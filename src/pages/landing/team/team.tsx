@@ -1,10 +1,3 @@
-import React from 'react'
-
-// export default function Team() {
-//     return (
-//         <div className='bg-indigo-500 h-screen'>T</div>
-//     )
-// }
 
 
 export default function Team() {
@@ -25,7 +18,7 @@ export default function Team() {
                             alt="Avatar"
                             className="rounded-full border aspect-square overflow-hidden object-cover object-center"
                             height="200"
-                            src="/placeholder.svg"
+                            src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                             width="200"
                         />
                         <div className="flex flex-col items-center justify-center space-y-1">
@@ -38,7 +31,7 @@ export default function Team() {
                             alt="Avatar"
                             className="rounded-full border aspect-square overflow-hidden object-cover object-center"
                             height="200"
-                            src="/placeholder.svg"
+                            src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                             width="200"
                         />
                         <div className="flex flex-col items-center justify-center space-y-1">
@@ -51,7 +44,7 @@ export default function Team() {
                             alt="Avatar"
                             className="rounded-full border aspect-square overflow-hidden object-cover object-center"
                             height="200"
-                            src="/placeholder.svg"
+                            src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                             width="200"
                         />
                         <div className="flex flex-col items-center justify-center space-y-1">
@@ -64,7 +57,7 @@ export default function Team() {
                             alt="Avatar"
                             className="rounded-full border aspect-square overflow-hidden object-cover object-center"
                             height="200"
-                            src="/placeholder.svg"
+                            src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                             width="200"
                         />
                         <div className="flex flex-col items-center justify-center space-y-1">
@@ -77,7 +70,7 @@ export default function Team() {
                             alt="Avatar"
                             className="rounded-full border aspect-square overflow-hidden object-cover object-center"
                             height="200"
-                            src="/placeholder.svg"
+                            src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                             width="200"
                         />
                         <div className="flex flex-col items-center justify-center space-y-1">
