@@ -1,0 +1,53 @@
+.Wrapper {
+  width: 100%;
+}
+
+.InnerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  @media (max-width: 550px) {
+    flex-direction: column;
+  }
+}
+
+.StyleP {
+  @media (max-width: 550px) {
+    margin: 20px 0;
+  }
+}
+
+.LogoLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.BackToTop {
+  color: #fff;
+  transition: 0.3s ease;
+  cursor: pointer;
+  font-size: 0.813rem;
+}
+
+.BackgroundColor {
+  background-color: #434b4d;
+}
+
+.title {
+  margin-left: 15px;
+  font-size: 0.938rem;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+/* Mis estilos */
+.container {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0px 30px;
+}

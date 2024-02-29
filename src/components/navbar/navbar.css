@@ -1,0 +1,57 @@
+.wrapper {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    transition: box-shadow 0.3s ease, height 0.3s ease;
+
+    &.withShadow {
+        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    &.scrollUp {
+        height: 60px;
+    }
+
+    &.scrollDown {
+        height: 60px;
+    }
+}
+
+.nav-inner {
+    position: relative;
+    height: 100%;
+}
+
+.burder-wrapper {
+    outline: none;
+    border: 0px;
+    background-color: transparent;
+    height: 100%;
+    padding: 0 15px;
+    display: none;
+
+    @media (max-width: 760px) {
+        display: block;
+    }
+}
+
+.ul-wrapper {
+    display: flex;
+
+    @media (max-width: 760px) {
+        display: none;
+    }
+}
+
+.ul-wrapper-right {
+    @media (max-width: 760px) {
+        display: none;
+    }
+}
+
+
+ul a.active {
+    color: rgb(34 197 94);
+}

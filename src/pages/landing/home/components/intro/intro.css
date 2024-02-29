@@ -1,0 +1,107 @@
+.Wrapper {
+  width: 100%;
+  min-height: 840px;
+  display: flex;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0px 30px;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 960px) {
+    flex-direction: column;
+  }
+}
+.svg {
+  @media (min-width: 1900px) {
+    position: absolute;
+    left: 6rem;
+  }
+}
+.RightSide {
+  width: 50%;
+  height: 100%;
+  @media (max-width: 960px) {
+    width: 100%;
+    order: 1;
+    margin-top: 30px;
+  }
+}
+.HeaderP {
+  max-width: 470px;
+  padding: 15px 0 200px 0;
+  line-height: 1.5rem;
+  @media (max-width: 960px) {
+    padding: 15px 0 30px 0;
+    text-align: center;
+    max-width: 100%;
+  }
+}
+.BtnWrapper {
+  max-width: 190px;
+  @media (max-width: 960px) {
+    margin: 0 auto;
+  }
+}
+.GreyDiv {
+  width: 30%;
+  height: 700px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  @media (max-width: 960px) {
+    display: none;
+  }
+}
+.ImageWrapper {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 9;
+  @media (max-width: 960px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.Img {
+  @media (max-width: 560px) {
+    width: 80%;
+    height: auto;
+  }
+}
+.QuoteWrapper {
+  /*position: absolute*/
+  left: 0;
+  bottom: 50px;
+  max-width: 330px;
+  padding: 30px;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b093b;
+  border-radius: 1rem;
+  @media (max-width: 960px) {
+    left: 20px;
+  }
+  @media (max-width: 560px) {
+    bottom: -50px;
+  }
+}
+.QuotesWrapper {
+  position: absolute;
+  left: -20px;
+  top: -10px;
+}
+.DotsWrapper {
+  position: absolute;
+  right: -100px;
+  bottom: 100px;
+  z-index: 2;
+  @media (max-width: 960px) {
+    right: 100px;
+  }
+  @media (max-width: 560px) {
+    display: none;
+  }
+}

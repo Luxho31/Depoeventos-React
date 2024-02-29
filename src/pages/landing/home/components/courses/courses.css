@@ -1,0 +1,118 @@
+.Wrapper {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.HeaderInfo {
+  @media (max-width: 860px) {
+    text-align: center;
+  }
+}
+
+.Advertising {
+  padding: 100px 0;
+  margin: 100px 0;
+  position: relative;
+  @media (max-width: 1160px) {
+    padding: 60px 0 40px 0;
+  }
+  @media (max-width: 860px) {
+    flex-direction: column;
+    padding: 0 0 30px 0;
+    margin: 80px 0 0px 0;
+  }
+}
+
+.ButtonsRow {
+  @media (max-width: 860px) {
+    justify-content: space-between;
+  }
+}
+
+.AddLeft {
+  position: relative;
+  width: 50%;
+  p {
+    max-width: 475px;
+  }
+  @media (max-width: 860px) {
+    width: 80%;
+    order: 2;
+    text-align: center;
+    h2 {
+      line-height: 3rem;
+      margin: 15px 0;
+    }
+    p {
+      margin: 0 auto;
+    }
+  }
+}
+
+.AddRight {
+  width: 50%;
+  @media (max-width: 860px) {
+    width: 80%;
+    order: 2;
+  }
+}
+
+.AddLeftInner {
+  width: 100%;
+  position: absolute;
+  top: -300px;
+  left: 0;
+  @media (max-width: 1190px) {
+    top: -250px;
+  }
+  @media (max-width: 920px) {
+    top: -200px;
+  }
+  @media (max-width: 860px) {
+    order: 1;
+    position: relative;
+    top: -60px;
+    left: 0;
+  }
+}
+
+.ImgWrapper {
+  width: 100%;
+  padding: 0 15%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 400px) {
+    padding: 0;
+  }
+}
+
+.H1 {
+  font-size: 2.5rem;
+  font-weight: 800 !important;
+}
+
+.Text {
+  font-size: 0.813rem;
+}
+
+.Row {
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex: 0 1 auto;
+  -webkit-box-flex: 0;
+  flex: 0 1 auto;
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -1rem;
+  margin-left: -1rem;
+
+  text-align: center;
+}
