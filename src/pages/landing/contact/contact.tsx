@@ -1,14 +1,23 @@
-import { Checkbox, Form, Input, Select } from "antd";
+import { useState } from "react";
+import { Checkbox, Form, Input, Select, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Contact() {
   const { Option } = Select;
   const { TextArea } = Input;
 
+  const [loading, setLoading] = useState(false);
+
   const handleSendMessage = async (values: any) => {
     try {
+      setLoading(true)
       console.log(values);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -23,7 +32,7 @@ export default function Contact() {
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
+      <Select style={{ width: 70 }} defaultValue="+51">
         <Option value="51">+51</Option>
         <Option value="58">+58</Option>
       </Select>
@@ -34,8 +43,8 @@ export default function Contact() {
     <div className="h-[93vh] flex w-[80%] m-auto ">
       <div className="flex-1 pt-[90px] flex flex-col items-center justify-center">
         {/* Texto introducción */}
-        <div className="">
-          <h1 className="">Contactanos</h1>
+        <div className="w-[750px] flex flex-col  mb-10">
+          <h1 className="text-5xl font-semibold">Contáctanos</h1>
           <p className="">
             Anímate! Si tienes alguna duda, pregunta o sugerencia, no dudes en
             escribirnos.
@@ -133,21 +142,29 @@ export default function Contact() {
           </Form.Item>
 
           {/* Botón para enviar mensaje */}
-          <Form.Item className="w-[30%] flex m-auto">
+          <Form.Item className="w-full flex justify-center">
             <button
               type="submit"
-              className="w-full bg-[#5aa8c4] text-white font-semibold rounded-md p-4"
+              className="w-96 h-14 bg-[#5aa8c4] text-white font-semibold rounded-md p-4"
+              disabled={loading}
             >
-              Enviar mensaje
+              {loading ? (
+                <Spin
+                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+                />
+              ) : (
+                "Enviar mensaje"
+              )}
             </button>
           </Form.Item>
         </Form>
       </div>
-      <div className="flex-1 pt-[90px] flex items-center justify-center">
+      <div className="flex-1 pt-[90px] flex items-center justify-center relative">
+        <div className="bg-gray-200 h-[90%] w-[90%] absolute"></div>
         <img
           src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
           alt="Mike Wazowski"
-          className="rounded-tl-[50%] rounded-br-[50%] h-[90%] w-[90%]"
+          className="rounded-tl-[50%] rounded-br-[50%] h-[90%] w-[90%] object-cover absolute"
         />
       </div>
     </div>

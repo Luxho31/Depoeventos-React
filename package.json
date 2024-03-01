@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
+    "animate.css": "^4.1.1",
     "antd": "^5.14.2",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",

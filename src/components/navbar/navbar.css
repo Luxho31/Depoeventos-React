@@ -1,4 +1,13 @@
-ul a.active {
-  color: rgb(34 197 94);
-  font-weight: bold;
+ul li a.active::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background-color: #f46e16;
+  margin-top: 5px;
+}
+
+ul li a {
+  list-style-type: none;
+  display: inline-block;
+  margin-right: 10px;
 }

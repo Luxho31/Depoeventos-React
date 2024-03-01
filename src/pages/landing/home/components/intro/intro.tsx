@@ -1,3 +1,4 @@
+import "animate.css"
 import "./intro.css";
 
 export default function Intro() {
@@ -24,10 +25,10 @@ export default function Intro() {
         </div>
         <img
           src="https://w0.peakpx.com/wallpaper/58/22/HD-wallpaper-spider-man-game-art-vertical-artwork-comic-art-portrait-display-marvel-super-heroes.jpg"
-          className="h-[39rem] w-[27rem] rounded-2xl mt-[5.6rem] ms-48 max-xl:ms-0 max-xl:w-[17rem] max-xl:h-[29rem]"
+          className="h-[39rem] w-[27rem] rounded-2xl mt-[5.6rem] ms-48 max-xl:ms-0 max-xl:w-[17rem] max-xl:h-[29rem] animate__animated animate__bounceInRight"
           alt=""
         />
-        <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[22rem] relative bottom-56 z-40 max-xl:hidden">
+        <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[22rem] relative bottom-56 z-40 max-xl:hidden animate__animated animate__pulse">
           <p className="text-sm italic">
             "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
           </p>
