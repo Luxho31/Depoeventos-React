@@ -34,13 +34,13 @@ export default function Contact() {
     <div className="h-[93vh] flex w-[80%] m-auto ">
       <div className="flex-1 pt-[90px] flex flex-col items-center justify-center">
         {/* Texto introducción */}
-        {/* <div className="">
+        <div className="">
           <h1 className="">Contactanos</h1>
           <p className="">
             Anímate! Si tienes alguna duda, pregunta o sugerencia, no dudes en
             escribirnos.
           </p>
-        </div> */}
+        </div>
 
         <Form
           name="contact-us"
