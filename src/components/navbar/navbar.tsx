@@ -20,7 +20,7 @@ export default function Navbar() {
               style={{ width: "50px", marginBottom: "10px" }}
             /> */}
             <h1 className="ml-7 text-lg font-semibold">
-              Depo<span className="orangeColor">Eventos</span>
+              Depo<span className="text-orange-500">Eventos</span>
             </h1>
           </div>
           {/* <button className="burder-wrapper point">
