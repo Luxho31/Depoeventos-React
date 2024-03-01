@@ -75,12 +75,13 @@ export default function Login() {
                   type: "email",
                   message: "Ingresa un correo electrónico válido.",
                 },
+                { max: 50, message: "El correo electrónico es muy largo." },
               ]}
               className="cursor-text"
             >
               <Input
                 className="w-full rounded-xl p-4"
-                placeholder="Ingresa tu username"
+                placeholder="Ingresa tu correo electrónico"
                 size="large"
                 prefix={<FaEnvelope className="site-form-item-icon me-1" />}
               />
