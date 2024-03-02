@@ -1,22 +1,53 @@
 import CarouselCard from "../../../components/carousel-card/carousel-card";
-import 'animate.css';
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "animate.css";
 
 export default function Team() {
-    return (
-
-        <main className="flex-1 overflow-y-auto mt-[100px] h-[82vh] pb-8">
-            <section className="container grid max-w-3xl gap-8 px-4 py-8 mx-auto lg:gap-10 lg:px-6 lg:py-12">
-                <div className="flex flex-col items-center justify-center space-y-2">
-                    <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl animate__animated animate__bounce">Meet our Team</h1>
-                    <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                        The team behind the innovation. We're a group of passionate individuals dedicated to pushing the
-                        boundaries of what's possible.
-                    </p>
-                </div>
-                <div>
-                    <CarouselCard />
-                </div>
-            </section>
-        </main>
-    )
+  return (
+    <div className="h-screen pt-16">
+      <div className="flex flex-col items-center justify-center h-[30%]">
+        <h1 className="text-5xl font-bold pb-1">Conoce al equipo</h1>
+        <p className="text-lg">
+          Our team is composed of the best of the best. We are a group of
+          passionate individuals who are dedicated to providing the best service
+          to our clients.
+        </p>
+      </div>
+      <div className="h-[70%] flex items-center justify-center">
+        <Swiper
+          slidesPerView={5}
+          spaceBetween={20}
+          modules={[Autoplay]}
+          autoplay={{
+            delay: 1000,
+          }}
+          loop={true}
+          effect="coverflow"
+          noSwiping={true}
+          noSwipingClass="swiper-no-swiping"
+        >
+          {Array.from({ length: 20 }).map((_, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src="https://st3.depositphotos.com/13324256/17675/i/600/depositphotos_176758222-stock-photo-beautiful-gerbera-flower-isolated-black.jpg"
+                alt=""
+                className="!h-[27rem] !w-96 object-cover rounded-3xl shadow-lg"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </div>
+  );
 }

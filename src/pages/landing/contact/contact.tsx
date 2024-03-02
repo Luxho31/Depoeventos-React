@@ -160,7 +160,7 @@ export default function Contact() {
         </Form>
       </div>
       <div className="flex-1 pt-[90px] flex items-center justify-center relative">
-        <div className="bg-gray-200 h-[90%] w-[90%] absolute"></div>
+        <div className="bg-gray-200 rounded-lg h-[90%] w-[90%] absolute"></div>
         <img
           src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
           alt="Mike Wazowski"
