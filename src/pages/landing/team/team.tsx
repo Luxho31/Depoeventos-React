@@ -27,22 +27,22 @@ export default function Team() {
       <div className="h-[70%] flex items-center justify-center">
         <Swiper
           slidesPerView={5}
-          spaceBetween={20}
+          spaceBetween={5}
           modules={[Autoplay]}
           autoplay={{
             delay: 1000,
+            disableOnInteraction: true,
           }}
           loop={true}
           effect="coverflow"
-          noSwiping={true}
           noSwipingClass="swiper-no-swiping"
         >
           {Array.from({ length: 20 }).map((_, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="h-full p-3">
               <img
                 src="https://st3.depositphotos.com/13324256/17675/i/600/depositphotos_176758222-stock-photo-beautiful-gerbera-flower-isolated-black.jpg"
                 alt=""
-                className="!h-[27rem] !w-96 object-cover rounded-3xl shadow-lg"
+                className="!h-[27rem] !w-96 object-cover rounded-3xl shadow-lg hover:scale-105 transition duration-300 ease-in-out "
               />
             </SwiperSlide>
           ))}
