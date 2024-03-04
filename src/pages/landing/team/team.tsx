@@ -1,17 +1,12 @@
-import CarouselCard from "../../../components/carousel-card/carousel-card";
-import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
+import "animate.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import "animate.css";
+import {
+  Autoplay
+} from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Team() {
   return (

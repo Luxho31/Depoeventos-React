@@ -48,7 +48,7 @@ export default function Navbar() {
             </li>
 
             <li className="semiBold font15 pointer">
-              <Link to="https://google.com" target="_blank">Dashboard</Link>
+              <Link to="/dashboard" target="_blank">Dashboard</Link>
             </li>
           </ul>
           <ul className="ul-wrapper-right flexNullCenter">
