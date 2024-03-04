@@ -258,7 +258,7 @@ export default function Register() {
 									className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
 								>
 									Siguiente
-									<FaArrowRight className="ms-1 animate-bounce"/>
+									<FaArrowRight className="ms-1"/>
 								</button>
 							</Form.Item>
 						)}

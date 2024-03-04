@@ -35,7 +35,7 @@ function App() {
 
         {/* Rutas Protegidas */}
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="/dashboard/paginaUno" element={<PaginaUno />} />
+          <Route index element={<PaginaUno />} />
           <Route path="/dashboard/paginaDos" element={<PaginaDos />} />
         </Route>
 

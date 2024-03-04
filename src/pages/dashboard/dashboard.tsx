@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import {
     MenuFoldOutlined,
@@ -55,24 +55,24 @@ export default function Dashboard() {
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div>
                     {collapsed ?
-                        <div className="w-full flex justify-center items-center py-4 select-none">
+                        <Link to={"/"} className="w-full flex justify-center items-center py-4 cursor-pointer">
                             <img
                                 src={LogoIcon}
                                 alt="DepoEventos"
                                 className="w-8"
                             />
-                        </div>
+                        </Link>
                         :
-                        <div className="w-full flex justify-center items-center py-4 select-none">
+                        <Link to={"/"} className="w-full flex justify-center items-center py-4 cursor-pointer">
                             <img
                                 src={LogoIcon}
                                 alt="DepoEventos"
                                 className="w-8"
                             />
-                            <h2 className="ms-2 text-lg text-white font-semibold cursor-default">
+                            <h2 className="ms-2 text-lg text-white font-semibold">
                                 Depo<span className="text-orange-500">Eventos</span>
                             </h2>
-                        </div>
+                        </Link>
                     }
                 </div>
                 <Menu

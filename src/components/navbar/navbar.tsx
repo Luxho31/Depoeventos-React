@@ -2,7 +2,7 @@
 // import { CLIENT_ROUTES } from "../../../../../shared/routes/client.routes";
 // import BurgerIcon from "./burger-icon/burger-icon.js";
 import { NavLink, Link } from "react-router-dom";
-// import LogoIcon from "../../../../../../assets/logo.png";
+import LogoIcon from "../../assets/image/logo.png";
 import "./navbar.css"
 
 export default function Navbar() {
@@ -13,16 +13,16 @@ export default function Navbar() {
         style={{ height: "65px" }}
       >
         <div className="nav-inner container flex justify-between items-center h-full">
-          <div className="pointer flexNullCenter">
-            {/* <img
+          <Link to={"/"} className="flex items-center gap-x-4 cursor-pointer">
+            <img
               src={LogoIcon}
               alt="DepoEventos"
-              style={{ width: "50px", marginBottom: "10px" }}
-            /> */}
-            <h1 className="ml-7 text-lg font-semibold">
+              className="w-10"
+            />
+            <h2 className="text-lg font-semibold">
               Depo<span className="text-orange-500">Eventos</span>
-            </h1>
-          </div>
+            </h2>
+          </Link>
           {/* <button className="burder-wrapper point">
             <BurgerIcon></BurgerIcon>
           </button> */}
@@ -48,7 +48,7 @@ export default function Navbar() {
             </li>
 
             <li className="semiBold font15 pointer">
-              <Link to="/dashboard" target="_blank">Dashboard</Link>
+              <Link to="/dashboard">Dashboard</Link>
             </li>
           </ul>
           <ul className="ul-wrapper-right flexNullCenter">
