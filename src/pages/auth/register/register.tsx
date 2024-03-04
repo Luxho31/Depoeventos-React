@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png"
+import { useNavigate } from "react-router-dom";
 
 import { DatePicker, Form, Input, InputNumber, Select, Spin } from "antd";
 import { FaChevronLeft, FaArrowRight} from "react-icons/fa";
@@ -17,26 +18,43 @@ import {
 import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
+import { registerUser } from "../../../services/auth/register/registerHandler";
 
 export default function Register() {
 	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
 	type RegisterType = {
-		name?: string;
-		lastName?: string;
-		mothersLastName?: string;
-		documentType?: string;
-		document_number?: number;
-		email?: string;
-		password?: string;
-		contact_number?: number;
-		emergency_contact_number?: number;
-		country?: string;
-		birth_date?: string;
-		address?: string;
+		firstName?: String,
+		lastName?: String,
+		motherLastName?: String,
+		documentType?: String,
+		documentNumber?: String,
+		contactNumber?: String,
+		emergencyContactNumber?: String,
+		address?: String,
+		birthDate?: String,
+		country?: String,
+		username?: String,
+		password?: String
 	};
 
-	const [formData, setFormData] = useState<RegisterType>({});
+	const [formData, setFormData] = useState<RegisterType>({
+		firstName: "",
+		lastName: "",
+		motherLastName: "",
+		documentType: "",
+		documentNumber: "",
+		contactNumber: "",
+		emergencyContactNumber: "",
+		address: "",
+		birthDate: "",
+		country: "",
+		username: "",
+		password: "",
+	});
+
+	// const [formData, setFormData] = useState<RegisterType>({});
 
 	const onFinishStep1 = (values: any) => {
 		setFormData({
@@ -52,10 +70,20 @@ export default function Register() {
 			const finalFormData = {
 				...formData,
 				...values,
-				birth_date: values.birth_date.format("YYYY-MM-DD"),
+				birthDate: values.birthDate.format("YYYY-MM-DD"),
 			};
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			console.log(finalFormData);
+			
+			
+			const userData = await registerUser(finalFormData);
+			console.log(userData);
+            if (userData.status === 200) {
+                console.log("Inicio de sesión exitoso");
+                navigate("/dashboard"); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
+            } else {
+                console.log("Error al iniciar sesión:", userData.error_message);
+            }
+
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -112,7 +140,7 @@ export default function Register() {
 						<div className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${paso === 1 ? "block" : "hidden"}`}>
 							{/* ------------------Input Nombre------------------ */}
 							<Form.Item<RegisterType>
-								name="name"
+								name="firstName"
 								rules={[
 									{
 										required: true,
@@ -150,7 +178,7 @@ export default function Register() {
 
 							{/* ------------------Input Apellido Materno------------------ */}
 							<Form.Item<RegisterType>
-								name="mothersLastName"
+								name="motherLastName"
 								rules={[
 									{
 										required: true,
@@ -191,7 +219,7 @@ export default function Register() {
 
 							{/* ------------------Input Número de Documento------------------ */}
 							<Form.Item<RegisterType>
-								name="document_number"
+								name="documentNumber"
 								rules={[
 									{
 										required: true,
@@ -210,7 +238,7 @@ export default function Register() {
 
 							{/* ------------------Input Correo Electronico------------------ */}
 							<Form.Item<RegisterType>
-								name="email"
+								name="username"
 								rules={[
 									{
 										required: true,
@@ -274,7 +302,7 @@ export default function Register() {
 						<div className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${paso === 2 ? "block" : "hidden"}`}>
 							{/* ------------------Input Número de Contacto------------------ */}
 							<Form.Item<RegisterType>
-								name="contact_number"
+								name="contactNumber"
 								rules={[
 									{
 										required: true,
@@ -293,7 +321,7 @@ export default function Register() {
 
 							{/* ------------------Input Número de Emergencia------------------ */}
 							<Form.Item<RegisterType>
-								name="emergency_contact_number"
+								name="emergencyContactNumber"
 								rules={[
 									{
 										required: true,
@@ -344,7 +372,7 @@ export default function Register() {
 
 							{/* ------------------Input Fecha de Nacimiento------------------ */}
 							<Form.Item
-								name="birth_date"
+								name="birthDate"
 								rules={[
 									{
 										required: true,
