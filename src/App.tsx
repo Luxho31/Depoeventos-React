@@ -13,36 +13,39 @@ import Contact from "./pages/landing/contact/contact";
 import PaginaUno from "./pages/dashboard/screens/paginaUno";
 import PaginaDos from "./pages/dashboard/screens/paginaDos";
 import Dashboard from "./pages/dashboard/dashboard";
+import { AuthProvider } from "./context/AuthProvider";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Rutas de Autenticacion */}
-        <Route path="/" element={<AuthLayout />}>
-          <Route index path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
+	return (
+		<BrowserRouter>
+			<AuthProvider>
+				<Routes>
+					{/* Rutas de Autenticacion */}
+					<Route path="/" element={<AuthLayout />}>
+						<Route index path="/login" element={<Login />} />
+						<Route path="/register" element={<Register />} />
+					</Route>
 
-        {/* Rutas Generales */}
-        <Route path="/" element={<RutaGeneral />}>
-          <Route index element={<Home />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/contact" element={<Contact />} />
-        </Route>
+					{/* Rutas Generales */}
+					<Route path="/" element={<RutaGeneral />}>
+						<Route index element={<Home />} />
+						<Route path="/packages" element={<Packages />} />
+						<Route path="/courses" element={<Courses />} />
+						<Route path="/team" element={<Team />} />
+						<Route path="/contact" element={<Contact />} />
+					</Route>
 
-        {/* Rutas Protegidas */}
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<PaginaUno />} />
-          <Route path="/dashboard/paginaDos" element={<PaginaDos />} />
-        </Route>
+					{/* Rutas Protegidas */}
+					<Route path="/dashboard" element={<Dashboard />}>
+						<Route index element={<PaginaUno />} />
+						<Route path="/dashboard/paginaDos" element={<PaginaDos />} />
+					</Route>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</AuthProvider>
+		</BrowserRouter>
+	);
 }
 
 export default App;

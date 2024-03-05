@@ -3,7 +3,7 @@ import LogoIcon from "../../../assets/image/logo.png"
 import { useNavigate } from "react-router-dom";
 
 import { DatePicker, Form, Input, InputNumber, Select, Spin } from "antd";
-import { FaChevronLeft, FaArrowRight} from "react-icons/fa";
+import { FaChevronLeft, FaArrowRight } from "react-icons/fa";
 
 // React Icons
 import {
@@ -18,10 +18,11 @@ import {
 import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
-import { registerUser } from "../../../services/auth/register/registerHandler";
+import { useAuth } from "../../../context/AuthProvider"
 
 export default function Register() {
 	const [loading, setLoading] = useState(false);
+	const { register } = useAuth();
 	const navigate = useNavigate();
 
 	type RegisterType = {
@@ -39,22 +40,7 @@ export default function Register() {
 		password?: String
 	};
 
-	const [formData, setFormData] = useState<RegisterType>({
-		firstName: "",
-		lastName: "",
-		motherLastName: "",
-		documentType: "",
-		documentNumber: "",
-		contactNumber: "",
-		emergencyContactNumber: "",
-		address: "",
-		birthDate: "",
-		country: "",
-		username: "",
-		password: "",
-	});
-
-	// const [formData, setFormData] = useState<RegisterType>({});
+	const [formData, setFormData] = useState<RegisterType>({});
 
 	const onFinishStep1 = (values: any) => {
 		setFormData({
@@ -72,20 +58,12 @@ export default function Register() {
 				...values,
 				birthDate: values.birthDate.format("YYYY-MM-DD"),
 			};
-			
-			
-			const userData = await registerUser(finalFormData);
-			console.log(userData);
-            if (userData.status === 200) {
-                console.log("Inicio de sesión exitoso");
-                navigate("/dashboard"); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
-            } else {
-                console.log("Error al iniciar sesión:", userData.error_message);
-            }
+			console.log(formData);
 
-			// await new Promise((resolve) => setTimeout(resolve, 2000));
+			await register(finalFormData);
+			navigate('/dashboard'); // Redirige al usuario al dashboard si el registro es exitoso
 		} catch (error) {
-			console.log(error);
+			console.error('Error al registrar:', error);
 		} finally {
 			setLoading(false);
 		}
@@ -286,7 +264,7 @@ export default function Register() {
 									className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
 								>
 									Siguiente
-									<FaArrowRight className="ms-1"/>
+									<FaArrowRight className="ms-1" />
 								</button>
 							</Form.Item>
 						)}

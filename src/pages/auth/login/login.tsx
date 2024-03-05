@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png"
 import { Form, Input, Spin } from "antd";
-import { loginUser } from "../../../services/auth/login/loginHandler";
+import {useAuth} from "../../../context/AuthProvider"
 import { useNavigate } from "react-router-dom";
 
 // React Icons
@@ -11,6 +11,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Login() {
     const [loading, setLoading] = React.useState(false);
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     type LoginType = {
@@ -20,22 +21,17 @@ export default function Login() {
 
     const handleSignIn = async (values: any) => {
         try {
-            setLoading(true);
-            console.log(values);
-
-            const userData = await loginUser(values.email, values.password);
-            if (userData.status === 200) {
-                console.log("Inicio de sesión exitoso");
-                navigate("/dashboard"); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
-            } else {
-                console.log("Error al iniciar sesión:", userData.error_message);
-            }
+          setLoading(true);
+          console.log(values);
+    
+          await login(values.email, values.password);
+          navigate('/dashboard'); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
         } catch (error) {
-            console.error("Error al iniciar sesión:", error);
+          console.error('Error al iniciar sesión:', error);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
     return (
         <>

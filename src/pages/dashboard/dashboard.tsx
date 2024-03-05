@@ -33,7 +33,7 @@ export default function Dashboard() {
             key: '1',
             icon: <UserOutlined />,
             label: 'Pagina 1',
-            onClick: () => handleItemClick('/dashboard/paginaUno')
+            onClick: () => handleItemClick('/dashboard')
         },
         {
             key: '2',
@@ -50,7 +50,6 @@ export default function Dashboard() {
     ];
 
     return (
-
         <Layout className='h-screen'>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div>
@@ -115,15 +114,3 @@ export default function Dashboard() {
         </Layout>
     )
 }
-
-
-
-{/* <Menu.Item>
-                            <NavLink
-                                to="/dashboard/paginaUno"
-                                className="bg-indigo-500 w-full flex justify-around rounded-md"
-                            >
-                                <UserOutlined />
-                                Pagina 1
-                            </NavLink>
-                        </Menu.Item> */}
