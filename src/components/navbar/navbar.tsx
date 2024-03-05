@@ -103,10 +103,6 @@ export default function Navbar() {
             <li className="">
               <Link to="/dashboard">Dashboard</Link>
             </li>
-
-            <li>
-              <CustomAlert />
-            </li>
           </ul>
 
           <ul className="">
