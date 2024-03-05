@@ -25,7 +25,7 @@ export default function Login() {
           console.log(values);
     
           await login(values.email, values.password);
-          navigate('/dashboard'); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
+          navigate('/'); // Redirige al usuario al dashboard si el inicio de sesión es exitoso
         } catch (error) {
           console.error('Error al iniciar sesión:', error);
         } finally {
