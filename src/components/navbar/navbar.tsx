@@ -1,13 +1,12 @@
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Avatar, Button, Dropdown, Space } from "antd";
 import { useEffect, useState } from "react";
+import { IoIosLogOut } from "react-icons/io";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import "./navbar.css";
-import { Avatar, Button, Dropdown, Space, message } from "antd";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { IoIosLogOut } from "react-icons/io";
-import type { MenuProps } from "antd";
-import CustomAlert from "../alerts/custom-alert";
-import { Toaster, toast } from "sonner";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -71,6 +70,7 @@ export default function Navbar() {
         className={`fixed w-full top-0 bg-white z-50 shadow-md`}
         style={{ height: "65px" }}
       >
+        <Toaster richColors />
         <div className="nav-inner container flex justify-between items-center h-full">
           <Link to={"/"} className="flex items-center gap-x-4 cursor-pointer">
             <img src={LogoIcon} alt="DepoEventos" className="w-10" />
@@ -110,7 +110,6 @@ export default function Navbar() {
               <li className="">
                 <Dropdown menu={menuProps} className="border-none">
                   <Button className="p-0">
-                    <Toaster richColors />
                     <Space>
                       <Avatar size={30} icon={<UserOutlined />} />
                       Luis Sánchez
