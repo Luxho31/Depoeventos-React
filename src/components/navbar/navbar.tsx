@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import LogoIcon from "../../assets/image/logo.png";
 import "./navbar.css";
+import { Avatar, Button, Dropdown, Space, message } from "antd";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import { IoIosLogOut } from "react-icons/io";
+import type { MenuProps } from 'antd';
 
 export default function Navbar() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,10 +23,48 @@ export default function Navbar() {
 		navigate("/")
 	};
 
+	const handleMenuClick: MenuProps['onClick'] = (e) => {
+		// message.info('Click on menu item.');
+		console.log('click', e);
+	};
+
+	const items: MenuProps['items'] = [
+		{
+			label: 'Perfil',
+			key: '1',
+			icon: <UserOutlined />,
+		},
+		{
+			label: 'Cerrar Sesión',
+			key: '2',
+			icon: <IoIosLogOut />,
+			danger: true,
+			onClick: () => logout()
+		},
+		// {
+		// 	label: '3rd menu item',
+		// 	key: '3',
+		// 	icon: <UserOutlined />,
+		// 	danger: true,
+		// },
+		// {
+		// 	label: '4rd menu item',
+		// 	key: '4',
+		// 	icon: <UserOutlined />,
+		// 	danger: true,
+		// 	disabled: true,
+		// },
+	];
+
+	const menuProps = {
+		items,
+		onClick: handleMenuClick,
+	};
+
 	return (
 		<>
 			<nav
-				className={`wrapper flexCenter animate whiteBg fixed w-full top-0 bg-white z-50 shadow-md`}
+				className={`fixed w-full top-0 bg-white z-50 shadow-md`}
 				style={{ height: "65px" }}
 			>
 				<div className="nav-inner container flex justify-between items-center h-full">
@@ -38,49 +80,59 @@ export default function Navbar() {
 					</Link>
 
 					<ul className="ul-wrapper flex  gap-2">
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<NavLink to="/">Inicio</NavLink>
 						</li>
 
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<NavLink to="/packages">Paquetes</NavLink>
 						</li>
 
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<NavLink to="/courses">Cursos</NavLink>
 						</li>
 
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<NavLink to="/team">Equipo</NavLink>
 						</li>
 
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<NavLink to="/contact">Contacto</NavLink>
 						</li>
 
-						<li className="semiBold font15 pointer">
+						<li className="">
 							<Link to="/dashboard">Dashboard</Link>
 						</li>
 					</ul>
 
-					<ul className="ul-wrapper-right flexNullCenter">
+					<ul className="">
 						{isLoggedIn ?
 							(
-								<li className="semiBold font15 pointer flexCenter">
-									<button
+								<li className="">
+									<Dropdown menu={menuProps} className="border-none">
+										<Button className="p-0">
+											<Space>
+												<Avatar size={30} icon={<UserOutlined />} />
+												Luis Sánchez
+												<DownOutlined />
+											</Space>
+										</Button>
+									</Dropdown>
+
+									{/* <button
 										onClick={logout}
 										className="radius8 lightBg"
 										style={{ padding: "10px 15px" }}
 									>
 										Cerrar Sesión
-									</button>
+									</button> */}
 								</li>
 							)
 							:
-							(<li className="semiBold font15 pointer flexCenter">
+							(<li className="">
 								<Link
 									to="/login"
-									className="radius8 lightBg"
+									className=""
 									style={{ padding: "10px 15px" }}
 								>
 									Log in
