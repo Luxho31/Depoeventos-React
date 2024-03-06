@@ -53,7 +53,7 @@ export default function Contact() {
         <div className="w-[580px] flex flex-col  mb-7">
           <h1 className="text-2xl font-semibold">Contáctanos</h1>
           <p className="">
-            Anímate! Si tienes alguna duda, pregunta o tugerencia, no dudes en
+            Anímate! Si tienes alguna duda, pregunta o sugerencia, no dudes en
             escribirnos.
           </p>
         </div>
