@@ -1,19 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import { AuthProvider } from "./context/AuthProvider";
+import AuthLayout from "./layout/AuthLayout";
+import RutaGeneral from "./layout/RutaGeneral";
 import Login from "./pages/auth/login/login";
 import Register from "./pages/auth/register/register";
-import Home from "./pages/landing/home/home";
-import RutaGeneral from "./layout/RutaGeneral";
-import AuthLayout from "./layout/AuthLayout";
-import NotFound from "./pages/not-found/not-found";
-import Team from "./pages/landing/team/team";
-import Packages from "./pages/landing/packages/packages";
-import Courses from "./pages/landing/courses/courses";
-import Contact from "./pages/landing/contact/contact";
-import PaginaUno from "./pages/dashboard/screens/paginaUno";
-import PaginaDos from "./pages/dashboard/screens/paginaDos";
 import Dashboard from "./pages/dashboard/dashboard";
-import { AuthProvider } from "./context/AuthProvider";
+import PaginaDos from "./pages/dashboard/screens/paginaDos";
+import PaginaUno from "./pages/dashboard/screens/paginaUno";
+import Contact from "./pages/landing/contact/contact";
+import Home from "./pages/landing/home/home";
+import Products from "./pages/landing/products/products";
+import Team from "./pages/landing/team/team";
+import NotFound from "./pages/not-found/not-found";
 
 function App() {
 	return (
@@ -29,8 +28,7 @@ function App() {
 					{/* Rutas Generales */}
 					<Route path="/" element={<RutaGeneral />}>
 						<Route index element={<Home />} />
-						<Route path="/packages" element={<Packages />} />
-						<Route path="/courses" element={<Courses />} />
+						<Route path="/products" element={<Products />} />
 						<Route path="/team" element={<Team />} />
 						<Route path="/contact" element={<Contact />} />
 					</Route>

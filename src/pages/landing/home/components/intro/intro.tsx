@@ -25,7 +25,7 @@ export default function Intro() {
         </div>
         <img
           src="https://w0.peakpx.com/wallpaper/58/22/HD-wallpaper-spider-man-game-art-vertical-artwork-comic-art-portrait-display-marvel-super-heroes.jpg"
-          className="h-[39rem] w-[27rem] rounded-2xl mt-[5.6rem] ms-48 max-xl:ms-0 max-xl:w-[17rem] max-xl:h-[29rem] animate__animated animate__bounceInRight"
+          className="h-[37rem] w-[25rem] rounded-2xl mt-[3.5rem] ms-52 max-xl:ms-0 max-xl:w-[17rem] max-xl:h-[29rem] animate__animated animate__bounceInRight"
           alt=""
         />
         <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[22rem] relative bottom-56 z-40 max-xl:hidden animate__animated animate__pulse">

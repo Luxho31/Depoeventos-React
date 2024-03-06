@@ -1,7 +1,7 @@
 import Courses from "./components/courses/courses";
 import Campuses from "./components/campuses/campuses";
 import Intro from "./components/intro/intro";
-import Packages from "./components/packages/packages";
+import Packages from "./components/products/products";
 export default function Home() {
   const data = [
     {

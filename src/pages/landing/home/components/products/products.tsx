@@ -1,7 +1,7 @@
-import PackageCard from "../../../../../components/package-card/package-card";
-import "./packages.css";
+import ProductCard from "../../../../../components/product-card/product-card";
+import "./products.css";
 
-export default function Packages() {
+export default function Products() {
   return (
     <div className="w-[80%] m-auto mt-20 mb-20">
       <div className="mb-12">
@@ -13,8 +13,8 @@ export default function Packages() {
         </p>
       </div>
       <div className="w-[80%] m-auto flex justify-around max-xl:w-full max-lg:flex-col max-lg:items-center max-lg:gap-10">
-        <PackageCard />
-        <PackageCard />
+        <ProductCard />
+        <ProductCard />
       </div>
     </div>
   );

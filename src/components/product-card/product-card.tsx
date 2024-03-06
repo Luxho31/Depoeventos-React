@@ -1,9 +1,7 @@
-import { FaTableTennis } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaCheck, FaTableTennis } from "react-icons/fa";
 // import { CLIENT_ROUTES } from "../../routes/client.routes";
 
-export default function PackageCard() {
+export default function ProductCard() {
   return (
     <div className="!w-[400px] !h-[500px] shadow-lg rounded-2xl">
       <div className="flex justify-between p-8">
