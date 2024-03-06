@@ -20,6 +20,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
 import { useAuth } from "../../../context/AuthProvider";
+import useForm from "antd/es/form/hooks/useForm";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,10 @@ export default function Register() {
   const navigate = useNavigate();
   const [paso, setPaso] = useState(1);
   const [formData, setFormData] = useState<RegisterType>({});
+  const [selectedDocumentType, setSelectedDocumentType] = useState<
+    string | undefined
+  >(undefined);
+  const [form] = useForm();
 
   type RegisterType = {
     firstName?: String;
@@ -117,6 +122,7 @@ export default function Register() {
             }}
             autoComplete="off"
             className="w-[750px] flex flex-col max-md:mx-20 md:mx-32"
+            form={form}
           >
             <div
               className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
@@ -218,6 +224,12 @@ export default function Register() {
                       label: "Carnet de Extranjería",
                     },
                   ]}
+                  onChange={(value) => {
+                    setSelectedDocumentType(value);
+                    form.setFieldsValue({
+                      documentNumber: undefined,
+                    });
+                  }}
                 />
               </Form.Item>
 
@@ -229,15 +241,51 @@ export default function Register() {
                     required: true,
                     message: "Por favor ingrese su número de documento",
                   },
+                  {
+                    validator: (_, value) => {
+                      if (!value) {
+                        return Promise.reject("");
+                      } else if (
+                        selectedDocumentType === "DNI" &&
+                        !/^\d{8}$/.test(value)
+                      ) {
+                        return Promise.reject("El DNI debe tener 8 dígitos");
+                      } else if (
+                        selectedDocumentType === "PASSPORT" &&
+                        !/^[A-Za-z0-9]{6,10}$/.test(value)
+                      ) {
+                        return Promise.reject(
+                          "El pasaporte debe tener entre 6 y 10 caracteres alfanuméricos"
+                        );
+                      } else if (
+                        selectedDocumentType === "CARNET DE EXTRANJERIA" &&
+                        !/^\d{9}$/.test(value)
+                      ) {
+                        return Promise.reject(
+                          "El carné de extranjería debe tener 9 dígitos"
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  },
                 ]}
                 className="cursor-text"
               >
-                <InputNumber
-                  className="w-full border rounded-xl py-3 px-4"
+                <Input
+                  className="w-full border rounded-xl py-5 px-4"
                   placeholder="Número de Documento"
                   size="large"
                   prefix={
                     <FaAddressCard className="site-form-item-icon me-1" />
+                  }
+                  maxLength={
+                    selectedDocumentType === "DNI"
+                      ? 8
+                      : selectedDocumentType === "PASSPORT"
+                      ? 10
+                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
+                      ? 9
+                      : undefined
                   }
                 />
               </Form.Item>
