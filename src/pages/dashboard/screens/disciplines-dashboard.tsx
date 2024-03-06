@@ -1,6 +1,6 @@
 import CustomTable from "../../../components/tables/custom-table";
 
-export default function PaginaUno() {
+export default function DiciplinesDashboard() {
   const data = [
     {
       key: 1,

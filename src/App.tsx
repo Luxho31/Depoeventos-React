@@ -6,13 +6,18 @@ import RutaGeneral from "./layout/RutaGeneral";
 import Login from "./pages/auth/login/login";
 import Register from "./pages/auth/register/register";
 import Dashboard from "./pages/dashboard/dashboard";
-import PaginaDos from "./pages/dashboard/screens/paginaDos";
-import PaginaUno from "./pages/dashboard/screens/paginaUno";
 import Contact from "./pages/landing/contact/contact";
 import Home from "./pages/landing/home/home";
 import Products from "./pages/landing/products/products";
 import Team from "./pages/landing/team/team";
 import NotFound from "./pages/not-found/not-found";
+import DisciplinesDashboard from "./pages/dashboard/screens/disciplines-dashboard";
+import ProductsDashboard from "./pages/dashboard/screens/products-dashboard";
+import UsersDashboard from "./pages/dashboard/screens/users-dashboard";
+import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
+import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
+import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
+import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
 
 function App() {
 	return (
@@ -35,8 +40,13 @@ function App() {
 
 					{/* Rutas Protegidas */}
 					<Route path="/dashboard" element={<Dashboard />}>
-						<Route index element={<PaginaUno />} />
-						<Route path="/dashboard/paginaDos" element={<PaginaDos />} />
+						<Route index element={<DisciplinesDashboard />} />
+						<Route path="/dashboard/products" element={<ProductsDashboard />} />
+						<Route path="/dashboard/Users" element={<UsersDashboard />} />
+						<Route path="/dashboard/childrens" element={<ChildrensDashboard />} />
+						<Route path="/dashboard/courses" element={<CoursesDashboard />} />
+						<Route path="/dashboard/registrations" element={<RegistrationsDashboard />} />
+						<Route path="/dashboard/transactions" element={<TransactionsDashboard />} />
 					</Route>
 
 					<Route path="*" element={<NotFound />} />
