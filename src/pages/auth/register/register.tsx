@@ -25,6 +25,8 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [paso, setPaso] = useState(1);
+  const [formData, setFormData] = useState<RegisterType>({});
 
   type RegisterType = {
     firstName?: String;
@@ -40,8 +42,6 @@ export default function Register() {
     username?: String;
     password?: String;
   };
-
-  const [formData, setFormData] = useState<RegisterType>({});
 
   const disabledDate = (current: any) => {
     return current && current > moment().subtract(18, "years");
@@ -73,8 +73,6 @@ export default function Register() {
       setLoading(false);
     }
   };
-
-  const [paso, setPaso] = useState(1);
 
   return (
     <>
