@@ -1,30 +1,36 @@
-import { useState } from "react";
-import { Checkbox, Form, Input, Select, Spin } from "antd";
+import { useRef, useState } from "react";
+import { Checkbox, Form, FormInstance, Input, Select, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { sendMessage } from "../../../services/contact-us-service";
+import { Toaster, toast } from "sonner";
 
 export default function Contact() {
   const { Option } = Select;
   const { TextArea } = Input;
 
+  const formRef = useRef<FormInstance | null>(null);
+
   const [loading, setLoading] = useState(false);
 
   const handleSendMessage = async (values: any) => {
     try {
-      setLoading(true)
-      console.log(values);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setLoading(true);
+      await sendMessage(values);
+      toast.success("Mensaje enviado correctamente");
+      if (formRef.current) {
+        formRef.current.resetFields();
+      }
     } catch (error) {
       console.log(error);
-    }
-    finally {
-      setLoading(false)
+      toast.error("Error al enviar mensaje");
+    } finally {
+      setLoading(false);
     }
   };
 
   type ContactUsType = {
     fullName?: string;
     email?: string;
-    password?: string;
     phone?: string;
     message?: string;
     privacyPolice?: boolean;
@@ -40,13 +46,14 @@ export default function Contact() {
   );
 
   return (
-    <div className="h-[93vh] flex w-[80%] m-auto ">
+    <div className="h-[93vh] flex w-[80%] m-auto mb-12 ">
+      <Toaster richColors />
       <div className="flex-1 pt-[90px] flex flex-col items-center justify-center">
         {/* Texto introducción */}
-        <div className="w-[750px] flex flex-col  mb-10">
-          <h1 className="text-5xl font-semibold">Contáctanos</h1>
+        <div className="w-[580px] flex flex-col  mb-7">
+          <h1 className="text-2xl font-semibold">Contáctanos</h1>
           <p className="">
-            Anímate! Si tienes alguna duda, pregunta o sugerencia, no dudes en
+            Anímate! Si tienes alguna duda, pregunta o tugerencia, no dudes en
             escribirnos.
           </p>
         </div>
@@ -57,20 +64,21 @@ export default function Contact() {
           onFinishFailed={() => {
             console.log("Fallo");
           }}
-          className="w-[750px] max-md:mx-20 md:mx-32"
+          className="w-[580px] max-md:mx-20 md:mx-32"
+          ref={(ref) => (formRef.current = ref)}
         >
           <Form.Item<ContactUsType>
             name="fullName"
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese su nombre completo",
+                message: "Por favor, ingrese tu nombre completo",
               },
             ]}
             className="cursor-text"
           >
             <Input
-              className="w-full border rounded-xl p-4"
+              className="w-full border rounded-xl p-2"
               placeholder="Nombre completo"
               size="large"
             />
@@ -92,7 +100,7 @@ export default function Contact() {
             className="cursor-text"
           >
             <Input
-              className="w-full rounded-xl p-4"
+              className="w-full rounded-xl p-2"
               placeholder="Ingresa tu correo electrónico"
               size="large"
             />
@@ -103,7 +111,10 @@ export default function Contact() {
           <Form.Item<ContactUsType>
             name="phone"
             rules={[
-              { required: true, message: "Please input your phone number!" },
+              {
+                required: true,
+                message: "Por favor, ingresa tu número de teléfono",
+              },
             ]}
           >
             <Input
@@ -120,14 +131,14 @@ export default function Contact() {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese su mensaje",
+                message: "Por favor, ingresa tu mensaje",
               },
             ]}
             className="cursor-text"
           >
             <TextArea
               rows={4}
-              placeholder="Ingrese su mensaje..."
+              placeholder="Ingresa tu mensaje..."
               size="large"
               autoSize={{ minRows: 4, maxRows: 4 }}
             />
@@ -145,7 +156,7 @@ export default function Contact() {
           <Form.Item className="w-full flex justify-center">
             <button
               type="submit"
-              className="w-96 h-14 bg-[#5aa8c4] text-white font-semibold rounded-md p-4"
+              className="w-72 h-14 bg-[#5aa8c4] text-white font-semibold rounded-md p-4"
               disabled={loading}
             >
               {loading ? (

@@ -12,8 +12,8 @@ export default function Team() {
 	return (
 		<div className="h-screen pt-16">
 			<div className="flex flex-col items-center justify-center h-[30%]">
-				<h1 className="text-4xl font-bold pb-1">Conoce al equipo</h1>
-				<p className="text-lg">
+				<h1 className="text-4xl font-bold pb-1">Conoce a nuestro equipo</h1>
+				<p className="text-lg+">
 					Our team is composed of the best of the best. We are a group of
 					passionate individuals who are dedicated to providing the best service
 					to our clients.
@@ -37,7 +37,7 @@ export default function Team() {
 							<img
 								src="https://st3.depositphotos.com/13324256/17675/i/600/depositphotos_176758222-stock-photo-beautiful-gerbera-flower-isolated-black.jpg"
 								alt=""
-								className="!h-[26rem] !w-[22rem] object-cover rounded-3xl shadow-lg hover:scale-105 transition duration-300 ease-in-out "
+								className="!h-[23rem] !w-[19rem] object-cover rounded-3xl shadow-lg hover:scale-105 transition duration-300 ease-in-out "
 							/>
 						</SwiperSlide>
 					))}
