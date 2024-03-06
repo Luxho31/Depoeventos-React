@@ -21,6 +21,7 @@ import { useState } from "react";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
 import { useAuth } from "../../../context/AuthProvider";
 import useForm from "antd/es/form/hooks/useForm";
+import { Toaster, toast } from "sonner";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,6 @@ export default function Register() {
     });
     setPaso(paso + 1);
   };
-
   const onFinishStep2 = async (values: any) => {
     try {
       setLoading(true);
@@ -68,12 +68,30 @@ export default function Register() {
         ...values,
         birthDate: values.birthDate.format("YYYY-MM-DD"),
       };
-      console.log(formData);
 
-      await register(finalFormData);
+      const response = await register(finalFormData);
+      console.log("Respuesta del registro:", response);
+
       navigate("/");
-    } catch (error) {
-      console.error("Error al registrar:", error);
+    } catch (error: any) {
+      toast.error(error.message);
+      if (error.message === "El correo electrónico ya está en uso") {
+        form.setFields([
+          {
+            name: "username",
+            errors: ["El correo electrónico ya está en uso"],
+          },
+        ]);
+      } else if (error.message === "El número de documento ya está en uso") {
+        form.setFields([
+          {
+            name: "documentNumber",
+            errors: ["El número de documento ya está en uso"],
+          },
+        ]);
+      } else {
+        toast.error("Error al registrar el usuario");
+      }
     } finally {
       setLoading(false);
     }
@@ -82,6 +100,7 @@ export default function Register() {
   return (
     <>
       <div className="flex items-center w-full h-screen">
+        <Toaster richColors />
         <>
           <img
             className="w-1/4 h-screen object-cover max-md:hidden relative"
@@ -278,6 +297,7 @@ export default function Register() {
                   prefix={
                     <FaAddressCard className="site-form-item-icon me-1" />
                   }
+                  disabled={selectedDocumentType === undefined}
                   maxLength={
                     selectedDocumentType === "DNI"
                       ? 8
