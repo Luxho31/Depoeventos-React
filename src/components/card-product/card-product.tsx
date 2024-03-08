@@ -1,24 +1,43 @@
+type Product = {
+    id: number;
+    image: string;
+    title: string;
+    price: number;
+    description: string;
+    // Otros campos del producto desde el backend
+};
 
-export default function CardProduct() {
+type CardProps = {
+    product: Product;
+    onClick: () => void;
+};
+
+export default function CardProduct({ product, onClick }: CardProps) {
     return (
-        // <div className="bg-indigo-500 border-black w-80 h-96">
-        //     {/* <img src="https://cdn-www.bluestacks.com/bs-images/com.netease.tjtw_.jpg" alt="" /> */}
-        //     <div className="bg-green-600 h-60"></div>
-        //     <div className="bg-orange-500">
-        //         CardProduct
-        //     </div>
-        // </div>
-        <div className="bg-gray-100 border-black shadow-lg w-80 h-96 rounded-xl">
-            <div className="h-60 rounded-t-xl relative">
+        // <div className="bg-gray-100 shadow-lg rounded-xl cursor-pointer">
+        <div className="bg-gray-100 shadow-lg rounded-xl cursor-pointer">
+            <div className="h-60 rounded-t-xl flex justify-center relative">
                 <img
-                    src="https://www.freepnglogos.com/uploads/tom-and-jerry-png/tom-and-jerry-hamera-deviantart-14.png"
-                    className="h-60 left-0 translate-x-1/2 absolute"
+                    // src="https://www.pngall.com/wp-content/uploads/2016/07/Tom-And-Jerry-PNG.png"
+                    src={product.image}
+                    className="h-60 p-4 object-cover absolute"
                     alt=""
                 />
-                <div className="bg-blue-500 rounded-t-xl rounded-b-lg h-36" />
+                <div className="bg-blue-500 rounded-t-xl rounded-b-lg h-36 w-full" />
             </div>
-            <div className="h-36 rounded-b-xl">
-                <span>Hola Soy Luis</span>
+            <div className="p-4 rounded-b-xl flex flex-col items-center">
+                {/* <p className="text-xl font-semibold mb-4">Futbol</p>
+                <p className="mb-4">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p> */}
+                <p className="text-xl font-semibold mb-4">{product.title}</p>
+                <p className="mb-4">{product.description}</p>
+            </div>
+            <div className="flex justify-center mb-4">
+                <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    onClick={onClick}
+                >
+                    Ver detalles
+                </button>
             </div>
         </div>
     )

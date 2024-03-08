@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../utils/cn";
+import CardProduct from "./card-product/card-product";
 // import Image from "next/image";
 
 type Card = {
@@ -26,7 +27,7 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
   };
 
   return (
-    <div className="w-full h-full p-10 grid grid-cols-1 md:grid-cols-3  max-w-7xl mx-auto gap-4 ">
+    <div className="w-full h-full p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  max-w-7xl mx-auto gap-8 ">
       {cards.map((card, i) => (
         <div key={i} className={cn(card.className, "")}>
           <motion.div
@@ -37,13 +38,14 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
               selected?.id === card.id
                 ? "rounded-lg cursor-pointer absolute inset-0 h-1/2 w-full md:w-1/2 m-auto z-50 flex justify-center items-center flex-wrap flex-col"
                 : lastSelected?.id === card.id
-                ? "z-40 bg-white rounded-xl h-full w-full"
-                : "bg-white rounded-xl h-full w-full"
+                  ? "z-40 bg-white rounded-xl h-full w-full"
+                  : "bg-white rounded-xl h-full w-full"
             )}
             layout
           >
             {selected?.id === card.id && <SelectedCard selected={selected} />}
-            <BlurImage card={card} />
+            {/* <BlurImage card={card} /> */}
+            {<CardProduct />}
           </motion.div>
         </div>
       ))}
@@ -59,22 +61,22 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
   );
 };
 
-const BlurImage = ({ card }: { card: Card }) => {
-  const [loaded, setLoaded] = useState(false);
-  return (
-    <img
-      src={card.thumbnail}
-      height="500"
-      width="500"
-      onLoad={() => setLoaded(true)}
-      className={cn(
-        "object-cover object-top absolute inset-0 h-full w-full transition duration-200",
-        loaded ? "blur-none" : "blur-md"
-      )}
-      alt="thumbnail"
-    />
-  );
-};
+// const BlurImage = ({ card }: { card: Card }) => {
+//   const [loaded, setLoaded] = useState(false);
+//   return (
+//     <img
+//       src={card.thumbnail}
+//       height="500"
+//       width="500"
+//       onLoad={() => setLoaded(true)}
+//       className={cn(
+//         "object-cover object-top absolute inset-0 h-full w-full transition duration-200",
+//         loaded ? "blur-none" : "blur-md"
+//       )}
+//       alt="thumbnail"
+//     />
+//   );
+// };
 
 const SelectedCard = ({ selected }: { selected: Card | null }) => {
   return (

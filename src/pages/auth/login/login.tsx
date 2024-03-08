@@ -58,7 +58,7 @@ export default function Login() {
           <Link
             className="pointer flexNullCenter absolute top-5 left-5"
             to="/"
-            // smooth={true}
+          // smooth={true}
           >
             <img
               src={LogoIcon}
@@ -81,7 +81,7 @@ export default function Login() {
             Bienvenido a Depo<span className="text-orange-500">Eventos</span>
           </h2>
 
-          <div className="flex flex-col gap-y-2 mb-8">
+          <div className="flex flex-col gap-y-2">
             {/* Input Email */}
             <Form.Item<LoginType>
               name="email"
@@ -124,6 +124,10 @@ export default function Login() {
                 prefix={<FaKey className="site-form-item-icon me-1" />}
               />
             </Form.Item>
+          </div>
+
+          <div className="mb-8 flex justify-end">
+            <Link to={"/forgot-password"}>¿Olvide la contraseña?</Link>
           </div>
 
           <Form.Item className="w-full flex justify-center">

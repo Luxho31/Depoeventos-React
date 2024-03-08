@@ -18,6 +18,8 @@ import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
 import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
 import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
+import ForgotPassword from "./pages/auth/forgot-password/forgot-password";
+import ChangePassword from "./pages/auth/change-password/change-password";
 
 function App() {
 	return (
@@ -28,6 +30,8 @@ function App() {
 					<Route path="/" element={<AuthLayout />}>
 						<Route index path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
+						<Route path="/forgot-password" element={<ForgotPassword />} />
+						<Route path="/change-password" element={<ChangePassword />} />
 					</Route>
 
 					{/* Rutas Generales */}
