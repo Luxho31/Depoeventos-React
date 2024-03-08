@@ -86,7 +86,7 @@ export default function ForgotPassword() {
               className="cursor-text"
             >
               <Input
-                className="w-full rounded-xl p-4"
+                className="w-full rounded-xl p-3"
                 placeholder="Ingresa tu correo electrónico"
                 size="large"
                 prefix={<FaEnvelope className="site-form-item-icon me-1" />}
