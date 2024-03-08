@@ -23,6 +23,10 @@ export default function ForgotPassword() {
       await sendMessage(values);
       form.resetFields();
       toast.success("Correo enviado con éxito");
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+
+      // Close the page
+      window.close();
     } catch (error) {
       toast.error("Error al enviar mensaje");
       form.setFields([

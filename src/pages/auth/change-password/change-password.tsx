@@ -7,6 +7,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import React from "react";
 import { FaKey } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
+import { forgotPassword } from "../../../services/forgot-password/change-password-service";
 
 export default function ChangePassword() {
   const [loading, setLoading] = React.useState(false);
@@ -18,7 +19,10 @@ export default function ChangePassword() {
     confirmPassword?: string;
   };
 
+  const token = window.location.pathname.split("/")[2];
+  console.log(token);
   const handleChangePassword = async (values: any) => {
+    console.log(values.password);
     if (values.password !== values.confirmPassword) {
       toast.error("Las contraseñas no coinciden");
       form.setFields([
@@ -36,8 +40,10 @@ export default function ChangePassword() {
 
     try {
       setLoading(true);
-
-      navigate("/");
+      await forgotPassword(token, values.password);
+      toast.success("Contraseña cambiada con éxito");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      navigate("/login");
     } catch (error: any) {
       toast.error(error.message);
     } finally {
