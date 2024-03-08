@@ -20,6 +20,7 @@ import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dash
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
 import ForgotPassword from "./pages/auth/forgot-password/forgot-password";
 import ChangePassword from "./pages/auth/change-password/change-password";
+import Profile from "./pages/dashboard/screens/profile";
 
 function App() {
 	return (
@@ -51,6 +52,7 @@ function App() {
 						<Route path="/dashboard/courses" element={<CoursesDashboard />} />
 						<Route path="/dashboard/registrations" element={<RegistrationsDashboard />} />
 						<Route path="/dashboard/transactions" element={<TransactionsDashboard />} />
+						<Route path="/dashboard/profile" element={<Profile />} />
 					</Route>
 
 					<Route path="*" element={<NotFound />} />

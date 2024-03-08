@@ -95,6 +95,7 @@ export default function Dashboard() {
 			label: "Perfil",
 			key: "1",
 			icon: <UserOutlined />,
+            onClick: () => handleItemClick('/dashboard/profile')
 		},
 		{
 			label: "Cerrar Sesión",
