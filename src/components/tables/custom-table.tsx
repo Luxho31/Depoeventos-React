@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import EditableCell from "./editable-cell";
 
 const originData: any = [];
-const CustomTable = ({ columns, dataTable }: any) => {
+const CustomTable = ({ columns, dataTable, expandable }: any) => {
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingkey, setEditingkey] = useState("");
@@ -22,8 +22,6 @@ const CustomTable = ({ columns, dataTable }: any) => {
     setEditingkey(record.key);
   };
 
-  // Aca irán nuestros metodos para hacer el CRUD------------------------------
-
   const save = async (key: any) => {
     try {
       const row = await form.validateFields();
@@ -37,12 +35,10 @@ const CustomTable = ({ columns, dataTable }: any) => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-
   const columnsMapped = columns.map((col: any) => ({
     title: col.title,
     dataIndex: col.dataIndex,
-    wkeyth: col.width,
+    width: col.width,
     editable: col.editable,
   }));
 
@@ -97,12 +93,16 @@ const CustomTable = ({ columns, dataTable }: any) => {
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{ onChange: cancel, showSizeChanger: false, pageSize: 8 }}
-        expandable={{
-          expandedRowRender: (record) => (
-            <p style={{ margin: 0 }}>{record.description}</p>
-          ),
-          rowExpandable: (record) => record.description !== "",
-        }}
+        expandable={
+          expandable
+            ? {
+                expandedRowRender: (record) => (
+                  <p style={{ margin: 0 }}>{record.description}</p>
+                ),
+                rowExpandable: (record) => record.description !== "",
+              }
+            : undefined
+        }
       />
     </Form>
   );
