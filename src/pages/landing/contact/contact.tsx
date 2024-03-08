@@ -37,8 +37,17 @@ export default function Contact() {
   };
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }} defaultValue="+51">
+    <Form.Item
+      name="prefix"
+      noStyle
+      rules={[
+        {
+          required: true,
+          message: "Por favor, ingresa el prefijo de tu país",
+        },
+      ]}
+    >
+      <Select style={{ width: 70 }}>
         <Option value="51">+51</Option>
         <Option value="58">+58</Option>
       </Select>
@@ -145,7 +154,16 @@ export default function Contact() {
           </Form.Item>
 
           {/* Checkbox para aceptar politicas de privacidad */}
-          <Form.Item<ContactUsType> name="privacyPolice">
+          <Form.Item<ContactUsType>
+            name="privacyPolice"
+            valuePropName="checked"
+            rules={[
+              {
+                required: true,
+                message: "Debes aceptar las políticas de privacidad",
+              },
+            ]}
+          >
             <Checkbox>
               He leido y acepto las politicas de privacidad{" "}
               <span className="text-red-500">*</span>
