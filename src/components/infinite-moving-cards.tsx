@@ -68,17 +68,9 @@ export const InfiniteMovingCards = ({
         {items.map((item) => (
           <li
             className="w-10  max-w-full relative rounded-xl shadow-md border flex-shrink-0 px-8 py-2 md:w-[270px]"
-            // style={{
-            //   background:
-            //     "linear-gradient(180deg, var(--slate-800), var(--slate-900)",
-            // }}
             key={item.name}
           >
             <blockquote>
-              {/* <div
-                aria-hidden="true"
-                className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
-              ></div> */}
               <img
                 src="https://www.freepnglogos.com/uploads/tom-and-jerry-png/tom-and-jerry-hamera-deviantart-14.png"
                 alt=""

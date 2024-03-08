@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import React, { useState } from "react";
 import { cn } from "../utils/cn";
 import CardProduct from "./card-product/card-product";
 // import Image from "next/image";

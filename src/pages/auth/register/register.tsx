@@ -17,11 +17,11 @@ import {
 } from "react-icons/fa";
 
 import { LoadingOutlined } from "@ant-design/icons";
+import useForm from "antd/es/form/hooks/useForm";
 import { useState } from "react";
+import { Toaster, toast } from "sonner";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
 import { useAuth } from "../../../context/AuthProvider";
-import useForm from "antd/es/form/hooks/useForm";
-import { Toaster, toast } from "sonner";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);

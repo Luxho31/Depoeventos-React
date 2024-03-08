@@ -1,13 +1,12 @@
-import { Link } from "react-router-dom";
-import LogoIcon from "../../../assets/image/logo.png";
 import { Form, Input, Spin } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import LogoIcon from "../../../assets/image/logo.png";
 import { useAuth } from "../../../context/AuthProvider";
-import { useNavigate } from "react-router-dom";
 
 // React Icons
-import { FaEnvelope, FaKey } from "react-icons/fa";
-import React from "react";
 import { LoadingOutlined } from "@ant-design/icons";
+import React from "react";
+import { FaKey } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
 
 export default function ChangePassword() {

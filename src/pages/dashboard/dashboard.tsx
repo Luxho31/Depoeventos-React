@@ -1,4 +1,3 @@
-import { Link, Outlet, useNavigate } from "react-router-dom"
 import {
     DownOutlined,
     MenuFoldOutlined,
@@ -9,11 +8,12 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from 'antd';
 import { useState } from 'react';
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
-import LogoIcon from "../../assets/image/logo.png"
-import { IoIosLogOut } from "react-icons/io";
-import { Toaster, toast } from "sonner";
 import type { MenuProps } from "antd";
+import { IoIosLogOut } from "react-icons/io";
+import { toast } from "sonner";
+import LogoIcon from "../../assets/image/logo.png";
 
 const { Header, Sider, Content } = Layout;
 
