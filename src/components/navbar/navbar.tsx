@@ -8,6 +8,7 @@ import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import "./navbar.css";
 import { useAuth } from "../../context/AuthProvider";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -103,7 +104,10 @@ export default function Navbar() {
             </li>
           </ul>
 
-          <ul className="">
+          <ul className="flex items-center">
+            <button className="p-2 me-8">
+              <FaShoppingCart className="text-2xl" />
+            </button>
             {isLoggedIn ? (
               <li className="">
                 <Dropdown menu={menuProps} className="border-none">

@@ -1,5 +1,5 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { DatePicker, Form, Input, InputNumber, Select, Spin } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { DatePicker, Form, GetProp, Input, InputNumber, Select, Spin, Upload, UploadProps, message } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
@@ -11,14 +11,40 @@ import {
     FaEnvelope,
     FaKey,
     FaMapMarkerAlt,
+    FaPen,
     FaPhone,
+    FaSave,
     FaUser,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (img: FileType, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+};
+
+
 export default function Profile() {
     const [loading, setLoading] = useState(false);
     const [form] = useForm();
+    const [fieldsEnabled, setFieldsEnabled] = useState(false);
     const [selectedDocumentType, setSelectedDocumentType] = useState<
         string | undefined
     >(undefined);
@@ -38,22 +64,70 @@ export default function Profile() {
         password?: String;
     };
 
+    // Funcionalidad de subida de imagen
+    // const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>();
+
+    const handleChange: UploadProps['onChange'] = (info) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as FileType, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
+
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none' }} type="button">
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+    );
+
+    // Funcionalidad de deshabilitar los campos
+
     const disabledDate = (current: any) => {
         return current && current > moment().subtract(18, "years");
     };
 
+    const toggleFields = () => {
+        setFieldsEnabled(!fieldsEnabled);
+    };
+
+    const resetForm = () => {
+        form.resetFields(); // Resetear los campos del formulario
+        setFieldsEnabled(false); // Deshabilitar los campos
+        setSelectedDocumentType(undefined)
+    };
 
     return (
         <div className="flex">
             <div className="w-1/3 flex flex-col items-center">
                 <div className="w-80 h-80 rounded-full border-4 mb-8">
                     <img
-                    src="https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png"
-                    alt=""
-                    className="w-full"
+                        src="https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png"
+                        alt=""
+                        className="w-full"
                     />
                 </div>
-                <button className="px-12 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600">Editar Foto</button>
+                {/* <button className="px-12 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600">Editar Foto</button> */}
+                <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                    disabled={!fieldsEnabled}
+                >
+                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                </Upload>
             </div>
             <div className="w-full">
                 {/* Formulario 1 */}
@@ -62,6 +136,7 @@ export default function Profile() {
                     autoComplete="off"
                     className="w-[750px] flex flex-col max-md:mx-20 md:mx-32"
                     form={form}
+                    disabled={!fieldsEnabled}
                 >
                     <div
                         className={`grid grid-cols-2 gap-x-4 gap-y-2`}
@@ -398,13 +473,13 @@ export default function Profile() {
                         </Form.Item>
                     </div>
 
-                    {/* ------------------Botón de Registro------------------ */}
-
                     <div className="flex justify-between">
+                        {/* ------------------Botón de Editar y Cancelar------------------ */}
                         <Form.Item className="">
                             <button
-                                type="submit"
-                                className="w-60 bg-gray-950 text-white font-semibold rounded-xl p-4 hover:bg-gray-700"
+                                type="button"
+                                className={`w-60 ${fieldsEnabled ? "bg-red-500 hover:bg-red-700" : "bg-gray-950 hover:bg-gray-700"} flex justify-center text-white font-semibold rounded-xl p-4`}
+                                onClick={fieldsEnabled ? resetForm : toggleFields}
                             >
                                 {loading ? (
                                     <Spin
@@ -413,14 +488,16 @@ export default function Profile() {
                                         }
                                     />
                                 ) : (
-                                    "Reestablecer Cambios"
+                                    fieldsEnabled ? "Cancelar" : <><FaPen className="me-2" />Editar</>
                                 )}
                             </button>
                         </Form.Item>
+                        {/* ------------------Botón de Guardar Cambios------------------ */}
                         <Form.Item className="">
                             <button
                                 type="submit"
-                                className="w-60 bg-blue-500 text-white font-semibold rounded-xl p-4 hover:bg-blue-600"
+                                className={`w-60 ${fieldsEnabled ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-300"} flex justify-center text-white font-semibold rounded-xl p-4`}
+                                disabled={!fieldsEnabled}
                             >
                                 {loading ? (
                                     <Spin
@@ -429,7 +506,10 @@ export default function Profile() {
                                         }
                                     />
                                 ) : (
-                                    "Guardar Cambios"
+                                    <>
+                                        <FaSave className="me-2" />
+                                        Guardar Cambios
+                                    </>
                                 )}
                             </button>
                         </Form.Item>
