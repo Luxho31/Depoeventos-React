@@ -4,29 +4,30 @@ export default function ProductsDashboard() {
   const data = [
     {
       key: 1,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
+      name: "Combo Voley + Fútbol",
+      price: 300,
+      campus: "Colegio Villa Caritas",
       description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    },
-    {
-      key: 2,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
+        "Entrena con nosotros Voley y Fútbol en un solo combo. ¡No te lo pierdas!",
+      category: "Lower",
+      courses: ["Voley", " - Fútbol"],
     },
   ];
   const columns = [
-    { title: "nombre", dataIndex: "name", width: "20%", editable: true },
-    { title: "edad", dataIndex: "age", width: "20%", editable: true },
-    { title: "address", dataIndex: "address", width: "30%", editable: true },
+    { title: "Nombre", dataIndex: "name", width: "15%", editable: true },
+    { title: "Precio", dataIndex: "price", width: "5%", editable: true },
+    { title: "Sede", dataIndex: "campus", width: "12%", editable: true },
+    { title: "Categoria", dataIndex: "category", width: "8%", editable: true },
+    {
+      title: "Disciplinas",
+      dataIndex: "courses",
+      width: "50%",
+      editable: true,
+    },
   ];
   return (
     <div className="h-screen">
-      <CustomTable columns={columns} dataTable={data} />
+      <CustomTable columns={columns} dataTable={data} expandable={true} />
     </div>
   );
 }

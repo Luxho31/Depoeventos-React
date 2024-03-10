@@ -45,7 +45,7 @@ const CustomTable = ({ columns, dataTable, expandable }: any) => {
   const table_columns = [
     ...columnsMapped,
     {
-      title: "operation",
+      title: "Operaciones",
       dataIndex: "operation",
       render: (_: any, record: any) => {
         const editable = isEditing(record);

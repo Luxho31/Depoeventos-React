@@ -21,6 +21,8 @@ import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashbo
 import ForgotPassword from "./pages/auth/forgot-password/forgot-password";
 import ChangePassword from "./pages/auth/change-password/change-password";
 import Profile from "./pages/dashboard/screens/profile";
+import CampusesDashboard from "./pages/dashboard/screens/campuses-dashboard";
+import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard";
 
 function App() {
 	return (
@@ -53,6 +55,8 @@ function App() {
 						<Route path="/dashboard/registrations" element={<RegistrationsDashboard />} />
 						<Route path="/dashboard/transactions" element={<TransactionsDashboard />} />
 						<Route path="/dashboard/profile" element={<Profile />} />
+						<Route path="/dashboard/campuses" element={<CampusesDashboard />} />
+						<Route path="/dashboard/categories" element={<CategoriesDashboard />} />
 					</Route>
 
 					<Route path="*" element={<NotFound />} />

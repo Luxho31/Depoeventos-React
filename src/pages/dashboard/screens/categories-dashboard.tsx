@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import CustomTable from "../../../components/tables/custom-table";
 import { IoReload } from "react-icons/io5";
 
-export default function UsersDashboard() {
+export default function CategoriesDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const getAllUsers = async () => {
+  const getAllDisciplines = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/users");
+      const response = await fetch("http://localhost:8080/api/categories");
       const data = await response.json();
 
       const dataWithKeys = data.map((item: any, index: any) => ({
@@ -22,13 +21,13 @@ export default function UsersDashboard() {
     }
   };
   useEffect(() => {
-    getAllUsers();
+    getAllDisciplines();
   }, []);
 
   const handleReload = () => {
     try {
       setLoading(true);
-      getAllUsers();
+      getAllDisciplines();
     } catch (error) {
       console.error("Error al recargar usuarios:", error);
     } finally {
@@ -37,43 +36,12 @@ export default function UsersDashboard() {
   };
 
   const columns = [
-    { title: "Nombre", dataIndex: "firstName", width: "10%", editable: true },
+    { title: "ID", dataIndex: "id", width: "5%", editable: true },
+    { title: "Nombre", dataIndex: "name", width: "20%", editable: true },
     {
-      title: "Apellido Paterno",
-      dataIndex: "lastName",
-      width: "10%",
-      editable: true,
-    },
-    {
-      title: "Apellido Materno",
-      dataIndex: "motherLastName",
-      width: "12%",
-      editable: true,
-    },
-    { title: "Correo", dataIndex: "username", width: "12%", editable: true },
-    {
-      title: "Fecha de nacimiento",
-      dataIndex: "birthDate",
-      width: "10%",
-      editable: true,
-    },
-    {
-      title: "Número de contacto",
-      dataIndex: "contactNumber",
-      width: "10%",
-      editable: true,
-    },
-    { title: "País", dataIndex: "country", width: "7%", editable: true },
-    {
-      title: "Tipo de documento",
-      dataIndex: "documentType",
-      width: "10%",
-      editable: true,
-    },
-    {
-      title: "Número de documento",
-      dataIndex: "documentNumber",
-      width: "10%",
+      title: "Descripción",
+      dataIndex: "description",
+      width: "60%",
       editable: true,
     },
   ];
@@ -85,7 +53,7 @@ export default function UsersDashboard() {
       >
         {loading ? "hola" : <IoReload className="text-lg" />}
       </button>
-      <CustomTable columns={columns} dataTable={userData} />
+      <CustomTable columns={columns} dataTable={userData} expandable={false} />
     </div>
   );
 }

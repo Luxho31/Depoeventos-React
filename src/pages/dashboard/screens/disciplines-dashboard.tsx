@@ -1,51 +1,59 @@
+import { useEffect, useState } from "react";
 import CustomTable from "../../../components/tables/custom-table";
+import { IoReload } from "react-icons/io5";
 
 export default function DiciplinesDashboard() {
-  const data = [
-    {
-      key: 1,
-      discipline_id: 1,
-      name: "Futbol",
-      discipline_description: "Entrena futbol con nosotros",
-    },
-    {
-      key: 2,
-      discipline_id: 2,
-      name: "Voley",
-      discipline_description: "Entrena voley con nosotros",
-    },
-    {
-      key: 3,
-      discipline_id: 3,
-      name: "Basket",
-      discipline_description: "Entrena basket con nosotros",
-    },
-    {
-      key: 4,
-      discipline_id: 4,
-      name: "Tenis",
-      discipline_description: "Entrena tenis con nosotros",
-    },
-    {
-      key: 5,
-      discipline_id: 5,
-      name: "Gimnasia",
-      discipline_description: "Entrena gimnasia con nosotros",
-    },
-  ];
+  const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const getAllDisciplines = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/courses");
+      const data = await response.json();
+
+      const dataWithKeys = data.map((item: any, index: any) => ({
+        ...item,
+        key: index,
+      }));
+
+      setUserData(dataWithKeys);
+    } catch (error) {
+      console.error("Error al obtener datos de usuarios:", error);
+    }
+  };
+  useEffect(() => {
+    getAllDisciplines();
+  }, []);
+
+  const handleReload = () => {
+    try {
+      setLoading(true);
+      getAllDisciplines();
+    } catch (error) {
+      console.error("Error al recargar usuarios:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const columns = [
-    { title: "ID", dataIndex: "discipline_id", width: "5%", editable: true },
+    { title: "ID", dataIndex: "id", width: "5%", editable: true },
     { title: "Nombre", dataIndex: "name", width: "20%", editable: true },
     {
       title: "Descripción",
-      dataIndex: "discipline_description",
+      dataIndex: "description",
       width: "60%",
       editable: true,
     },
   ];
   return (
     <div className="h-screen">
-      <CustomTable columns={columns} dataTable={data} expandable={false} />
+      <button
+        onClick={handleReload}
+        className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+      >
+        {loading ? "hola" : <IoReload className="text-lg" />}
+      </button>
+      <CustomTable columns={columns} dataTable={userData} expandable={false} />
     </div>
   );
 }
