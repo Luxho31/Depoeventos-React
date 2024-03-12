@@ -1,15 +1,15 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-    DatePicker,
-    Form,
-    GetProp,
-    Input,
-    InputNumber,
-    Select,
-    Spin,
-    Upload,
-    UploadProps,
-    message,
+  DatePicker,
+  Form,
+  GetProp,
+  Input,
+  InputNumber,
+  Select,
+  Spin,
+  Upload,
+  UploadProps,
+  message,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import moment from "moment";
@@ -18,12 +18,12 @@ import { COUNTRIES } from "../../../components/selectors/country-selector/countr
 
 // React Icons
 import {
-    FaAddressCard,
-    FaMapMarkerAlt,
-    FaPen,
-    FaPhone,
-    FaSave,
-    FaUser
+  FaAddressCard,
+  FaMapMarkerAlt,
+  FaPen,
+  FaPhone,
+  FaSave,
+  FaUser
 } from "react-icons/fa";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -298,10 +298,10 @@ export default function Profile() {
                   selectedDocumentType === "DNI"
                     ? 8
                     : selectedDocumentType === "PASSPORT"
-                    ? 10
-                    : selectedDocumentType === "CARNET DE EXTRANJERIA"
-                    ? 9
-                    : undefined
+                      ? 10
+                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
+                        ? 9
+                        : undefined
                 }
               />
             </Form.Item>
@@ -423,11 +423,10 @@ export default function Profile() {
             <Form.Item className="">
               <button
                 type="button"
-                className={`w-60 ${
-                  fieldsEnabled
+                className={`w-60 ${fieldsEnabled
                     ? "bg-red-500 hover:bg-red-700"
                     : "bg-gray-950 hover:bg-gray-700"
-                } flex justify-center text-white font-semibold rounded-xl p-4`}
+                  } flex justify-center text-white font-semibold rounded-xl p-4`}
                 onClick={fieldsEnabled ? resetForm : toggleFields}
               >
                 {loading ? (
@@ -450,11 +449,10 @@ export default function Profile() {
             <Form.Item className="">
               <button
                 type="submit"
-                className={`w-60 ${
-                  fieldsEnabled
+                className={`w-60 ${fieldsEnabled
                     ? "bg-blue-500 hover:bg-blue-600"
                     : "bg-blue-300"
-                } flex justify-center text-white font-semibold rounded-xl p-4`}
+                  } flex justify-center text-white font-semibold rounded-xl p-4`}
                 disabled={!fieldsEnabled}
               >
                 {loading ? (
