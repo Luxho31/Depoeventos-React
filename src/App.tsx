@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { AuthProvider } from "./context/AuthProvider";
+import { AuthProvider, useAuth } from "./context/AuthProvider";
 import AuthLayout from "./layout/AuthLayout";
 import RutaGeneral from "./layout/RutaGeneral";
 import Login from "./pages/auth/login/login";
@@ -23,47 +23,92 @@ import ChangePassword from "./pages/auth/change-password/change-password";
 import Profile from "./pages/dashboard/screens/profile";
 import CampusesDashboard from "./pages/dashboard/screens/campuses-dashboard";
 import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard";
+import { useEffect } from "react";
 
 function App() {
-	return (
-		<BrowserRouter>
-			<AuthProvider>
-				<Routes>
-					{/* Rutas de Autenticacion */}
-					<Route path="/" element={<AuthLayout />}>
-						<Route index path="/login" element={<Login />} />
-						<Route path="/register" element={<Register />} />
-						<Route path="/forgot-password" element={<ForgotPassword />} />
-						<Route path="/change-password/:token" element={<ChangePassword />} />
-					</Route>
+  const { isAuthenticated } = useAuth();
 
-					{/* Rutas Generales */}
-					<Route path="/" element={<RutaGeneral />}>
-						<Route index element={<Home />} />
-						<Route path="/products" element={<Products />} />
-						<Route path="/team" element={<Team />} />
-						<Route path="/contact" element={<Contact />} />
-					</Route>
+  useEffect(() => {
+    const renewTokenOnLoad = async () => {
+      if (isAuthenticated) {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/renewToken/${localStorage.getItem(
+              "token"
+            )}}`,
+            {
+              method: "GET",
+            }
+          );
+          if (!response.ok || localStorage.getItem("token") == "") {
+            localStorage.removeItem("token");
+            throw new Error("Error al renovar el token");
+          }
 
-					{/* Rutas Protegidas */}
-					<Route path="/dashboard" element={<Dashboard />}>
-						<Route index element={<DisciplinesDashboard />} />
-						<Route path="/dashboard/products" element={<ProductsDashboard />} />
-						<Route path="/dashboard/Users" element={<UsersDashboard />} />
-						<Route path="/dashboard/childrens" element={<ChildrensDashboard />} />
-						<Route path="/dashboard/courses" element={<CoursesDashboard />} />
-						<Route path="/dashboard/registrations" element={<RegistrationsDashboard />} />
-						<Route path="/dashboard/transactions" element={<TransactionsDashboard />} />
-						<Route path="/dashboard/profile" element={<Profile />} />
-						<Route path="/dashboard/campuses" element={<CampusesDashboard />} />
-						<Route path="/dashboard/categories" element={<CategoriesDashboard />} />
-					</Route>
+          const newToken = await response.text();
+          localStorage.setItem("token", newToken);
+        } catch (error) {
+          console.error("Error al renovar el token:", error);
+        }
+      }
+    };
+    renewTokenOnLoad();
+  }, [isAuthenticated]);
 
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</AuthProvider>
-		</BrowserRouter>
-	);
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Rutas de Autenticacion */}
+          <Route path="/" element={<AuthLayout />}>
+            <Route index path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/change-password/:token"
+              element={<ChangePassword />}
+            />
+          </Route>
+
+          {/* Rutas Generales */}
+          <Route path="/" element={<RutaGeneral />}>
+            <Route index element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
+
+          {/* Rutas Protegidas */}
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<DisciplinesDashboard />} />
+            <Route path="/dashboard/products" element={<ProductsDashboard />} />
+            <Route path="/dashboard/Users" element={<UsersDashboard />} />
+            <Route
+              path="/dashboard/childrens"
+              element={<ChildrensDashboard />}
+            />
+            <Route path="/dashboard/courses" element={<CoursesDashboard />} />
+            <Route
+              path="/dashboard/registrations"
+              element={<RegistrationsDashboard />}
+            />
+            <Route
+              path="/dashboard/transactions"
+              element={<TransactionsDashboard />}
+            />
+            <Route path="/dashboard/profile" element={<Profile />} />
+            <Route path="/dashboard/campuses" element={<CampusesDashboard />} />
+            <Route
+              path="/dashboard/categories"
+              element={<CategoriesDashboard />}
+            />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
 export default App;

@@ -42,7 +42,23 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    if (token) {
+      fetch(`${BASE_URL}/renewToken/${token}`, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            setIsAuthenticated(false);
+            localStorage.removeItem("token");
+            throw new Error("Error al renovar el token");
+          }
+        })
+        .catch((error) => {
+          console.error("Error al renovar el token:", error);
+        });
+    } else {
+      setIsAuthenticated(!!token);
+    }
   }, []);
 
   const login = async (username: string, password: string) => {
