@@ -69,9 +69,28 @@ export default function ChildrensDashboard() {
   }, []);
 
   const columns = [
-    { title: "nombre", dataIndex: ["name"], width: "20%", editable: true },
-    { title: "edad", dataIndex: "age", width: "20%", editable: true },
-    { title: "address", dataIndex: "address", width: "30%", editable: true },
+    { title: "Nombres", dataIndex: "name", width: "15%", editable: true },
+    {
+      title: "Apellido paterno",
+      dataIndex: "lastName",
+      width: "15%",
+      editable: true,
+    },
+    {
+      title: "Apellido materno",
+      dataIndex: "motherLastName",
+      width: "15%",
+      editable: true,
+    },
+    { title: "Fecha de nacimiento", dataIndex: "birthdate", width: "10%" },
+    { title: "Tipo de documento", dataIndex: "documentType", width: "5%" },
+    { title: "Número de documento", dataIndex: "documentNumber", width: "7%" },
+    {
+      title: "Número de emergencia",
+      dataIndex: "emergencyContactPhone",
+      width: "7%",
+    },
+    { title: "Sexo", dataIndex: "gender", width: "5%" },
   ];
 
   // ---------------- Switch
@@ -647,8 +666,8 @@ export default function ChildrensDashboard() {
         </Modal>
         {/* ------------------- VENTANA MODAL ----------------- */}
       </div>
-
-      <CustomTable columns={columns} dataTable={userData} expandable={true} />
+      <br />
+      <CustomTable columns={columns} dataTable={userData} expandable={false} />
     </div>
   );
 }
