@@ -9,12 +9,12 @@ import {
   Switch,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaAddressCard, FaArrowRight } from "react-icons/fa";
 import CustomTable from "../../../components/tables/custom-table";
 import {
   createChildren,
-  getUserInfo,
+  getChildrensByUserId,
 } from "../../../services/children-service";
 
 export default function ChildrensDashboard() {
@@ -34,6 +34,7 @@ export default function ChildrensDashboard() {
 
   const [isStudent, setIsStudent] = useState(false);
   const [isClubMember, setIsClubMember] = useState(false);
+  const [userData, setUserData] = useState([]);
 
   type FirstStepType = {
     name?: String;
@@ -60,26 +61,15 @@ export default function ChildrensDashboard() {
     memberMotherLastName?: String;
   };
 
-  const data = [
-    {
-      key: 1,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    },
-    {
-      key: 2,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    },
-  ];
+  useEffect(() => {
+    getChildrensByUserId().then((data) => {
+      setUserData(data);
+      console.log(data);
+    });
+  }, []);
+
   const columns = [
-    { title: "nombre", dataIndex: "name", width: "20%", editable: true },
+    { title: "nombre", dataIndex: ["name"], width: "20%", editable: true },
     { title: "edad", dataIndex: "age", width: "20%", editable: true },
     { title: "address", dataIndex: "address", width: "30%", editable: true },
   ];
@@ -106,8 +96,6 @@ export default function ChildrensDashboard() {
     });
     console.log(values.birthdate);
     setPaso(paso + 1);
-    console.log(setFormData);
-    console.log(getUserInfo(localStorage.getItem("token")));
   };
 
   const onFinishStep2 = (values: any) => {
@@ -127,6 +115,10 @@ export default function ChildrensDashboard() {
       setLoading(true);
       console.log(finalFormData);
       await createChildren(finalFormData);
+      getChildrensByUserId().then((data) => {
+        setUserData(data);
+      });
+      setOpen(false);
     } catch (error) {
       console.error("Error al crear un hijo", error);
       throw error;
@@ -656,7 +648,7 @@ export default function ChildrensDashboard() {
         {/* ------------------- VENTANA MODAL ----------------- */}
       </div>
 
-      <CustomTable columns={columns} dataTable={data} expandable={true} />
+      <CustomTable columns={columns} dataTable={userData} expandable={true} />
     </div>
   );
 }
