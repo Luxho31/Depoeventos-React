@@ -6,12 +6,10 @@ import {
   Input,
   Modal,
   Spin,
-  Upload,
   UploadProps,
-  message,
+  message
 } from "antd";
 import { useEffect, useState } from "react";
-import { FaEnvelope, FaKey } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import CustomTable from "../../../components/tables/custom-table";
 import {
@@ -184,7 +182,7 @@ export default function DiciplinesDashboard() {
               >
                 <TextArea
                   rows={4}
-                  placeholder="maxLength is 6"
+                  placeholder="Ingresar descripción de la disciplina"
                   maxLength={6}
                   autoSize={{ minRows: 4, maxRows: 4 }}
                 />

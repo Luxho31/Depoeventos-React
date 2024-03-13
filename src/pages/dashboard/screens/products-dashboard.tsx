@@ -1,60 +1,42 @@
-import { IoReload } from "react-icons/io5";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Select, Spin } from "antd";
+import { useEffect, useState } from "react";
 import CustomTable from "../../../components/tables/custom-table";
-import { Button, Form, GetProp, Input, Modal, Select, Spin, Upload, UploadProps, message } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: FileType) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
+import { getAllProducts } from "../../../services/products-service";
 
 export default function ProductsDashboard() {
-
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState([]);
 
-  const data = [
-    {
-      key: 1,
-      name: "Combo Voley + Fútbol",
-      price: 300,
-      campus: "Colegio Villa Caritas",
-      description:
-        "Entrena con nosotros Voley y Fútbol en un solo combo. ¡No te lo pierdas!",
-      category: "Lower",
-      courses: ["Voley", " - Fútbol"],
-    },
-  ];
+  useEffect(() => {
+    getAllProducts().then((data) => {
+      setUserData(data);
+    })
+  }, []);
+
+  const handleReload = () => {
+    try {
+      setLoading(true);
+      // getAllDisciplines();
+    } catch (error) {
+      console.error("Error al recargar usuarios:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const columns = [
     { title: "Nombre", dataIndex: "name", width: "15%", editable: true },
     { title: "Precio", dataIndex: "price", width: "5%", editable: true },
-    { title: "Sede", dataIndex: "campus", width: "12%", editable: true },
-    { title: "Categoria", dataIndex: "category", width: "8%", editable: true },
-    {
-      title: "Disciplinas",
-      dataIndex: "courses",
-      width: "50%",
-      editable: true,
-    },
+    { title: "Sede", dataIndex: ["campus", "name"], width: "12%", editable: true },
+    { title: "Categoria", dataIndex: ["category", "name"], width: "8%", editable: true },
+    // { 
+    //   title: "Disciplinas", 
+    //   dataIndex: ["courses", "name"], 
+    //   width: "50%", 
+    // },
   ];
-
-  const [open, setOpen] = useState(false);
 
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
@@ -90,7 +72,7 @@ export default function ProductsDashboard() {
             <div className="flex flex-col gap-y-4 mb-10">
               {/* ------------------Input Nombre Producto------------------ */}
               <Form.Item
-                name="text"
+                name="name"
                 rules={[
                   {
                     required: true,
@@ -109,7 +91,7 @@ export default function ProductsDashboard() {
 
               {/* ------------------Input Descripcion Producto------------------ */}
               <Form.Item
-                name="text"
+                name="description"
                 rules={[
                   {
                     required: true,
@@ -127,11 +109,11 @@ export default function ProductsDashboard() {
 
               {/* ------------------Seleccionar Sede------------------ */}
               <Form.Item
-                name="documentType"
+                name="campusName"
                 rules={[
                   {
                     required: true,
-                    message: "Por favor ingrese su tipo de documento",
+                    message: "Por favor ingrese su nombre de la sede",
                   },
                 ]}
               >
@@ -149,11 +131,11 @@ export default function ProductsDashboard() {
 
               {/* ------------------Seleccionar Categoria------------------ */}
               <Form.Item
-                name="documentType"
+                name="categoryName"
                 rules={[
                   {
                     required: true,
-                    message: "Por favor ingrese su tipo de documento",
+                    message: "Por favor ingrese su nombre de la categoria",
                   },
                 ]}
               >
@@ -170,11 +152,11 @@ export default function ProductsDashboard() {
               </Form.Item>
               {/* ------------------Seleccionar Disciplina------------------ */}
               <Form.Item
-                name="documentType"
+                name="disciplineName"
                 rules={[
                   {
                     required: true,
-                    message: "Por favor ingrese su tipo de documento",
+                    message: "Por favor ingrese su nombre de la disciplina",
                   },
                 ]}
               >
@@ -210,7 +192,7 @@ export default function ProductsDashboard() {
         </Modal>
         {/* ------------------- VENTANA MODAL ----------------- */}
       </div>
-      <CustomTable columns={columns} dataTable={data} expandable={true} />
+      <CustomTable columns={columns} dataTable={userData} expandable={true} />
     </div>
   );
 }
