@@ -5,6 +5,7 @@ import { IoReload } from "react-icons/io5";
 export default function CategoriesDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  
   const getAllDisciplines = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/categories");

@@ -1,9 +1,23 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, GetProp, Input, Modal, Spin, Upload, UploadProps, message } from "antd";
+import {
+  Button,
+  Form,
+  GetProp,
+  Input,
+  Modal,
+  Spin,
+  Upload,
+  UploadProps,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import CustomTable from "../../../components/tables/custom-table";
+import {
+  createDiscipline,
+  getAllDisciplines,
+} from "../../../services/disciplines-service";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -28,29 +42,19 @@ const beforeUpload = (file: FileType) => {
 export default function DiciplinesDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const getAllDisciplines = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/courses");
-      const data = await response.json();
 
-      const dataWithKeys = data.map((item: any, index: any) => ({
-        ...item,
-        key: index,
-      }));
-
-      setUserData(dataWithKeys);
-    } catch (error) {
-      console.error("Error al obtener datos de usuarios:", error);
-    }
-  };
   useEffect(() => {
-    getAllDisciplines();
+    getAllDisciplines().then((data) => {
+      setUserData(data);
+    });
   }, []);
 
   const handleReload = () => {
     try {
       setLoading(true);
-      getAllDisciplines();
+      getAllDisciplines().then((data) => {
+        setUserData(data);
+      });
     } catch (error) {
       console.error("Error al recargar usuarios:", error);
     } finally {
@@ -81,7 +85,6 @@ export default function DiciplinesDashboard() {
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj as FileType, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -95,6 +98,18 @@ export default function DiciplinesDashboard() {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+
+  const createDisciplineForm = async (form: any) => {
+    try {
+      createDiscipline(form);
+      getAllDisciplines().then((data) => {
+        setUserData(data);
+      });
+    } catch (error) {
+      console.error("Error al crear un hijo:", error);
+      throw error;
+    }
+  };
 
   return (
     <div className="h-screen">
@@ -125,6 +140,9 @@ export default function DiciplinesDashboard() {
         >
           <Form
             name="login"
+            onFinish={(values) => {
+              createDisciplineForm(values);
+            }}
             onFinishFailed={() => {
               console.log("Fallo");
             }}
@@ -133,13 +151,16 @@ export default function DiciplinesDashboard() {
             <div className="flex flex-col gap-y-4">
               {/* ------------------Input Nombre Disciplina------------------ */}
               <Form.Item
-                name="text"
+                name="name"
                 rules={[
                   {
                     required: true,
                     message: "Por favor, ingresa nombre de la disciplina.",
                   },
-                  { max: 50, message: "El nombre de la disciplina es muy largo." },
+                  {
+                    max: 50,
+                    message: "El nombre de la disciplina es muy largo.",
+                  },
                 ]}
                 className="cursor-text"
               >
@@ -152,7 +173,7 @@ export default function DiciplinesDashboard() {
 
               {/* ------------------Input Descripcion Disciplina------------------ */}
               <Form.Item
-                name="text"
+                name="description"
                 rules={[
                   {
                     required: true,
@@ -171,7 +192,7 @@ export default function DiciplinesDashboard() {
 
               {/* ------------------Fotografia de la Disciplina------------------ */}
               <Form.Item
-                name="text"
+                name="photo"
                 rules={[
                   {
                     required: true,
@@ -180,7 +201,7 @@ export default function DiciplinesDashboard() {
                 ]}
                 className="cursor-text"
               >
-                <Upload
+                {/* <Upload
                   name="avatar"
                   listType="picture-card"
                   className="avatar-uploader"
@@ -190,11 +211,20 @@ export default function DiciplinesDashboard() {
                   onChange={handleChange}
                 >
                   {imageUrl ? (
-                    <img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
+                    <img
+                      src={imageUrl}
+                      alt="avatar"
+                      style={{ width: "100%" }}
+                    />
                   ) : (
                     uploadButton
                   )}
-                </Upload>
+                </Upload> */}
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Ingresa nombre de la disciplina"
+                  size="large"
+                ></Input>
               </Form.Item>
             </div>
 
@@ -206,7 +236,9 @@ export default function DiciplinesDashboard() {
               >
                 {loading ? (
                   <Spin
-                    indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+                    indicator={
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    }
                   />
                 ) : (
                   "Crear"
