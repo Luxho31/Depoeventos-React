@@ -12,6 +12,10 @@ import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { FaAddressCard, FaArrowRight } from "react-icons/fa";
 import CustomTable from "../../../components/tables/custom-table";
+import {
+  createChildren,
+  getUserInfo,
+} from "../../../services/children-service";
 
 export default function ChildrensDashboard() {
   const [loading, setLoading] = useState(false);
@@ -32,14 +36,14 @@ export default function ChildrensDashboard() {
   const [isClubMember, setIsClubMember] = useState(false);
 
   type FirstStepType = {
-    firstName?: String;
+    name?: String;
     lastName?: String;
     motherLastName?: String;
     documentType?: String;
     documentNumber?: String;
-    birthDate?: String;
-    emergencyContactNumber?: String;
-    sex?: String;
+    birthdate?: String;
+    emergencyContactPhone?: String;
+    gender?: String;
   };
   type SecondStepType = {
     isStudent?: Boolean;
@@ -49,7 +53,7 @@ export default function ChildrensDashboard() {
   };
   type ThirdStepType = {
     isClubMember?: Boolean;
-    nameClub?: String;
+    club?: String;
     membershipCardNumber?: String;
     memberName?: String;
     memberLastName?: String;
@@ -95,12 +99,15 @@ export default function ChildrensDashboard() {
   // ---------------- Funcionalidad de crear
   const onFinishStep1 = (values: any) => {
     console.log(values);
+    values.birthdate = values.birthdate.format("YYYY-MM-DD");
     setFormData({
       ...formData,
       ...values,
     });
+    console.log(values.birthdate);
     setPaso(paso + 1);
     console.log(setFormData);
+    console.log(getUserInfo(localStorage.getItem("token")));
   };
 
   const onFinishStep2 = (values: any) => {
@@ -111,13 +118,21 @@ export default function ChildrensDashboard() {
     setPaso(paso + 1);
   };
 
-  const onFinishStep3 = (values: any) => {
+  const onFinishStep3 = async (values: any) => {
     const finalFormData = {
       ...formData,
       ...values,
-      
     };
-    console.log(finalFormData);
+    try {
+      setLoading(true);
+      console.log(finalFormData);
+      await createChildren(finalFormData);
+    } catch (error) {
+      console.error("Error al crear un hijo", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -160,7 +175,7 @@ export default function ChildrensDashboard() {
             >
               {/* ------------------Input Nombre Hijo------------------ */}
               <Form.Item<FirstStepType>
-                name="firstName"
+                name="name"
                 rules={[
                   {
                     required: true,
@@ -309,7 +324,7 @@ export default function ChildrensDashboard() {
 
               {/* ------------------Input Fecha de Nacimiento del Hijo------------------ */}
               <Form.Item<FirstStepType>
-                name="birthDate"
+                name="birthdate"
                 rules={[
                   {
                     required: true,
@@ -328,7 +343,7 @@ export default function ChildrensDashboard() {
 
               {/* ------------------Input Número de Emergencia------------------ */}
               <Form.Item<FirstStepType>
-                name="emergencyContactNumber"
+                name="emergencyContactPhone"
                 rules={[
                   {
                     required: true,
@@ -347,7 +362,7 @@ export default function ChildrensDashboard() {
 
               {/* ------------------Input Sexo del Hijo------------------ */}
               <Form.Item<FirstStepType>
-                name="sex"
+                name="gender"
                 rules={[
                   {
                     required: true,
@@ -361,8 +376,8 @@ export default function ChildrensDashboard() {
                   // style={{ width: 120 }}
                   size="large"
                   options={[
-                    { value: "MASCULINO", label: "Masculino" },
-                    { value: "FEMENINO", label: "Femenino" },
+                    { value: "Masculino", label: "Masculino" },
+                    { value: "Femenino", label: "Femenino" },
                   ]}
                   // onChange={(value) => {
                   //   setSelectedDocumentType(value);
@@ -517,7 +532,7 @@ export default function ChildrensDashboard() {
 
               {/* ------------------Input Nombre del Club del Miembro------------------ */}
               <Form.Item<ThirdStepType>
-                name="nameClub"
+                name="club"
                 rules={[
                   {
                     required: true,

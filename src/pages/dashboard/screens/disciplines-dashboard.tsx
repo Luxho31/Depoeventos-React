@@ -7,7 +7,7 @@ import {
   Modal,
   Spin,
   UploadProps,
-  message
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
@@ -99,13 +99,18 @@ export default function DiciplinesDashboard() {
 
   const createDisciplineForm = async (form: any) => {
     try {
-      createDiscipline(form);
+      setLoading(true);
+      await createDiscipline(form);
+      // recargar datos
       getAllDisciplines().then((data) => {
         setUserData(data);
       });
+      setOpen(false);
     } catch (error) {
       console.error("Error al crear un hijo:", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 

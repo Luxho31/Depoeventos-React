@@ -4,7 +4,10 @@ import { IoReload } from "react-icons/io5";
 import { Button, Form, Input, Modal, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { LoadingOutlined } from "@ant-design/icons";
-import { createCampus, getAllCampuses } from "../../../services/campuses-service";
+import {
+  createCampus,
+  getAllCampuses,
+} from "../../../services/campuses-service";
 
 export default function CampusesDashboard() {
   const [userData, setUserData] = useState([]);
@@ -30,13 +33,17 @@ export default function CampusesDashboard() {
 
   const createCampusesForm = async (form: any) => {
     try {
-      createCampus(form);
+      setLoading(true);
+      await createCampus(form);
       getAllCampuses().then((data) => {
         setUserData(data);
       });
+      setOpen(false);
     } catch (error) {
       console.error("Error al crear una sede:", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,9 +181,7 @@ export default function CampusesDashboard() {
             >
               {loading ? (
                 <Spin
-                  indicator={
-                    <LoadingOutlined style={{ fontSize: 24 }} spin />
-                  }
+                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
                 />
               ) : (
                 "Crear"

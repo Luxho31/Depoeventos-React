@@ -4,7 +4,10 @@ import { IoReload } from "react-icons/io5";
 import { Button, Form, Input, Modal, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { LoadingOutlined } from "@ant-design/icons";
-import { createCategory, getAllCategories } from "../../../services/categories-service";
+import {
+  createCategory,
+  getAllCategories,
+} from "../../../services/categories-service";
 
 export default function CategoriesDashboard() {
   const [open, setOpen] = useState(false);
@@ -17,28 +20,21 @@ export default function CategoriesDashboard() {
     });
   }, []);
 
-  const handleReload = () => {
+  const createCategoryForm = async (form: any) => {
     try {
       setLoading(true);
-      // getAllDisciplines();
+      await createCategory(form);
+      getAllCategories().then((data) => {
+        setUserData(data);
+      });
+      setOpen(false);
     } catch (error) {
-      console.error("Error al recargar usuarios:", error);
+      console.error("Error al crear una categoria", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
-
-  const createCategoryForm = async (form: any) => {
-    try {
-      createCategory(form);
-      getAllCategories().then((data) => {
-        setUserData(data)
-      })
-    } catch (error) {
-      console.error("Error al crear una categoria", error);
-      throw error;
-    }
-  }
 
   const columns = [
     { title: "ID", dataIndex: "id", width: "5%", editable: true },
@@ -52,12 +48,9 @@ export default function CategoriesDashboard() {
   ];
   return (
     <div className="h-screen">
-      <button
-        onClick={handleReload}
-        className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-      >
+      {/* <button className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
         {loading ? "hola" : <IoReload className="text-lg" />}
-      </button>
+      </button> */}
       {/* ------------------- VENTANA MODAL ----------------- */}
       <Button
         type="primary"
@@ -79,8 +72,8 @@ export default function CategoriesDashboard() {
           name="categories"
           onFinish={(values) => {
             // createDisciplineForm(values);
-            createCategoryForm(values)
-            console.log(values)
+            createCategoryForm(values);
+            console.log(values);
           }}
           onFinishFailed={() => {
             console.log("Fallo");
@@ -138,9 +131,7 @@ export default function CategoriesDashboard() {
             >
               {loading ? (
                 <Spin
-                  indicator={
-                    <LoadingOutlined style={{ fontSize: 24 }} spin />
-                  }
+                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
                 />
               ) : (
                 "Crear"

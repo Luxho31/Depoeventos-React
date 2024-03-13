@@ -17,7 +17,7 @@ export const createDiscipline = async (form: disciplineType) => {
       },
       body: JSON.stringify(form),
     });
-    
+    getAllDisciplines();
   } catch (error) {
     console.error("Error al crear un hijo:", error);
     throw error;
@@ -32,8 +32,6 @@ export const getAllDisciplines = async () => {
       },
     });
     const data = await response.json();
-
-    console.log("Disciplinas obtenidas:", data);
 
     const dataWithKeys = data.map((item: any, index: any) => ({
       ...item,
