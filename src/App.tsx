@@ -23,6 +23,7 @@ import Home from "./pages/landing/home/home";
 import Products from "./pages/landing/products/products";
 import Team from "./pages/landing/team/team";
 import NotFound from "./pages/not-found/not-found";
+import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
 
 function App() {
   return (
@@ -50,7 +51,8 @@ function App() {
 
           {/* Rutas Protegidas */}
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<DisciplinesDashboard />} />
+            <Route index element={<HomeDashboard />} />
+            <Route path="/dashboard/disciplines" element={<DisciplinesDashboard />} />
             <Route path="/dashboard/products" element={<ProductsDashboard />} />
             <Route path="/dashboard/Users" element={<UsersDashboard />} />
             <Route

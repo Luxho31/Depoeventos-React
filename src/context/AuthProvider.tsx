@@ -8,6 +8,7 @@ const BASE_URL = generalRoutes.BASE_URL;
 interface AuthContextType {
   isAuthenticated: boolean;
   cargando: boolean;
+  userRole: string[] | null;
   login: (username: string, password: string) => Promise<void>;
   register: (user: User) => Promise<void>;
   logout: () => void;
@@ -26,6 +27,7 @@ interface User {
   country?: string;
   username?: string;
   password?: string;
+  role?: string[];
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,19 +43,11 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: any) => {
   const [cargando, setCargando] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // console.log(isAuthenticated);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     verifyToken(token)
-  //     console.log(verifyToken(token));
-  //     setIsAuthenticated(true);
-  //   }
-  // }, []);
+  const [userRole, setUserRole] = useState<string[] | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       verifyToken(token)
         .then(isValid => {
@@ -75,6 +69,12 @@ export const AuthProvider = ({ children }: any) => {
           // También establece cargando en false en caso de error
           setCargando(false);
         });
+
+      // Verificar Rol
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      const userRoles = tokenPayload.roles;
+      // console.log("Roles del usuario:", userRoles);
+      setUserRole(userRoles)
     } else {
       // Si no hay token, establece cargando en false también
       setCargando(false);
@@ -99,6 +99,13 @@ export const AuthProvider = ({ children }: any) => {
 
       if (userData.token) {
         localStorage.setItem("token", userData.token);
+
+        // Verificar Rol
+        const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
+        const userRoles = tokenPayload.roles;
+        // console.log("Roles del usuario:", userRoles);
+        setUserRole(userRoles)
+
         setIsAuthenticated(true);
       } else {
         console.error("Token no encontrado en los datos de usuario");
@@ -129,6 +136,13 @@ export const AuthProvider = ({ children }: any) => {
 
       if (userData.token) {
         localStorage.setItem("token", userData.token);
+
+        // Verificar Rol
+        const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
+        const userRoles = tokenPayload.roles;
+        // console.log("Roles del usuario:", userRoles);
+        setUserRole(userRoles)
+
         setIsAuthenticated(true);
       } else {
         console.error("Token no encontrado en los datos de usuario");
@@ -143,12 +157,13 @@ export const AuthProvider = ({ children }: any) => {
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
+    setUserRole(null)
   };
 
   const verifyToken = async (token: string) => {
     try {
       const response = await fetch(`${BASE_URL}/api/verifyToken/${token}`);
-  
+
       if (response.ok) {
         return true;
       } else {
@@ -163,7 +178,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, cargando }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, cargando, userRole }}>
       {children}
     </AuthContext.Provider>
   );

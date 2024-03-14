@@ -19,11 +19,9 @@ import { useAuth } from "../../context/AuthProvider"
 const { Header, Sider, Content } = Layout;
 
 export default function Dashboard() {
-  const { isAuthenticated, logout, cargando } = useAuth()
-  console.log(isAuthenticated);
-  if (cargando){
-    return <Spin fullscreen />;
-  } 
+  const { isAuthenticated, logout, cargando, userRole } = useAuth()
+
+  
 
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -33,7 +31,6 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const handleItemClick = (path: string) => {
-    console.log("Navegando a:", path); // Agregar console.log para depurar
     navigate(path);
   };
 
@@ -41,63 +38,79 @@ export default function Dashboard() {
     {
       key: "1",
       icon: <UserOutlined />,
-      label: "Disciplinas",
+      label: "Inicio",
       onClick: () => handleItemClick("/dashboard"),
+      role: ["ADMIN", "USER", "TEACHER"]
     },
     {
       key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Productos FALTA",
-      onClick: () => handleItemClick("/dashboard/products"),
+      icon: <UserOutlined />,
+      label: "Disciplinas",
+      onClick: () => handleItemClick("/dashboard/disciplines"),
+      role: ["ADMIN"]
     },
     {
       key: "3",
-      icon: <UploadOutlined />,
-      label: "Usuarios",
-      onClick: () => handleItemClick("/dashboard/users"),
+      icon: <VideoCameraOutlined />,
+      label: "Productos FALTA",
+      onClick: () => handleItemClick("/dashboard/products"),
+      role: ["ADMIN"]
     },
     {
       key: "4",
       icon: <UploadOutlined />,
-      label: "Hijos FALTA",
-      onClick: () => handleItemClick("/dashboard/childrens"),
+      label: "Usuarios",
+      onClick: () => handleItemClick("/dashboard/users"),
+      role: ["ADMIN"]
     },
     {
       key: "5",
       icon: <UploadOutlined />,
-      label: "Cursos Matriculados FALTA",
-      onClick: () => handleItemClick("/dashboard/courses"),
+      label: "Hijos FALTA",
+      onClick: () => handleItemClick("/dashboard/childrens"),
+      role: ["USER"]
     },
     {
       key: "6",
       icon: <UploadOutlined />,
-      label: "Matriculas FALTA",
-      onClick: () => handleItemClick("/dashboard/registrations"),
+      label: "Cursos Matriculados FALTA",
+      onClick: () => handleItemClick("/dashboard/courses"),
+      role: ["USER"]
     },
     {
       key: "7",
       icon: <UploadOutlined />,
-      label: "Transacciones FALTA",
-      onClick: () => handleItemClick("/dashboard/transactions"),
+      label: "Matriculas FALTA",
+      onClick: () => handleItemClick("/dashboard/registrations"),
+      role: ["ADMIN"]
     },
     {
       key: "8",
       icon: <UploadOutlined />,
-      label: "Sedes",
-      onClick: () => handleItemClick("/dashboard/campuses"),
+      label: "Transacciones FALTA",
+      onClick: () => handleItemClick("/dashboard/transactions"),
+      role: ["ADMIN", "USER"]
     },
     {
       key: "9",
       icon: <UploadOutlined />,
+      label: "Sedes",
+      onClick: () => handleItemClick("/dashboard/campuses"),
+      role: ["ADMIN"]
+    },
+    {
+      key: "10",
+      icon: <UploadOutlined />,
       label: "Categorias",
       onClick: () => handleItemClick("/dashboard/categories"),
+      role: ["ADMIN"]
     },
   ];
 
   const handleLogout = () => {
     logout()
     toast.info("Sesión cerrada exitosamente");
-    return <Navigate to="/" />;
+    navigate("/");
   };
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
@@ -141,6 +154,17 @@ export default function Dashboard() {
     onClick: handleMenuClick,
   };
 
+  if (!userRole) {
+    return null; // O manejo adicional según tu lógica
+  }
+
+  // Filtrar elementos del menú según los roles permitidos
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.role.some((allowedRole) => userRole.includes(allowedRole))
+  );
+
+  if (cargando) return <Spin fullscreen />;
+
   return (
     <>
       {isAuthenticated ? (
@@ -170,7 +194,7 @@ export default function Dashboard() {
               theme="dark"
               mode="inline"
               defaultSelectedKeys={["1"]}
-              items={menuItems.map((item) => ({
+              items={filteredMenuItems.map((item) => ({
                 ...item,
                 onClick: () => item.onClick(),
               }))}
