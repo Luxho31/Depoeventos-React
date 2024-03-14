@@ -24,6 +24,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { getUserInfo } from "../../../services/basic-service";
+import { updateUserInfo } from "../../../services/profile-service";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -70,7 +71,8 @@ export default function Profile() {
     const token = localStorage.getItem("token");
     if (token) {
       getUserInfo(token).then((data) => {
-        form.setFieldsValue(data);
+        const { birthDate, ...userData } = data;
+        form.setFieldsValue(userData);
       });
     }
   }, []);
@@ -100,6 +102,21 @@ export default function Profile() {
     </button>
   );
 
+  const updateUserInformation = async (data: any) => {
+    try {
+      setLoading(true);
+      updateUserInfo(data, data.id).then((res) => {
+        console.log(res);
+      });
+    } catch (error) {
+      console.error("Error al actualizar datos de usuario:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+      setFieldsEnabled(false);
+    }
+  };
+
   // Funcionalidad de deshabilitar los campos
 
   const toggleFields = () => {
@@ -107,8 +124,7 @@ export default function Profile() {
   };
 
   const resetForm = () => {
-    form.resetFields(); // Resetear los campos del formulario
-    setFieldsEnabled(false); // Deshabilitar los campos
+    setFieldsEnabled(false);
     setSelectedDocumentType(undefined);
   };
 
@@ -148,9 +164,15 @@ export default function Profile() {
           className="w-[750px] flex flex-col max-md:mx-20 md:mx-32"
           form={form}
           disabled={!fieldsEnabled}
+          onFinish={(values) => {
+            updateUserInformation(values);
+          }}
         >
           <div className={`grid grid-cols-2 gap-x-4 gap-y-2`}>
             {/* ------------------Input Nombre------------------ */}
+            <Form.Item name="id" hidden>
+              <Input />
+            </Form.Item>
             <Form.Item<RegisterType>
               name="firstName"
               rules={[

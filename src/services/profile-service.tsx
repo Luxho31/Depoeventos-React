@@ -1,26 +1,21 @@
 import { generalRoutes } from "../utils/routes/general.routes";
-import { getUserInfo } from "./basic-service";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-type ChildrenType = {
-  name?: string;
-};
-
-export const updateUser = async (form: ChildrenType) => {
+export const updateUserInfo = async (data: any, id: any) => {
   try {
-    const token = localStorage.getItem("token");
-    const user = await getUserInfo(token);
-    await fetch(`${BASE_URL}/api/userInfo/${user.id}`, {
-      method: "POST",
+    const response = await fetch(`${BASE_URL}/updateUser/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(data),
     });
+    const res = await response.json();
+    return res;
   } catch (error) {
-    console.error("Error al crear un hijo:", error);
+    console.error("Error al actualizar datos de usuario:", error);
     throw error;
   }
 };
