@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   register: (user: User) => Promise<void>;
   logout: () => void;
+  userInfo: User | null;
 }
 
 interface User {
@@ -44,14 +45,18 @@ export const AuthProvider = ({ children }: any) => {
   const [cargando, setCargando] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string[] | null>(null);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       verifyToken(token)
-        .then(isValid => {
+        .then((isValid) => {
           if (isValid) {
+            // get userInfo and set it
+            getUserInfo(token);
+
             setIsAuthenticated(true);
             console.log("Autenticado correctamente");
           } else {
@@ -62,7 +67,7 @@ export const AuthProvider = ({ children }: any) => {
           // Establece cargando en false cuando haya terminado la verificación
           setCargando(false);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error al verificar el token:", error);
           setIsAuthenticated(false);
           localStorage.removeItem("token");
@@ -74,12 +79,33 @@ export const AuthProvider = ({ children }: any) => {
       const tokenPayload = JSON.parse(atob(token.split(".")[1]));
       const userRoles = tokenPayload.roles;
       // console.log("Roles del usuario:", userRoles);
-      setUserRole(userRoles)
+      setUserRole(userRoles);
     } else {
       // Si no hay token, establece cargando en false también
       setCargando(false);
     }
   }, []);
+
+  const getUserInfo = async (token: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/userInfo/${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error al obtener la información del usuario");
+      }
+      setCargando(false);
+      const userData = await response.json();
+      setUserInfo(userData);
+      return userData;
+    } catch (error) {
+      console.error("Error al obtener la información del usuario:", error);
+    }
+  };
 
   const login = async (username: string, password: string) => {
     try {
@@ -100,11 +126,14 @@ export const AuthProvider = ({ children }: any) => {
       if (userData.token) {
         localStorage.setItem("token", userData.token);
 
+        // get userdata
+        getUserInfo(userData.token);
+        setUserInfo(userData);
         // Verificar Rol
         const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
         const userRoles = tokenPayload.roles;
         // console.log("Roles del usuario:", userRoles);
-        setUserRole(userRoles)
+        setUserRole(userRoles);
 
         setIsAuthenticated(true);
       } else {
@@ -137,11 +166,15 @@ export const AuthProvider = ({ children }: any) => {
       if (userData.token) {
         localStorage.setItem("token", userData.token);
 
+        // get userdata
+        getUserInfo(userData.token);
+        setUserInfo(userData);
+
         // Verificar Rol
         const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
         const userRoles = tokenPayload.roles;
         // console.log("Roles del usuario:", userRoles);
-        setUserRole(userRoles)
+        setUserRole(userRoles);
 
         setIsAuthenticated(true);
       } else {
@@ -157,7 +190,7 @@ export const AuthProvider = ({ children }: any) => {
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-    setUserRole(null)
+    setUserRole(null);
   };
 
   const verifyToken = async (token: string) => {
@@ -178,7 +211,17 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, cargando, userRole }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        login,
+        register,
+        logout,
+        cargando,
+        userRole,
+        userInfo,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

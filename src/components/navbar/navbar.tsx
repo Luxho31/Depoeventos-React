@@ -2,27 +2,25 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Avatar, Button, Dropdown, Space } from "antd";
 import { useEffect, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
-import "./navbar.css";
 import { useAuth } from "../../context/AuthProvider";
-import { FaShoppingCart } from "react-icons/fa";
+import "./navbar.css";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const { logout, isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
-
+  const { logout, isAuthenticated, userInfo, cargando } = useAuth();
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     setIsLoggedIn(!!storedToken);
   }, []);
 
   const handleItemClick = (path: string) => {
-    console.log("Navegando a:", path); // Agregar console.log para depurar
     navigate(path);
   };
 
@@ -33,7 +31,6 @@ export default function Navbar() {
   };
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
-    // message.info('Click on menu item.');
     console.log("click", e);
   };
 
@@ -53,25 +50,15 @@ export default function Navbar() {
         handleLogout();
       },
     },
-    // {
-    // 	label: '3rd menu item',
-    // 	key: '3',
-    // 	icon: <UserOutlined />,
-    // 	danger: true,
-    // },
-    // {
-    // 	label: '4rd menu item',
-    // 	key: '4',
-    // 	icon: <UserOutlined />,
-    // 	danger: true,
-    // 	disabled: true,
-    // },
   ];
 
   const menuProps = {
     items,
     onClick: handleMenuClick,
   };
+
+  if (!userInfo) return;
+  if (cargando) return "Cargando... :)";
 
   return (
     <>
@@ -120,7 +107,7 @@ export default function Navbar() {
                   <Button className="p-0">
                     <Space>
                       <Avatar size={30} icon={<UserOutlined />} />
-                      Luis Sánchez
+                      {userInfo?.firstName + " " + userInfo?.lastName}
                       <DownOutlined />
                     </Space>
                   </Button>
