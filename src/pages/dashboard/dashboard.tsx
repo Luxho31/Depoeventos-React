@@ -6,7 +6,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, Space, Spin, theme } from "antd";
 import { useState } from "react";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 
@@ -21,7 +21,9 @@ const { Header, Sider, Content } = Layout;
 export default function Dashboard() {
   const { isAuthenticated, logout, cargando } = useAuth()
   console.log(isAuthenticated);
-  if (cargando) return 'Cargando...';
+  if (cargando){
+    return <Spin fullscreen />;
+  } 
 
   const [collapsed, setCollapsed] = useState(false);
   const {

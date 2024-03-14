@@ -21,6 +21,11 @@ export default function Navbar() {
     setIsLoggedIn(!!storedToken);
   }, []);
 
+  const handleItemClick = (path: string) => {
+    console.log("Navegando a:", path); // Agregar console.log para depurar
+    navigate(path);
+  };
+
   const handleLogout = () => {
     logout();
     toast.info("Sesión cerrada exitosamente");
@@ -37,6 +42,7 @@ export default function Navbar() {
       label: "Perfil",
       key: "1",
       icon: <UserOutlined />,
+      onClick: () => handleItemClick("/dashboard/profile"),
     },
     {
       label: "Cerrar Sesión",
