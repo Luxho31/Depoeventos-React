@@ -16,7 +16,7 @@ import {
   Spin,
   theme,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 
 import type { MenuProps } from "antd";
@@ -29,6 +29,7 @@ const { Header, Sider, Content } = Layout;
 
 export default function Dashboard() {
   const { isAuthenticated, logout, cargando, userRole, userInfo } = useAuth();
+  const [redirectToHome, setRedirectToHome] = useState(false);
 
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -36,6 +37,16 @@ export default function Dashboard() {
   } = theme.useToken();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated && !cargando) {
+      setRedirectToHome(true);
+    }
+  }, [isAuthenticated, cargando]);
+
+  if (redirectToHome) {
+    return <Navigate to="/" />;
+  }
 
   const handleItemClick = (path: string) => {
     navigate(path);

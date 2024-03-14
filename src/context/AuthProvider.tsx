@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }: any) => {
           if (isValid) {
             // get userInfo and set it
             getUserInfo(token);
-
             setIsAuthenticated(true);
             console.log("Autenticado correctamente");
           } else {
