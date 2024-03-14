@@ -1,6 +1,6 @@
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Avatar, Button, Dropdown, Space } from "antd";
+import { Avatar, Button, Dropdown, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
@@ -57,8 +57,7 @@ export default function Navbar() {
     onClick: handleMenuClick,
   };
 
-  if (!userInfo) return;
-  if (cargando) return "Cargando... :)";
+  if (cargando) return <Spin fullscreen />;
 
   return (
     <>
