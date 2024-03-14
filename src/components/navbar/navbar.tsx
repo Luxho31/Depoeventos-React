@@ -13,7 +13,8 @@ import { FaShoppingCart } from "react-icons/fa";
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
+  console.log(isAuthenticated);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -22,7 +23,6 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    setIsLoggedIn(false);
     toast.info("Sesión cerrada exitosamente");
     navigate("/");
   };
@@ -99,7 +99,7 @@ export default function Navbar() {
               <NavLink to="/contact">Contacto</NavLink>
             </li>
 
-            <li className={`${isLoggedIn ? "block" : "hidden"}`}>
+            <li className={`${isAuthenticated ? "block" : "hidden"}`}>
               <Link to="/dashboard">Dashboard</Link>
             </li>
           </ul>
@@ -108,7 +108,7 @@ export default function Navbar() {
             <button className="p-2 me-8">
               <FaShoppingCart className="text-2xl" />
             </button>
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <li className="">
                 <Dropdown menu={menuProps} className="border-none">
                   <Button className="p-0">

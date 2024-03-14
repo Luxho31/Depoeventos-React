@@ -7,6 +7,7 @@ const BASE_URL = generalRoutes.BASE_URL;
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  cargando: boolean;
   login: (username: string, password: string) => Promise<void>;
   register: (user: User) => Promise<void>;
   logout: () => void;
@@ -38,12 +39,45 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: any) => {
+  const [cargando, setCargando] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  // console.log(isAuthenticated);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     verifyToken(token)
+  //     console.log(verifyToken(token));
+  //     setIsAuthenticated(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setIsAuthenticated(true);
+      verifyToken(token)
+        .then(isValid => {
+          if (isValid) {
+            setIsAuthenticated(true);
+            console.log("Autenticado correctamente");
+          } else {
+            setIsAuthenticated(false);
+            localStorage.removeItem("token");
+            console.log("El token no es valido");
+          }
+          // Establece cargando en false cuando haya terminado la verificación
+          setCargando(false);
+        })
+        .catch(error => {
+          console.error("Error al verificar el token:", error);
+          setIsAuthenticated(false);
+          localStorage.removeItem("token");
+          // También establece cargando en false en caso de error
+          setCargando(false);
+        });
+    } else {
+      // Si no hay token, establece cargando en false también
+      setCargando(false);
     }
   }, []);
 
@@ -68,6 +102,7 @@ export const AuthProvider = ({ children }: any) => {
         setIsAuthenticated(true);
       } else {
         console.error("Token no encontrado en los datos de usuario");
+        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
@@ -97,6 +132,7 @@ export const AuthProvider = ({ children }: any) => {
         setIsAuthenticated(true);
       } else {
         console.error("Token no encontrado en los datos de usuario");
+        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Error al registrarse:", error);
@@ -109,8 +145,25 @@ export const AuthProvider = ({ children }: any) => {
     setIsAuthenticated(false);
   };
 
+  const verifyToken = async (token: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/verifyToken/${token}`);
+  
+      if (response.ok) {
+        return true;
+      } else {
+        // Si el servidor responde con un estado no exitoso, lanzamos un error
+        throw new Error(`Error al verificar el token: ${response.statusText}`);
+      }
+    } catch (error) {
+      // Capturamos cualquier error de red u otros errores que puedan ocurrir
+      console.error("Error al verificar el token:", error);
+      return false;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, cargando }}>
       {children}
     </AuthContext.Provider>
   );
