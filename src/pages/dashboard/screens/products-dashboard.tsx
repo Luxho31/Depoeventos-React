@@ -2,18 +2,28 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
 import CustomTable from "../../../components/tables/custom-table";
+import { useAuth } from "../../../context/AuthProvider";
 import { getAllProducts } from "../../../services/products-service";
 
 export default function ProductsDashboard() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState([]);
+  const { userRole } = useAuth()
 
   useEffect(() => {
-    getAllProducts().then((data) => {
-      setUserData(data);
-    })
-  }, []);
+    const specificRole = 'ADMIN';
+    if (userRole && userRole.some(role => role === specificRole)) {
+      setLoading(true);
+      getAllProducts().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener productos:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const handleReload = () => {
     try {

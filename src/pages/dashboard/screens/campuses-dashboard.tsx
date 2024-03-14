@@ -1,24 +1,36 @@
-import { useEffect, useState } from "react";
-import CustomTable from "../../../components/tables/custom-table";
-import { IoReload } from "react-icons/io5";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { IoReload } from "react-icons/io5";
+import CustomTable from "../../../components/tables/custom-table";
 import {
   createCampus,
   getAllCampuses,
 } from "../../../services/campuses-service";
+import { useAuth } from "../../../context/AuthProvider"
 
 export default function CampusesDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { userRole } = useAuth()
 
   useEffect(() => {
-    getAllCampuses().then((data) => {
-      setUserData(data);
-    });
-  }, []);
+    // Verificar si el userRole contiene el rol específico
+    const specificRole = 'ADMIN'; // Rol específico que deseas
+    if (userRole && userRole.some(role => role === specificRole)) {
+      // Solo realiza la llamada a la API si el usuario tiene el rol específico
+      setLoading(true);
+      getAllCampuses().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener sedes:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const handleReload = () => {
     try {

@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import CustomTable from "../../../components/tables/custom-table";
+import { useAuth } from "../../../context/AuthProvider";
 import {
   createDiscipline,
   getAllDisciplines,
@@ -40,12 +41,21 @@ const beforeUpload = (file: FileType) => {
 export default function DiciplinesDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { userRole } = useAuth()
 
   useEffect(() => {
-    getAllDisciplines().then((data) => {
-      setUserData(data);
-    });
-  }, []);
+    const specificRole = 'ADMIN';
+    if (userRole && userRole.some(role => role === specificRole)) {
+      setLoading(true);
+      getAllDisciplines().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener disciplinas:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const handleReload = () => {
     try {
@@ -139,7 +149,7 @@ export default function DiciplinesDashboard() {
           onOk={() => setOpen(false)}
           onCancel={() => setOpen(false)}
           width={1000}
-          footer={null} // Eliminamos el footer
+          footer={null}
         >
           <Form
             name="login"

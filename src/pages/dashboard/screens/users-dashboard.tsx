@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import CustomTable from "../../../components/tables/custom-table";
+import { useAuth } from "../../../context/AuthProvider";
+import { getAllUsers } from "../../../services/user-service";
 
 export default function UsersDashboard() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { userRole } = useAuth()
 
-  const getAllUsers = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/users");
-      const data = await response.json();
-
-      const dataWithKeys = data.map((item: any, index: any) => ({
-        ...item,
-        key: index,
-      }));
-
-      setUserData(dataWithKeys);
-    } catch (error) {
-      console.error("Error al obtener datos de usuarios:", error);
-    }
-  };
   useEffect(() => {
-    getAllUsers();
-  }, []);
+    // Verificar si el userRole contiene el rol específico
+    const specificRole = 'ADMIN'; // Rol específico que deseas
+    if (userRole && userRole.some(role => role === specificRole)) {
+      // Solo realiza la llamada a la API si el usuario tiene el rol específico
+      setLoading(true);
+      getAllUsers().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener sedes:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const handleReload = () => {
     try {

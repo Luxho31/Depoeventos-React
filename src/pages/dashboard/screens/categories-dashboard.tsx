@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import CustomTable from "../../../components/tables/custom-table";
-import { IoReload } from "react-icons/io5";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import CustomTable from "../../../components/tables/custom-table";
+import { useAuth } from "../../../context/AuthProvider";
 import {
   createCategory,
   getAllCategories,
@@ -13,12 +13,21 @@ export default function CategoriesDashboard() {
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { userRole } = useAuth()
 
   useEffect(() => {
-    getAllCategories().then((data) => {
-      setUserData(data);
-    });
-  }, []);
+    const specificRole = 'ADMIN';
+    if (userRole && userRole.some(role => role === specificRole)) {
+      setLoading(true);
+      getAllCategories().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener categorías:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const createCategoryForm = async (form: any) => {
     try {
@@ -48,9 +57,6 @@ export default function CategoriesDashboard() {
   ];
   return (
     <div className="h-screen">
-      {/* <button className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-        {loading ? "hola" : <IoReload className="text-lg" />}
-      </button> */}
       {/* ------------------- VENTANA MODAL ----------------- */}
       <Button
         type="primary"
@@ -66,12 +72,11 @@ export default function CategoriesDashboard() {
         onOk={() => setOpen(false)}
         onCancel={() => setOpen(false)}
         width={1000}
-        footer={null} // Eliminamos el footer
+        footer={null}
       >
         <Form
           name="categories"
           onFinish={(values) => {
-            // createDisciplineForm(values);
             createCategoryForm(values);
             console.log(values);
           }}

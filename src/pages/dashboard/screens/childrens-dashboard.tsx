@@ -12,6 +12,7 @@ import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { FaAddressCard, FaArrowRight } from "react-icons/fa";
 import CustomTable from "../../../components/tables/custom-table";
+import { useAuth } from "../../../context/AuthProvider";
 import {
   createChildren,
   getChildrensByUserId,
@@ -31,9 +32,6 @@ export default function ChildrensDashboard() {
 
   // ---------------- Modal
   const [open, setOpen] = useState(false);
-
-  const [isStudent, setIsStudent] = useState(false);
-  const [isClubMember, setIsClubMember] = useState(false);
   const [userData, setUserData] = useState([]);
 
   type FirstStepType = {
@@ -61,12 +59,21 @@ export default function ChildrensDashboard() {
     memberMotherLastName?: String;
   };
 
+  const { userRole } = useAuth()
+
   useEffect(() => {
-    getChildrensByUserId().then((data) => {
-      setUserData(data);
-      console.log(data);
-    });
-  }, []);
+    const specificRole = 'USER';
+    if (userRole && userRole.some(role => role === specificRole)) {
+      setLoading(true);
+      getChildrensByUserId().then((data) => {
+        setUserData(data);
+        setLoading(false);
+      }).catch(error => {
+        console.error("Error al obtener hijos:", error);
+        setLoading(false);
+      });
+    }
+  }, [userRole]);
 
   const columns = [
     { title: "Nombres", dataIndex: "name", width: "15%", editable: true },
