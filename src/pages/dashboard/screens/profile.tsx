@@ -108,6 +108,10 @@ export default function Profile() {
       updateUserInfo(data, data.id).then((res) => {
         console.log(res);
       });
+      getUserInfo(localStorage.getItem("token")).then((data) => {
+        const { birthDate, ...userData } = data;
+        form.setFieldsValue(userData);
+      });
     } catch (error) {
       console.error("Error al actualizar datos de usuario:", error);
       throw error;
