@@ -24,6 +24,7 @@ import Products from "./pages/landing/products/products";
 import Team from "./pages/landing/team/team";
 import NotFound from "./pages/not-found/not-found";
 import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
+import Cart from "./pages/landing/cart/cart";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/team" element={<Team />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cart" element={<Cart />} />
           </Route>
 
           {/* Rutas Protegidas */}

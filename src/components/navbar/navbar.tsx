@@ -57,6 +57,10 @@ export default function Navbar() {
     onClick: handleMenuClick,
   };
 
+  const handleMouseEnter = () => {
+    
+  };
+
   if (cargando) return <Spin fullscreen />;
 
   return (
@@ -97,9 +101,44 @@ export default function Navbar() {
           </ul>
 
           <ul className="flex items-center">
-            <button className="p-2 me-8">
+            {/* <button className="p-2 me-8">
               <FaShoppingCart className="text-2xl" />
-            </button>
+            </button> */}
+            {/* Carrito de compras */}
+            <li className="">
+              <Dropdown
+                placement="bottomRight"
+                overlay={
+                  <div className="bg-white rounded-md px-4 py-2">
+                    <table id="lista-carrito" className="u-full-width">
+                      <thead>
+                        <tr className="flex gap-12 leading-10">
+                          <th>Imagen</th>
+                          <th>Nombre</th>
+                          <th>Precio</th>
+                          <th>Cantidad</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <hr className="h-px" />
+                      <tbody></tbody>
+                    </table>
+                    <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">Vaciar Carrito</button>
+                  </div>
+                }
+                className="border-none"
+              >
+                <Button className="me-4">
+                  <Space>
+                  <Link to="/cart">
+                    <FaShoppingCart className="text-2xl" />
+                  </Link>
+                  </Space>
+                </Button>
+              </Dropdown>
+            </li>
+
+            {/* Autenticacion */}
             {isAuthenticated ? (
               <li className="">
                 <Dropdown menu={menuProps} className="border-none">
