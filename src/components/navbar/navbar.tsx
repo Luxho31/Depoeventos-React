@@ -113,7 +113,6 @@ export default function Navbar() {
                     <table id="lista-carrito" className="u-full-width">
                       <thead>
                         <tr className="flex gap-12 leading-10">
-                          <th>Imagen</th>
                           <th>Nombre</th>
                           <th>Precio</th>
                           <th>Cantidad</th>
