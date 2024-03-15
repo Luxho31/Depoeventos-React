@@ -3,6 +3,7 @@ import { Input, Progress, Tooltip } from "antd";
 import { useState } from "react";
 import PaymentStep from "./components/payment-step";
 import 'animate.css';
+import CartTable from "./components/cart-table";
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
@@ -38,61 +39,43 @@ export default function Cart() {
             </div>
 
             {/* Table Cart */}
-            <div className={`${progressPercent === 0 ? "block" : "hidden"} mb-24`}>
-                <div className="mb-24">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="flex justify-around gap-12 leading-[60px]">
-                                <th className="font-normal w-full">Producto</th>
-                                <th className="font-normal w-full">Descripción</th>
-                                <th className="font-normal w-full">Sede</th>
-                                <th className="font-normal w-full">Categoría</th>
-                                <th className="font-normal w-full">Alumno</th>
-                                <th className="font-normal w-full">Precio</th>
-                                {/* <button onClick={() => setProgressPercent(50)}>50%</button>
-                            <button onClick={() => setProgressPercent(20)}>20%</button>
-                            <button onClick={() => setProgressPercent(100)}>100%</button> */}
-                            </tr>
-                            <hr className="h-px bg-neutral-300" />
-                        </thead>
-                        <tbody>
-                            <tr className="flex justify-around gap-12 leading-[60px]">
-                                <td className="w-full text-center">Futbol</td>
-                                <td className="w-full text-center">Aprende a jugar futbol</td>
-                                <td className="w-full text-center">Colegio Villa Caritas</td>
-                                <td className="w-full text-center">Lower</td>
-                                <td className="w-full text-center">Juanito Perez</td>
-                                <td className="w-full text-center">S/. 250</td>
-                            </tr>
-                            <tr className="flex justify-around gap-12 leading-[60px]">
-                                <td className="w-full text-center">Voley</td>
-                                <td className="w-full text-center">Aprende a jugar voley</td>
-                                <td className="w-full text-center">Colegio Villa Caritas</td>
-                                <td className="w-full text-center">Lower</td>
-                                <td className="w-full text-center">Juanito Perez</td>
-                                <td className="w-full text-center">S/. 250</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div className={`${progressPercent === 0 ? "block" : "hidden"} flex items-start gap-12 mx-auto mb-24`}>
+                <div className="w-[60rem] mb-24">
+                    <CartTable />
                 </div>
-                <div className="flex justify-around mb-24">
-                    <div className="w-1/3 h-fit flex flex-col gap-y-4 border rounded-md shadow-md p-8">
+                <div className="flex flex-col justify-around gap-y-8 mb-24">
+                    <div className="bg-[#f3f3f9] h-fit w-[30rem] flex flex-col justify-between rounded-3xl shadow-md p-8">
                         <h2 className="text-lg">¿Tienes un cupón?</h2>
-                        <h2 className="text-md text-neutral-500 font-extralight">Añade tu código para obtener un descuento instantáneo</h2>
-                        <div className="w-full flex justify-center">
+                        <div className="w-full flex justify-center mt-4 mb-8">
                             <Tooltip title="Proximamente..." placement="right">
-                                <Input size="large" placeholder="Ingresa tu cupón" className="p-4" disabled />
+                                <div className="w-full flex justify-between border-neutral-300 border rounded-full ps-6 pe-1 py-1">
+                                    <input type="text" className="border-none outline-none" placeholder="Ingresa tu cupón" disabled />
+                                    <button className="bg-neutral-900 text-white rounded-full px-8 py-3 hover:bg-neutral-700" disabled>Aplicar</button>
+                                </div>
                             </Tooltip>
                         </div>
-                    </div>
-                    <div className="w-1/3 h-72 flex flex-col justify-between border rounded-md shadow-md p-8">
-                        <h2 className="text-lg">Cart Summary</h2>
-                        <h2 className="text-2xl font-bold">Total S/. 500</h2>
+                        <hr className="h-px bg-neutral-300" />
+                        <div className="my-8 flex flex-col gap-2">
+                            <div className="flex justify-between">
+                                <h2 className="text-lg text-slate-400">Subtotal</h2>
+                                <h2 className="text-lg text-slate-400 line-through">S/. 500.00</h2>
+                            </div>
+                            <div className="flex justify-between">
+                                <h2 className="text-lg text-slate-400">Descuento</h2>
+                                <h2 className="text-lg text-slate-400">- S/. 0.00</h2>
+                            </div>
+                            <div className="flex justify-between">
+                                <h2 className="text-lg font-semibold">Total</h2>
+                                <h2 className="text-xl font-semibold">S/. 500.00</h2>
+                            </div>
+                        </div>
                         <div className="w-full flex justify-center">
                             <button
-                                className="w-[90%] bg-neutral-900 text-white rounded-md py-4 hover:bg-neutral-700"
+                                className="w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"
                                 onClick={() => setProgressPercent(50)}
-                            >Pagar</button>
+                            >
+                                Pagar
+                            </button>
                         </div>
                     </div>
                 </div>
