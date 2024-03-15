@@ -1,85 +1,25 @@
 import { SmileOutlined } from "@ant-design/icons";
-import { Collapse, CollapseProps, Input, MenuProps, Progress, Tooltip } from "antd";
+import { Input, Progress, Tooltip } from "antd";
 import { useState } from "react";
-
-const itemsNest: CollapseProps['items'] = [
-    {
-        key: '1',
-        label: 'BCP',
-        children:
-            <div>
-                <p>CC: 1234-1234-1234-1234</p>
-                <p>CCI: 1234-1234-1234-1234</p>
-            </div>,
-    },
-    {
-        key: '2',
-        label: 'Interbank',
-        children:
-            <div>
-                <p>CC: 1234-1234-1234-1234</p>
-                <p>CCI: 1234-1234-1234-1234</p>
-            </div>,
-    },
-    {
-        key: '3',
-        label: 'Scotiabank',
-        children:
-            <div>
-                <p>CC: 1234-1234-1234-1234</p>
-                <p>CCI: 1234-1234-1234-1234</p>
-            </div>,
-    },
-];
-
-const items: CollapseProps['items'] = [
-    {
-        key: '1',
-        label: 'Yape',
-        children:
-            <div className="flex justify-center">
-                <YapeInfo />
-            </div>,
-    },
-    {
-        key: '2',
-        label: 'Plin',
-        children:
-            <div className="flex justify-center">
-                <PlinInfo />,
-            </div>
-    },
-    {
-        key: '3',
-        label: 'Transferencia',
-        children: <Collapse defaultActiveKey="3" accordion items={itemsNest} />,
-
-    },
-];
-
-function YapeInfo() {
-    return (
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" className="w-64 m-8" alt="" />
-    )
-}
-
-function PlinInfo() {
-    return (
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" className="w-64 m-8" alt="" />
-    )
-}
+import PaymentStep from "./components/payment-step";
+import 'animate.css';
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
 
-    const onChange = (key: string | string[]) => {
-        console.log(key);
-    };
-
     return (
         <div className="flex flex-col w-[80%] m-auto mt-24">
+            {/* Progress Bar */}
             <div className="w-full text-center">
-                <h1>Resumen de Compra</h1>
+                <div className={`${progressPercent === 0 ? "block" : "hidden"}`}>
+                    <h1 className="animate__animated animate__backInDown">Resumen de Compra</h1>
+                </div>
+                <div className={`${progressPercent === 50 ? "block" : "hidden"}`}>
+                    <h1 className="animate__animated animate__backInDown">Realizar Pago</h1>
+                </div>
+                <div className={`${progressPercent === 100 ? "block" : "hidden"}`}>
+                    <h1 className="animate__animated animate__backInDown">Gracias por la Compra</h1>
+                </div>
                 <div
                     className="relative mt-8 mb-12"
                 >
@@ -97,6 +37,7 @@ export default function Cart() {
                 </div>
             </div>
 
+            {/* Table Cart */}
             <div className={`${progressPercent === 0 ? "block" : "hidden"} mb-24`}>
                 <div className="mb-24">
                     <table className="w-full">
@@ -157,10 +98,14 @@ export default function Cart() {
                 </div>
             </div>
 
+            {/* Pasarela de Pago */}
             <div className={`${progressPercent === 50 ? "block" : "hidden"} mb-24`}>
-                <div className="">
-                    <Collapse onChange={onChange} accordion items={items} />
-                </div>
+                <PaymentStep setNextStep={setProgressPercent} />
+            </div>
+
+            {/* Pasarela de Pago */}
+            <div className={`${progressPercent === 100 ? "block" : "hidden"} mb-24`}>
+                <h2>Hola</h2>
             </div>
         </div>
     );
