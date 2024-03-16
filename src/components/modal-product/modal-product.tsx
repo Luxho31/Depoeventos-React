@@ -1,8 +1,8 @@
+import { Select, SelectProps } from "antd";
 import { motion } from "framer-motion";
 import { FaCartPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { Navigate, useNavigate } from "react-router-dom";
-import { Select, SelectProps } from "antd";
 import { useCart } from "../../context/CartProvider";
 
 type Product = {
@@ -21,7 +21,7 @@ type ModalProps = {
 
 export default function ModalProduct({ product, onClose }: ModalProps) {
     const { isAuthenticated, cargando } = useAuth();
-    const { addToCart, products } = useCart();
+    const { addToCart } = useCart();
 
     if (cargando) {
         return "cargando..."
@@ -44,7 +44,6 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
         } else {
             addToCart(product);
             onClose();
-            console.log(products);
         }
     };
 
