@@ -2,6 +2,7 @@ import Courses from "./components/courses/courses";
 import Campuses from "./components/campuses/campuses";
 import Intro from "./components/intro/intro";
 import Packages from "./components/products/products";
+import { FloatButton } from "antd";
 export default function Home() {
   const data = [
     {
@@ -39,6 +40,7 @@ export default function Home() {
         <Courses />
         <Packages />
         <Campuses slide={data} />
+        <FloatButton.BackTop />
       </div>
     </>
   );

@@ -1,5 +1,9 @@
 import { motion } from "framer-motion";
 import { FaCartPlus } from "react-icons/fa";
+import { useAuth } from "../../context/AuthProvider";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Select, SelectProps } from "antd";
+import { useCart } from "../../context/CartProvider";
 
 type Product = {
     id: number;
@@ -16,6 +20,34 @@ type ModalProps = {
 };
 
 export default function ModalProduct({ product, onClose }: ModalProps) {
+    const { isAuthenticated, cargando } = useAuth();
+    const { addToCart, products } = useCart();
+
+    if (cargando) {
+        return "cargando..."
+    }
+
+    const navigate = useNavigate();
+
+    const options: SelectProps['options'] = [
+        { value: "hola", label: "hola" }
+    ];
+
+    const handleChange = (value: string[]) => {
+        console.log(`selected ${value}`);
+    };
+
+    const handleAddToCart = () => {
+        if (!isAuthenticated) {
+            onClose();
+            navigate("/login")
+        } else {
+            addToCart(product);
+            onClose();
+            console.log(products);
+        }
+    };
+
     return (
         <motion.div
             className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50 z-50"
@@ -36,11 +68,26 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                             <h2 className="text-gray-900 font-bold text-3xl">{product.title}</h2>
                             <p className="text-gray-700 font-bold text-3xl">${product.price}</p>
                         </div>
-                        <div className="h-full">
+                        <div className="">
                             <p className="text-gray-600 text-base">{product.description}</p>
                         </div>
+                        {isAuthenticated ? (
+                            <div className="flex items-center">
+                                <label htmlFor="" className="me-2">Alumnos:</label>
+                                <Select
+                                    mode="multiple"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Por favor, selecciona los hijos a matricular"
+                                    onChange={handleChange}
+                                    options={options}
+                                />
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                         <div className="flex justify-end">
-                            <button className="flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600">
+                            <button className="flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" onClick={handleAddToCart}>
                                 <FaCartPlus className="me-2 text-lg" />
                                 Agregar al Carrito
                             </button>

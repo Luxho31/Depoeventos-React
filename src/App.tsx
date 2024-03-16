@@ -25,61 +25,64 @@ import Team from "./pages/landing/team/team";
 import NotFound from "./pages/not-found/not-found";
 import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
 import Cart from "./pages/landing/cart/cart";
+import { CartProvider } from "./context/CartProvider";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Rutas de Autenticacion */}
-          <Route path="/" element={<AuthLayout />}>
-            <Route index path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route
-              path="/change-password/:token"
-              element={<ChangePassword />}
-            />
-          </Route>
+        <CartProvider>
+          <Routes>
+            {/* Rutas de Autenticacion */}
+            <Route path="/" element={<AuthLayout />}>
+              <Route index path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/change-password/:token"
+                element={<ChangePassword />}
+              />
+            </Route>
 
-          {/* Rutas Generales */}
-          <Route path="/" element={<RutaGeneral />}>
-            <Route index element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cart" element={<Cart />} />
-          </Route>
+            {/* Rutas Generales */}
+            <Route path="/" element={<RutaGeneral />}>
+              <Route index element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/cart" element={<Cart />} />
+            </Route>
 
-          {/* Rutas Protegidas */}
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<HomeDashboard />} />
-            <Route path="/dashboard/disciplines" element={<DisciplinesDashboard />} />
-            <Route path="/dashboard/products" element={<ProductsDashboard />} />
-            <Route path="/dashboard/Users" element={<UsersDashboard />} />
-            <Route
-              path="/dashboard/childrens"
-              element={<ChildrensDashboard />}
-            />
-            <Route path="/dashboard/courses" element={<CoursesDashboard />} />
-            <Route
-              path="/dashboard/registrations"
-              element={<RegistrationsDashboard />}
-            />
-            <Route
-              path="/dashboard/transactions"
-              element={<TransactionsDashboard />}
-            />
-            <Route path="/dashboard/profile" element={<Profile />} />
-            <Route path="/dashboard/campuses" element={<CampusesDashboard />} />
-            <Route
-              path="/dashboard/categories"
-              element={<CategoriesDashboard />}
-            />
-          </Route>
+            {/* Rutas Protegidas */}
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<HomeDashboard />} />
+              <Route path="/dashboard/disciplines" element={<DisciplinesDashboard />} />
+              <Route path="/dashboard/products" element={<ProductsDashboard />} />
+              <Route path="/dashboard/Users" element={<UsersDashboard />} />
+              <Route
+                path="/dashboard/childrens"
+                element={<ChildrensDashboard />}
+              />
+              <Route path="/dashboard/courses" element={<CoursesDashboard />} />
+              <Route
+                path="/dashboard/registrations"
+                element={<RegistrationsDashboard />}
+              />
+              <Route
+                path="/dashboard/transactions"
+                element={<TransactionsDashboard />}
+              />
+              <Route path="/dashboard/profile" element={<Profile />} />
+              <Route path="/dashboard/campuses" element={<CampusesDashboard />} />
+              <Route
+                path="/dashboard/categories"
+                element={<CategoriesDashboard />}
+              />
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
