@@ -17,7 +17,6 @@ export default function Navbar() {
   const { logout, isAuthenticated, userInfo, cargando } = useAuth();
   const { products } = useCart();
 
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
 
@@ -61,9 +60,7 @@ export default function Navbar() {
     onClick: handleMenuClick,
   };
 
-  const handleMouseEnter = () => {
-
-  };
+  const handleMouseEnter = () => {};
 
   if (cargando) return <Spin fullscreen />;
 
@@ -131,9 +128,14 @@ export default function Navbar() {
                           </tr>
                         ) : (
                           products.map((product) => (
-                            <tr key={product.id} className="flex gap-12 leading-10">
-                              <td>{product.title}</td>
-                              <td>${product.price}</td>
+                            <tr
+                              key={product.id}
+                              className="flex gap-12 leading-10"
+                            >
+                              <td>{product.product && product.product.name}</td>
+                              <td>
+                                ${product.product && product.product.price}
+                              </td>
                               <td>1</td>
                               <td>
                                 <button className="text-red-500">
@@ -145,13 +147,15 @@ export default function Navbar() {
                         )}
                       </tbody>
                     </table>
-                    <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">Vaciar Carrito</button>
+                    <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">
+                      Vaciar Carrito
+                    </button>
                   </div>
                 }
                 className="border-none"
               >
                 <Button className="me-4">
-                  <Badge count={products.length}>
+                  <Badge count={isAuthenticated ? products.length : 0}>
                     <Link to="/cart">
                       <FaShoppingCart className="text-2xl" />
                     </Link>
