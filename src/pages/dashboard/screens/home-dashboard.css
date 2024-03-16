@@ -1,0 +1,10 @@
+.ant-image-preview-operations {
+    display: none;
+}
+
+.custom-mask {
+    border-radius: 20px;
+    /* Cambia el valor según el redondeo deseado */
+    overflow: hidden;
+    /* Asegura que la imagen redondeada se muestre correctamente */
+}
