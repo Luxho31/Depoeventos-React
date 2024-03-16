@@ -13,6 +13,7 @@ import {
   UploadProps,
 } from "antd";
 import { useRef, useState } from "react";
+import { useCart } from "../../../../context/CartProvider";
 
 const itemsNest: CollapseProps["items"] = [
   {
@@ -108,6 +109,8 @@ const props: UploadProps = {
 };
 
 export default function PaymentStep({ setNextStep }: any) {
+
+  const { getTotalPrice } = useCart();
   const [loading, setLoading] = useState(false);
 
   const onChange = (key: string | string[]) => {
@@ -289,7 +292,7 @@ export default function PaymentStep({ setNextStep }: any) {
       <div className="w-[22rem]">
         <div className="border rounded-md shadow-md p-8" ref={ref3}>
           <h2 className="text-lg mb-4">Cart Summary</h2>
-          <h2 className="text-2xl font-bold">Total S/. 500</h2>
+          <h2 className="text-2xl font-bold">Total S/. {getTotalPrice()}</h2>
         </div>
         <div className="flex justify-center mt-20 ">
           <Button

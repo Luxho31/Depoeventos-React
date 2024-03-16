@@ -14,7 +14,6 @@ type CardProps = {
 
 export default function CardProduct({ product, onClick }: CardProps) {
     return (
-        // <div className="bg-gray-100 shadow-lg rounded-xl cursor-pointer">
         <div className="bg-gray-100 shadow-lg rounded-xl cursor-pointer">
             <div className="h-60 rounded-t-xl flex justify-center relative">
                 <img
@@ -26,8 +25,6 @@ export default function CardProduct({ product, onClick }: CardProps) {
                 <div className="bg-blue-500 rounded-t-xl rounded-b-lg h-36 w-full" />
             </div>
             <div className="p-4 rounded-b-xl flex flex-col items-center">
-                {/* <p className="text-xl font-semibold mb-4">Futbol</p>
-                <p className="mb-4">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p> */}
                 <p className="text-xl font-semibold mb-4">{product.title}</p>
                 <p className="mb-4">{product.description}</p>
             </div>

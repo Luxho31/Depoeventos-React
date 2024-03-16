@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 type Product = {
     id: number;
@@ -12,6 +12,7 @@ type Product = {
 type CartContextType = {
     products: Product[];
     addToCart: (product: Product) => void;
+    getTotalPrice: () => number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -24,15 +25,20 @@ export const useCart = () => {
     return context;
 };
 
-export const CartProvider = ({ children }:any) => {
+export const CartProvider = ({ children }: any) => {
     const [products, setProducts] = useState<Product[]>([]);
 
     const addToCart = (product: Product) => {
         setProducts(prevProducts => [...prevProducts, product]);
     };
 
+    const getTotalPrice = () => {
+        return products.reduce((acc, product) => acc + product.price, 0);
+    }
+
+
     return (
-        <CartContext.Provider value={{ products, addToCart }}>
+        <CartContext.Provider value={{ products, addToCart, getTotalPrice }}>
             {children}
         </CartContext.Provider>
     );

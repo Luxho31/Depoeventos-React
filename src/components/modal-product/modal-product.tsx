@@ -1,6 +1,6 @@
 import { Select, SelectProps } from "antd";
 import { motion } from "framer-motion";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartPlus, FaUserLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
@@ -43,6 +43,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             navigate("/login")
         } else {
             addToCart(product);
+            const storedProducts = JSON.parse(localStorage.getItem('cartProducts') || '[]');
+            localStorage.setItem('cartProducts', JSON.stringify([...storedProducts, product]));
             onClose();
         }
     };
@@ -85,10 +87,10 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                         ) : (
                             <></>
                         )}
-                        <div className="flex justify-end">
+                        <div className="flex justify-center">
                             <button className="flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" onClick={handleAddToCart}>
-                                <FaCartPlus className="me-2 text-lg" />
-                                Agregar al Carrito
+                                {isAuthenticated ? <FaCartPlus className="me-2 text-lg" /> : <FaUserLock className="me-2 text-lg" />}
+                                {isAuthenticated ? "Agregar al carrito" : "Inicia sesión para comprar"}
                             </button>
                         </div>
                     </div>

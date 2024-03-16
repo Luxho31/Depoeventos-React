@@ -1,6 +1,6 @@
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Avatar, Button, Dropdown, Space, Spin } from "antd";
+import { Avatar, Badge, Button, Dropdown, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
@@ -9,11 +9,15 @@ import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import "./navbar.css";
+import { useCart } from "../../context/CartProvider";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { logout, isAuthenticated, userInfo, cargando } = useAuth();
+  const { products } = useCart();
+
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
 
@@ -58,7 +62,7 @@ export default function Navbar() {
   };
 
   const handleMouseEnter = () => {
-    
+
   };
 
   if (cargando) return <Spin fullscreen />;
@@ -120,7 +124,26 @@ export default function Navbar() {
                         </tr>
                       </thead>
                       <hr className="h-px" />
-                      <tbody></tbody>
+                      <tbody>
+                        {products.length === 0 ? (
+                          <tr>
+                            <td colSpan={4}>No hay productos en el carrito</td>
+                          </tr>
+                        ) : (
+                          products.map((product) => (
+                            <tr key={product.id} className="flex gap-12 leading-10">
+                              <td>{product.title}</td>
+                              <td>${product.price}</td>
+                              <td>1</td>
+                              <td>
+                                <button className="text-red-500">
+                                  <i className="fas fa-times"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
                     </table>
                     <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">Vaciar Carrito</button>
                   </div>
@@ -128,11 +151,11 @@ export default function Navbar() {
                 className="border-none"
               >
                 <Button className="me-4">
-                  <Space>
-                  <Link to="/cart">
-                    <FaShoppingCart className="text-2xl" />
-                  </Link>
-                  </Space>
+                  <Badge count={products.length}>
+                    <Link to="/cart">
+                      <FaShoppingCart className="text-2xl" />
+                    </Link>
+                  </Badge>
                 </Button>
               </Dropdown>
             </li>
