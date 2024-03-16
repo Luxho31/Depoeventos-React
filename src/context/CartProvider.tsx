@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getUserInfo } from '../services/basic-service';
+import { useAuth } from './AuthProvider';
 
 type Product = {
     id: number;
@@ -26,16 +28,55 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: any) => {
+    const { getUserId } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
+    const token = localStorage.getItem("token");
 
-    const addToCart = (product: Product) => {
-        setProducts(prevProducts => [...prevProducts, product]);
+    const addToCart = async (product: Product) => {
+        try {
+            const productId = product.id;
+            if (!token) {
+                throw new Error('No se ha encontrado un token de autenticación');
+            }
+
+            await saveItem(productId);
+
+            setProducts(prevProducts => [...prevProducts, product]);
+        } catch (error) {
+            console.error('Error al agregar el producto al carrito:', error);
+        }
     };
 
     const getTotalPrice = () => {
-        return products.reduce((acc, product) => acc + product.price, 0);
+        return products.reduce((total, product) => {
+            return typeof product.price === 'number' ? total + product.price : total;
+        }, 0);
     }
 
+    const saveItem = async (productId: number) => {
+        try {
+            const user = await getUserId(token!);
+            const body = {
+                productId: productId,
+                userId: user,
+            };
+
+            const response = await fetch('http://localhost:8080/api/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(body),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar el producto en el carrito');
+            }
+        } catch (error) {
+            throw new Error('Error al guardar el producto en el carrito');
+        }
+    };
 
     return (
         <CartContext.Provider value={{ products, addToCart, getTotalPrice }}>

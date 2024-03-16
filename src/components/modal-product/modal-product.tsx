@@ -43,8 +43,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             navigate("/login")
         } else {
             addToCart(product);
-            const storedProducts = JSON.parse(localStorage.getItem('cartProducts') || '[]');
-            localStorage.setItem('cartProducts', JSON.stringify([...storedProducts, product]));
+            // const storedProducts = JSON.parse(localStorage.getItem('cartProducts') || '[]');
+            // localStorage.setItem('cartProducts', JSON.stringify([...storedProducts, product]));
             onClose();
         }
     };
