@@ -44,3 +44,20 @@ export const getAllDisciplines = async () => {
     throw error;
   }
 };
+
+export const updateDiscipline = async (form: disciplineType, id:number) => {
+  try {
+    await fetch(`${BASE_URL}/api/courses/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(form),
+    });
+    getAllDisciplines();
+  } catch (error) {
+    console.error("Error al actualizar un hijo:", error);
+    throw error;
+  }
+};

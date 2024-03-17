@@ -16,6 +16,7 @@ import { useAuth } from "../../../context/AuthProvider";
 import {
   createDiscipline,
   getAllDisciplines,
+  updateDiscipline,
 } from "../../../services/disciplines-service";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -117,7 +118,7 @@ export default function DiciplinesDashboard() {
       });
       setOpen(false);
     } catch (error) {
-      console.error("Error al crear un hijo:", error);
+      console.error("Error al crear una disciplina:", error);
       throw error;
     } finally {
       setLoading(false);

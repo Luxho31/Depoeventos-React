@@ -5,6 +5,8 @@ import PaymentStep from "./components/payment-step";
 import 'animate.css';
 import CartTable from "./components/cart-table";
 import { useCart } from "../../../context/CartProvider";
+import { Link } from "react-router-dom";
+import "./cart.css"
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
@@ -94,7 +96,11 @@ export default function Cart() {
 
             {/* Pasarela de Pago */}
             <div className={`${progressPercent === 100 ? "block" : "hidden"} mb-24`}>
-                <h2>Hola</h2>
+                <div className="h-[34rem] flex flex-col justify-center items-center gap-y-8 BackgroundMessage">
+                    <h2 className="text-8xl font-bold">Gracias</h2>
+                    <h3 className="text-xl">Gracias por adquirir nuestros servicios, nuestro equipo se contactara con usted para gestionar la matricula</h3>
+                    <Link to="/" className="bg-indigo-400 text-white rounded-xl px-8 py-4 hover:bg-indigo-300">Seguir Comprando</Link>
+                </div>
             </div>
         </div>
     );
