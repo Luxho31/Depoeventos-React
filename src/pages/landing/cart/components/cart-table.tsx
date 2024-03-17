@@ -5,12 +5,33 @@ import { useCart } from "../../../../context/CartProvider";
 
 export default function CartTable() {
   const { products, getTotalPrice } = useCart();
-  type ProductsType = {
+  type Product = {
+    id: number;
+    // image: string;
+    name: string;
+    price: number;
+    description: string;
+    startDate: string;
+    maxStudents: number;
+    campus: {
+      id: number;
+      name: string;
+      description: string;
+    };
+    category: {
+      id: number;
+      name: string;
+      description: string;
+    };
+    startDateInscription: string;
+    endDateInscription: string;
+    courses: Course[];
+  };
+
+  type Course = {
     id: number;
     name: string;
-    children: string;
-    price: number;
-    image: string;
+    description: string;
   };
 
   return (
@@ -56,23 +77,21 @@ export default function CartTable() {
             >
               <div className="w-1/6">
                 <img
-                  src={product.product.image}
-                  alt={product.product.name}
+                  // src={product.product.image}
+                  alt={product.name}
                   className="!w-20 !h-auto bg-gray-300 rounded-xl"
                 />
               </div>
               <div className="w-1/4">
-                <h2 className="text-lg">{product.product.name}</h2>
+                <h2 className="text-lg">{product.name}</h2>
               </div>
               <div className="w-1/4">
                 <h2 className="text-lg font-light text-center">
-                  {product.children.name}
+                  {product.name}
                 </h2>
               </div>
               <div className="w-1/6 text-right">
-                <p className="text-lg font-semibold">
-                  S/. {product.product.price}
-                </p>
+                <p className="text-lg font-semibold">S/. {product.price}</p>
               </div>
               <div className="w-1/6 text-right flex justify-end">
                 <IoIosClose className="text-red-500 text-3xl cursor-pointer" />

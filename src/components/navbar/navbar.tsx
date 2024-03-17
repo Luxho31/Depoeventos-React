@@ -132,10 +132,8 @@ export default function Navbar() {
                               key={product.id}
                               className="flex gap-12 leading-10"
                             >
-                              <td>{product.product && product.product.name}</td>
-                              <td>
-                                ${product.product && product.product.price}
-                              </td>
+                              <td>{product && product.name}</td>
+                              <td>${product && product.price}</td>
                               <td>1</td>
                               <td>
                                 <button className="text-red-500">

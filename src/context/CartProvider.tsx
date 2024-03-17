@@ -1,17 +1,32 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUserInfo } from "../services/basic-service";
 import { useAuth } from "./AuthProvider";
 
 type Product = {
   id: number;
-  product: {
-    price: number;
+  name: string;
+  price: number;
+  description: string;
+  startDate: string;
+  maxStudents: number;
+  campus: {
+    id: number;
     name: string;
-    image: string;
+    description: string;
   };
-  children: {
+  category: {
+    id: number;
     name: string;
+    description: string;
   };
+  startDateInscription: string;
+  endDateInscription: string;
+  courses: Course[];
+};
+
+type Course = {
+  id: number;
+  name: string;
+  description: string;
 };
 
 type CartContextType = {
@@ -41,15 +56,19 @@ export const CartProvider = ({ children }: any) => {
         if (!token) {
           throw new Error("No se ha encontrado un token de autenticación");
         }
-
         const user = await getUserId(token!);
         const response = await fetch(`http://localhost:8080/api/cart/${user}`);
-        console.log(response);
         if (!response.ok) {
           throw new Error("Error al obtener los productos del carrito");
         }
         const data = await response.json();
-        setProducts(data);
+        const mappedProducts: Product[] = data.map((item: any) => ({
+          id: item.id,
+          name: item.product.name,
+          price: item.product.price,
+          description: item.product.description,
+        }));
+        setProducts(mappedProducts);
       } catch (error) {
         console.error("Error al obtener los productos del carrito:", error);
       }
@@ -58,6 +77,7 @@ export const CartProvider = ({ children }: any) => {
     fetchData();
   }, [token, getUserId]);
 
+  // Función para agregar un producto al carrito
   const addToCart = async (product: Product) => {
     try {
       const productId = product.id;
@@ -73,14 +93,14 @@ export const CartProvider = ({ children }: any) => {
     }
   };
 
+  // Función para obtener el precio total del carrito
   const getTotalPrice = () => {
     return products.reduce((total, product) => {
-      return typeof product.product.price === "number"
-        ? total + product.product.price
-        : total;
+      return typeof product.price === "number" ? total + product.price : total;
     }, 0);
   };
 
+  // Función para guardar un producto en el carrito
   const saveItem = async (productId: number) => {
     try {
       const user = await getUserId(token!);

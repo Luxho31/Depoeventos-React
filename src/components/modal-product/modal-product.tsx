@@ -7,18 +7,31 @@ import { useCart } from "../../context/CartProvider";
 
 type Product = {
   id: number;
-  image: string;
+  // image: string;
   name: string;
   price: number;
   description: string;
-  product: {
+  startDate: string;
+  maxStudents: number;
+  campus: {
+    id: number;
     name: string;
-    price: number;
-    image: string;
+    description: string;
   };
-  children: {
+  category: {
+    id: number;
     name: string;
+    description: string;
   };
+  startDateInscription: string;
+  endDateInscription: string;
+  courses: Course[];
+};
+
+type Course = {
+  id: number;
+  name: string;
+  description: string;
 };
 
 type Option = {
@@ -52,6 +65,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       onClose();
       navigate("/login");
     } else {
+      console.log("Agregando al carrito:", product);
       addToCart(product);
       onClose();
     }
@@ -75,7 +89,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
           <div className="w-[40%]">
             <img
               className="w-full h-full object-cover object-center p-4"
-              src={product.image}
+              src="{product.product.image}"
               alt={product.name}
             />
           </div>

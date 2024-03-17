@@ -43,7 +43,7 @@ export default function Cart() {
             </div>
 
             {/* Table Cart */}
-            <div className={`${progressPercent === 100 ? "block" : "hidden"} flex items-start gap-12 mx-auto mb-24`}>
+            <div className={`${progressPercent === 0 ? "block" : "hidden"} flex items-start gap-12 mx-auto mb-24`}>
                 <div className="w-[60rem] mb-24">
                     <CartTable />
                 </div>
@@ -93,7 +93,7 @@ export default function Cart() {
             </div>
 
             {/* Pasarela de Pago */}
-            <div className={`${progressPercent === 0 ? "block" : "hidden"} mb-24`}>
+            <div className={`${progressPercent === 100 ? "block" : "hidden"} mb-24`}>
                 <h2>Hola</h2>
             </div>
         </div>
