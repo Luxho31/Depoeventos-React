@@ -1,7 +1,7 @@
 type Product = {
     id: number;
     image: string;
-    title: string;
+    name: string;
     price: number;
     description: string;
     // Otros campos del producto desde el backend
@@ -25,7 +25,7 @@ export default function CardProduct({ product, onClick }: CardProps) {
                 <div className="bg-blue-500 rounded-t-xl rounded-b-lg h-36 w-full" />
             </div>
             <div className="p-4 rounded-b-xl flex flex-col items-center">
-                <p className="text-xl font-semibold mb-4">{product.title}</p>
+                <p className="text-xl font-semibold mb-4">{product.name}</p>
                 <p className="mb-4">{product.description}</p>
             </div>
             <div className="flex justify-center mb-4">

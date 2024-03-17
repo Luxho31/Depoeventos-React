@@ -8,7 +8,7 @@ import { useCart } from "../../context/CartProvider";
 type Product = {
   id: number;
   image: string;
-  title: string;
+  name: string;
   price: number;
   description: string;
   product: {
@@ -76,13 +76,13 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             <img
               className="w-full h-full object-cover object-center p-4"
               src={product.image}
-              alt={product.title}
+              alt={product.name}
             />
           </div>
           <div className="flex flex-col justify-between w-[60%] px-10 py-10">
             <div className="flex justify-between items-center h-32">
               <h2 className="text-gray-900 font-bold text-3xl">
-                {product.title}
+                {product.name}
               </h2>
               <p className="text-gray-700 font-bold text-3xl">
                 ${product.price}
