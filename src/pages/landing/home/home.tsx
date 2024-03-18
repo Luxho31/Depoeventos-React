@@ -43,8 +43,8 @@ export default function Home() {
         <Intro />
         <Courses />
         {/* <Packages /> */}
-        <Team />
         <Campuses slide={data} />
+        <Team />
         <FloatButton.BackTop />
       </div>
     </>

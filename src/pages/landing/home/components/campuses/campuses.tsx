@@ -10,7 +10,7 @@ import CampusCard from "../../../../../components/campus-card/campus-card";
 
 export default function Campuses({ slide }: any) {
   return (
-    <div className="w-[80%] m-auto mb-10">
+    <div className="w-[80%] m-auto mb-10 mt-20">
       <div className="mb-12">
         <h1 className="text-4xl font-extrabold mb-3">Sedes</h1>
         <p>

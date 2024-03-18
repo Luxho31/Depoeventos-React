@@ -30,9 +30,9 @@ export default function Intro() {
         />
         <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[18rem] h-[8rem] relative bottom-56 z-40 max-xl:hidden animate__animated animate__pulse">
           <p className="text-sm italic">
-            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+            "Que crecer no signifique dejar de ser niños."
           </p>
-          <span className="flex justify-end text-orange-500 pt-1 text-sm">El Merchon</span>
+          <span className="flex justify-end text-orange-500 pt-1 text-sm">- Familia Depoeventos</span>
         </div>
       </div>
     </div>
