@@ -4,6 +4,8 @@ import { FaCartPlus, FaUserLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
+import { useEffect, useState } from "react";
+import { getChildrensByUserId } from "../../services/children-service";
 
 type Product = {
   id: number;
@@ -47,6 +49,18 @@ type ModalProps = {
 export default function ModalProduct({ product, onClose }: ModalProps) {
   const { isAuthenticated, cargando } = useAuth();
   const { addToCart } = useCart();
+  const [children, setChildren] = useState([]);
+
+
+
+  useEffect(() => {
+    const fetchChildren = async () => {
+      const children = await getChildrensByUserId();
+      setChildren(children);
+      console.log(children);
+    };
+    fetchChildren();
+  }, []);
 
   if (cargando) {
     return "cargando...";
@@ -116,7 +130,11 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   style={{ width: "100%" }}
                   placeholder="Por favor, selecciona los hijos a matricular"
                   onChange={handleChange}
-                  options={options}
+                  options={children.map((child: any) => ({
+                    value: child.name,
+                    label: child.name,
+                  }))
+                  }
                 />
               </div>
             ) : (
@@ -124,8 +142,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             )}
             <div className="flex justify-center">
               <button
-                className="flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"
-                onClick={handleAddToCart}
+                className={children.length > 0 ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600 cursor-not-allowed"}
+
+                onClick={children.length > 0 ? handleAddToCart : () => { }}
               >
                 {isAuthenticated ? (
                   <FaCartPlus className="me-2 text-lg" />
@@ -133,13 +152,13 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   <FaUserLock className="me-2 text-lg" />
                 )}
                 {isAuthenticated
-                  ? "Agregar al carrito"
+                  ? children.length > 0 ? "Agregar al carrito" : "No tienes hijos registrados"
                   : "Inicia sesión para comprar"}
               </button>
             </div>
           </div>
         </div>
       </div>
-    </motion.div>
+    </motion.div >
   );
 }
