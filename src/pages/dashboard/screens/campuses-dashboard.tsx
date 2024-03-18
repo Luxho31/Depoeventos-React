@@ -3,13 +3,14 @@ import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import { HiMiniPlus } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import {
     deleteCampus,
     getAllCampuses,
 } from "../../../services/campuses-service";
 import CampusModal from "../modals/campuses-modals-dashboard";
-import { HiMiniPlus } from "react-icons/hi2";
 
 type CampusData = {
     id: number;
@@ -29,6 +30,8 @@ export default function DiciplinesDashboard() {
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const specificRole: string = "ADMIN";
         if (userRole && userRole.some((role) => role === specificRole)) {
@@ -42,6 +45,8 @@ export default function DiciplinesDashboard() {
                     console.error("Error al obtener campuses:", error);
                     setLoading(false);
                 });
+        } else {
+            navigate("/dashboard");
         }
     }, [userRole]);
 
@@ -136,10 +141,10 @@ export default function DiciplinesDashboard() {
                     </div>
                     <div className="flex justify-between items-center mb-5">
                         <Button
-                        onClick={openCreateCampusModal}
-                        className="flex items-center gap-x-2"
+                            onClick={openCreateCampusModal}
+                            className="flex items-center gap-x-2"
                         >
-                        <HiMiniPlus className="text-lg" />
+                            <HiMiniPlus className="text-lg" />
                             Crear sede
                         </Button>
                         <CampusModal

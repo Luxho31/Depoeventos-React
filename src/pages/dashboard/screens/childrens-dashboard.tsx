@@ -11,6 +11,7 @@ import {
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { FaAddressCard, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import CustomTable from "../../../components/tables/custom-table";
 import { useAuth } from "../../../context/AuthProvider";
 import {
@@ -60,6 +61,7 @@ export default function ChildrensDashboard() {
   };
 
   const { userRole } = useAuth()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const specificRole = 'USER';
@@ -72,6 +74,8 @@ export default function ChildrensDashboard() {
         console.error("Error al obtener hijos:", error);
         setLoading(false);
       });
+    } else {
+      navigate("/dashboard")
     }
   }, [userRole]);
 
@@ -187,9 +191,8 @@ export default function ChildrensDashboard() {
             form={form1}
           >
             <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 1 ? "block" : "hidden"
-              }`}
+              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${paso === 1 ? "block" : "hidden"
+                }`}
             >
               {/* ------------------Input Nombre Hijo------------------ */}
               <Form.Item<FirstStepType>
@@ -332,10 +335,10 @@ export default function ChildrensDashboard() {
                     selectedDocumentType === "DNI"
                       ? 8
                       : selectedDocumentType === "PASSPORT"
-                      ? 10
-                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
-                      ? 9
-                      : undefined
+                        ? 10
+                        : selectedDocumentType === "CARNET DE EXTRANJERIA"
+                          ? 9
+                          : undefined
                   }
                 />
               </Form.Item>
@@ -397,12 +400,12 @@ export default function ChildrensDashboard() {
                     { value: "Masculino", label: "Masculino" },
                     { value: "Femenino", label: "Femenino" },
                   ]}
-                  // onChange={(value) => {
-                  //   setSelectedDocumentType(value);
-                  //   form.setFieldsValue({
-                  //     documentNumber: undefined,
-                  //   });
-                  // }}
+                // onChange={(value) => {
+                //   setSelectedDocumentType(value);
+                //   form.setFieldsValue({
+                //     documentNumber: undefined,
+                //   });
+                // }}
                 />
               </Form.Item>
             </div>
@@ -412,7 +415,7 @@ export default function ChildrensDashboard() {
                 <button
                   type="submit"
                   className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
+                // bg-blue-500 hover:bg-blue-600
                 >
                   Siguiente
                   <FaArrowRight className="ms-1" />
@@ -432,9 +435,8 @@ export default function ChildrensDashboard() {
             form={form2}
           >
             <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 2 ? "block" : "hidden"
-              }`}
+              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${paso === 2 ? "block" : "hidden"
+                }`}
             >
               {/* ------------------Switch ¿Es estudiante?------------------ */}
               <Form.Item<SecondStepType>
@@ -516,7 +518,7 @@ export default function ChildrensDashboard() {
                 <button
                   type="submit"
                   className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
+                // bg-blue-500 hover:bg-blue-600
                 >
                   Siguiente
                   <FaArrowRight className="ms-1" />
@@ -536,9 +538,8 @@ export default function ChildrensDashboard() {
             form={form3}
           >
             <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 3 ? "block" : "hidden"
-              }`}
+              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${paso === 3 ? "block" : "hidden"
+                }`}
             >
               {/* ------------------Switch ¿Es miebro de un cub?------------------ */}
               <Form.Item<ThirdStepType> name="isClubMember">
@@ -662,7 +663,7 @@ export default function ChildrensDashboard() {
                 <button
                   type="submit"
                   className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
+                // bg-blue-500 hover:bg-blue-600
                 >
                   Siguiente
                   <FaArrowRight className="ms-1" />

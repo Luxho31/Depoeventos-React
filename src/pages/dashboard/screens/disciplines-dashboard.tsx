@@ -10,6 +10,7 @@ import {
 } from "../../../services/disciplines-service";
 import DisciplineModal from "../modals/disciplines-modals-dashboard";
 import { HiMiniPlus } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 type DisciplineData = {
     id: number;
@@ -28,6 +29,8 @@ export default function DiciplinesDashboard() {
     const [open, setOpen] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const specificRole: string = "ADMIN";
@@ -42,6 +45,8 @@ export default function DiciplinesDashboard() {
                     console.error("Error al obtener disciplinas:", error);
                     setLoading(false);
                 });
+        } else {
+            navigate("/dashboard");
         }
     }, [userRole]);
 

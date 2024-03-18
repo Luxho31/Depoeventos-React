@@ -10,6 +10,7 @@ import {
     getAllProducts,
 } from "../../../services/products-service";
 import { HiMiniPlus } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 type ProductData = {
     id: number;
@@ -32,6 +33,8 @@ export default function DiciplinesDashboard() {
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const specificRole: string = "ADMIN";
         if (userRole && userRole.some((role) => role === specificRole)) {
@@ -45,6 +48,8 @@ export default function DiciplinesDashboard() {
                     console.error("Error al obtener disciplinas:", error);
                     setLoading(false);
                 });
+        } else {
+            navigate("/dashboard");
         }
     }, [userRole]);
 
@@ -145,9 +150,9 @@ export default function DiciplinesDashboard() {
                     </div>
                     <div className="flex justify-between items-center mb-5">
                         <Button
-						onClick={openCreateProductModal}
-						className="flex items-center gap-x-2"
-						>
+                            onClick={openCreateProductModal}
+                            className="flex items-center gap-x-2"
+                        >
                             <HiMiniPlus className="text-lg" />
                             Crear Productos
                         </Button>

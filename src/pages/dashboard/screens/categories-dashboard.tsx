@@ -3,13 +3,14 @@ import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import { HiMiniPlus } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import {
     deleteCategory,
     getAllCategories,
 } from "../../../services/categories-service";
 import CategoryModal from "../modals/categories-modals-dashboard";
-import { HiMiniPlus } from "react-icons/hi2";
 
 type CategoryData = {
     id: number;
@@ -29,6 +30,8 @@ export default function DiciplinesDashboard() {
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const specificRole: string = "ADMIN";
         if (userRole && userRole.some((role) => role === specificRole)) {
@@ -42,6 +45,8 @@ export default function DiciplinesDashboard() {
                     console.error("Error al obtener categories:", error);
                     setLoading(false);
                 });
+        } else {
+            navigate("/dashboard")
         }
     }, [userRole]);
 

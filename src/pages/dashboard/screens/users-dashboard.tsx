@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthProvider";
 import { getAllUsers } from "../../../services/user-service";
 import { Input, Pagination } from "antd";
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 type UserData = {
     id: number;
@@ -30,6 +31,8 @@ function UsersDashboard() {
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const specificRole: string = "ADMIN";
         if (userRole && userRole.some((role) => role === specificRole)) {
@@ -43,6 +46,8 @@ function UsersDashboard() {
                     console.error("Error fetching users:", error);
                     setLoading(false);
                 });
+        } else {
+            navigate("/dashboard");
         }
     }, [userRole]);
 
