@@ -19,7 +19,7 @@ export const createDiscipline = async (form: disciplineType) => {
     });
     getAllDisciplines();
   } catch (error) {
-    console.error("Error al crear un hijo:", error);
+    console.error("Error al crear una disciplina:", error);
     throw error;
   }
 };
@@ -40,7 +40,7 @@ export const getAllDisciplines = async () => {
 
     return dataWithKeys;
   } catch (error) {
-    console.error("Error al obtener datos de usuarios:", error);
+    console.error("Error al obtener datos de disciplinas:", error);
     throw error;
   }
 };
@@ -57,7 +57,7 @@ export const updateDiscipline = async (form: disciplineType, id?: number) => {
     });
     getAllDisciplines();
   } catch (error) {
-    console.error("Error al actualizar un hijo:", error);
+    console.error("Error al actualizar una disciplina:", error);
     throw error;
   }
 };
@@ -72,7 +72,23 @@ export const getDisciplineById = async (id: number) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error al obtener datos de usuarios:", error);
+    console.error("Error al obtener datos de disciplinas:", error);
     throw error;
   }
 }
+
+export const deleteDiscipline = async (id: number) => {
+  try {
+    await fetch(`${BASE_URL}/api/courses/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    getAllDisciplines();
+  } catch (error) {
+    console.error("Error al eliminar una disciplina:", error);
+    throw error;
+  }
+};
+

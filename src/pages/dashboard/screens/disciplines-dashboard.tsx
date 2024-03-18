@@ -1,10 +1,11 @@
-import { Button, Input, Pagination } from "antd";
+import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { useAuth } from "../../../context/AuthProvider";
-import { getAllDisciplines } from "../../../services/disciplines-service";
+import { deleteDiscipline, getAllDisciplines } from "../../../services/disciplines-service";
 import DisciplineModal from "../modals/disciplines-modals-dashboard";
 import { CiSearch } from "react-icons/ci";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 type DisciplineData = {
 	id: number;
@@ -61,6 +62,19 @@ export default function DiciplinesDashboard() {
 		setEditId(id);
 		setOpenEditModal(true);
 	};
+
+	const handleRemoveDiscipline = async (id: number) => {
+		try {
+			setLoading(true);
+			await deleteDiscipline(id);
+			handleReload();
+		} catch (error) {
+			console.error("Error al eliminar disciplina:", error);
+		} finally {
+			setLoading(false);
+		}
+
+	}
 	const handleSearch = () => {
 		// Actualiza la página actual a 1 después de la búsqueda
 		setCurrentPage(1);
@@ -78,14 +92,12 @@ export default function DiciplinesDashboard() {
 			indexOfLastUser
 		);
 
-		// Renderiza la página con los resultados filtrados
 		setCurrentPage(page);
 	};
 
 	const indexOfLastUser: number = currentPage * usersPerPage;
 	const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
-	// Filtra antes de la paginación
 	const filteredUsers = disciplineData.filter((discipline) =>
 		discipline.name.toLowerCase().includes(searchTerm.toLowerCase())
 	);
@@ -163,9 +175,24 @@ export default function DiciplinesDashboard() {
 									>
 										<FaEdit className="text-xl text-gray-700" />
 									</button>
-									<button className="bg-red-300 rounded-md p-1">
-										<FaRegTrashAlt className="text-xl text-gray-700" />
-									</button>
+									<Popconfirm
+										title="Eliminar disciplina?"
+										description="Esta acción no se puede deshacer."
+										onConfirm={() => handleRemoveDiscipline(user.id)}
+										okText="Si"
+										cancelText="No"
+										okButtonProps={{
+											className: "bg-red-500 text-white !hover:bg-red-600",
+										}}
+										icon={<QuestionCircleOutlined style={{ color: 'red' }}
+										/>}
+									>
+										<button
+											className="bg-red-300 rounded-md p-1"
+										>
+											<FaRegTrashAlt className="text-xl text-gray-700" />
+										</button>
+									</Popconfirm>
 								</td>
 							</tr>
 						))}
