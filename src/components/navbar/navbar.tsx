@@ -60,7 +60,7 @@ export default function Navbar() {
     onClick: handleMenuClick,
   };
 
-  const handleMouseEnter = () => {};
+  const handleMouseEnter = () => { };
 
   if (cargando) return <Spin fullscreen />;
 
@@ -86,10 +86,6 @@ export default function Navbar() {
 
             <li className="">
               <NavLink to="/products">Productos</NavLink>
-            </li>
-
-            <li className="">
-              <NavLink to="/team">Equipo</NavLink>
             </li>
 
             <li className="">

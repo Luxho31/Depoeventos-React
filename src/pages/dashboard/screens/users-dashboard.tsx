@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllUsers } from "../../../services/user-service";
+import { Input, Pagination } from "antd";
+import { CiSearch } from "react-icons/ci";
 
 type UserData = {
     id: number;
@@ -55,9 +57,27 @@ function UsersDashboard() {
                 setLoading(false);
             });
     };
+    const handleSearch = () => {
+        setCurrentPage(1);
+    };
 
+    const onPageChange = (page: number) => {
+        // Mantén la búsqueda al cambiar de página
+        const filteredUsers = userData.filter((user) =>
+            user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        const indexOfLastUser: number = page * usersPerPage;
+        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+        const currentUsers: UserData[] = filteredUsers.slice(
+            indexOfFirstUser,
+            indexOfLastUser
+        );
+
+        setCurrentPage(page);
+    };
     const indexOfLastUser: number = currentPage * usersPerPage;
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+
     const filteredUsers: UserData[] = userData.filter((user) =>
         user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -65,9 +85,7 @@ function UsersDashboard() {
         indexOfFirstUser,
         indexOfLastUser
     );
-    const totalPages: number = Math.ceil(filteredUsers.length / usersPerPage);
 
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
         <div className="h-screen">
@@ -84,30 +102,17 @@ function UsersDashboard() {
                         Search
                     </label>
                     <div className="relative">
-                        <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-gray-500"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
+                        <Input
                             id="table-search-users"
-                            className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Search for users"
+                            placeholder="Buscar por nombre"
+                            className="w-full rounded-xl p-1"
+                            size="small"
+                            prefix={<CiSearch className="site-form-item-icon me-1" />}
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                handleSearch();
+                            }}
                         />
                     </div>
                 </div>
@@ -172,26 +177,14 @@ function UsersDashboard() {
                         ))}
                     </tbody>
                 </table>
-                <nav
-                    className="flex items-center justify-between flex-column flex-wrap md:flex-row pt-4"
-                    aria-label="Table navigation"
-                >
-                    <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                        {Array.from({ length: totalPages }, (_, index) => (
-                            <li key={index}>
-                                <button
-                                    onClick={() => paginate(index + 1)}
-                                    className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                                        currentPage === index + 1 &&
-                                        "text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                                    }`}
-                                >
-                                    {index + 1}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <Pagination
+                    className="mt-4"
+                    current={currentPage}
+                    total={filteredUsers.length}
+                    pageSize={usersPerPage}
+                    onChange={onPageChange}
+                    showSizeChanger={false}
+                />
             </div>
         </div>
     );

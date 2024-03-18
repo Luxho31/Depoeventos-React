@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./context/AuthProvider";
+import { CartProvider } from "./context/CartProvider";
 import AuthLayout from "./layout/AuthLayout";
 import RutaGeneral from "./layout/RutaGeneral";
 import ChangePassword from "./pages/auth/change-password/change-password";
@@ -13,19 +14,17 @@ import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard"
 import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
 import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
 import DisciplinesDashboard from "./pages/dashboard/screens/disciplines-dashboard";
+import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
 import ProductsDashboard from "./pages/dashboard/screens/products-dashboard";
 import Profile from "./pages/dashboard/screens/profile";
 import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
 import UsersDashboard from "./pages/dashboard/screens/users-dashboard";
+import Cart from "./pages/landing/cart/cart";
 import Contact from "./pages/landing/contact/contact";
 import Home from "./pages/landing/home/home";
 import Products from "./pages/landing/products/products";
-import Team from "./pages/landing/team/team";
 import NotFound from "./pages/not-found/not-found";
-import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
-import Cart from "./pages/landing/cart/cart";
-import { CartProvider } from "./context/CartProvider";
 
 function App() {
   return (
@@ -48,7 +47,6 @@ function App() {
             <Route path="/" element={<RutaGeneral />}>
               <Route index element={<Home />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
             </Route>
