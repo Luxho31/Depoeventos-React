@@ -45,10 +45,10 @@ export const getAllDisciplines = async () => {
   }
 };
 
-export const updateDiscipline = async (form: disciplineType, id:number) => {
+export const updateDiscipline = async (form: disciplineType, id?: number) => {
   try {
     await fetch(`${BASE_URL}/api/courses/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -61,3 +61,18 @@ export const updateDiscipline = async (form: disciplineType, id:number) => {
     throw error;
   }
 };
+
+export const getDisciplineById = async (id: number) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/courses/${id}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de usuarios:", error);
+    throw error;
+  }
+}

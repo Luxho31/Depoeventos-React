@@ -1,45 +1,14 @@
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-    Button,
-    Form,
-    GetProp,
-    Input,
-    Modal,
-    Spin,
-    UploadProps,
-    message,
+    Button
 } from "antd";
 import { useEffect, useState } from "react";
-import { IoReload } from "react-icons/io5";
-import CustomTable from "../../../components/tables/custom-table";
-import { useAuth } from "../../../context/AuthProvider";
-import {
-    createDiscipline,
-    getAllDisciplines,
-    updateDiscipline,
-} from "../../../services/disciplines-service";
-import { FaRegTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { IoReload } from "react-icons/io5";
+import { useAuth } from "../../../context/AuthProvider";
+import { getAllDisciplines } from "../../../services/disciplines-service";
+import DisciplineModal from "../modals/disciplines-modals-dashboard";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-        message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 type DisciplineData = {
     id: number;
@@ -52,8 +21,14 @@ export default function DiciplinesDashboard() {
     const [loading, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editId, setEditId] = useState<number | undefined>(undefined);
+    const [open, setOpen] = useState(false);
     const { userRole } = useAuth();
-    const usersPerPage: number = 5;
+    const usersPerPage: number = 15;
+
+
 
     useEffect(() => {
         const specificRole: string = "ADMIN";
@@ -84,26 +59,17 @@ export default function DiciplinesDashboard() {
         }
     };
 
-    const [open, setOpen] = useState(false);
-
-    const { TextArea } = Input;
-
-    const createDisciplineForm = async (form: any) => {
-        try {
-            setLoading(true);
-            await createDiscipline(form);
-            // recargar datos
-            getAllDisciplines().then((data) => {
-                setDisciplineData(data);
-            });
-            setOpen(false);
-        } catch (error) {
-            console.error("Error al crear una disciplina:", error);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
+    // Función para abrir el modal de creación
+    const openCreateDisciplineModal = () => {
+        setOpenCreateModal(true);
     };
+
+    // Función para abrir el modal de edición
+    const openEditDisciplineModal = (id: number) => {
+        setEditId(id);
+        setOpenEditModal(true);
+    };
+
 
     const indexOfLastUser: number = currentPage * usersPerPage;
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
@@ -119,6 +85,7 @@ export default function DiciplinesDashboard() {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+
     return (
         <div className="h-screen">
             <div className="flex justify-between items-center">
@@ -132,140 +99,26 @@ export default function DiciplinesDashboard() {
                 {/* ------------------- VENTANA MODAL ----------------- */}
                 <Button
                     type="primary"
-                    onClick={() => setOpen(true)}
+                    onClick={() => openCreateDisciplineModal()}
                     className="bg-blue-500"
                 >
                     + Crear Disciplinas
                 </Button>
-                <Modal
-                    title="Crear Disciplina"
-                    centered
-                    open={open}
-                    onOk={() => setOpen(false)}
-                    onCancel={() => setOpen(false)}
-                    width={1000}
-                    footer={null}
-                >
-                    <Form
-                        name="login"
-                        onFinish={(values) => {
-                            createDisciplineForm(values);
-                        }}
-                        onFinishFailed={() => {
-                            console.log("Fallo");
-                        }}
-                        className="my-10 max-md:mx-20 md:mx-32"
-                    >
-                        <div className="flex flex-col gap-y-4">
-                            {/* ------------------Input Nombre Disciplina------------------ */}
-                            <Form.Item
-                                name="name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            "Por favor, ingresa nombre de la disciplina.",
-                                    },
-                                    {
-                                        max: 50,
-                                        message:
-                                            "El nombre de la disciplina es muy largo.",
-                                    },
-                                ]}
-                                className="cursor-text"
-                            >
-                                <Input
-                                    className="w-full rounded-xl p-4"
-                                    placeholder="Ingresa nombre de la disciplina"
-                                    size="large"
-                                />
-                            </Form.Item>
+                <DisciplineModal
+                    create={true}
+                    open={openCreateModal}
+                    setOpen={setOpenCreateModal}
+                />
+                <DisciplineModal
+                    create={false}
+                    id={editId}
+                    open={openEditModal}
+                    setOpen={setOpenEditModal}
+                />
 
-                            {/* ------------------Input Descripcion Disciplina------------------ */}
-                            <Form.Item
-                                name="description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            "Por favor ingrese descripción de la disciplina.",
-                                    },
-                                ]}
-                                className="cursor-text"
-                            >
-                                <TextArea
-                                    rows={4}
-                                    placeholder="Ingresar descripción de la disciplina"
-                                    maxLength={6}
-                                    autoSize={{ minRows: 4, maxRows: 4 }}
-                                />
-                            </Form.Item>
-
-                            {/* ------------------Fotografia de la Disciplina------------------ */}
-                            <Form.Item
-                                name="photo"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            "Por favor ingrese fotografia de la disciplina.",
-                                    },
-                                ]}
-                                className="cursor-text"
-                            >
-                                {/* <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt="avatar"
-                      style={{ width: "100%" }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload> */}
-                                <Input
-                                    className="w-full rounded-xl p-4"
-                                    placeholder="Ingresa nombre de la disciplina"
-                                    size="large"
-                                ></Input>
-                            </Form.Item>
-                        </div>
-
-                        <Form.Item className="w-full flex justify-end">
-                            <button
-                                type="submit"
-                                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
-                                disabled={loading}
-                            >
-                                {loading ? (
-                                    <Spin
-                                        indicator={
-                                            <LoadingOutlined
-                                                style={{ fontSize: 24 }}
-                                                spin
-                                            />
-                                        }
-                                    />
-                                ) : (
-                                    "Crear"
-                                )}
-                            </button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
                 {/* ------------------- VENTANA MODAL ----------------- */}
             </div>
 
-            {/* <CustomTable columns={columns} dataTable={userData} expandable={false} /> */}
 
             <div className="h-screen">
                 <button
@@ -337,7 +190,7 @@ export default function DiciplinesDashboard() {
                                         {user.description}
                                     </td>
                                     <td className="flex px-6 py-4 gap-x-2">
-                                        <button className="bg-slate-300 rounded-md p-1">
+                                        <button className="bg-slate-300 rounded-md p-1" onClick={() => openEditDisciplineModal(user.id)}>
                                             <FaEdit className="text-xl text-gray-700" />
                                         </button>
                                         <button className="bg-red-300 rounded-md p-1">
@@ -357,10 +210,9 @@ export default function DiciplinesDashboard() {
                                 <li key={index}>
                                     <button
                                         onClick={() => paginate(index + 1)}
-                                        className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                                            currentPage === index + 1 &&
+                                        className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${currentPage === index + 1 &&
                                             "text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                                        }`}
+                                            }`}
                                     >
                                         {index + 1}
                                     </button>
