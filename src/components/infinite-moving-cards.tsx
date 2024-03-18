@@ -9,6 +9,7 @@ export const InfiniteMovingCards = ({
 }: {
   items: {
     name: string;
+    img: any;
   }[];
   direction?: "left" | "right";
   pauseOnHover?: boolean;
@@ -52,6 +53,8 @@ export const InfiniteMovingCards = ({
     }
   }
 
+  console.log(items);
+
   return (
     <div
       ref={containerRef}
@@ -65,15 +68,17 @@ export const InfiniteMovingCards = ({
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
+
         {items.map((item) => (
+
           <li
             className="w-10  max-w-full relative rounded-xl shadow-md border flex-shrink-0 px-8 py-2 md:w-[270px]"
             key={item.name}
           >
             <blockquote>
               <img
-                src="https://www.freepnglogos.com/uploads/tom-and-jerry-png/tom-and-jerry-hamera-deviantart-14.png"
-                alt=""
+                src={item.img}
+                alt={item.name}
                 className="w-20 h-30"
               />
               <div className="relative z-20 mt-6 flex flex-row items-center">
