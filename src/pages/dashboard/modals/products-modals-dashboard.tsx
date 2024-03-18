@@ -6,13 +6,13 @@ import TextArea from 'antd/es/input/TextArea';
 import { getAllDisciplines } from '../../../services/disciplines-service';
 import { getAllCampuses } from '../../../services/campuses-service';
 import { getAllCategories } from '../../../services/categories-service';
+import moment from 'moment';
 
 export default function ProductModal({ type, id, open, setOpen, handleReload }: any) {
     const [loading, setLoading] = useState(false);
     const [campuses, setCampuses] = useState([]);
     const [categories, setCategories] = useState([]);
     const [disciplines, setDisciplines] = useState([]);
-    const [dataLoaded, setDataLoaded] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -23,8 +23,20 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
     const getProductByIdForm = async (id: number) => {
         try {
             setLoading(true);
-            const discipline = await getProductById(id);
-            form.setFieldsValue(discipline);
+            const product = await getProductById(id);
+            form.setFieldsValue({
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                maxStudents: product.maxStudents,
+                campusId: product.campus.name,
+                categoryId: product.category.name,
+                startDate: moment(product.startDate),
+                coursesId: "Falta iterar los cursos",
+                startDateInscription: product.startDateInscription,
+                endDateInscription: product.endDateInscription
+            });
+
         } catch (error) {
             console.error("Error al obtener datos del producto:", error);
         } finally {
@@ -35,6 +47,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
     const updateProductForm = async (values: any) => {
         try {
             setLoading(true);
+            values.startDate = values.startDate.format("YYYY-MM-DD");
             await updateProduct(values, id);
             setOpen(false);
             handleReload();
@@ -48,9 +61,8 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
     const createProductForm = async (values: any) => {
         try {
             setLoading(true);
-            const courses = [values.coursesId];
             values.startDate = values.startDate.format("YYYY-MM-DD");
-            values.coursesId = courses;
+
             await createProduct(values);
             setOpen(false);
             form.resetFields();
@@ -65,7 +77,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
     const seeProductForm = async (id: number) => {
         try {
             setLoading(true);
-            setOpen(false);
+            await getProductById(id);
             console.log(id)
         } catch (error) {
             console.error("Error al ver un producto:", error);
@@ -80,7 +92,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                 return "Crear Producto";
             case "edit":
                 return "Editar Producto";
-            case "ver":
+            case "see":
                 return "Ver Producto";
             default:
                 return "Producto";
@@ -93,7 +105,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                 return createProductForm;
             case "edit":
                 return updateProductForm;
-            case "ver":
+            case "see":
                 return seeProductForm;
             default:
                 return createProductForm;
@@ -111,7 +123,6 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                 setDisciplines(disciplinesData);
                 setCampuses(campusesData);
                 setCategories(categoriesData);
-                setDataLoaded(true);
             });
         } catch (error) {
             console.error("Error al obtener los datos:", error);
@@ -129,6 +140,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
             onCancel={() => setOpen(false)}
             width={1000}
             footer={null}
+
         >
             <Form
                 name="productForm"
@@ -152,7 +164,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                         className="w-full rounded-xl p-4"
                         placeholder="Nombre del producto"
                         size="large"
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
 
                 </Form.Item>
@@ -166,7 +178,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                         className="w-full rounded-xl p-4"
                         placeholder="Descripción del producto"
                         size="large"
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
                 </Form.Item>
 
@@ -179,21 +191,20 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                         className="w-full rounded-xl p-4"
                         placeholder="Precio del producto"
                         size="large"
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
                 </Form.Item>
 
                 <Form.Item
                     name="startDate"
                     label="Fecha de inicio"
-                    rules={[{ required: true, message: "El nombre es requerido" }]}
+                    rules={[{ required: true, message: "La fecha es requerida" }]}
                 >
                     <DatePicker
                         className="w-full rounded-xl p-4"
                         placeholder="Fecha de inicio del producto"
                         size="large"
-                        format={"DD/MM/YYYY"}
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
                 </Form.Item>
 
@@ -206,7 +217,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                         className="w-full rounded-xl p-4"
                         placeholder="Cantidad de estudiantes"
                         size="large"
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
                 </Form.Item>
 
@@ -222,7 +233,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                         options={campuses.map((campus: any) => {
                             return { value: campus.id, label: campus.name }
                         })}
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
 
                 </Form.Item>
@@ -240,7 +251,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                                 return { value: category.id, label: category.name }
                             })
                         }
-                        disabled={type === "ver"}
+                        disabled={type === "see"}
                     />
                 </Form.Item>
 
@@ -250,23 +261,55 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                     rules={[{ required: true, message: "La sede es requerida" }]}
                 >
                     <Select
-                        placeholder="Seleccionar Disciplina"
-                        className="w-full h-14"
-                        options={
-                            disciplines.map((discipline: any) => {
-                                return { value: discipline.id, label: discipline.name }
-                            })
-                        }
-                        disabled={type === "ver"}
+                        mode="multiple"
+                        allowClear
+                        style={{ width: "100%" }}
+                        placeholder="Por favor, selecciona las disciplinas"
+                        options={disciplines.map((discipline: any) => {
+                            return { value: discipline.id, label: discipline.name }
+                        })}
+                        disabled={type === "see"}
                     />
-                </Form.Item>
 
+                </Form.Item>
+                {type === "see" && (
+                    <div className='w-full flex flex-row justify-between'>
+                        <Form.Item
+                            name="startDateInscription"
+                            label="Inicio de inscripción"
+                        >
+                            <Input
+                                className="w-full rounded-xl p-4"
+                                placeholder="Nombre del producto"
+                                size="large"
+                                disabled={type === "see"}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="endDateInscription"
+                            label="Fin de inscripción"
+                        >
+                            <Input
+                                className="w-full rounded-xl p-4"
+                                placeholder="Nombre del producto"
+                                size="large"
+                                disabled={type === "see"}
+                            />
+                        </Form.Item>
+
+                    </div>
+
+                )
+                }
 
                 <Form.Item className="w-full flex justify-end">
                     <button
                         type="submit"
                         className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
                         disabled={loading}
+                        onClick={() => {
+                            if (type === "see") setOpen(false)
+                        }}
                     >
                         {loading ? (
                             <Spin
@@ -278,10 +321,21 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                                 }
                             />
                         ) : (
-                            getTitle(type)
+                            type === "see" ? "Cerrar" : getTitle(type)
                         )}
                     </button>
                 </Form.Item>
+
+                {/* Sección solo para see
+                
+                "startDateInscription": "2024-03-19",
+                "endDateInscription": "2024-04-09",
+                "campusname"
+                "categoryname"
+
+                */}
+
+
             </Form>
         </Modal>
     )
