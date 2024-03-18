@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/AuthProvider";
 import { getAllCampuses } from "../../../services/campuses-service";
 
 import { Checkbox, Collapse, Button } from "antd";
+import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
 
 type Product = {
@@ -131,13 +132,8 @@ export default function Products() {
     const campusSelect = document.getElementById("campusSelect") as HTMLSelectElement | null;
 
     // Verifica si los elementos existen antes de asignarles valores
-    if (categorySelect) {
-      categorySelect.value = "0";
-    }
-
-    if (campusSelect) {
-      campusSelect.value = "0";
-    }
+    setSelectedCategories([]);
+    setSelectedCampuses([]);
   }
 
   return (
@@ -175,13 +171,13 @@ export default function Products() {
 
           {/* Boton Resetear Filtros */}
           <div className="flex justify-between mt-8">
-            <button onClick={applyFilters} className="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-400">Aplicar</button>
-            <button onClick={resetFilter} className="bg-red-500 text-white rounded-lg py-2 px-4 hover:bg-red-400">Resetear Filtros</button>
+            <button onClick={applyFilters} className="border w-40 text-black border-blue-500  rounded-lg py-2 px-4 hover:bg-blue-400">Aplicar</button>
+            <button onClick={resetFilter} className="border w-fit border-red-500 text-black rounded-lg py-1 px-2 hover:bg-red-400">Reset</button>
           </div>
         </div>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {filteredData.map((product: any) => (
-            <CardProduct
+            <ProductCard
               key={product.id}
               product={product}
               onClick={() => handleCardClick(product)}
