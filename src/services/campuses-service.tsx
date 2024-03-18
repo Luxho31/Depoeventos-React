@@ -17,7 +17,7 @@ export const createCampus = async (form: campusType) => {
       },
       body: JSON.stringify(form),
     });
-    
+
   } catch (error) {
     console.error("Error al crear una sede:", error);
     throw error;
@@ -43,6 +43,52 @@ export const getAllCampuses = async () => {
     return dataWithKeys;
   } catch (error) {
     console.error("Error al obtener datos de sedes:", error);
+    throw error;
+  }
+};
+
+
+export const updateCampus = async (form: campusType, id?: number) => {
+  try {
+    await fetch(`${BASE_URL}/api/campuses/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(form),
+    });
+  } catch (error) {
+    console.error("Error al actualizar una sede:", error);
+    throw error;
+  }
+};
+
+export const getCampusById = async (id: number) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/campuses/${id}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de categorias:", error);
+    throw error;
+  }
+}
+
+export const deleteCampus = async (id: number) => {
+  try {
+    await fetch(`${BASE_URL}/api/campuses/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+  } catch (error) {
+    console.error("Error al eliminar una categoria:", error);
     throw error;
   }
 };
