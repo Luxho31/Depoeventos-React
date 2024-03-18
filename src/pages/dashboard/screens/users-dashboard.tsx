@@ -26,6 +26,7 @@ function UsersDashboard() {
     const [loading, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
 
@@ -45,6 +46,10 @@ function UsersDashboard() {
         }
     }, [userRole]);
 
+    useEffect(() => {
+        handleSearch();
+    }, [searchTerm, userData]);
+
     const handleReload = () => {
         setLoading(true);
         getAllUsers()
@@ -57,35 +62,28 @@ function UsersDashboard() {
                 setLoading(false);
             });
     };
+
     const handleSearch = () => {
         setCurrentPage(1);
+        const searchTerms = searchTerm.toLowerCase().split(" ");
+        const filteredUsers = userData.filter((user) =>
+            searchTerms.some((term) =>
+                `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()} ${user.documentNumber}`.includes(term)
+            )
+        );
+        setFilteredUsers(filteredUsers);
     };
 
     const onPageChange = (page: number) => {
-        // Mantén la búsqueda al cambiar de página
-        const filteredUsers = userData.filter((user) =>
-            user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        const indexOfLastUser: number = page * usersPerPage;
-        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        const currentUsers: UserData[] = filteredUsers.slice(
-            indexOfFirstUser,
-            indexOfLastUser
-        );
-
         setCurrentPage(page);
     };
+
     const indexOfLastUser: number = currentPage * usersPerPage;
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-
-    const filteredUsers: UserData[] = userData.filter((user) =>
-        user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
     const currentUsers: UserData[] = filteredUsers.slice(
         indexOfFirstUser,
         indexOfLastUser
     );
-
 
     return (
         <div className="h-screen">
@@ -98,23 +96,16 @@ function UsersDashboard() {
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
-                    <div className="relative">
-                        <Input
-                            id="table-search-users"
-                            placeholder="Buscar por nombre"
-                            className="w-full rounded-xl p-1"
-                            size="small"
-                            prefix={<CiSearch className="site-form-item-icon me-1" />}
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                handleSearch();
-                            }}
-                        />
-                    </div>
+
+                    <Input
+                        id="table-search-users"
+                        placeholder="Buscar por nombre, número de documento..."
+                        className="w-[20%] rounded-xl p-1"
+                        size="small"
+                        prefix={<CiSearch className="site-form-item-icon me-1" />}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
