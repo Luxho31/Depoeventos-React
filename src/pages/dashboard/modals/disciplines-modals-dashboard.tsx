@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Form, Input, Modal, Spin } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useEffect, useState } from 'react';
-import { createDiscipline, getAllDisciplines, getDisciplineById, updateDiscipline } from '../../../services/disciplines-service';
+import { createDiscipline, getDisciplineById, updateDiscipline } from '../../../services/disciplines-service';
 
 export default function DisciplineModal({ create, id, open, setOpen }: any) {
     const [loading, setLoading] = useState(false);
