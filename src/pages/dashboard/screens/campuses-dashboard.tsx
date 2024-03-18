@@ -110,7 +110,7 @@ export default function DiciplinesDashboard() {
     <div className="h-screen">
       <div className="flex justify-between items-center mb-5">
         <Button onClick={openCreateCampusModal}>
-          + Crear Disciplinas
+          + Crear sede
         </Button>
         <CampusModal
           create={true}
