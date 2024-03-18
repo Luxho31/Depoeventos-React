@@ -130,7 +130,7 @@ export default function CategoryModal({ create, id, open, setOpen, handleReload 
                     >
                         <Input
                             className="w-full rounded-xl p-4"
-                            placeholder="Ingresa nombre de la categoria"
+                            placeholder="Ingresa la fotografia de la categoria"
                             size="large"
                         ></Input>
                     </Form.Item>

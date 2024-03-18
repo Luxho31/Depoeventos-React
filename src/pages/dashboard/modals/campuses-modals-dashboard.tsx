@@ -130,7 +130,7 @@ export default function CampusModal({ create, id, open, setOpen, handleReload }:
                     >
                         <Input
                             className="w-full rounded-xl p-4"
-                            placeholder="Ingresa nombre de la sede"
+                            placeholder="Ingresa la fotografia de la sede"
                             size="large"
                         ></Input>
                     </Form.Item>

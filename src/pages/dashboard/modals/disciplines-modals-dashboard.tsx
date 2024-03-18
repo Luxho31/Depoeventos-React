@@ -130,7 +130,7 @@ export default function DisciplineModal({ create, id, open, setOpen, handleReloa
                     >
                         <Input
                             className="w-full rounded-xl p-4"
-                            placeholder="Ingresa nombre de la disciplina"
+                            placeholder="Ingresa la fotografia de la disciplina"
                             size="large"
                         ></Input>
                     </Form.Item>

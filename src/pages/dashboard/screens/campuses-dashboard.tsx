@@ -1,41 +1,52 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Spin } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import { IoReload } from "react-icons/io5";
-import CustomTable from "../../../components/tables/custom-table";
-import {
-  createCampus,
-  getAllCampuses,
-} from "../../../services/campuses-service";
-import { useAuth } from "../../../context/AuthProvider"
+import { CiSearch } from "react-icons/ci";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import { useAuth } from "../../../context/AuthProvider";
+import { deleteCampus, getAllCampuses } from "../../../services/campuses-service";
+import CampusModal from "../modals/campuses-modals-dashboard";
 
-export default function CampusesDashboard() {
-  const [userData, setUserData] = useState([]);
-  const [loading, setLoading] = useState(false);
+type CampusData = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+export default function DiciplinesDashboard() {
+  const [campusData, setCampusData] = useState<CampusData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editId, setEditId] = useState<number | undefined>(undefined);
   const [open, setOpen] = useState(false);
-  const { userRole } = useAuth()
+  const { userRole } = useAuth();
+  const usersPerPage: number = 5;
 
   useEffect(() => {
-    // Verificar si el userRole contiene el rol específico
-    const specificRole = 'ADMIN'; // Rol específico que deseas
-    if (userRole && userRole.some(role => role === specificRole)) {
-      // Solo realiza la llamada a la API si el usuario tiene el rol específico
+    const specificRole: string = "ADMIN";
+    if (userRole && userRole.some((role) => role === specificRole)) {
       setLoading(true);
-      getAllCampuses().then((data) => {
-        setUserData(data);
-        setLoading(false);
-      }).catch(error => {
-        console.error("Error al obtener sedes:", error);
-        setLoading(false);
-      });
+      getAllCampuses()
+        .then((data: CampusData[]) => {
+          setCampusData(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error al obtener campuses:", error);
+          setLoading(false);
+        });
     }
   }, [userRole]);
 
   const handleReload = () => {
     try {
       setLoading(true);
-      getAllCampuses();
+      getAllCampuses().then((data) => {
+        setCampusData(data);
+      });
     } catch (error) {
       console.error("Error al recargar sedes:", error);
     } finally {
@@ -43,167 +54,160 @@ export default function CampusesDashboard() {
     }
   };
 
-  const createCampusesForm = async (form: any) => {
+  const openCreateCampusModal = () => {
+    setOpenCreateModal(true);
+  };
+
+  const openEditCampusModal = (id: number) => {
+    setEditId(id);
+    setOpenEditModal(true);
+  };
+
+  const handleRemoveCampus = async (id: number) => {
     try {
       setLoading(true);
-      await createCampus(form);
-      getAllCampuses().then((data) => {
-        setUserData(data);
-      });
-      setOpen(false);
+      await deleteCampus(id);
+      handleReload();
     } catch (error) {
-      console.error("Error al crear una sede:", error);
-      throw error;
+      console.error("Error al eliminar sede:", error);
     } finally {
       setLoading(false);
     }
+
+  }
+  const handleSearch = () => {
+    setCurrentPage(1);
   };
 
-  const columns = [
-    { title: "ID", dataIndex: "id", width: "5%", editable: true },
-    { title: "Nombre", dataIndex: "name", width: "20%", editable: true },
-    {
-      title: "Descripción",
-      dataIndex: "description",
-      width: "60%",
-      editable: true,
-    },
-  ];
+  const onPageChange = (page: number) => {
+    // Mantén la búsqueda al cambiar de página
+    const filteredUsers = campusData.filter((discipline) =>
+      discipline.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const indexOfLastUser: number = page * usersPerPage;
+    const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+    const currentUsers: CampusData[] = filteredUsers.slice(
+      indexOfFirstUser,
+      indexOfLastUser
+    );
+
+    setCurrentPage(page);
+  };
+
+  const indexOfLastUser: number = currentPage * usersPerPage;
+  const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+
+  const filteredUsers = campusData.filter((discipline) =>
+    discipline.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const currentUsers: CampusData[] = filteredUsers.slice(
+    indexOfFirstUser,
+    indexOfLastUser
+  );
+
   return (
     <div className="h-screen">
-      <button
-        onClick={handleReload}
-        className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-      >
-        {loading ? "hola" : <IoReload className="text-lg" />}
-      </button>
-      {/* ------------------- VENTANA MODAL ----------------- */}
-      <Button
-        type="primary"
-        onClick={() => setOpen(true)}
-        className="bg-blue-500"
-      >
-        + Crear Sede
-      </Button>
-      <Modal
-        title="Crear Sede"
-        centered
-        open={open}
-        onOk={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-        width={1000}
-        footer={null} // Eliminamos el footer
-      >
-        <Form
-          name="campus"
-          onFinish={(values) => {
-            createCampusesForm(values);
-            console.log(values);
-          }}
-          onFinishFailed={() => {
-            console.log("Fallo");
-          }}
-          className="my-10 max-md:mx-20 md:mx-32"
-        >
-          <div className="flex flex-col gap-y-4">
-            {/* ------------------Input Nombre Sede------------------ */}
-            <Form.Item
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa nombre de la sede.",
-                },
-                {
-                  max: 50,
-                  message: "El nombre de la sede es muy largo.",
-                },
-              ]}
-              className="cursor-text"
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa nombre de la sede"
-                size="large"
-              />
-            </Form.Item>
-
-            {/* ------------------Input Descripcion Sede------------------ */}
-            <Form.Item
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese descripción de la sede.",
-                },
-              ]}
-              className="cursor-text"
-            >
-              <TextArea
-                rows={4}
-                placeholder="Ingresar descripción de la sede"
-                maxLength={6}
-                autoSize={{ minRows: 4, maxRows: 4 }}
-              />
-            </Form.Item>
-
-            {/* ------------------Fotografia de la Sede------------------ */}
-            <Form.Item
-              name="photo"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese fotografia de la sede.",
-                },
-              ]}
-              className="cursor-text"
-            >
-              {/* <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt="avatar"
-                      style={{ width: "100%" }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload> */}
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa nombre de la sede"
-                size="large"
-              ></Input>
-            </Form.Item>
+      <div className="flex justify-between items-center mb-5">
+        <Button onClick={openCreateCampusModal}>
+          + Crear Disciplinas
+        </Button>
+        <CampusModal
+          create={true}
+          open={openCreateModal}
+          setOpen={setOpenCreateModal}
+          handleReload={handleReload}
+        />
+        <CampusModal
+          create={false}
+          id={editId}
+          open={openEditModal}
+          setOpen={setOpenEditModal}
+          handleReload={handleReload}
+        />
+      </div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+          <label htmlFor="table-search" className="sr-only">
+            Search
+          </label>
+          <div className="relative">
+            <Input
+              id="table-search-users"
+              placeholder="Buscar por nombre"
+              className="w-full rounded-xl p-1"
+              size="small"
+              prefix={<CiSearch className="site-form-item-icon me-1" />}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                handleSearch();
+              }}
+            />
           </div>
-
-          <Form.Item className="w-full flex justify-end">
-            <button
-              type="submit"
-              className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
-              disabled={loading}
-            >
-              {loading ? (
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-                />
-              ) : (
-                "Crear"
-              )}
-            </button>
-          </Form.Item>
-        </Form>
-      </Modal>
-      {/* ------------------- VENTANA MODAL ----------------- */}
-      <CustomTable columns={columns} dataTable={userData} expandable={false} />
+        </div>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                ID
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Nombre
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Descripción
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Operaciones
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((user, index) => (
+              <tr key={index} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4">{user.id}</td>
+                <td className="px-6 py-4">{user.name}</td>
+                <td className="px-6 py-4">{user.description}</td>
+                <td className="flex px-6 py-4 gap-x-2">
+                  <button
+                    className="bg-slate-300 rounded-md p-1"
+                    onClick={() => openEditCampusModal(user.id)}
+                  >
+                    <FaEdit className="text-xl text-gray-700" />
+                  </button>
+                  <Popconfirm
+                    title="Eliminar sede?"
+                    description="Esta acción no se puede deshacer."
+                    onConfirm={() => handleRemoveCampus(user.id)}
+                    okText="Si"
+                    cancelText="No"
+                    okButtonProps={{
+                      className: "bg-red-500 text-white !hover:bg-red-600",
+                    }}
+                    icon={<QuestionCircleOutlined style={{ color: 'red' }}
+                    />}
+                  >
+                    <button
+                      className="bg-red-300 rounded-md p-1"
+                    >
+                      <FaRegTrashAlt className="text-xl text-gray-700" />
+                    </button>
+                  </Popconfirm>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Pagination
+          className="mt-4"
+          current={currentPage}
+          total={filteredUsers.length}
+          pageSize={usersPerPage}
+          onChange={onPageChange}
+          showSizeChanger={false}
+        />
+      </div>
     </div>
   );
 }
