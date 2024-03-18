@@ -82,6 +82,8 @@ export const AuthProvider = ({ children }: any) => {
       const userRoles = tokenPayload.roles;
       // console.log("Roles del usuario:", userRoles);
       setUserRole(userRoles);
+
+      setCargando(true);
     }
   }, []);
 

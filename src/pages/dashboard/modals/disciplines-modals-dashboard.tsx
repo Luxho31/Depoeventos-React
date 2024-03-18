@@ -29,7 +29,6 @@ export default function DisciplineModal({ create, id, open, setOpen }: any) {
             setLoading(true);
             await updateDiscipline(values, id);
             setOpen(false);
-            await getAllDisciplines();
         } catch (error) {
             console.error("Error al actualizar una disciplina:", error);
         } finally {
@@ -42,7 +41,7 @@ export default function DisciplineModal({ create, id, open, setOpen }: any) {
             setLoading(true);
             await createDiscipline(values);
             setOpen(false);
-            await getAllDisciplines();
+            form.resetFields();
         } catch (error) {
             console.error("Error al crear una disciplina:", error);
         } finally {
