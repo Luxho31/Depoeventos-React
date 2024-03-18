@@ -1,11 +1,11 @@
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { useAuth } from "../../../context/AuthProvider";
 import { deleteDiscipline, getAllDisciplines } from "../../../services/disciplines-service";
 import DisciplineModal from "../modals/disciplines-modals-dashboard";
-import { CiSearch } from "react-icons/ci";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 
 type DisciplineData = {
 	id: number;
@@ -117,12 +117,14 @@ export default function DiciplinesDashboard() {
 					create={true}
 					open={openCreateModal}
 					setOpen={setOpenCreateModal}
+					handleReload={handleReload}
 				/>
 				<DisciplineModal
 					create={false}
 					id={editId}
 					open={openEditModal}
 					setOpen={setOpenEditModal}
+					handleReload={handleReload}
 				/>
 			</div>
 			<div className="relative overflow-x-auto shadow-md sm:rounded-lg">

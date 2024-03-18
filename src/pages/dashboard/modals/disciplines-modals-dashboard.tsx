@@ -4,7 +4,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { useEffect, useState } from 'react';
 import { createDiscipline, getDisciplineById, updateDiscipline } from '../../../services/disciplines-service';
 
-export default function DisciplineModal({ create, id, open, setOpen }: any) {
+export default function DisciplineModal({ create, id, open, setOpen, handleReload }: any) {
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -29,6 +29,7 @@ export default function DisciplineModal({ create, id, open, setOpen }: any) {
             setLoading(true);
             await updateDiscipline(values, id);
             setOpen(false);
+            handleReload();
         } catch (error) {
             console.error("Error al actualizar una disciplina:", error);
         } finally {
@@ -42,6 +43,7 @@ export default function DisciplineModal({ create, id, open, setOpen }: any) {
             await createDiscipline(values);
             setOpen(false);
             form.resetFields();
+            handleReload();
         } catch (error) {
             console.error("Error al crear una disciplina:", error);
         } finally {
