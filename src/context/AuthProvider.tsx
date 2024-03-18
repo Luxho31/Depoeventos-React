@@ -51,6 +51,8 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
+    setCargando(false);
+
     if (token) {
       verifyToken(token)
         .then((isValid) => {
@@ -80,9 +82,6 @@ export const AuthProvider = ({ children }: any) => {
       const userRoles = tokenPayload.roles;
       // console.log("Roles del usuario:", userRoles);
       setUserRole(userRoles);
-    } else {
-      // Si no hay token, establece cargando en false también
-      setCargando(false);
     }
   }, []);
 

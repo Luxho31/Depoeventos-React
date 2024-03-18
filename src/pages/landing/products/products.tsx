@@ -6,6 +6,9 @@ import { getAllCategories } from "../../../services/categories-service";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllCampuses } from "../../../services/campuses-service";
 
+import { Checkbox, Collapse, Button } from "antd";
+const { Panel } = Collapse;
+
 type Product = {
   id: number;
   // image: string;
@@ -44,6 +47,9 @@ export default function Products() {
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(0);
   const [selectedCampusId, setSelectedCampusId] = useState(0);
+
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedCampuses, setSelectedCampuses] = useState<number[]>([]);
 
   useEffect(() => {
     getAllProducts()
@@ -103,12 +109,16 @@ export default function Products() {
   const applyFilters = () => {
     let filtered = productData;
 
-    if (selectedCategoryId !== 0) {
-      filtered = filtered.filter((product: Product) => product.category.id === selectedCategoryId);
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((product: Product) =>
+        selectedCategories.includes(product.category.id)
+      );
     }
 
-    if (selectedCampusId !== 0) {
-      filtered = filtered.filter((product: Product) => product.campus.id === selectedCampusId);
+    if (selectedCampuses.length > 0) {
+      filtered = filtered.filter((product: Product) =>
+        selectedCampuses.includes(product.campus.id)
+      );
     }
 
     setFilteredData(filtered);
@@ -133,42 +143,58 @@ export default function Products() {
   return (
     <div className="mt-20 w-[80%] m-auto">
       <h1 className="text-3xl font-bold mb-8">Productos</h1>
-      <div>
-        {/* Filtro por categoría */}
-        <select id="categorySelect" onChange={(e) => setSelectedCategoryId(parseInt(e.target.value))}>
-          <option value="0">Todas las categorías</option>
-          {categoryData.map((category: any) => (
-            <option value={category.id}>{category.name}</option>
-          ))}
-        </select>
 
-        {/* Filtro por campus */}
-        <select id="campusSelect" onChange={(e) => setSelectedCampusId(parseInt(e.target.value))}>
-          <option value="0">Todos los campus</option>
-          {campusData.map((campus: any) => (
-            <option value={campus.id}>{campus.name}</option>
-          ))}
-        </select>
+      <div className="flex gap-x-24">
+        <div className="w-96">
+          <Collapse defaultActiveKey={["1"]}>
+            <Panel header="Categorías" key="1">
+              <Checkbox.Group
+                value={selectedCategories}
+                onChange={(values) => setSelectedCategories(values)}
+              >
+                {categoryData.map((category: any) => (
+                  <Checkbox key={category.id} value={category.id}>
+                    {category.name}
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </Panel>
+            <Panel header="Sedes" key="2">
+              <Checkbox.Group
+                value={selectedCampuses}
+                onChange={(values) => setSelectedCampuses(values)}
+              >
+                {campusData.map((campus: any) => (
+                  <Checkbox key={campus.id} value={campus.id}>
+                    {campus.name}
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </Panel>
+          </Collapse>
 
-        {/* Boton Resetear Filtros */}
-        <button onClick={applyFilters} className="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-400">Aplicar</button>
-        <button onClick={resetFilter} className="bg-red-500 text-white rounded-lg py-2 px-4 hover:bg-red-400">Resetear Filtros</button>
+          {/* Boton Resetear Filtros */}
+          <div className="flex justify-between mt-8">
+            <button onClick={applyFilters} className="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-400">Aplicar</button>
+            <button onClick={resetFilter} className="bg-red-500 text-white rounded-lg py-2 px-4 hover:bg-red-400">Resetear Filtros</button>
+          </div>
+        </div>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {filteredData.map((product: any) => (
+            <CardProduct
+              key={product.id}
+              product={product}
+              onClick={() => handleCardClick(product)}
+            />
+          ))}
+          {filteredData.length === 0 ? (
+            <h2>Se encontraron {filteredData.length} elementos</h2>
+          ) : ("")}
+        </div>
+        {selectedProduct && (
+          <ModalProduct product={selectedProduct} onClose={handleCloseModal} />
+        )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {filteredData.map((product: any) => (
-          <CardProduct
-            key={product.id}
-            product={product}
-            onClick={() => handleCardClick(product)}
-          />
-        ))}
-        {filteredData.length === 0 ? (
-          <h2>Se encontraron {filteredData.length} elementos</h2>
-        ) : ("")}
-      </div>
-      {selectedProduct && (
-        <ModalProduct product={selectedProduct} onClose={handleCloseModal} />
-      )}
     </div>
   );
 }

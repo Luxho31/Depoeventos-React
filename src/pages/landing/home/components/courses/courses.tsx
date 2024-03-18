@@ -1,37 +1,44 @@
 import CustomCard from "../../../../../components/card/card";
 import "./courses.css";
 
+import AtletismoIMG from "../../../../../assets/disciplines/Atletismo.jpg"
+import BasketIMG from "../../../../../assets/disciplines/Basket.jpg"
+import GimnasiaIMG from "../../../../../assets/disciplines/Gimnasia.jpg"
+import PatinajeIMG from "../../../../../assets/disciplines/Patinaje.jpg"
+import SkateIMG from "../../../../../assets/disciplines/Skate.jpg"
+import TennisIMG from "../../../../../assets/disciplines/Tennis.jpg"
+
 export default function Courses() {
 
   const projects = [
     {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
-      title: "Futbol",
+      image: AtletismoIMG,
+      title: "Atletismo",
       description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
     },
     {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
-      title: "Tennis",
+      image: BasketIMG,
+      title: "Basquet",
       description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
     },
     {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
-      title: "Basket",
-      description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
-    },
-    {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
-      title: "Natación",
-      description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
-    },
-    {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
+      image: GimnasiaIMG,
       title: "Gimnasia",
       description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
     },
     {
-      image: "https://yt3.googleusercontent.com/ytc/AIf8zZQDYAtrD9fQrLMzN22rP50lt2DlOp0UalGBU5RP4A=s900-c-k-c0x00ffffff-no-rj",
-      title: "Skate",
+      image: PatinajeIMG,
+      title: "Patinaje",
+      description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
+    },
+    {
+      image: SkateIMG,
+      title: "Skateboarding",
+      description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
+    },
+    {
+      image: TennisIMG,
+      title: "Tenis",
       description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.",
     },
   ];
@@ -40,7 +47,7 @@ export default function Courses() {
   return (
     <div className="w-[80%] m-auto">
       <div className="mb-12">
-        <h1 className="text-4xl font-extrabold mb-3">Talleres</h1>
+        <h1 className="text-4xl font-extrabold mb-3">Disciplinas</h1>
         <p>
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
           labore et dolore magna aliquyam erat, sed diam voluptua.

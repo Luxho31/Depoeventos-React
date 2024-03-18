@@ -3,6 +3,7 @@ import Campuses from "./components/campuses/campuses";
 import Intro from "./components/intro/intro";
 import Packages from "./components/products/products";
 import { FloatButton } from "antd";
+import Team from "./components/team/team";
 export default function Home() {
   const data = [
     {
@@ -38,7 +39,8 @@ export default function Home() {
       <div className="mt-12">
         <Intro />
         <Courses />
-        <Packages />
+        {/* <Packages /> */}
+        <Team />
         <Campuses slide={data} />
         <FloatButton.BackTop />
       </div>
