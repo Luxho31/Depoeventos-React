@@ -34,6 +34,8 @@ export const createOrder = async (data: any) => {
                 id: user.id,
             },
             paymentMethod: data.paymentMethod,
+            bankName: data.bankName,
+            operationNumber: data.operationNumber,
             items: items,
         };
 
@@ -56,3 +58,24 @@ export const createOrder = async (data: any) => {
         throw error;
     }
 };
+
+export const getAllOrders = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/orders`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      const data = await response.json();
+  
+      const dataWithKeys = data.map((item: any, index: any) => ({
+        ...item,
+        key: index,
+      }));
+  
+      return dataWithKeys;
+    } catch (error) {
+      console.error("Error al obtener datos de ordenes:", error);
+      throw error;
+    }
+  };

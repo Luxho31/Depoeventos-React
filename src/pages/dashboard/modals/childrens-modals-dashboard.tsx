@@ -153,13 +153,13 @@ export default function ChildrenModal({
     const getTitle = (type: string) => {
         switch (type) {
             case "create":
-                return "Crear Producto";
+                return "Crear Hijo";
             case "edit":
-                return "Editar Producto";
+                return "Editar Hijo";
             case "see":
-                return "Ver Producto";
+                return "Ver Hijo";
             default:
-                return "Producto";
+                return "Hijo";
         }
     }
 

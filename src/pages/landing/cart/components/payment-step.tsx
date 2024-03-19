@@ -138,6 +138,7 @@ export default function PaymentStep({ setNextStep }: any) {
         try {
             setLoading(true)
             await createOrder(values)
+            console.log(values);
             setNextStep(100);
             // recargar la página luego de 2 segundos
             clearCart();
@@ -251,9 +252,9 @@ export default function PaymentStep({ setNextStep }: any) {
                             />
                         </Form.Item>
 
-                        {/* Input Tipo de Banco */}
+                        {/* Input Nombre de Banco */}
                         <Form.Item
-                            name="bankType"
+                            name="bankName"
                             rules={[
                                 {
                                     required: true,
