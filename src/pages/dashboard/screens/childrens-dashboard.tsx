@@ -1,687 +1,305 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Select,
-  Switch,
-} from "antd";
-import { useForm } from "antd/es/form/Form";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import { FaAddressCard, FaArrowRight } from "react-icons/fa";
+import { CiSearch } from "react-icons/ci";
+import { FaEdit, FaEye, FaRegTrashAlt } from "react-icons/fa";
+import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import CustomTable from "../../../components/tables/custom-table";
 import { useAuth } from "../../../context/AuthProvider";
-import {
-  createChildren,
-  getChildrensByUserId,
-} from "../../../services/children-service";
+import { getChildrensByUserId } from "../../../services/children-service";
+import ChildrenModal from "../modals/childrens-modals-dashboard";
+
+type ChildrenData = {
+    id: number;
+    name: string;
+    lastName: string;
+    motherLastName: string;
+    birthdate: string;
+    documentType: string;
+    documentNumber: string;
+    emergencyContactPhone: string;
+    gender: string;
+    isStudent: boolean;
+    school: string;
+    grade: string;
+    section: string;
+    isClubMember: boolean;
+    club: string;
+    membershipCardNumber: string;
+    memberName: string;
+    memberLastName: string;
+    memberMotherLastName: string;
+};
 
 export default function ChildrensDashboard() {
-  const [loading, setLoading] = useState(false);
-  const [paso, setPaso] = useState(1);
-  const [formData, setFormData] = useState<SecondStepType>({});
-  const [selectedDocumentType, setSelectedDocumentType] = useState<
-    string | undefined
-  >(undefined);
-  const [form1] = useForm();
-  const [form2] = useForm();
+    const [childrenData, setChildrenData] = useState<ChildrenData[]>([]);
+    const [loading, setLoading] = useState(false);
 
-  const [form3] = useForm();
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editId, setEditId] = useState<number | undefined>(undefined);
+    const [seeId, setSeeId] = useState<number | undefined>(undefined);
+    const [openSeeModal, setOpenSeeModal] = useState(false);
+    const [open, setOpen] = useState(false);
+    const { userRole } = useAuth();
+    const usersPerPage: number = 5;
+    const navigate = useNavigate();
 
-  // ---------------- Modal
-  const [open, setOpen] = useState(false);
-  const [userData, setUserData] = useState([]);
+    useEffect(() => {
+        const specificRoles = ["USER", "ADMIN"];
+        if (userRole && userRole.some((role) => specificRoles.includes(role))) {
+            setLoading(true);
+            getChildrensByUserId()
+                .then((data: ChildrenData[]) => {
+                    setChildrenData(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error("Error al obtener hijos:", error);
+                    setLoading(false);
+                });
+        } else {
+            navigate("/dashboard"); // Redirige si el usuario no tiene un rol permitido
+        }
+    }, [userRole]);
 
-  type FirstStepType = {
-    name?: String;
-    lastName?: String;
-    motherLastName?: String;
-    documentType?: String;
-    documentNumber?: String;
-    birthdate?: String;
-    emergencyContactPhone?: String;
-    gender?: String;
-  };
-  type SecondStepType = {
-    isStudent?: Boolean;
-    school?: String;
-    grade?: String;
-    section?: String;
-  };
-  type ThirdStepType = {
-    isClubMember?: Boolean;
-    club?: String;
-    membershipCardNumber?: String;
-    memberName?: String;
-    memberLastName?: String;
-    memberMotherLastName?: String;
-  };
-
-  const { userRole } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const specificRoles = ["USER", "ADMIN"];
-    const hasAllowedRole =
-      userRole && userRole.some((role) => specificRoles.includes(role));
-    if (hasAllowedRole) {
-      setLoading(true);
-      getChildrensByUserId()
-        .then((data) => {
-          setUserData(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error al obtener hijos:", error);
-          setLoading(false);
-        });
-    } else {
-      navigate("/dashboard"); // Redirige si el usuario no tiene un rol permitido
-    }
-  }, [userRole]);
-  const columns = [
-    { title: "Nombres", dataIndex: "name", width: "15%", editable: true },
-    {
-      title: "Apellido paterno",
-      dataIndex: "lastName",
-      width: "15%",
-      editable: true,
-    },
-    {
-      title: "Apellido materno",
-      dataIndex: "motherLastName",
-      width: "15%",
-      editable: true,
-    },
-    { title: "Fecha de nacimiento", dataIndex: "birthdate", width: "10%" },
-    { title: "Tipo de documento", dataIndex: "documentType", width: "5%" },
-    { title: "Número de documento", dataIndex: "documentNumber", width: "7%" },
-    {
-      title: "Número de emergencia",
-      dataIndex: "emergencyContactPhone",
-      width: "7%",
-    },
-    { title: "Sexo", dataIndex: "gender", width: "5%" },
-  ];
-
-  // ---------------- Switch
-  const switchIsStudent = (checked: boolean) => {
-    console.log(`switch to ${checked}`);
-
-    // setIsStudent(checked);
-  };
-
-  const switchIsClubMember = (checked: boolean) => {
-    console.log(`switch to ${checked}`);
-    // setIsClubMember(checked);
-  };
-
-  // ---------------- Funcionalidad de crear
-  const onFinishStep1 = (values: any) => {
-    console.log(values);
-    values.birthdate = values.birthdate.format("YYYY-MM-DD");
-    setFormData({
-      ...formData,
-      ...values,
-    });
-    console.log(values.birthdate);
-    setPaso(paso + 1);
-  };
-
-  const onFinishStep2 = (values: any) => {
-    setFormData({
-      ...formData,
-      ...values,
-    });
-    setPaso(paso + 1);
-  };
-
-  const onFinishStep3 = async (values: any) => {
-    const finalFormData = {
-      ...formData,
-      ...values,
+    const handleReload = () => {
+        try {
+            setLoading(true);
+            getChildrensByUserId().then((data) => {
+                setChildrenData(data);
+            });
+        } catch (error) {
+            console.error("Error al recargar usuarios:", error);
+        } finally {
+            setLoading(false);
+        }
     };
-    try {
-      setLoading(true);
-      console.log(finalFormData);
-      await createChildren(finalFormData);
-      getChildrensByUserId().then((data) => {
-        setUserData(data);
-      });
-      setOpen(false);
-    } catch (error) {
-      console.error("Error al crear un hijo", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  return (
-    <div className="h-screen">
-      <div className="flex justify-between items-center">
-        {/* ------------------- VENTANA MODAL ----------------- */}
-        <Button
-          type="primary"
-          onClick={() => setOpen(true)}
-          className="bg-blue-500"
-        >
-          + Crear Hijo
-        </Button>
-        <Modal
-          title="Crear Usuario"
-          centered
-          open={open}
-          onOk={() => setOpen(false)}
-          onCancel={() => setOpen(false)}
-          width={1000}
-          footer={null}
-        >
-          {/* Formulario 1 */}
-          <Form
-            name="firstStep"
-            onFinish={(values) => {
-              onFinishStep1(values);
-            }}
-            onFinishFailed={(error) => {
-              console.log(error);
-            }}
-            autoComplete="off"
-            className="my-10 max-md:mx-20 md:mx-32"
-            form={form1}
-          >
-            <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 1 ? "block" : "hidden"
-              }`}
-            >
-              {/* ------------------Input Nombre Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa nombre del hijo.",
-                  },
-                  { max: 50, message: "El nombre del hijo es muy largo." },
-                ]}
-                className="col-span-2 cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa nombre del hijo"
-                  size="large"
-                />
-              </Form.Item>
+    const openCreateChildrenModal = () => {
+        setOpenCreateModal(true);
+    };
 
-              {/* ------------------Input Apellido Paterno Hijos------------------ */}
-              <Form.Item<FirstStepType>
-                name="lastName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa apellido paterno del hijo.",
-                  },
-                  {
-                    max: 50,
-                    message: "El apellido paterno del hijo es muy largo.",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa apellido paterno del hijo"
-                  size="large"
-                />
-              </Form.Item>
+    const openEditChildrenModal = (id: number) => {
+        setEditId(id);
+        setOpenEditModal(true);
+    };
 
-              {/* ------------------Input Apellido Materno Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="motherLastName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese el apellido materno del hijo.",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa apellido materno del hijo"
-                  size="large"
-                />
-              </Form.Item>
+    const openSeeChildrenModal = (id: number) => {
+        setSeeId(id);
+        setOpenSeeModal(true);
+    };
 
-              {/* ------------------Input Tipo de Documento Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="documentType"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese tipo de documento del hijo",
-                  },
-                ]}
-              >
-                <Select
-                  placeholder="Tipo de Documento del Hijo"
-                  className="w-full !h-16"
-                  // style={{ width: 120 }}
-                  size="large"
-                  options={[
-                    { value: "DNI", label: "DNI" },
-                    { value: "PASSPORT", label: "Pasaporte" },
-                    {
-                      value: "CARNET DE EXTRANJERIA",
-                      label: "Carnet de Extranjería",
-                    },
-                  ]}
-                  onChange={(value) => {
-                    setSelectedDocumentType(value);
-                    form1.setFieldsValue({
-                      documentNumber: undefined,
-                    });
-                  }}
-                />
-              </Form.Item>
+    const handleRemoveChildren = async (id: number) => {
+        try {
+            setLoading(true);
+            // await deleteChildren(id);
+            handleReload();
+        } catch (error) {
+            console.error("Error al eliminar disciplina:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const handleSearch = () => {
+        // Actualiza la página actual a 1 después de la búsqueda
+        setCurrentPage(1);
+    };
 
-              {/* ------------------Input Número de Documento del Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="documentNumber"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese número de documento del hijo",
-                  },
-                  {
-                    validator: (_, value) => {
-                      if (!value) {
-                        return Promise.reject("");
-                      } else if (
-                        selectedDocumentType === "DNI" &&
-                        !/^\d{8}$/.test(value)
-                      ) {
-                        return Promise.reject("El DNI debe tener 8 dígitos");
-                      } else if (
-                        selectedDocumentType === "PASSPORT" &&
-                        !/^[A-Za-z0-9]{6,10}$/.test(value)
-                      ) {
-                        return Promise.reject(
-                          "El pasaporte debe tener entre 6 y 10 caracteres alfanuméricos"
-                        );
-                      } else if (
-                        selectedDocumentType === "CARNET DE EXTRANJERIA" &&
-                        !/^\d{9}$/.test(value)
-                      ) {
-                        return Promise.reject(
-                          "El carné de extranjería debe tener 9 dígitos"
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full border rounded-xl py-5 px-4"
-                  placeholder="Número de Documento del Hijo"
-                  size="large"
-                  prefix={
-                    <FaAddressCard className="site-form-item-icon me-1" />
-                  }
-                  disabled={selectedDocumentType === undefined}
-                  maxLength={
-                    selectedDocumentType === "DNI"
-                      ? 8
-                      : selectedDocumentType === "PASSPORT"
-                      ? 10
-                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
-                      ? 9
-                      : undefined
-                  }
-                />
-              </Form.Item>
+    const onPageChange = (page: number) => {
+        // Mantén la búsqueda al cambiar de página
+        const filteredUsers = childrenData.filter((children) =>
+            children.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        const indexOfLastUser: number = page * usersPerPage;
+        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+        const currentUsers: ChildrenData[] = filteredUsers.slice(
+            indexOfFirstUser,
+            indexOfLastUser
+        );
 
-              {/* ------------------Input Fecha de Nacimiento del Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="birthdate"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese fecha de nacimiento del hijo",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <DatePicker
-                  className="w-full border rounded-xl p-4"
-                  placeholder="Fecha de Nacimiento"
-                  size="large"
-                  allowClear={false}
-                />
-              </Form.Item>
+        setCurrentPage(page);
+    };
 
-              {/* ------------------Input Número de Emergencia------------------ */}
-              <Form.Item<FirstStepType>
-                name="emergencyContactPhone"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese su número de emergencia",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <InputNumber
-                  className="w-full border rounded-xl py-3 px-4"
-                  placeholder="Número de Emergencia"
-                  size="large"
-                  maxLength={9}
-                />
-              </Form.Item>
+    const indexOfLastUser: number = currentPage * usersPerPage;
+    const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
-              {/* ------------------Input Sexo del Hijo------------------ */}
-              <Form.Item<FirstStepType>
-                name="gender"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese el sexo del hijo",
-                  },
-                ]}
-              >
-                <Select
-                  placeholder="Sexo del Hijo"
-                  className="w-full !h-16"
-                  // style={{ width: 120 }}
-                  size="large"
-                  options={[
-                    { value: "Masculino", label: "Masculino" },
-                    { value: "Femenino", label: "Femenino" },
-                  ]}
-                  // onChange={(value) => {
-                  //   setSelectedDocumentType(value);
-                  //   form.setFieldsValue({
-                  //     documentNumber: undefined,
-                  //   });
-                  // }}
-                />
-              </Form.Item>
-            </div>
-            {/* ------------------Botón de Siguiente------------------ */}
-            {paso === 1 && (
-              <Form.Item className="w-full flex justify-center">
-                <button
-                  type="submit"
-                  className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
-                >
-                  Siguiente
-                  <FaArrowRight className="ms-1" />
-                </button>
-              </Form.Item>
-            )}
-          </Form>
+    const filteredUsers = childrenData.filter((children) =>
+        children.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-          {/* Formulario 2 */}
-          <Form
-            name="register"
-            onFinish={(values) => {
-              onFinishStep2(values);
-            }}
-            autoComplete="off"
-            className="my-10 max-md:mx-20 md:mx-32"
-            form={form2}
-          >
-            <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 2 ? "block" : "hidden"
-              }`}
-            >
-              {/* ------------------Switch ¿Es estudiante?------------------ */}
-              <Form.Item<SecondStepType>
-                name="isStudent"
-                className="flex justify-center items-center"
-              >
-                <div>
-                  <label className="me-8 text-lg text-neutral-400 select-none">
-                    ¿Es estudiante?
-                  </label>
-                  <Switch
-                    onChange={switchIsStudent}
-                    className="bg-neutral-400"
-                  />
+    const currentUsers: ChildrenData[] = filteredUsers.slice(
+        indexOfFirstUser,
+        indexOfLastUser
+    );
+
+    return (
+        <div className="h-screen">
+            <div className="flex justify-between">
+                <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+                    <label htmlFor="table-search" className="sr-only">
+                        Search
+                    </label>
+                    <div className="relative">
+                        <Input
+                            id="table-search-users"
+                            placeholder="Buscar por nombre"
+                            className="w-full rounded-xl p-1"
+                            size="small"
+                            prefix={
+                                <CiSearch className="site-form-item-icon me-1" />
+                            }
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                handleSearch();
+                            }}
+                        />
+                    </div>
                 </div>
-              </Form.Item>
-
-              {/* ------------------Input Nombre de la Escuela del Hijo------------------ */}
-              <Form.Item<SecondStepType>
-                name="school"
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      "Por favor, ingresa nombre de la escuela del hijo.",
-                  },
-                  { max: 50, message: "El nombre de la escuela es muy largo." },
-                ]}
-                className="col-span-2 cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa nombre de la escuela del hijo"
-                  size="large"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Grado del Hijo------------------ */}
-              <Form.Item<SecondStepType>
-                name="grade"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa el grado del hijo.",
-                  },
-                  { max: 50, message: "El grado es muy largo." },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa el grado del hijo"
-                  size="large"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Sección del Hijo------------------ */}
-              <Form.Item<SecondStepType>
-                name="section"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa la sección del hijo.",
-                  },
-                  { max: 50, message: "La sección es muy larga." },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa la sección del hijo"
-                  size="large"
-                />
-              </Form.Item>
+                <div className="flex justify-between items-center mb-5">
+                    <Button
+                        onClick={openCreateChildrenModal}
+                        className="flex items-center gap-x-2"
+                    >
+                        <HiMiniPlus className="text-lg" />
+                        Crear Hijo
+                    </Button>
+                    <ChildrenModal
+                        type="create"
+                        create={true}
+                        open={openCreateModal}
+                        setOpen={setOpenCreateModal}
+                        handleReload={handleReload}
+                    />
+                    <ChildrenModal
+                        type="edit"
+                        create={false}
+                        id={editId}
+                        open={openEditModal}
+                        setOpen={setOpenEditModal}
+                        handleReload={handleReload}
+                    />
+                    <ChildrenModal
+                        type="see"
+                        id={seeId}
+                        open={openSeeModal}
+                        setOpen={setOpenSeeModal}
+                        handleReload={handleReload}
+                    />
+                </div>
             </div>
-            {/* ------------------Botón de Siguiente------------------ */}
-            {paso === 2 && (
-              <Form.Item className="w-full flex justify-center">
-                <button
-                  type="submit"
-                  className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
-                >
-                  Siguiente
-                  <FaArrowRight className="ms-1" />
-                </button>
-              </Form.Item>
-            )}
-          </Form>
-
-          {/* Formulario 3 */}
-          <Form
-            name="ThreeStep"
-            onFinish={(values) => {
-              onFinishStep3(values);
-            }}
-            autoComplete="off"
-            className="my-10 max-md:mx-20 md:mx-32"
-            form={form3}
-          >
-            <div
-              className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                paso === 3 ? "block" : "hidden"
-              }`}
-            >
-              {/* ------------------Switch ¿Es miebro de un cub?------------------ */}
-              <Form.Item<ThirdStepType> name="isClubMember">
-                <Switch
-                  onChange={switchIsClubMember}
-                  className="bg-neutral-400"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Nombre del Club del Miembro------------------ */}
-              <Form.Item<ThirdStepType>
-                name="club"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa nombre del club.",
-                  },
-                  { max: 50, message: "El nombre del club es muy largo." },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa nombre del club"
-                  size="large"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Número de Carnét de Miembro------------------ */}
-              <Form.Item<ThirdStepType>
-                name="membershipCardNumber"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese número del carnét del miembro",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <InputNumber
-                  className="w-full border rounded-xl py-3 px-4"
-                  placeholder="Número del carnét del miembro"
-                  size="large"
-                  maxLength={9}
-                />
-              </Form.Item>
-
-              {/* ------------------Input Nombre del Miembro------------------ */}
-              <Form.Item<ThirdStepType>
-                name="memberName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingresa nombre del miembro del club.",
-                  },
-                  {
-                    max: 50,
-                    message: "El nombre del miebro del club es muy largo.",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa nombre del miembro del club"
-                  size="large"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Apellido Paterno del Miembro------------------ */}
-              <Form.Item<ThirdStepType>
-                name="memberLastName"
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      "Por favor, ingresa apellido paterno del miembro del club.",
-                  },
-                  {
-                    max: 50,
-                    message:
-                      "El apellido paterno del miembro del club es muy largo.",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa apellido paterno del miembro del club"
-                  size="large"
-                />
-              </Form.Item>
-
-              {/* ------------------Input Apellido Materno del Miembro------------------ */}
-              <Form.Item<ThirdStepType>
-                name="memberMotherLastName"
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      "Por favor, ingresa apellido materno del miembro del club.",
-                  },
-                  {
-                    max: 50,
-                    message:
-                      "El apellido materno del miembro del club es muy largo.",
-                  },
-                ]}
-                className="cursor-text"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Ingresa apellido materno del miembro del club"
-                  size="large"
-                />
-              </Form.Item>
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                Hijo
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Fecha de Nacimiento
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Documento
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Número de emergencia
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Operaciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentUsers.map((user, index) => (
+                            <tr
+                                key={index}
+                                className="bg-white border-b hover:bg-gray-50"
+                            >
+                                <td
+                                    scope="row"
+                                    className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                                >
+                                    <div className="ps-3">
+                                        <div className="text-base font-semibold">
+                                            {user.name} {user.lastName}{" "}
+                                            {user.motherLastName}
+                                        </div>
+                                        <div className="font-normal text-gray-500">
+                                            {user.gender}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">{user.birthdate}</td>
+                                <td
+                                    scope="row"
+                                    className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                                >
+                                    <div className="ps-3">
+                                        <div className="text-base font-semibold">
+                                            {user.documentNumber}
+                                        </div>
+                                        <div className="font-normal text-gray-500">
+                                            {user.documentType}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">{user.birthdate}</td>
+                                <td className="flex px-6 py-4 gap-x-2">
+                                    <button
+                                        className="bg-slate-300 rounded-md p-1"
+                                        onClick={() =>
+                                            openSeeChildrenModal(user.id)
+                                        }
+                                    >
+                                        <FaEye className="text-xl text-gray-700" />
+                                    </button>
+                                    <button
+                                        className="bg-slate-300 rounded-md p-1"
+                                        onClick={() =>
+                                            openEditChildrenModal(user.id)
+                                        }
+                                    >
+                                        <FaEdit className="text-xl text-gray-700" />
+                                    </button>
+                                    <Popconfirm
+                                        title="Eliminar hijo?"
+                                        description="Esta acción no se puede deshacer."
+                                        onConfirm={() =>
+                                            handleRemoveChildren(user.id)
+                                        }
+                                        okText="Si"
+                                        cancelText="No"
+                                        okButtonProps={{
+                                            className:
+                                                "bg-red-500 text-white !hover:bg-red-600",
+                                        }}
+                                        icon={
+                                            <QuestionCircleOutlined
+                                                style={{ color: "red" }}
+                                            />
+                                        }
+                                    >
+                                        <button className="bg-red-300 rounded-md p-1">
+                                            <FaRegTrashAlt className="text-xl text-gray-700" />
+                                        </button>
+                                    </Popconfirm>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-
-            {paso === 3 && (
-              <Form.Item className="w-full flex justify-center">
-                <button
-                  type="submit"
-                  className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
-                  // bg-blue-500 hover:bg-blue-600
-                >
-                  Siguiente
-                  <FaArrowRight className="ms-1" />
-                </button>
-              </Form.Item>
-            )}
-          </Form>
-        </Modal>
-        {/* ------------------- VENTANA MODAL ----------------- */}
-      </div>
-      <br />
-      <CustomTable columns={columns} dataTable={userData} expandable={false} />
-    </div>
-  );
+            <Pagination
+                className="mt-4"
+                current={currentPage}
+                total={filteredUsers.length}
+                pageSize={usersPerPage}
+                onChange={onPageChange}
+                showSizeChanger={false}
+            />
+        </div>
+    );
 }
