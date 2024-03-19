@@ -160,7 +160,7 @@ export default function Products() {
     };
 
     return (
-        <div className="mt-20 w-[80%] m-auto">
+        <div className="mt-20 w-[80%] min-h-[84vh] m-auto">
             <h1 className="text-3xl font-bold mb-8">Productos</h1>
 
             <div className="flex gap-x-24">
