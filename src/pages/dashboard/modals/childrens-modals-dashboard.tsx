@@ -5,7 +5,6 @@ import {
     InputNumber,
     Modal,
     Select,
-    Spin,
     Switch,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -15,11 +14,8 @@ import {
     createChildren,
     getChildrensByUserId,
 } from "../../../services/children-service";
-import moment from "moment";
-import { LoadingOutlined } from "@ant-design/icons";
 
 export default function ChildrenModal({
-    type,
     create,
     id,
     open,
@@ -69,100 +65,21 @@ export default function ChildrenModal({
         getChildrenByIdForm();
     }, []);
 
-    // const getChildrenByIdForm = async () => {
-    //     try {
-    //         setLoading(true);
-    //         const children = await getChildrensByUserId();
-    //         form.setFieldsValue(children);
-    //     } catch (error) {
-    //         console.error("Error al obtener datos del hijo:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const updateChildrenForm = async (values: any) => {
-    //     try {
-    //         setLoading(true);
-    //         // await updateChildren(values, id);
-    //         setOpen(false);
-    //         handleReload();
-    //     } catch (error) {
-    //         console.error("Error al actualizar un hijo:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const createChildrenForm = async (values: any) => {
-    //     try {
-    //         setLoading(true);
-    //         await createChildren(values);
-    //         setOpen(false);
-    //         form.resetFields();
-    //         form1.resetFields();
-    //         form2.resetFields();
-    //         form3.resetFields();
-    //         setPaso(1);
-    //         handleReload();
-    //     } catch (error) {
-    //         console.error("Error al crear un hijo:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const seeChildrenForm = async () => {
-    //     try {
-    //         setLoading(true);
-    //         await getChildrensByUserId();
-    //         console.log(id)
-    //     } catch (error) {
-    //         console.error("Error al ver un producto:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
     const getChildrenByIdForm = async () => {
         try {
             setLoading(true);
             const children = await getChildrensByUserId();
-            form.setFieldsValue({
-
-                name: children.name,
-                lastName: children.lastName,
-                motherLastName: children.motherLastName,
-                documentType: children.documentType,
-                documentNumber: children.documentNumber,
-                birthdate: moment(children.birthdate),
-                emergencyContactPhone: children.emergencyContactPhone,
-                gender: children.gender,
-
-                isStudent: children.isStudent,
-                school: children.school,
-                grade: children.grade,
-                section: children.section,
-
-                isClubMember: children.isClubMember,
-                club: children.club,
-                membershipCardNumber: children.membershipCardNumber,
-                memberName: children.memberName,
-                memberLastName: children.memberLastName,
-                memberMotherLastName: children.memberMotherLastName,
-            });
-
+            form.setFieldsValue(children);
         } catch (error) {
             console.error("Error al obtener datos del hijo:", error);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const updateChildrenForm = async (values: any) => {
         try {
             setLoading(true);
-            values.startDate = values.startDate.format("YYYY-MM-DD");
             // await updateChildren(values, id);
             setOpen(false);
             handleReload();
@@ -171,7 +88,7 @@ export default function ChildrenModal({
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const createChildrenForm = async (values: any) => {
         try {
@@ -191,65 +108,8 @@ export default function ChildrenModal({
         }
     };
 
-    const seeChildrenForm = async () => {
-        try {
-            setLoading(true);
-            await getChildrensByUserId();
-        } catch (error) {
-            console.error("Error al ver un hijo:", error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const getTitle = (type: string) => {
-        switch (type) {
-            case "create":
-                return "Crear Hijo";
-            case "edit":
-                return "Editar Hijo";
-            case "see":
-                return "Ver Hijo";
-            default:
-                return "Hijo";
-        }
-    }
-
-    const chooseMethod = (type: string) => {
-        switch (type) {
-            case "create":
-                return createChildrenForm;
-            case "edit":
-                return updateChildrenForm;
-            case "see":
-                return seeChildrenForm;
-            default:
-                return createChildrenForm;
-        }
-    }
-
-    // const getAllData = async () => {
-    //     try {
-    //         setLoading(true);
-    //         await Promise.all([
-    //             getAllDisciplines(),
-    //             getAllCampuses(),
-    //             getAllCategories()
-    //         ]).then(([disciplinesData, campusesData, categoriesData]) => {
-    //             setDisciplines(disciplinesData);
-    //             setCampuses(campusesData);
-    //             setCategories(categoriesData);
-    //         });
-    //     } catch (error) {
-    //         console.error("Error al obtener los datos:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
     // ---------------- Funcionalidad de crear
     const onFinishStep1 = (values: any) => {
-        // chooseMethod(type)(values)
         console.log(values);
         values.birthdate = values.birthdate.format("YYYY-MM-DD");
         setFormData({
@@ -261,7 +121,6 @@ export default function ChildrenModal({
     };
 
     const onFinishStep2 = (values: any) => {
-        // chooseMethod(type)(values)
         setFormData({
             ...formData,
             ...values,
@@ -270,7 +129,6 @@ export default function ChildrenModal({
     };
 
     const onFinishStep3 = async (values: any) => {
-        chooseMethod(type)(values)
         const finalFormData = {
             ...formData,
             ...values,
@@ -291,9 +149,12 @@ export default function ChildrenModal({
         }
     };
 
+
+
+
     return (
         <Modal
-            title={getTitle(type)}
+            title="Crear Usuario"
             centered
             open={open}
             onOk={() => setOpen(false)}
@@ -589,7 +450,9 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es estudiante?------------------ */}
                     <Form.Item<SecondStepType> name="isStudent">
-                        <Switch className="bg-neutral-400" />
+                        <Switch
+                            className="bg-neutral-400"
+                        />
                     </Form.Item>
 
                     {/* ------------------Input Nombre de la Escuela del Hijo------------------ */}
@@ -694,7 +557,9 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es miebro de un cub?------------------ */}
                     <Form.Item<ThirdStepType> name="isClubMember">
-                        <Switch className="bg-neutral-400" />
+                        <Switch
+                            className="bg-neutral-400"
+                        />
                     </Form.Item>
 
                     {/* ------------------Input Nombre del Club del Miembro------------------ */}
@@ -817,22 +682,8 @@ export default function ChildrenModal({
                         <button
                             type="submit"
                             className="w-96 bg-blue-400 text-white font-semibold rounded-xl p-4 hover:bg-blue-500"
-                            onClick={() => {
-                                if (type === "see") setOpen(false)
-                            }}
                         >
-                            {loading ? (
-                                <Spin
-                                    indicator={
-                                        <LoadingOutlined
-                                            style={{ fontSize: 24 }}
-                                            spin
-                                        />
-                                    }
-                                />
-                            ) : (
-                                type === "see" ? "Cerrar" : getTitle(type)
-                            )}
+                            Crear Hijo
                         </button>
                     </Form.Item>
                 )}

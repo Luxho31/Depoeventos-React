@@ -2,7 +2,7 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Input, Pagination, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEdit, FaEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -40,8 +40,6 @@ export default function ChildrensDashboard() {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editId, setEditId] = useState<number | undefined>(undefined);
-    const [seeId, setSeeId] = useState<number | undefined>(undefined);
-    const [openSeeModal, setOpenSeeModal] = useState(false);
     const [open, setOpen] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
@@ -55,9 +53,10 @@ export default function ChildrensDashboard() {
                 .then((data: ChildrenData[]) => {
                     setChildrenData(data);
                     setLoading(false);
+                    console.log("Datos devueltos por getChildrensByUserId():", data);
                 })
                 .catch((error) => {
-                    console.error("Error al obtener hijos:", error);
+                    console.error("Error al obtener disciplinas:", error);
                     setLoading(false);
                 });
         } else {
@@ -85,11 +84,6 @@ export default function ChildrensDashboard() {
     const openEditChildrenModal = (id: number) => {
         setEditId(id);
         setOpenEditModal(true);
-    };
-
-    const openSeeChildrenModal = (id: number) => {
-        setSeeId(id);
-        setOpenSeeModal(true);
     };
 
     const handleRemoveChildren = async (id: number) => {
@@ -168,25 +162,16 @@ export default function ChildrensDashboard() {
                         Crear Hijo
                     </Button>
                     <ChildrenModal
-                        type="create"
                         create={true}
                         open={openCreateModal}
                         setOpen={setOpenCreateModal}
                         handleReload={handleReload}
                     />
                     <ChildrenModal
-                        type="edit"
                         create={false}
                         id={editId}
                         open={openEditModal}
                         setOpen={setOpenEditModal}
-                        handleReload={handleReload}
-                    />
-                    <ChildrenModal
-                        type="see"
-                        id={seeId}
-                        open={openSeeModal}
-                        setOpen={setOpenSeeModal}
                         handleReload={handleReload}
                     />
                 </div>
@@ -195,6 +180,9 @@ export default function ChildrensDashboard() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
+                            <th scope="col" className="px-6 py-3">
+                                ID
+                            </th>
                             <th scope="col" className="px-6 py-3">
                                 Hijo
                             </th>
@@ -218,6 +206,7 @@ export default function ChildrensDashboard() {
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
                             >
+                                <td className="px-6 py-4">{user.id}</td>
                                 <td
                                     scope="row"
                                     className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
@@ -248,14 +237,6 @@ export default function ChildrensDashboard() {
                                 </td>
                                 <td className="px-6 py-4">{user.birthdate}</td>
                                 <td className="flex px-6 py-4 gap-x-2">
-                                    <button
-                                        className="bg-slate-300 rounded-md p-1"
-                                        onClick={() =>
-                                            openSeeChildrenModal(user.id)
-                                        }
-                                    >
-                                        <FaEye className="text-xl text-gray-700" />
-                                    </button>
                                     <button
                                         className="bg-slate-300 rounded-md p-1"
                                         onClick={() =>
