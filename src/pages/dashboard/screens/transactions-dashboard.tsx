@@ -7,6 +7,7 @@ import { Input, Pagination, Popconfirm } from "antd";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaEye, FaRegTrashAlt } from "react-icons/fa";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import TransactionModal from "../modals/transactions-modals-dashboard";
 
 type OrderData = {
     id: number;
@@ -23,6 +24,10 @@ export default function TransactionsDashboard() {
     const [loading, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editId, setEditId] = useState<number | undefined>(undefined);
+    const [seeId, setSeeId] = useState<number | undefined>(undefined);
+    const [openSeeModal, setOpenSeeModal] = useState(false);
     const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
     const { userRole } = useAuth();
     const ordersPerPage: number = 5;
@@ -68,6 +73,17 @@ export default function TransactionsDashboard() {
             });
     };
 
+    const openEditTransactionModal = (id: number) => {
+        setEditId(id);
+        setOpenEditModal(true);
+    };
+
+    const openSeeTransactionModal = (id: number) => {
+      setSeeId(id);
+      console.log(id);
+      setOpenSeeModal(true);
+  };
+
     const handleSearch = () => {
         setCurrentPage(1);
         const searchTerms = searchTerm.toLowerCase().split(" ");
@@ -99,29 +115,6 @@ export default function TransactionsDashboard() {
         indexOfLastOrder
     );
 
-    // const data = [
-    //   {
-    //     key: 1,
-    //     name: "John Brown",
-    //     age: 32,
-    //     address: "New York No. 1 Lake Park",
-    //     description:
-    //       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    //   },
-    //   {
-    //     key: 2,
-    //     name: "John Brown",
-    //     age: 32,
-    //     address: "New York No. 1 Lake Park",
-    //     description:
-    //       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    //   },
-    // ];
-    // const columns = [
-    //   { title: "nombre", dataIndex: "name", width: "20%", editable: true },
-    //   { title: "edad", dataIndex: "age", width: "20%", editable: true },
-    //   { title: "address", dataIndex: "address", width: "30%", editable: true },
-    // ];
     return (
         <div className="h-screen">
             <button
@@ -130,6 +123,20 @@ export default function TransactionsDashboard() {
             >
                 {loading ? "Loading..." : <IoReload className="text-lg" />}
             </button>
+            <TransactionModal
+                type="edit"
+                id={editId}
+                open={openEditModal}
+                setOpen={setOpenEditModal}
+                handleReload={handleReload}
+            />
+            <TransactionModal
+                type="see"
+                id={seeId}
+                open={openSeeModal}
+                setOpen={setOpenSeeModal}
+                handleReload={handleReload}
+            />
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
@@ -195,17 +202,17 @@ export default function TransactionsDashboard() {
                                 <td className="px-6 py-4">
                                     <button
                                         className="bg-slate-300 rounded-md p-1 me-2"
-                                        // onClick={() =>
-                                        //     openSeeProductModal(user.id)
-                                        // }
+                                        onClick={() =>
+                                            openSeeTransactionModal(user.id)
+                                        }
                                     >
                                         <FaEye className="text-xl text-gray-700" />
                                     </button>
                                     <button
                                         className="bg-slate-300 rounded-md p-1"
-                                        // onClick={() =>
-                                        //     openEditProductModal(user.id)
-                                        // }
+                                        onClick={() =>
+                                            openEditTransactionModal(user.id)
+                                        }
                                     >
                                         <FaEdit className="text-xl text-gray-700" />
                                     </button>

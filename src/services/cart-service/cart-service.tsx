@@ -3,6 +3,16 @@ import { getUserInfo } from "../basic-service";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
+type orderType = {
+    id: number;
+    paymentMethod: string;
+    bankName: string;
+    operationNumber: string;
+    date: string;
+    totalPrice: number;
+    status: string;
+  };
+
 export const createOrder = async (data: any) => {
     const token = localStorage.getItem("token");
 
@@ -105,3 +115,28 @@ export const uploadVoucherImage = async (orderId: number, file: File) => {
         // throw error;
     }
 };
+
+export const getOrderById = async (orderId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}/api/orders/${orderId}`)
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updateOrder = async (form: orderType, orderId?: number) => {
+    try {
+        await fetch(`${BASE_URL}/api/orders/${orderId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(form),
+        })
+        getAllOrders();
+    } catch (error) {
+        console.log(error);
+    }
+}

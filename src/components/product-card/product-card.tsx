@@ -3,11 +3,31 @@ import { FaCheck, FaTableTennis } from "react-icons/fa";
 
 type Product = {
   id: number;
-  image: string;
+  // image: string;
   name: string;
   price: number;
   description: string;
-  // Otros campos del producto desde el backend
+  startDate: string;
+  maxStudents: number;
+  campus: {
+    id: number;
+    name: string;
+    description: string;
+  };
+  category: {
+    id: number;
+    name: string;
+    description: string;
+  };
+  startDateInscription: string;
+  endDateInscription: string;
+  courses: Course[];
+};
+
+type Course = {
+  id: number;
+  name: string;
+  description: string;
 };
 
 type CardProps = {
@@ -17,13 +37,13 @@ type CardProps = {
 
 export default function ProductCard({ product, onClick }: CardProps) {
   return (
-    <div className="!w-[300px] !h-[350px] shadow-lg rounded-2xl">
+    <div className="!w-[350px] !h-[500px] shadow-lg rounded-2xl flex flex-col justify-between">
       <div className="flex justify-between p-8">
         <FaTableTennis className="text-3xl opacity-70" />
         <h3 className="text-2xl font-bold text-green-400">S/.{product.price}.00</h3>
       </div>
       <div className="px-8 py-4">
-        <h3 className="text-2xl font-bold mb-3 text-center">
+        <h3 className="text-xl font-bold mb-3 text-center">
           {product.name}
         </h3>
         <p className="w-full">
@@ -34,15 +54,16 @@ export default function ProductCard({ product, onClick }: CardProps) {
 
         <li className="flex items-center mb-4">
           <FaCheck className="text-green-700" />
-          <p className="ms-4 text-lg font-bold">Lorem Ipsum</p>
+          <p className="ms-4 text-lg font-bold">{product.campus.name}</p>
         </li>
-
-
-
+        <li className="flex items-center mb-4">
+          <FaCheck className="text-green-700" />
+          <p className="ms-4 text-lg font-bold">{product.category.name}</p>
+        </li>
       </ul>
       <div className="w-full flex justify-center">
         <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-4 py-2 my-8 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={onClick}
         >
           Ver detalles

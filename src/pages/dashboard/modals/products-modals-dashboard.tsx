@@ -141,7 +141,6 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
             onCancel={() => setOpen(false)}
             width={1000}
             footer={null}
-
         >
             <Form
                 name="productForm"

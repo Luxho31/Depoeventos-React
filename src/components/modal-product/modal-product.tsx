@@ -133,6 +133,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             <div className="">
               <p className="text-gray-600 text-base">{product.description}</p>
             </div>
+            <div className="">
+              <p className="text-gray-600 text-base">{product.campus.name} - {product.category.name}</p>
+            </div>
             {isAuthenticated ? (
               <div className="flex items-center">
                 <label htmlFor="" className="me-2">

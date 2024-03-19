@@ -161,7 +161,7 @@ export default function ChildrenModal({
             default:
                 return "Hijo";
         }
-    }
+    };
 
     const chooseMethod = (type: string) => {
         switch (type) {
@@ -174,7 +174,7 @@ export default function ChildrenModal({
             default:
                 return createChildrenForm;
         }
-    }
+    };
 
     return (
         <Modal
