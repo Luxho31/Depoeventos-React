@@ -68,8 +68,6 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
 
   const navigate = useNavigate();
 
-  const options: Option[] = [{ value: "hola", label: "hola" }];
-
   const handleChange = (value: string[]) => {
     console.log(`selected ${value}`);
   };
@@ -80,7 +78,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       navigate("/login");
     } else {
       console.log("Agregando al carrito:", product);
-      addToCart(product);
+      const childrenIds = children.map((child: any) => child.id);
+      addToCart(product, childrenIds);
       onClose();
     }
   };

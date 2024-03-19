@@ -31,7 +31,7 @@ type Course = {
 
 type CartContextType = {
   products: Product[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, children: number[]) => Promise<void>;
   getTotalPrice: () => number;
   clearCart: () => void;
 };
@@ -50,6 +50,7 @@ export const CartProvider = ({ children }: any) => {
   const { getUserId } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const token = localStorage.getItem("token");
+  const [items, setItems] = useState([{}]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +69,7 @@ export const CartProvider = ({ children }: any) => {
           name: item.product.name,
           price: item.product.price,
           description: item.product.description,
+          children: item.children
         }));
         setProducts(mappedProducts);
       } catch (error) {
@@ -79,15 +81,27 @@ export const CartProvider = ({ children }: any) => {
   }, [token, getUserId]);
 
   // Función para agregar un producto al carrito
-  const addToCart = async (product: Product) => {
+  const addToCart = async (product: Product, childrenIds: number[]) => {
     try {
-      const productId = product.id;
-      if (!token) {
-        throw new Error("No se ha encontrado un token de autenticación");
+      const userId = await getUserId(token!);
+      for (const childId of childrenIds) {
+        const body = {
+          productId: product.id,
+          userId: userId,
+          childrenId: childId,
+        };
+        const response = await fetch("http://localhost:8080/api/cart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al guardar el producto en el carrito");
+        }
       }
-
-      await saveItem(productId);
-
       setProducts((prevProducts) => [...prevProducts, product]);
     } catch (error) {
       console.error("Error al agregar el producto al carrito:", error);
@@ -119,10 +133,9 @@ export const CartProvider = ({ children }: any) => {
   };
 
   // Función para guardar un producto en el carrito
-  const saveItem = async (productId: number) => {
+  const saveItem = async (productId: number, children: number[]) => {
     try {
       const user = await getUserId(token!);
-      const children = 1;
       const body = {
         productId: productId,
         userId: user,
@@ -144,6 +157,8 @@ export const CartProvider = ({ children }: any) => {
       throw new Error("Error al guardar el producto en el carrito");
     }
   };
+
+
 
   return (
     <CartContext.Provider value={{
