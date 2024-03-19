@@ -84,6 +84,7 @@ export const CartProvider = ({ children }: any) => {
   const addToCart = async (product: Product, childrenIds: number[]) => {
     try {
       const userId = await getUserId(token!);
+      // Iterar sobre cada hijo seleccionado y realizar una solicitud HTTP individual
       for (const childId of childrenIds) {
         const body = {
           productId: product.id,
@@ -102,11 +103,35 @@ export const CartProvider = ({ children }: any) => {
           throw new Error("Error al guardar el producto en el carrito");
         }
       }
-      setProducts((prevProducts) => [...prevProducts, product]);
+      // Actualizar el estado de productos combinando los productos existentes con el nuevo producto
+      // setProducts((prevProducts) => [...prevProducts, product]);
+      updateCart();
     } catch (error) {
       console.error("Error al agregar el producto al carrito:", error);
     }
   };
+
+  const updateCart = async () => {
+    try {
+      const user = await getUserId(token!);
+      const response = await fetch(`http://localhost:8080/api/cart/${user}`);
+      if (!response.ok) {
+        throw new Error("Error al obtener los productos del carrito");
+      }
+      const data = await response.json();
+      const mappedProducts: Product[] = data.map((item: any) => ({
+        id: item.id,
+        name: item.product.name,
+        price: item.product.price,
+        description: item.product.description,
+        children: item.children
+      }));
+      setProducts(mappedProducts);
+    } catch (error) {
+      console.error("Error al obtener los productos del carrito:", error);
+    }
+  }
+
 
   const clearCart = async () => {
     try {

@@ -68,8 +68,15 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
 
   const navigate = useNavigate();
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
+  const handleChange = (selectedValues: string[]) => {
+    // Actualizar el estado de los hijos para marcar si están seleccionados o no
+    const updatedChildren = children.map((child: any) => ({
+      ...child,
+      selected: selectedValues.includes(child.name), // Marcar como seleccionado si el nombre está en los valores seleccionados
+    }));
+
+    // Actualizar el estado de los hijos seleccionados
+    setChildren(updatedChildren);
   };
 
   const handleAddToCart = () => {
@@ -78,8 +85,16 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       navigate("/login");
     } else {
       console.log("Agregando al carrito:", product);
-      const childrenIds = children.map((child: any) => child.id);
-      addToCart(product, childrenIds);
+      const selectedChildrenIds = children
+        .filter((child: any) => child.selected)
+        .map((selectedChild: any) => selectedChild.id);
+
+      if (selectedChildrenIds.length === 0) {
+        console.error("No se han seleccionado hijos");
+        return;
+      }
+
+      addToCart(product, selectedChildrenIds);
       onClose();
     }
   };
@@ -129,6 +144,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   style={{ width: "100%" }}
                   placeholder="Por favor, selecciona los hijos a matricular"
                   onChange={handleChange}
+                  value={children.filter((child: any) => child.selected).map((child: any) => child.name)} // Especificar los valores seleccionados
                   options={children.map((child: any) => ({
                     value: child.name,
                     label: child.name,
