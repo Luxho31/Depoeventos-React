@@ -12,7 +12,9 @@ export const createOrder = async (data: any) => {
         let products: any = [];
 
         // Obtener los productos del carrito
-        const response = await fetch(`http://localhost:8080/api/cart/${user.id}`);
+        const response = await fetch(
+            `http://localhost:8080/api/cart/${user.id}`
+        );
         if (!response.ok) {
             throw new Error("Error al obtener los productos del carrito");
         }
@@ -61,21 +63,45 @@ export const createOrder = async (data: any) => {
 
 export const getAllOrders = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/orders`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data = await response.json();
-  
-      const dataWithKeys = data.map((item: any, index: any) => ({
-        ...item,
-        key: index,
-      }));
-  
-      return dataWithKeys;
+        const response = await fetch(`${BASE_URL}/api/orders`, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        });
+        const data = await response.json();
+
+        const dataWithKeys = data.map((item: any, index: any) => ({
+            ...item,
+            key: index,
+        }));
+
+        return dataWithKeys;
     } catch (error) {
-      console.error("Error al obtener datos de ordenes:", error);
-      throw error;
+        console.error("Error al obtener datos de ordenes:", error);
+        throw error;
     }
-  };
+};
+
+export const uploadVoucherImage = async (orderId: number, file: File) => {
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await fetch(
+            `${BASE_URL}/api/orders/uploadVoucherPicture/${orderId}`,
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
+        const data = await response.json();
+        if (response.ok) {
+            return data; // Retorna los datos recibidos del servidor si la carga es exitosa
+        } 
+        // else {
+        //     throw new Error(data.message || "Error al subir la imagen del voucher");
+        // }
+    } catch (error) {
+        console.error("Error al subir la imagen del voucher:", error);
+        // throw error;
+    }
+};

@@ -4,6 +4,7 @@ import {
     Collapse,
     CollapseProps,
     Form,
+    GetProp,
     Input,
     Select,
     Spin,
@@ -11,10 +12,12 @@ import {
     TourProps,
     Upload,
     UploadProps,
+    // UploadProps,
+    message,
 } from "antd";
 import { useRef, useState } from "react";
 import { useCart } from "../../../../context/CartProvider";
-import { createOrder } from "../../../../services/cart-service/cart-service";
+import { createOrder, uploadVoucherImage } from "../../../../services/cart-service/cart-service";
 
 const itemsNest: CollapseProps["items"] = [
     {
@@ -95,40 +98,42 @@ function PlinInfo() {
     );
 }
 
-// const props: UploadProps = {
-//     action: "//jsonplaceholder.typicode.com/posts/",
-//     listType: "picture",
-//     previewFile(file) {
-//         console.log("Your upload file:", file);
-//         return fetch("https://next.json-generator.com/api/json/get/4ytyBoLK8", {
-//             method: "POST",
-//             body: file,
-//         })
-//             .then((res) => res.json())
-//             .then(({ thumbnail }) => thumbnail);
-//     },
-// };
-
-type Order = {
-    user: {
-        id: number;
-    };
-    paymentMethod: string;
-    items: {
-        product: {
-            id: number;
-        };
-        children: {
-            id: number;
-        };
-    }[];
+const props: UploadProps = {
+    name: "file",
+    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    headers: {
+        authorization: "authorization-text",
+    },
+    onChange(info) {
+        if (info.file.status !== "uploading") {
+            console.log(info.file, info.fileList);
+        }
+        if (info.file.status === "done") {
+            message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === "error") {
+            message.error(`${info.file.name} file upload failed.`);
+        }
+    },
 };
+
+
+
+
+
+// Define la función getBase64
+function getBase64(file: any, callback: any) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(file);
+}
 
 export default function PaymentStep({ setNextStep }: any) {
     const { getTotalPrice, products, clearCart } = useCart();
     const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState();
+    const [voucherImage, setVoucherImage] = useState<any>(null);
 
-    console.log(products)
+    console.log(products);
 
     const onChange = (key: string | string[]) => {
         console.log(key);
@@ -136,11 +141,16 @@ export default function PaymentStep({ setNextStep }: any) {
 
     const createOrderForm = async (values: any) => {
         try {
-            setLoading(true)
-            await createOrder(values)
-            console.log(values);
+            setLoading(true);
+            const orderId = await createOrder(values);
+            console.log("Orden creada con ID:", orderId.id);
+    
+            // Subir la imagen del voucher si existe
+            if (voucherImage) {
+                await handleImageUpload(orderId.id, voucherImage.originFileObj); // Cambiado a voucherImage.originFileObj
+            }
+    
             setNextStep(100);
-            // recargar la página luego de 2 segundos
             clearCart();
         } catch (error) {
             console.log("Error al crear la orden:", error);
@@ -197,6 +207,42 @@ export default function PaymentStep({ setNextStep }: any) {
         },
     ];
 
+    const handleImageUpload = async (orderId: any, file: any) => {
+        setLoading(true);
+        try {
+            await uploadVoucherImage(orderId, file);
+            message.success("Imagen de voucher subida exitosamente");
+            setVoucherImage(file); // Actualiza el estado con la imagen subida
+            getBase64(file.originFileObj, (imageUrl: any) => {
+                setImageUrl(imageUrl);
+            });
+        } catch (error) {
+            console.error("Error al subir la imagen del voucher:", error);
+            // message.error("Error al subir la imagen del voucher. Por favor, intenta de nuevo.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const propsUpload = {
+        name: "file",
+        action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+        headers: {
+            authorization: "authorization-text",
+        },
+        onChange(info: any) {
+            if (info.file.status === "done") {
+                message.success(`${info.file.name} file uploaded successfully`);
+                setVoucherImage(info.file);
+                getBase64(info.file.originFileObj, (imageUrl:any) => {
+                    setImageUrl(imageUrl);
+                });
+            } else if (info.file.status === "error") {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        },
+    };
+
     return (
         <div className="flex justify-around">
             {/* Metodo de Pago */}
@@ -219,7 +265,7 @@ export default function PaymentStep({ setNextStep }: any) {
                     }}
                     onFinish={(values) => {
                         console.log(values);
-                        createOrderForm(values)
+                        createOrderForm(values);
                     }}
                     className="h-[550px] flex flex-col justify-between border rounded-md shadow-md p-8"
                 >
@@ -302,8 +348,8 @@ export default function PaymentStep({ setNextStep }: any) {
                         </Form.Item>
 
                         {/* Input Foto del Voucher */}
-                        {/* <Form.Item
-                            name="photoVoucher"
+                        <Form.Item
+                            name="photo"
                             rules={[
                                 {
                                     required: true,
@@ -313,12 +359,12 @@ export default function PaymentStep({ setNextStep }: any) {
                             ]}
                             className="cursor-text"
                         >
-                            <Upload {...props}>
+                            <Upload {...propsUpload}>
                                 <Button icon={<UploadOutlined />}>
-                                    Subir voucher
+                                    Click to Upload
                                 </Button>
                             </Upload>
-                        </Form.Item> */}
+                        </Form.Item>
                     </div>
 
                     <div className="w-full flex justify-center">

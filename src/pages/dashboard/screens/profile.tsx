@@ -24,7 +24,10 @@ import {
     FaUser,
 } from "react-icons/fa";
 import { getUserInfo } from "../../../services/basic-service";
-import { updateUserInfo, uploadProfileImage } from "../../../services/profile-service";
+import {
+    updateUserInfo,
+    uploadProfileImage,
+} from "../../../services/profile-service";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -53,7 +56,7 @@ export default function Profile() {
     const [selectedDocumentType, setSelectedDocumentType] = useState<
         string | undefined
     >(undefined);
-    const [photo, setPhoto] = useState("")
+    const [photo, setPhoto] = useState("");
 
     type RegisterType = {
         firstName?: String;
@@ -74,7 +77,7 @@ export default function Profile() {
             getUserInfo(token).then((data: any) => {
                 const { birthDate, ...userData } = data;
                 form.setFieldsValue(userData);
-                setPhoto(data.photo)
+                setPhoto(data.photo);
             });
         }
     }, []);
@@ -123,35 +126,36 @@ export default function Profile() {
         }
     };
 
-
-  const handleImageUpload = async (file: any) => {
-    try {
-        setLoading(true);
-        await uploadProfileImage("luisse24@hotmail.com", file); // Llamar a la función uploadProfileImage con el correo electrónico y el archivo de imagen
-        message.success("Imagen de perfil subida exitosamente");
-    } catch (error) {
-        console.error("Error al subir la imagen:", error);
-        message.error("Error al subir la imagen. Por favor, intenta de nuevo.");
-    } finally {
-        setLoading(false);
-    }
-};
-
-const handleChange: UploadProps["onChange"] = async (info) => {
-    if (info.file.status === "uploading") {
-        setLoading(true);
-        return;
-    }
-    if (info.file.status === "done") {
-        // Get this url from response in real world.
-        getBase64(info.file.originFileObj as FileType, (url) => {
+    const handleImageUpload = async (file: any) => {
+        try {
+            setLoading(true);
+            await uploadProfileImage("luisse24@hotmail.com", file); // Llamar a la función uploadProfileImage con el correo electrónico y el archivo de imagen
+            message.success("Imagen de perfil subida exitosamente");
+        } catch (error) {
+            console.error("Error al subir la imagen:", error);
+            message.error(
+                "Error al subir la imagen. Por favor, intenta de nuevo."
+            );
+        } finally {
             setLoading(false);
-            setImageUrl(url);
-        });
-        // Handle image upload
-        await handleImageUpload(info.file.originFileObj);
-    }
-};
+        }
+    };
+
+    const handleChange: UploadProps["onChange"] = async (info) => {
+        if (info.file.status === "uploading") {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === "done") {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as FileType, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+            // Handle image upload
+            await handleImageUpload(info.file.originFileObj);
+        }
+    };
 
     // Funcionalidad de deshabilitar los campos
 
@@ -186,10 +190,7 @@ const handleChange: UploadProps["onChange"] = async (info) => {
                     disabled={!fieldsEnabled}
                 >
                     {imageUrl ? (
-                        <img
-                            alt="avatar"
-                            style={{ width: "100%" }}
-                        />
+                        <img alt="avatar" style={{ width: "100%" }} />
                     ) : (
                         uploadButton
                     )}
