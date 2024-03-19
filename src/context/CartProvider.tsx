@@ -33,6 +33,7 @@ type CartContextType = {
   products: Product[];
   addToCart: (product: Product) => void;
   getTotalPrice: () => number;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -93,6 +94,23 @@ export const CartProvider = ({ children }: any) => {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const user = await getUserId(token!);
+      const response = await fetch(`http://localhost:8080/api/cart/${user}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al limpiar el carrito");
+      }
+
+      setProducts([]);
+    } catch (error) {
+      console.error("Error al limpiar el carrito:", error);
+    }
+  }
+
   // Función para obtener el precio total del carrito
   const getTotalPrice = () => {
     return products.reduce((total, product) => {
@@ -128,7 +146,9 @@ export const CartProvider = ({ children }: any) => {
   };
 
   return (
-    <CartContext.Provider value={{ products, addToCart, getTotalPrice }}>
+    <CartContext.Provider value={{
+      products, addToCart, getTotalPrice, clearCart
+    }}>
       {children}
     </CartContext.Provider>
   );

@@ -103,7 +103,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
           <div className="w-[40%]">
             <img
               className="w-full h-full object-cover object-center p-4"
-              src="{product.product.image}"
+              src="https://img.freepik.com/vector-premium/nino-dibujos-animados-jugando-al-futbol_353337-414.jpg"
               alt={product.name}
             />
           </div>

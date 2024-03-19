@@ -125,20 +125,22 @@ type Order = {
 };
 
 export default function PaymentStep({ setNextStep }: any) {
-    const { getTotalPrice, products } = useCart();
+    const { getTotalPrice, products, clearCart } = useCart();
     const [loading, setLoading] = useState(false);
 
-	console.log(products)
+    console.log(products)
 
     const onChange = (key: string | string[]) => {
         console.log(key);
     };
 
-	const createOrderForm = async (values: any) => {
+    const createOrderForm = async (values: any) => {
         try {
             setLoading(true)
             await createOrder(values)
             setNextStep(100);
+            // recargar la página luego de 2 segundos
+            clearCart();
         } catch (error) {
             console.log("Error al crear la orden:", error);
         } finally {
@@ -216,7 +218,7 @@ export default function PaymentStep({ setNextStep }: any) {
                     }}
                     onFinish={(values) => {
                         console.log(values);
-						createOrderForm(values)
+                        createOrderForm(values)
                     }}
                     className="h-[550px] flex flex-col justify-between border rounded-md shadow-md p-8"
                 >
@@ -239,8 +241,8 @@ export default function PaymentStep({ setNextStep }: any) {
                                 // style={{ width: 120 }}
                                 size="large"
                                 options={[
-                                    { value: "Yape", label: "Yape" },
-                                    { value: "Plin", label: "Plin" },
+                                    { value: "YAPE", label: "Yape" },
+                                    { value: "PLIN", label: "Plin" },
                                     {
                                         value: "Transferencia",
                                         label: "Transferencia",
