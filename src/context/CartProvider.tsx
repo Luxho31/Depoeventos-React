@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider";
 
 type Product = {
+  children: any
   id: number;
   name: string;
   price: number;
