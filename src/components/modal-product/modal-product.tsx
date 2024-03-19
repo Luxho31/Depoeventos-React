@@ -1,7 +1,7 @@
 import { Select, SelectProps } from "antd";
 import { motion } from "framer-motion";
 import { FaCartPlus, FaUserLock } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
 import { useEffect, useState } from "react";
@@ -160,9 +160,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             )}
             <div className="flex justify-center">
               <button
-                className={children.length > 0 ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600 cursor-not-allowed"}
-
-                onClick={children.length > 0 ? handleAddToCart : () => { }}
+                className={children.length > 0 ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"}
+                onClick={children.length > 0 ? handleAddToCart : () => navigate("/dashboard/childrens") }
               >
                 {isAuthenticated ? (
                   <FaCartPlus className="me-2 text-lg" />

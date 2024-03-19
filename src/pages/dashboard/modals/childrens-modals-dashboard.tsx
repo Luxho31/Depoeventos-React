@@ -475,6 +475,7 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es estudiante?------------------ */}
                     <Form.Item<SecondStepType> name="isStudent">
+                        <span className="me-2">¿Es estudiante?</span>
                         <Switch className="bg-neutral-400" />
                     </Form.Item>
 
@@ -579,8 +580,9 @@ export default function ChildrenModal({
                         paso === 3 ? "block" : "hidden"
                     }`}
                 >
-                    {/* ------------------Switch ¿Es miebro de un cub?------------------ */}
+                    {/* ------------------Switch ¿Es miembro de un club?------------------ */}
                     <Form.Item<ThirdStepType> name="isClubMember">
+                    <span className="me-2">¿Es miembro de un club?</span>
                         <Switch className="bg-neutral-400" />
                     </Form.Item>
 

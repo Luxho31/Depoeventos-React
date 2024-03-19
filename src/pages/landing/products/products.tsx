@@ -160,7 +160,7 @@ export default function Products() {
     };
 
     return (
-        <div className="mt-20 w-[80%] h-[89vh] m-auto">
+        <div className="mt-20 w-[80%] m-auto">
             <h1 className="text-3xl font-bold mb-8">Productos</h1>
 
             <div className="flex gap-x-24">
@@ -221,7 +221,7 @@ export default function Products() {
                         </button>
                     </div>
                 </div>
-                <div className="w-full">
+                <div className="w-full h-full">
                     {filteredData.length && (
                         <h2 className="text-lg font-semibold mb-4">Se encontraron {filteredData.length} elementos</h2>
                     )}
