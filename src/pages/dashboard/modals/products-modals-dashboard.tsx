@@ -24,6 +24,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
         try {
             setLoading(true);
             const product = await getProductById(id);
+            console.log(product);
             form.setFieldsValue({
                 name: product.name,
                 description: product.description,
@@ -32,7 +33,7 @@ export default function ProductModal({ type, id, open, setOpen, handleReload }: 
                 campusId: product.campus.name,
                 categoryId: product.category.name,
                 startDate: moment(product.startDate),
-                coursesId: "Falta iterar los cursos",
+                coursesId: product.courses.map((course: any) => course.id),
                 startDateInscription: product.startDateInscription,
                 endDateInscription: product.endDateInscription
             });
