@@ -5,6 +5,7 @@ import { useCart } from "../../../../context/CartProvider";
 
 export default function CartTable() {
   const { products, getTotalPrice } = useCart();
+  console.log(products);
   type Product = {
     id: number;
     // image: string;
@@ -87,7 +88,7 @@ export default function CartTable() {
               </div>
               <div className="w-1/4">
                 <h2 className="text-lg font-light text-center">
-                  {product.name}
+                  {product.children.name}
                 </h2>
               </div>
               <div className="w-1/6 text-right">
