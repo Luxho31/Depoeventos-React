@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import CardProduct from "../../../components/card-product/card-product";
 import ModalProduct from "../../../components/modal-product/modal-product";
-import { getAllProducts } from "../../../services/products-service";
-import { getAllCategories } from "../../../services/categories-service";
-import { useAuth } from "../../../context/AuthProvider";
 import { getAllCampuses } from "../../../services/campuses-service";
+import { getAllCategories } from "../../../services/categories-service";
+import { getAllProducts } from "../../../services/products-service";
 
-import { Checkbox, Collapse, Button } from "antd";
+import { Checkbox, Collapse } from "antd";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
 
@@ -55,8 +53,16 @@ export default function Products() {
   useEffect(() => {
     getAllProducts()
       .then((data) => {
-        setProductData(data);
-        setFilteredData(data)
+
+        // Mostrar solo los productos que la fecha actual coincida entre el startDateInscription y endDateInscription
+        const currentDate = new Date();
+        const filtered = data.filter((product: Product) => {
+          const startDateInscription = new Date(product.startDateInscription);
+          const endDateInscription = new Date(product.endDateInscription);
+          return currentDate >= startDateInscription && currentDate <= endDateInscription;
+        });
+        setProductData(filtered);
+        setFilteredData(filtered)
         console.log("Productos obtenidos:", data);
       })
       .catch((error) => {
