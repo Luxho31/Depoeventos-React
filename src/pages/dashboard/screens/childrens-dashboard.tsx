@@ -53,7 +53,10 @@ export default function ChildrensDashboard() {
                 .then((data: ChildrenData[]) => {
                     setChildrenData(data);
                     setLoading(false);
-                    console.log("Datos devueltos por getChildrensByUserId():", data);
+                    console.log(
+                        "Datos devueltos por getChildrensByUserId():",
+                        data
+                    );
                 })
                 .catch((error) => {
                     console.error("Error al obtener disciplinas:", error);
@@ -162,13 +165,13 @@ export default function ChildrensDashboard() {
                         Crear Hijo
                     </Button>
                     <ChildrenModal
-                        create={true}
+                        type="create"
                         open={openCreateModal}
                         setOpen={setOpenCreateModal}
                         handleReload={handleReload}
                     />
                     <ChildrenModal
-                        create={false}
+                        type="edit"
                         id={editId}
                         open={openEditModal}
                         setOpen={setOpenEditModal}

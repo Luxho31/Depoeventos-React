@@ -16,6 +16,7 @@ import {
 } from "../../../services/children-service";
 
 export default function ChildrenModal({
+    type,
     create,
     id,
     open,
@@ -149,12 +150,35 @@ export default function ChildrenModal({
         }
     };
 
+    const getTitle = (type: string) => {
+        switch (type) {
+            case "create":
+                return "Crear Producto";
+            case "edit":
+                return "Editar Producto";
+            case "see":
+                return "Ver Producto";
+            default:
+                return "Producto";
+        }
+    }
 
-
+    const chooseMethod = (type: string) => {
+        switch (type) {
+            case "create":
+                return createChildrenForm;
+            case "edit":
+                return updateChildrenForm;
+            // case "see":
+            //     return seeProductForm;
+            default:
+                return createChildrenForm;
+        }
+    }
 
     return (
         <Modal
-            title="Crear Usuario"
+            title={getTitle(type)}
             centered
             open={open}
             onOk={() => setOpen(false)}
@@ -166,6 +190,7 @@ export default function ChildrenModal({
             <Form
                 name="firstStep"
                 onFinish={(values) => {
+                    // chooseMethod(type)(values);
                     onFinishStep1(values);
                 }}
                 onFinishFailed={(error) => {
@@ -435,7 +460,7 @@ export default function ChildrenModal({
 
             {/* Formulario 2 */}
             <Form
-                name="register"
+                name="secondStep"
                 onFinish={(values) => {
                     onFinishStep2(values);
                 }}
@@ -450,9 +475,7 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es estudiante?------------------ */}
                     <Form.Item<SecondStepType> name="isStudent">
-                        <Switch
-                            className="bg-neutral-400"
-                        />
+                        <Switch className="bg-neutral-400" />
                     </Form.Item>
 
                     {/* ------------------Input Nombre de la Escuela del Hijo------------------ */}
@@ -542,9 +565,10 @@ export default function ChildrenModal({
 
             {/* Formulario 3 */}
             <Form
-                name="ThreeStep"
+                name="thirdStep"
                 onFinish={(values) => {
                     onFinishStep3(values);
+                    // chooseMethod(type)(values);
                 }}
                 autoComplete="off"
                 className="my-10 max-md:mx-20 md:mx-32"
@@ -557,9 +581,7 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es miebro de un cub?------------------ */}
                     <Form.Item<ThirdStepType> name="isClubMember">
-                        <Switch
-                            className="bg-neutral-400"
-                        />
+                        <Switch className="bg-neutral-400" />
                     </Form.Item>
 
                     {/* ------------------Input Nombre del Club del Miembro------------------ */}
