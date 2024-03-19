@@ -19,6 +19,7 @@ type UserData = {
     emergencyContactNumber: any;
     address: string;
     birthDate: string;
+    photo: string;
     roles: [];
 };
 
@@ -144,7 +145,7 @@ function UsersDashboard() {
                                 >
                                     <img
                                         className="w-10 h-10 rounded-full"
-                                        src="https://thumbs.dreamstime.com/b/businessman-icon-vector-male-avatar-profile-image-profile-businessman-icon-vector-male-avatar-profile-image-182095609.jpg"
+                                        src={user.photo}
                                         alt={`${user.firstName} image`}
                                     />
                                     <div className="ps-3">

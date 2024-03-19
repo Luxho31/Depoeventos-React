@@ -294,7 +294,7 @@ export default function Dashboard() {
                                         <Space>
                                             <Avatar
                                                 size={30}
-                                                icon={<UserOutlined />}
+                                                src={userInfo?.photo}
                                             />
                                             {userInfo?.firstName +
                                                 " " +

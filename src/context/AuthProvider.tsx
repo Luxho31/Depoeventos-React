@@ -29,6 +29,7 @@ interface User {
   country?: string;
   username?: string;
   password?: string;
+  photo?: string;
   role?: string[];
 }
 
@@ -101,6 +102,7 @@ export const AuthProvider = ({ children }: any) => {
       }
       setCargando(false);
       const userData = await response.json();
+      console.log(userData);
       setUserInfo(userData);
       return userData;
     } catch (error) {

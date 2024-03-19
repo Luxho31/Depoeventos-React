@@ -19,3 +19,23 @@ export const updateUserInfo = async (data: any, id: any) => {
     throw error;
   }
 };
+
+export const uploadProfileImage = async (email: string, file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file); // Cambiado 'avatar' por 'file' según el requerimiento
+    const response = await fetch(`${BASE_URL}/api/uploadProfilePicture/${email}`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.message || "Error al subir la imagen");
+    }
+  } catch (error) {
+    console.error("Error al subir la imagen:", error);
+    throw error;
+  }
+};

@@ -10,7 +10,6 @@ import PaymentStep from "./components/payment-step";
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
-
     const { products, getTotalPrice } = useCart();
 
     return (
