@@ -42,7 +42,7 @@ export default function Register() {
     documentNumber?: string;
     contactNumber?: string;
     emergencyContactNumber?: string;
-    address?: string;
+    // address?: string;
     birthDate?: string;
     country?: string;
     username?: string;
@@ -67,6 +67,7 @@ export default function Register() {
         ...formData,
         ...values,
         birthDate: values.birthDate.format("YYYY-MM-DD"),
+        address: "-",
       };
 
       await register(finalFormData);
@@ -483,7 +484,7 @@ export default function Register() {
               </Form.Item>
 
               {/* ------------------Input Dirección------------------ */}
-              <Form.Item<RegisterType>
+              {/* <Form.Item<RegisterType>
                 name="address"
                 rules={[
                   {
@@ -494,14 +495,14 @@ export default function Register() {
                 className="col-span-2 cursor-text"
               >
                 <Input
-                  className="w-full border rounded-xl p-4"
+                  className="w-full border rounded-xl p-4 hidden"
                   placeholder="Dirección"
                   size="large"
                   prefix={
                     <FaMapMarkerAlt className="site-form-item-icon me-1" />
                   }
                 />
-              </Form.Item>
+              </Form.Item> */}
             </div>
 
             {/* ------------------Botón de Registro------------------ */}
