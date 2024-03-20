@@ -25,6 +25,23 @@ export const createChildren = async (form: ChildrenType) => {
   }
 };
 
+export const updateChildren = async (form: ChildrenType, id?: number) => {
+  try {
+    await fetch(`${BASE_URL}/api/children/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(form),
+    });
+    getChildrensByUserId();
+  } catch (error) {
+    console.error("Error al actualizar un hijo:", error);
+    throw error;
+  }
+};
+
 export const getChildrensByUserId = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -47,3 +64,26 @@ export const getChildrensByUserId = async () => {
     throw error;
   }
 };
+
+export const getChildrenById = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const user = await getUserInfo(token);
+    const response = await fetch(`${BASE_URL}/api/children/getOnlyChildren/${user.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const data = await response.json();
+    const dataWithKeys = data.map((item: any, index: any) => ({
+      ...item,
+      key: index,
+    }));
+    return dataWithKeys;
+  } catch (error) {
+    console.error("Error al obtener los hijos:", error);
+    throw error;
+  }
+}

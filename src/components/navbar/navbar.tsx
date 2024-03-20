@@ -168,7 +168,7 @@ export default function Navbar() {
                 <Dropdown menu={menuProps} className="border-none">
                   <Button className="p-0">
                     <Space>
-                      <Avatar size={30} icon={<UserOutlined />} />
+                      <Avatar size={30} src={userInfo?.photo} />
                       {userInfo?.firstName + " " + userInfo?.lastName}
                       <DownOutlined />
                     </Space>

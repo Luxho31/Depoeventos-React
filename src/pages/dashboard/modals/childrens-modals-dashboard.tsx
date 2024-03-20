@@ -13,10 +13,12 @@ import { FaAddressCard, FaArrowRight, FaChevronLeft } from "react-icons/fa";
 import {
     createChildren,
     getChildrensByUserId,
+    updateChildren,
 } from "../../../services/children-service";
 
 export default function ChildrenModal({
     type,
+    id,
     open,
     setOpen,
     handleReload,
@@ -78,18 +80,18 @@ export default function ChildrenModal({
         }
     };
 
-    //   const updateChildrenForm = async (values: any) => {
-    //     try {
-    //       setLoading(true);
-    //       // await updateChildren(values, id);
-    //       setOpen(false);
-    //       handleReload();
-    //     } catch (error) {
-    //       console.error("Error al actualizar un hijo:", error);
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
+    const updateChildrenForm = async (values: any) => {
+        try {
+            setLoading(true);
+            await updateChildren(values, id);
+            setOpen(false);
+            handleReload();
+        } catch (error) {
+            console.error("Error al actualizar un hijo:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const createChildrenForm = async (values: any) => {
         try {
@@ -100,6 +102,8 @@ export default function ChildrenModal({
             form1.resetFields();
             form2.resetFields();
             form3.resetFields();
+            setIsStudent(false);
+            setIsClubMember(false);
             setPaso(1);
             handleReload();
         } catch (error) {
@@ -151,6 +155,7 @@ export default function ChildrenModal({
 
             setLoading(true);
             await createChildrenForm(finalFormData);
+            await updateChildrenForm(finalFormData);
             getChildrensByUserId().then((data) => {
                 setUserData(data);
             });
@@ -176,16 +181,16 @@ export default function ChildrenModal({
         }
     };
 
-    //   const chooseMethod = (type: string) => {
-    //     switch (type) {
-    //       case "create":
-    //         return createChildrenForm;
-    //       case "edit":
-    //         return updateChildrenForm;
-    //       default:
-    //         return createChildrenForm;
-    //     }
-    //   };
+    const chooseMethod = (type: string) => {
+        switch (type) {
+            case "create":
+                return createChildrenForm;
+            case "edit":
+                return updateChildrenForm;
+            default:
+                return createChildrenForm;
+        }
+    };
 
     const handleSwitchChangeIsStudent = (checked: boolean) => {
         setIsStudent(checked);
@@ -609,7 +614,7 @@ export default function ChildrenModal({
                 name="thirdStep"
                 onFinish={(values) => {
                     onFinishStep3(values);
-                    // chooseMethod(type)(values);
+                    chooseMethod(type)(values);
                 }}
                 autoComplete="off"
                 className="my-10 max-md:mx-20 md:mx-32"
