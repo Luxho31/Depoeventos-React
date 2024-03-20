@@ -71,7 +71,7 @@ export default function Navbar() {
         style={{ height: "65px" }}
       >
         <Toaster richColors />
-        <div className="container flex justify-between items-center h-full">
+        <div className="container flex justify-between items-center w-[80%] h-full m-auto">
           <Link to={"/"} className="flex items-center gap-x-4 cursor-pointer">
             <img src={LogoIcon} alt="DepoEventos" className="w-10" />
             <h2 className="text-lg font-semibold">
