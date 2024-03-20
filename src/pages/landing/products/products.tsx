@@ -52,15 +52,15 @@ export default function Products() {
   useEffect(() => {
     getAllProducts()
       .then((data) => {
-        const currentDate = new Date();
-        const filteredProducts = data.filter((product: Product) => {
-          const startDate = new Date(product.startDate);
-          const endDate = new Date(startDate);
-          endDate.setMonth(endDate.getMonth() + 6);
-          return currentDate >= startDate && currentDate <= endDate;
-        });
-        setProductData(filteredProducts);
-        setFilteredData(filteredProducts);
+        // const currentDate = new Date();
+        // const filteredProducts = data.filter((product: Product) => {
+        //   const startDate = new Date(product.startDate);
+        //   const endDate = new Date(startDate);
+        //   endDate.setMonth(endDate.getMonth() + 6);
+        //   return currentDate >= startDate && currentDate <= endDate;
+        // });
+        setProductData(data);
+        setFilteredData(data);
       })
       .catch((error) => {
         console.error("Error al obtener productos:", error);

@@ -1,7 +1,8 @@
-import { Select } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Select, Tooltip } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FaCartPlus, FaUserLock } from "react-icons/fa";
+import { FaCartPlus, FaCheck, FaHome, FaUserLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
@@ -51,6 +52,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
     const fetchChildren = async () => {
       const children = await getChildrensByUserId();
       setChildren(children);
+      console.log(product);
     };
     fetchChildren();
   }, []);
@@ -106,30 +108,54 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
           X
         </button>
         <div className="flex h-full">
-          <div className="w-[40%]">
+          <div className="w-[40%] ">
             <img
-              className="w-full h-full object-cover object-center p-4"
-              src="https://img.freepik.com/vector-premium/nino-dibujos-animados-jugando-al-futbol_353337-414.jpg"
+              className="w-full h-full border-md object-cover object-center p-4"
+              src="https://img.freepik.com/vector-premium/futbol-infantil-ninos-juegan-juego-competitivo-deportivo-parque-portero-pequenos-jugadores-futbol-ninos-corriendo-al-aire-libre-atletas-pateando-pelota-esplendido-concepto-vector-campeonato-equipo_533410-2109.jpg"
               alt={product.name}
             />
           </div>
           <div className="flex flex-col justify-between w-[60%] px-10 py-10">
-            <div className="flex justify-between items-center h-32">
-              <h2 className="text-gray-900 font-bold text-3xl">
-                {product.name}
-              </h2>
-              <p className="text-gray-700 font-bold text-3xl">
+            <div className="flex justify-between items-center p-4 mb-4">
+              <div className="text-gray-900 font-bold text-3xl flex items-center gap-x-2">
+                <Tooltip
+                  title={`Cupos disponibles: ${product.maxStudents}`}
+                  placement="top"
+                >
+                  <InfoCircleOutlined className="text-base text-gray-500" />
+                </Tooltip>
+                <h2>{product.name}</h2>
+              </div>
+
+              <p className="text-green-700 font-bold text-2xl">
                 ${product.price}
               </p>
             </div>
-            <div className="">
-              <p className="text-gray-600 text-base">{product.description}</p>
-            </div>
-            <div className="">
-              <p className="text-gray-600 text-base">
+
+            <div className="mb-4 flex items-center gap-x-2">
+              <FaHome className="text-gray-600 text-lg" />
+              <p className="text-gray-600 text-lg">
                 {product.campus.name} - {product.category.name}
               </p>
             </div>
+            <ul className="px-8 py-4">
+              {product.courses.map((course) => (
+                <li key={course.id} className="flex items-center mb-4">
+                  <FaCheck className="text-green-700" />
+                  <p className="ms-4 text-lg font-bold">{course.name}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mb-4">
+              <p className="text-gray-600 text-lg">
+                Inicio de clases: {product.startDate}
+              </p>
+            </div>
+            {/* <div className="mb-4">
+              <p className="text-gray-600 text-lg">
+                
+              </p>
+            </div> */}
             {isAuthenticated ? (
               <div className="flex items-center">
                 <label htmlFor="" className="me-2">
@@ -138,7 +164,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 <Select
                   mode="multiple"
                   allowClear
-                  style={{ width: "100%" }}
+                  className="w-full h-10"
                   placeholder="Por favor, selecciona los hijos a matricular"
                   onChange={handleChange}
                   value={children
