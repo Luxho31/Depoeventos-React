@@ -52,18 +52,8 @@ export default function Products() {
   useEffect(() => {
     getAllProducts()
       .then((data) => {
-        // Mostrar solo los productos que la fecha actual coincida entre el startDateInscription y endDateInscription
-        const currentDate = new Date();
-        const filtered = data.filter((product: Product) => {
-          const startDateInscription = new Date(product.startDateInscription);
-          const endDateInscription = new Date(product.endDateInscription);
-          return (
-            currentDate >= startDateInscription &&
-            currentDate <= endDateInscription
-          );
-        });
-        setProductData(filtered);
-        setFilteredData(filtered);
+        setProductData(data);
+        setFilteredData(data);
       })
       .catch((error) => {
         console.error("Error al obtener disciplinas:", error);
