@@ -30,6 +30,7 @@ type Product = {
   startDateInscription: string;
   endDateInscription: string;
   courses: Course[];
+  children: any;
 };
 
 type Course = {

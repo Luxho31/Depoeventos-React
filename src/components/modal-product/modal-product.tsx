@@ -28,6 +28,7 @@ type Product = {
   startDateInscription: string;
   endDateInscription: string;
   courses: Course[];
+  children: any;
 };
 
 type Course = {
@@ -62,7 +63,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
 
   const handleChange = (selectedValues: string[]) => {
     // Actualizar el estado de los hijos para marcar si están seleccionados o no
-    const updatedChildren = children.map((child: any) => ({
+    const updatedChildren: any = children.map((child: any) => ({
       ...child,
       selected: selectedValues.includes(child.name), // Marcar como seleccionado si el nombre está en los valores seleccionados
     }));
