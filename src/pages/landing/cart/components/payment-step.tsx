@@ -19,6 +19,7 @@ import {
   createOrder,
   uploadVoucherImage,
 } from "../../../../services/cart-service/cart-service";
+import { useForm } from "antd/es/form/Form";
 
 const itemsNest: CollapseProps["items"] = [
   {
@@ -135,10 +136,77 @@ export default function PaymentStep({ setNextStep }: any) {
     }
   };
 
+  const [form] = useForm();
   // Funcionalidad Tour
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
+
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [bankOptions, setBankOptions] = useState<Options[]>([]);
+
+  const handlePaymentMethodChange = (value: string) => {
+    setPaymentMethod(value);
+    switch (value) {
+      case "YAPE":
+        setBankOptions(YapeOptions);
+        break;
+      case "PLIN":
+        setBankOptions(PlinOptions);
+        break;
+      case "TRANSFERENCIA_BANCARIA":
+        setBankOptions(TransferOptions);
+        break;
+      default:
+        setBankOptions([]);
+    }
+    form.setFieldsValue({ bankName: undefined });
+  };
+  type Options = {
+    value: string;
+    label: string;
+  };
+
+  const YapeOptions: Options[] = [
+    { value: "Mibanco", label: "Mibanco" },
+    { value: "Caja Huancayo", label: "Caja Huancayo" },
+    { value: "Caja Ica", label: "Caja Ica" },
+    { value: "Caja Piura", label: "Caja Piura" },
+    { value: "Caja Sullana", label: "Caja Sullana" },
+    { value: "Caja Tacna", label: "Caja Tacna" },
+    { value: "Caja Trujillo", label: "Caja Trujillo" },
+    { value: "Banco de la Nación", label: "Banco de la Nación" },
+    { value: "BCP", label: "BCP" },
+  ];
+
+  const PlinOptions: Options[] = [
+    { value: "Interbank", label: "Interbank" },
+    { value: "Scotiabank", label: "Scotiabank" },
+    { value: "BBVA", label: "BBVA" },
+  ];
+
+  const TransferOptions: Options[] = [
+    { value: "Banco de Comercio", label: "Banco de Comercio" },
+    { value: "BCP", label: "BCP" },
+    {
+      value: "Banco Interamericano de Finanzas (BanBif)",
+      label: "Banco Interamericano de Finanzas (BanBif)",
+    },
+    { value: "Banco Pichincha", label: "Banco Pichincha" },
+    { value: "BBVA", label: "BBVA" },
+    { value: "Citibank Perú", label: "Citibank Perú" },
+    { value: "Interbank", label: "Interbank" },
+    { value: "MiBanco", label: "MiBanco" },
+    { value: "Scotiabank Perú", label: "Scotiabank Perú" },
+    { value: "Banco GNB Perú", label: "Banco GNB Perú" },
+    { value: "Banco Falabella", label: "Banco Falabella" },
+    { value: "Banco Ripley", label: "Banco Ripley" },
+    { value: "Banco Santander Perú", label: "Banco Santander Perú" },
+    { value: "Alfin Banco", label: "Alfin Banco" },
+    { value: "Bank of China", label: "Bank of China" },
+    { value: "Bci Perú", label: "Bci Perú" },
+    { value: "ICBC PERU BANK", label: "ICBC PERU BANK" },
+  ];
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -188,13 +256,12 @@ export default function PaymentStep({ setNextStep }: any) {
     try {
       await uploadVoucherImage(orderId, file);
       message.success("Imagen de voucher subida exitosamente");
-      setVoucherImage(file); // Actualiza el estado con la imagen subida
+      setVoucherImage(file);
       getBase64(file.originFileObj, (imageUrl: any) => {
         setImageUrl(imageUrl);
       });
     } catch (error) {
       console.error("Error al subir la imagen del voucher:", error);
-      // message.error("Error al subir la imagen del voucher. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -230,6 +297,7 @@ export default function PaymentStep({ setNextStep }: any) {
       {/* Formulario Voucher */}
       <div className="w-1/3" ref={ref2}>
         <Form
+          form={form}
           name="payment"
           onFinishFailed={() => {}}
           onFinish={(values) => {
@@ -255,13 +323,14 @@ export default function PaymentStep({ setNextStep }: any) {
                 // style={{ width: 120 }}
                 size="large"
                 options={[
-                  { value: "YAPE", label: "Yape" },
-                  { value: "PLIN", label: "Plin" },
+                  { value: "YAPE", label: "YAPE" },
+                  { value: "PLIN", label: "PLIN" },
                   {
-                    value: "Transferencia",
-                    label: "Transferencia",
+                    value: "TRANSFERENCIA_BANCARIA",
+                    label: "Transferencia bancaria",
                   },
                 ]}
+                onChange={handlePaymentMethodChange}
               />
             </Form.Item>
 
@@ -279,19 +348,9 @@ export default function PaymentStep({ setNextStep }: any) {
               <Select
                 placeholder="Tipo de Banco"
                 className="w-full !h-16"
-                // style={{ width: 120 }}
                 size="large"
-                options={[
-                  {
-                    value: "BCP",
-                    label: "Banco Crédito del Perú",
-                  },
-                  { value: "Interbank", label: "Interbank" },
-                  {
-                    value: "Scotiabank",
-                    label: "Scotiabank",
-                  },
-                ]}
+                options={[...bankOptions, { value: "OTRO", label: "Otro" }]}
+                disabled={!paymentMethod}
               />
             </Form.Item>
 
@@ -300,17 +359,27 @@ export default function PaymentStep({ setNextStep }: any) {
               name="operationNumber"
               rules={[
                 {
-                  required: true,
+                  required: paymentMethod !== "TRANSFERENCIA_BANCARIA",
                   message: "Por favor ingrese su número de operación.",
                 },
               ]}
               className="cursor-text"
             >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa tu número de operación"
-                size="large"
-              />
+              {paymentMethod === "YAPE" || paymentMethod === "PLIN" ? (
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Ingresa tu número de operación"
+                  size="large"
+                  disabled
+                  defaultValue="-"
+                />
+              ) : (
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Ingresa tu número de operación"
+                  size="large"
+                />
+              )}
             </Form.Item>
 
             {/* Input Foto del Voucher */}
