@@ -349,7 +349,7 @@ export default function PaymentStep({ setNextStep }: any) {
                 placeholder="Tipo de Banco"
                 className="w-full !h-16"
                 size="large"
-                options={[...bankOptions, { value: "OTRO", label: "Otro" }]}
+                options={[...bankOptions]}
                 disabled={!paymentMethod}
               />
             </Form.Item>
