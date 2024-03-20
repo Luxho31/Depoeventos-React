@@ -35,6 +35,7 @@ type CartContextType = {
   addToCart: (product: Product, children: number[]) => Promise<void>;
   getTotalPrice: () => number;
   clearCart: () => void;
+  removeProduct: (cartItem: number) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -152,11 +153,10 @@ export const CartProvider = ({ children }: any) => {
     }
   };
 
-  const removeProduct = async (productId: number) => {
+  const removeProduct = async (cartItem: number) => {
     try {
-      const user = await getUserId(token!);
       const response = await fetch(
-        `http://localhost:8080/api/cart/${user}/${productId}`,
+        `http://localhost:8080/api/cart/${cartItem}`,
         {
           method: "DELETE",
         }
@@ -186,6 +186,7 @@ export const CartProvider = ({ children }: any) => {
         addToCart,
         getTotalPrice,
         clearCart,
+        removeProduct,
       }}
     >
       {children}

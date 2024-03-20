@@ -4,7 +4,7 @@ import { useCart } from "../../../../context/CartProvider";
 import { Popconfirm } from "antd";
 
 export default function CartTable() {
-  const { products, getTotalPrice, clearCart } = useCart();
+  const { products, getTotalPrice, clearCart, removeProduct } = useCart();
 
   return (
     <div className="border rounded-3xl shadow-md p-8">
@@ -20,7 +20,7 @@ export default function CartTable() {
             title="¿Estás seguro de que deseas limpiar el carrito?"
             onConfirm={clearCart}
             okText="Sí"
-            okButtonProps={{ className: "bg-blue-700"}}
+            okButtonProps={{ className: "bg-blue-700" }}
             cancelText="No"
           >
             <button className="bg-transparent text-red-500 flex items-center p-2 rounded mb-4">
@@ -73,7 +73,10 @@ export default function CartTable() {
               <div className="w-1/6 text-right">
                 <p className="text-lg font-semibold">S/. {product.price}</p>
               </div>
-              <div className="w-1/6 text-right flex justify-end">
+              <div
+                className="w-1/6 text-right flex justify-end"
+                onClick={() => removeProduct(product.id)}
+              >
                 <IoIosClose className="text-red-500 text-3xl cursor-pointer" />
               </div>
             </li>
