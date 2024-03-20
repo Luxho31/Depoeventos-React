@@ -17,87 +17,86 @@ import PercyCelisIMG from "../../../../../assets/teachers/Prof._Percy_Celis_-_Fu
 import OscarGuevaraIMG from "../../../../../assets/teachers/Prof.Functional_SPVC_y_Baile_PPFF-__Oscar_Guevara-removebg-preview.png";
 
 export default function Team() {
-    const testimonials1 = [
-        {
-            name: "Prof. Fernando Campos",
-            img: FernandoCamposIMG,
-        },
-        {
-            name: "Prof. Angel Aponte",
-            img: AngelAponteIMG,
-        },
-        {
-            name: "Prof. Virginia Mora",
-            img: VirginiaMoraIMG,
-        },
-        {
-            name: "Prof. Martin Rodriguez",
-            img: MartinRodriguezIMG,
-        },
-        {
-            name: "Prof. Angelo Campos",
-            img: AngeloCamposIMG,
-        },
-        {
-            name: "Prof. Cesar Campos",
-            img: CesarCamposIMG,
-        },
-        {
-            name: "Prof. Eduardo Dioses",
-            img: EduardoDiosesIMG,
-        },
-        {
-            name: "Prof. Edwin Condezo",
-            img: EdwinCondezoIMG,
-        },
+  const testimonials1 = [
+    {
+      name: "Prof. Fernando Campos - Basquet",
+      img: FernandoCamposIMG,
+    },
+    {
+      name: "Prof. Angel Aponte - Gimnasia",
+      img: AngelAponteIMG,
+    },
+    {
+      name: "Prof. Virginia Mora - Gimnasia",
+      img: VirginiaMoraIMG,
+    },
+    {
+      name: "Prof. Martin Rodriguez - Fútbol",
+      img: MartinRodriguezIMG,
+    },
+    {
+      name: "Prof. Angelo Campos - Skateboarding",
+      img: AngeloCamposIMG,
+    },
+    {
+      name: "Prof. Cesar Campos - Patinaje",
+      img: CesarCamposIMG,
+    },
+    {
+      name: "Prof. Eduardo Dioses - Basquet",
+      img: EduardoDiosesIMG,
+    },
+    {
+      name: "Prof. Edwin Condezo - Atletismo",
+      img: EdwinCondezoIMG,
+    },
+  ];
 
-    ];
+  const testimonials2 = [
+    {
+      name: "Prof. Miguel Paredes - Fútbol",
+      img: MiguelParedesIMG,
+    },
+    {
+      name: "Prof. Luis Carpio - Fútbol",
+      img: LuisCarpioIMG,
+    },
+    {
+      name: "Prof. Jesus Huaraca - Tenis de Campo",
+      img: JesusHuaracaIMG,
+    },
+    {
+      name: "Prof. Jesus Paucarcaja - Karate",
+      img: JesusPaucarcajaIMG,
+    },
+    {
+      name: "Prof. Jose - Karate",
+      img: JoseIMG,
+    },
+    {
+      name: "Prof. Percy Celis - Fútbol",
+      img: PercyCelisIMG,
+    },
+    {
+      name: "Prof. Oscar Guevara - Functional & Baile",
+      img: OscarGuevaraIMG,
+    },
+  ];
 
-    const testimonials2 = [
-        {
-            name: "Prof. Miguel Paredes",
-            img: MiguelParedesIMG,
-        },
-        {
-            name: "Prof. Luis Carpio",
-            img: LuisCarpioIMG,
-        },
-        {
-            name: "Prof. Jesus Huaraca",
-            img: JesusHuaracaIMG,
-        },
-        {
-            name: "Prof. Jesus Paucarcaja",
-            img: JesusPaucarcajaIMG,
-        },
-        {
-            name: "Prof. Jose",
-            img: JoseIMG,
-        },
-        {
-            name: "Prof. Percy Celis",
-            img: PercyCelisIMG,
-        },
-        {
-            name: "Prof. Oscar Guevara",
-            img: OscarGuevaraIMG,
-        },
-    ];
-
-    return (
-        <div className="w-[80%] m-auto mt-20 mb-20">
-            <div className="mb-12">
-                <h1 className="text-4xl font-extrabold mb-3">Equipo</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua.
-                </p>
-            </div>
-            <div className="w-full m-auto flex flex-col justify-around max-xl:w-full max-lg:flex-col max-lg:items-center max-lg:gap-10">
-                <InfiniteMovingCards items={testimonials1} direction="right" />
-                <InfiniteMovingCards items={testimonials2} direction="left" />
-            </div>
-        </div>
-    );
+  return (
+    <div className="w-[80%] m-auto mt-20 mb-20">
+      <div className="mb-12">
+        <h1 className="text-4xl font-extrabold mb-3">Equipo</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+          sed diam voluptua.
+        </p>
+      </div>
+      <div className="w-full m-auto flex flex-col justify-around max-xl:w-full max-lg:flex-col max-lg:items-center max-lg:gap-10">
+        <InfiniteMovingCards items={testimonials1} direction="right" />
+        <InfiniteMovingCards items={testimonials2} direction="left" />
+      </div>
+    </div>
+  );
 }
