@@ -114,7 +114,7 @@ export default function Dashboard() {
       icon: <UploadOutlined />,
       label: "Cursos Matriculados FALTA",
       onClick: () => handleItemClick("/dashboard/courses"),
-      role: ["USER"],
+      role: ["ADMIN", "USER"],
     },
     {
       key: "7",
