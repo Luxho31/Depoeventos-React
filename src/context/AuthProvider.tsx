@@ -61,11 +61,9 @@ export const AuthProvider = ({ children }: any) => {
             // get userInfo and set it
             getUserInfo(token);
             setIsAuthenticated(true);
-            console.log("Autenticado correctamente");
           } else {
             setIsAuthenticated(false);
             localStorage.removeItem("token");
-            console.log("El token no es valido");
           }
           // Establece cargando en false cuando haya terminado la verificación
           setCargando(false);
@@ -81,7 +79,6 @@ export const AuthProvider = ({ children }: any) => {
       // Verificar Rol
       const tokenPayload = JSON.parse(atob(token.split(".")[1]));
       const userRoles = tokenPayload.roles;
-      // console.log("Roles del usuario:", userRoles);
       setUserRole(userRoles);
 
       setCargando(true);
@@ -102,7 +99,6 @@ export const AuthProvider = ({ children }: any) => {
       }
       setCargando(false);
       const userData = await response.json();
-      console.log(userData);
       setUserInfo(userData);
       return userData;
     } catch (error) {
@@ -129,7 +125,7 @@ export const AuthProvider = ({ children }: any) => {
     } catch (error) {
       console.error("Error al obtener la información del usuario:", error);
     }
-  }
+  };
 
   const login = async (username: string, password: string) => {
     try {
@@ -156,7 +152,6 @@ export const AuthProvider = ({ children }: any) => {
         // Verificar Rol
         const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
         const userRoles = tokenPayload.roles;
-        // console.log("Roles del usuario:", userRoles);
         setUserRole(userRoles);
 
         setIsAuthenticated(true);
@@ -197,7 +192,6 @@ export const AuthProvider = ({ children }: any) => {
         // Verificar Rol
         const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
         const userRoles = tokenPayload.roles;
-        // console.log("Roles del usuario:", userRoles);
         setUserRole(userRoles);
 
         setIsAuthenticated(true);
@@ -244,7 +238,7 @@ export const AuthProvider = ({ children }: any) => {
         cargando,
         userRole,
         userInfo,
-        getUserId
+        getUserId,
       }}
     >
       {children}

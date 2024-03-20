@@ -8,8 +8,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
-import "./navbar.css";
 import { useCart } from "../../context/CartProvider";
+import "./navbar.css";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,9 +28,11 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    logout();
-    toast.info("Sesión cerrada exitosamente");
-    navigate("/");
+    if (isLoggedIn) {
+      logout();
+      toast.info("Sesión cerrada exitosamente");
+      navigate("/");
+    }
   };
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
@@ -59,8 +61,6 @@ export default function Navbar() {
     items,
     onClick: handleMenuClick,
   };
-
-  const handleMouseEnter = () => { };
 
   if (cargando) return <Spin fullscreen />;
 
@@ -98,10 +98,6 @@ export default function Navbar() {
           </ul>
 
           <ul className="flex items-center">
-            {/* <button className="p-2 me-8">
-              <FaShoppingCart className="text-2xl" />
-            </button> */}
-            {/* Carrito de compras */}
             <li className="">
               <Dropdown
                 placement="bottomRight"

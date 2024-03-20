@@ -17,7 +17,6 @@ export const createCampus = async (form: campusType) => {
       },
       body: JSON.stringify(form),
     });
-
   } catch (error) {
     console.error("Error al crear una sede:", error);
     throw error;
@@ -33,8 +32,6 @@ export const getAllCampuses = async () => {
     });
     const data = await response.json();
 
-    console.log("Sedes obtenidas:", data);
-
     const dataWithKeys = data.map((item: any, index: any) => ({
       ...item,
       key: index,
@@ -46,7 +43,6 @@ export const getAllCampuses = async () => {
     throw error;
   }
 };
-
 
 export const updateCampus = async (form: campusType, id?: number) => {
   try {
@@ -77,7 +73,7 @@ export const getCampusById = async (id: number) => {
     console.error("Error al obtener datos de categorias:", error);
     throw error;
   }
-}
+};
 
 export const deleteCampus = async (id: number) => {
   try {

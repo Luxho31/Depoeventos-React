@@ -46,15 +46,12 @@ export const getAllProducts = async () => {
     const response = await fetch(`${BASE_URL}/api/products`);
     const data = await response.json();
 
-    console.log("Productos obtenidos:", data);
-
     return data;
   } catch (error) {
     console.error("Error al obtener datos de productos:", error);
     throw error;
   }
 };
-
 
 export const updateProduct = async (form: productType, id?: number) => {
   try {
@@ -86,7 +83,7 @@ export const getProductById = async (id: number) => {
     console.error("Error al obtener datos producto:", error);
     throw error;
   }
-}
+};
 
 export const deleteProduct = async (id: number) => {
   try {
@@ -102,4 +99,3 @@ export const deleteProduct = async (id: number) => {
     throw error;
   }
 };
-

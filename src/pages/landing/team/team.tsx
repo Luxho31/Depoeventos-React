@@ -3,34 +3,30 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import TennisIMG from "../../../assets/disciplines/Tennis.jpg";
 import { InfiniteMovingCards } from "../../../components/infinite-moving-cards";
-import TennisIMG from "../../../assets/disciplines/Tennis.jpg"
-
 
 export default function Team() {
   const testimonials = [
     {
       name: "Charles Dickens",
-      img: TennisIMG
+      img: TennisIMG,
     },
     {
       name: "William Shakespeare",
-      img: TennisIMG
-
+      img: TennisIMG,
     },
     {
       name: "Edgar Allan Poe",
-      img: TennisIMG
-
+      img: TennisIMG,
     },
     {
       name: "Jane Austen",
-      img: TennisIMG
-
+      img: TennisIMG,
     },
     {
       name: "Herman Melville",
-      img: "https://w0.peakpx.com/wallpaper/58/22/HD-wallpaper-spider-man-game-art-vertical-artwork-comic-art-portrait-display-marvel-super-heroes.jpg"
+      img: "https://w0.peakpx.com/wallpaper/58/22/HD-wallpaper-spider-man-game-art-vertical-artwork-comic-art-portrait-display-marvel-super-heroes.jpg",
     },
   ];
 

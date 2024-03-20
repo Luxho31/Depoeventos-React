@@ -53,8 +53,6 @@ export const InfiniteMovingCards = ({
     }
   }
 
-  console.log(items);
-
   return (
     <div
       ref={containerRef}
@@ -68,19 +66,13 @@ export const InfiniteMovingCards = ({
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
-
         {items.map((item) => (
-
           <li
             className="w-10  max-w-full relative rounded-xl shadow-md border flex-shrink-0 px-8 py-2 md:w-[270px]"
             key={item.name}
           >
             <blockquote>
-              <img
-                src={item.img}
-                alt={item.name}
-                className=""
-              />
+              <img src={item.img} alt={item.name} className="" />
               <div className="relative z-20 mt-6 flex flex-row items-center">
                 <span className="flex flex-col gap-1">
                   <span className="text-sm leading-[1.6] text-gray-400 font-normal">

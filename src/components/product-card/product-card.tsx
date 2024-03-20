@@ -1,9 +1,7 @@
 import { FaCheck, FaTableTennis } from "react-icons/fa";
-// import { CLIENT_ROUTES } from "../../routes/client.routes";
 
 type Product = {
   id: number;
-  // image: string;
   name: string;
   price: number;
   description: string;

@@ -1,11 +1,9 @@
 import { FaFacebook, FaInstagramSquare, FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import "./footer.css";
 
 export default function Footer() {
   return (
     <div className="bg-white w-full h-[70px] flex flex-row items-center justify-center px-10  ">
-      {/* <img className="h-[40px]" src={LogoIcon} alt="logo" /> */}
       <h1 className="text-xl italic font-bold">
         Depo<span className="text-orange-600">Eventos</span>
       </h1>

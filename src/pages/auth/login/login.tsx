@@ -23,7 +23,6 @@ export default function Login() {
   const handleSignIn = async (values: any) => {
     try {
       setLoading(true);
-      console.log(values);
 
       await login(values.email, values.password);
       navigate("/");
@@ -54,11 +53,7 @@ export default function Login() {
             src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
             alt=""
           />
-          <Link
-            className="pointer flexNullCenter absolute top-5 left-5"
-            to="/"
-          // smooth={true}
-          >
+          <Link className="pointer flexNullCenter absolute top-5 left-5" to="/">
             <img
               src={LogoIcon}
               alt="DepoEventos"
@@ -71,9 +66,7 @@ export default function Login() {
           name="login"
           form={form}
           onFinish={handleSignIn}
-          onFinishFailed={() => {
-            console.log("Fallo");
-          }}
+          onFinishFailed={() => {}}
           className="w-[750px] max-md:mx-20 md:mx-32"
         >
           <h2 className="text-3xl text-center font-semibold mb-8">

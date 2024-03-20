@@ -1,22 +1,21 @@
 .typing-effect {
-    display: inline-block;
-    font-family: monospace;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 4px solid; /* Efecto de cursor de escritura */
-    animation: typing 1s steps(30), blink .5s infinite step-start; /* Duración y animación de escritura */
-  }
+  display: inline-block;
+  font-family: monospace;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 4px solid; /* Efecto de cursor de escritura */
+  animation: typing 1s steps(30), blink 0.5s infinite step-start; /* Duración y animación de escritura */
+}
 
-  
-  @keyframes typing {
-    from {
-      width: 0;
-    }
+@keyframes typing {
+  from {
+    width: 0;
   }
-  
-  @keyframes blink {
-    50% {
-      border-color: transparent; /* Efecto de parpadeo */
-    }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent; /* Efecto de parpadeo */
   }
+}

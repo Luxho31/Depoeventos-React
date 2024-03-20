@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider";
 
 type Product = {
-  children: any
+  children: any;
   id: number;
   name: string;
   price: number;
@@ -51,7 +51,6 @@ export const CartProvider = ({ children }: any) => {
   const { getUserId } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const token = localStorage.getItem("token");
-  const [items, setItems] = useState([{}]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +69,7 @@ export const CartProvider = ({ children }: any) => {
           name: item.product.name,
           price: item.product.price,
           description: item.product.description,
-          children: item.children
+          children: item.children,
         }));
         setProducts(mappedProducts);
       } catch (error) {
@@ -125,14 +124,13 @@ export const CartProvider = ({ children }: any) => {
         name: item.product.name,
         price: item.product.price,
         description: item.product.description,
-        children: item.children
+        children: item.children,
       }));
       setProducts(mappedProducts);
     } catch (error) {
       console.error("Error al obtener los productos del carrito:", error);
     }
-  }
-
+  };
 
   const clearCart = async () => {
     try {
@@ -149,7 +147,7 @@ export const CartProvider = ({ children }: any) => {
     } catch (error) {
       console.error("Error al limpiar el carrito:", error);
     }
-  }
+  };
 
   // Función para obtener el precio total del carrito
   const getTotalPrice = () => {
@@ -158,38 +156,15 @@ export const CartProvider = ({ children }: any) => {
     }, 0);
   };
 
-  // Función para guardar un producto en el carrito
-  const saveItem = async (productId: number, children: number[]) => {
-    try {
-      const user = await getUserId(token!);
-      const body = {
-        productId: productId,
-        userId: user,
-        childrenId: children,
-      };
-
-      const response = await fetch("http://localhost:8080/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al guardar el producto en el carrito");
-      }
-    } catch (error) {
-      throw new Error("Error al guardar el producto en el carrito");
-    }
-  };
-
-
-
   return (
-    <CartContext.Provider value={{
-      products, addToCart, getTotalPrice, clearCart
-    }}>
+    <CartContext.Provider
+      value={{
+        products,
+        addToCart,
+        getTotalPrice,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

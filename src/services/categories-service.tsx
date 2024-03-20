@@ -16,7 +16,6 @@ export const createCategory = async (form: categoryType) => {
       },
       body: JSON.stringify(form),
     });
-
   } catch (error) {
     console.error("Error al crear una categoria:", error);
     throw error;
@@ -31,8 +30,6 @@ export const getAllCategories = async () => {
       },
     });
     const data = await response.json();
-
-    console.log("Categorias obtenidas:", data);
 
     const dataWithKeys = data.map((item: any, index: any) => ({
       ...item,
@@ -75,7 +72,7 @@ export const getCategoryById = async (id: number) => {
     console.error("Error al obtener datos de categorias:", error);
     throw error;
   }
-}
+};
 
 export const deleteCategory = async (id: number) => {
   try {
@@ -90,5 +87,3 @@ export const deleteCategory = async (id: number) => {
     throw error;
   }
 };
-
-

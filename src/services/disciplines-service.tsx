@@ -75,7 +75,7 @@ export const getDisciplineById = async (id: number) => {
     console.error("Error al obtener datos de disciplinas:", error);
     throw error;
   }
-}
+};
 
 export const deleteDiscipline = async (id: number) => {
   try {
@@ -91,4 +91,3 @@ export const deleteDiscipline = async (id: number) => {
     throw error;
   }
 };
-

@@ -1,4 +1,4 @@
-import "animate.css"
+import "animate.css";
 import "./intro.css";
 
 export default function Intro() {

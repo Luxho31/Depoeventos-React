@@ -1,11 +1,10 @@
-import Courses from "./components/courses/courses";
-import Campuses from "./components/campuses/campuses";
-import Intro from "./components/intro/intro";
-import Packages from "./components/products/products";
 import { FloatButton } from "antd";
+import PalestinoArabeIMG from "../../../assets/campuses/club-palestino-arabe.png";
+import VillaCaritasIMG from "../../../assets/campuses/villa-caritas.jpg";
+import Campuses from "./components/campuses/campuses";
+import Courses from "./components/courses/courses";
+import Intro from "./components/intro/intro";
 import Team from "./components/team/team";
-import VillaCaritasIMG from "../../../assets/campuses/villa-caritas.jpg"
-import PalestinoArabeIMG from "../../../assets/campuses/club-palestino-arabe.png"
 
 export default function Home() {
   const data = [
@@ -25,7 +24,8 @@ export default function Home() {
       description:
         "En el corazón de la encantadora Villa Caritas, nuestro colegio es un faro de aprendizaje y desarrollo personal. Con un enfoque centrado en los valores y una comunidad educativa acogedora, el Colegio Villa Caritas se esfuerza por inspirar la curiosidad intelectual y fomentar habilidades para la vida en un ambiente enriquecedor y estimulante",
       logo: VillaCaritasIMG,
-      image: "https://villacaritas.vc-sp.edu.pe/wp-content/uploads/2023/11/IMG_0942.jpg",
+      image:
+        "https://villacaritas.vc-sp.edu.pe/wp-content/uploads/2023/11/IMG_0942.jpg",
     },
     {
       id: 3,
@@ -34,7 +34,8 @@ export default function Home() {
       description:
         "El Club Palestino-Árabe es más que un lugar de encuentro, es una comunidad que celebra la rica herencia cultural y promueve la amistad entre personas de diversas raíces. Con instalaciones deportivas de primera clase y eventos culturales emocionantes, el club es un espacio donde la diversidad se une para compartir experiencias, fortalecer lazos y construir un futuro inclusivo.",
       logo: PalestinoArabeIMG,
-      image: "https://lh3.googleusercontent.com/p/AF1QipO_OSnM0VTjKCto34IOUe2B6e-KBSbJELJs_v6X=s680-w680-h510",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipO_OSnM0VTjKCto34IOUe2B6e-KBSbJELJs_v6X=s680-w680-h510",
     },
   ];
   return (

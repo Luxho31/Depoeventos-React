@@ -1,10 +1,10 @@
-import { Select, SelectProps } from "antd";
+import { Select } from "antd";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { FaCartPlus, FaUserLock } from "react-icons/fa";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
-import { useEffect, useState } from "react";
 import { getChildrensByUserId } from "../../services/children-service";
 
 type Product = {
@@ -36,11 +36,6 @@ type Course = {
   description: string;
 };
 
-type Option = {
-  value: string;
-  label: string;
-};
-
 type ModalProps = {
   product: Product;
   onClose: () => void;
@@ -51,13 +46,10 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
   const { addToCart } = useCart();
   const [children, setChildren] = useState([]);
 
-
-
   useEffect(() => {
     const fetchChildren = async () => {
       const children = await getChildrensByUserId();
       setChildren(children);
-      console.log(children);
     };
     fetchChildren();
   }, []);
@@ -84,7 +76,6 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       onClose();
       navigate("/login");
     } else {
-      console.log("Agregando al carrito:", product);
       const selectedChildrenIds = children
         .filter((child: any) => child.selected)
         .map((selectedChild: any) => selectedChild.id);
@@ -134,7 +125,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               <p className="text-gray-600 text-base">{product.description}</p>
             </div>
             <div className="">
-              <p className="text-gray-600 text-base">{product.campus.name} - {product.category.name}</p>
+              <p className="text-gray-600 text-base">
+                {product.campus.name} - {product.category.name}
+              </p>
             </div>
             {isAuthenticated ? (
               <div className="flex items-center">
@@ -147,12 +140,13 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   style={{ width: "100%" }}
                   placeholder="Por favor, selecciona los hijos a matricular"
                   onChange={handleChange}
-                  value={children.filter((child: any) => child.selected).map((child: any) => child.name)} // Especificar los valores seleccionados
+                  value={children
+                    .filter((child: any) => child.selected)
+                    .map((child: any) => child.name)} // Especificar los valores seleccionados
                   options={children.map((child: any) => ({
                     value: child.name,
                     label: child.name,
-                  }))
-                  }
+                  }))}
                 />
               </div>
             ) : (
@@ -160,8 +154,16 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             )}
             <div className="flex justify-center">
               <button
-                className={children.length > 0 ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600" : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"}
-                onClick={children.length > 0 ? handleAddToCart : () => navigate("/dashboard/childrens") }
+                className={
+                  children.length > 0
+                    ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"
+                    : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"
+                }
+                onClick={
+                  children.length > 0
+                    ? handleAddToCart
+                    : () => navigate("/dashboard/childrens")
+                }
               >
                 {isAuthenticated ? (
                   <FaCartPlus className="me-2 text-lg" />
@@ -169,13 +171,15 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   <FaUserLock className="me-2 text-lg" />
                 )}
                 {isAuthenticated
-                  ? children.length > 0 ? "Agregar al carrito" : "No tienes hijos registrados"
+                  ? children.length > 0
+                    ? "Agregar al carrito"
+                    : "No tienes hijos registrados"
                   : "Inicia sesión para comprar"}
               </button>
             </div>
           </div>
         </div>
       </div>
-    </motion.div >
+    </motion.div>
   );
 }

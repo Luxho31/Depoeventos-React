@@ -63,9 +63,7 @@ export default function ForgotPassword() {
           name="login"
           form={form}
           onFinish={handleForgotPassword}
-          onFinishFailed={() => {
-            console.log("Fallo");
-          }}
+          onFinishFailed={() => {}}
           className="w-[750px] max-md:mx-20 md:mx-32"
         >
           <h2 className="text-3xl text-center font-semibold mb-8">

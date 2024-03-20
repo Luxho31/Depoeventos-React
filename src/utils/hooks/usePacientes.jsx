@@ -1,8 +1,8 @@
-import { useContext } from 'react'
-import PacientesContext from '../context/PacientesProvider'
+import { useContext } from "react";
+import PacientesContext from "../context/PacientesProvider";
 
 const usePacientes = () => {
-    return useContext(PacientesContext)
-}
+  return useContext(PacientesContext);
+};
 
-export default usePacientes
+export default usePacientes;

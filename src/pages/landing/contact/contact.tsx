@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
-import { Checkbox, Form, FormInstance, Input, Select, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { sendMessage } from "../../../services/contact-us-service";
+import { Checkbox, Form, FormInstance, Input, Select, Spin } from "antd";
+import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
+import { sendMessage } from "../../../services/contact-us-service";
 
 export default function Contact() {
   const { Option } = Select;
@@ -21,7 +21,6 @@ export default function Contact() {
         formRef.current.resetFields();
       }
     } catch (error) {
-      console.log(error);
       toast.error("Error al enviar mensaje");
     } finally {
       setLoading(false);
@@ -70,9 +69,7 @@ export default function Contact() {
         <Form
           name="contact-us"
           onFinish={handleSendMessage}
-          onFinishFailed={() => {
-            console.log("Fallo");
-          }}
+          onFinishFailed={() => {}}
           className="w-[580px] max-md:mx-20 md:mx-32"
           ref={(ref) => (formRef.current = ref)}
         >

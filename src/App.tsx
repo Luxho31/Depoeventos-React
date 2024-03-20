@@ -54,8 +54,14 @@ function App() {
             {/* Rutas Protegidas */}
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<HomeDashboard />} />
-              <Route path="/dashboard/disciplines" element={<DisciplinesDashboard />} />
-              <Route path="/dashboard/products" element={<ProductsDashboard />} />
+              <Route
+                path="/dashboard/disciplines"
+                element={<DisciplinesDashboard />}
+              />
+              <Route
+                path="/dashboard/products"
+                element={<ProductsDashboard />}
+              />
               <Route path="/dashboard/Users" element={<UsersDashboard />} />
               <Route
                 path="/dashboard/childrens"
@@ -71,7 +77,10 @@ function App() {
                 element={<TransactionsDashboard />}
               />
               <Route path="/dashboard/profile" element={<Profile />} />
-              <Route path="/dashboard/campuses" element={<CampusesDashboard />} />
+              <Route
+                path="/dashboard/campuses"
+                element={<CampusesDashboard />}
+              />
               <Route
                 path="/dashboard/categories"
                 element={<CategoriesDashboard />}

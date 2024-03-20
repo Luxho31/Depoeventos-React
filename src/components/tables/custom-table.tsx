@@ -31,7 +31,7 @@ const CustomTable = ({ columns, dataTable, expandable }: any) => {
       setData(newData);
       setEditingkey("");
     } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+      console.error("Validate Failed:", errInfo);
     }
   };
 

@@ -1,39 +1,9 @@
-import React, { useState } from "react";
 import { FaInbox, FaRegTrashCan } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
 import { useCart } from "../../../../context/CartProvider";
 
 export default function CartTable() {
   const { products, getTotalPrice } = useCart();
-  console.log(products);
-  type Product = {
-    id: number;
-    // image: string;
-    name: string;
-    price: number;
-    description: string;
-    startDate: string;
-    maxStudents: number;
-    campus: {
-      id: number;
-      name: string;
-      description: string;
-    };
-    category: {
-      id: number;
-      name: string;
-      description: string;
-    };
-    startDateInscription: string;
-    endDateInscription: string;
-    courses: Course[];
-  };
-
-  type Course = {
-    id: number;
-    name: string;
-    description: string;
-  };
 
   return (
     <div className="border rounded-3xl shadow-md p-8">

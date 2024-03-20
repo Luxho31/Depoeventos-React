@@ -20,9 +20,7 @@ export default function ChangePassword() {
   };
 
   const token = window.location.pathname.split("/")[2];
-  console.log(token);
   const handleChangePassword = async (values: any) => {
-    console.log(values.password);
     if (values.password !== values.confirmPassword) {
       toast.error("Las contraseñas no coinciden");
       form.setFields([
@@ -74,9 +72,7 @@ export default function ChangePassword() {
           name="change-password"
           form={form}
           onFinish={handleChangePassword}
-          onFinishFailed={() => {
-            console.log("Fallo");
-          }}
+          onFinishFailed={() => {}}
           className="w-[750px] max-md:mx-20 md:mx-32"
         >
           <h2 className="text-3xl text-center font-semibold mb-8">

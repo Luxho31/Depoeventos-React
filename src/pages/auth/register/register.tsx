@@ -35,18 +35,18 @@ export default function Register() {
   const [form] = useForm();
 
   type RegisterType = {
-    firstName?: String;
-    lastName?: String;
-    motherLastName?: String;
-    documentType?: String;
-    documentNumber?: String;
-    contactNumber?: String;
-    emergencyContactNumber?: String;
-    address?: String;
-    birthDate?: String;
-    country?: String;
-    username?: String;
-    password?: String;
+    firstName?: string;
+    lastName?: string;
+    motherLastName?: string;
+    documentType?: string;
+    documentNumber?: string;
+    contactNumber?: string;
+    emergencyContactNumber?: string;
+    address?: string;
+    birthDate?: string;
+    country?: string;
+    username?: string;
+    password?: string;
   };
 
   const disabledDate = (current: any) => {
@@ -69,8 +69,7 @@ export default function Register() {
         birthDate: values.birthDate.format("YYYY-MM-DD"),
       };
 
-      const response = await register(finalFormData);
-      console.log("Respuesta del registro:", response);
+      await register(finalFormData);
 
       navigate("/");
     } catch (error: any) {

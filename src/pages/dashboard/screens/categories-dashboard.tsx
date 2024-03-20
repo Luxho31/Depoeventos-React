@@ -7,233 +7,216 @@ import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import {
-    deleteCategory,
-    getAllCategories,
+  deleteCategory,
+  getAllCategories,
 } from "../../../services/categories-service";
 import CategoryModal from "../modals/categories-modals-dashboard";
 
 type CategoryData = {
-    id: number;
-    name: string;
-    description: string;
+  id: number;
+  name: string;
+  description: string;
 };
 
 export default function DiciplinesDashboard() {
-    const [campusData, setCategoryData] = useState<CategoryData[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const [openCreateModal, setOpenCreateModal] = useState(false);
-    const [openEditModal, setOpenEditModal] = useState(false);
-    const [editId, setEditId] = useState<number | undefined>(undefined);
-    const [open, setOpen] = useState(false);
-    const { userRole } = useAuth();
-    const usersPerPage: number = 5;
+  const [campusData, setCategoryData] = useState<CategoryData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editId, setEditId] = useState<number | undefined>(undefined);
+  const { userRole } = useAuth();
+  const usersPerPage: number = 5;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const specificRole: string = "ADMIN";
-        if (userRole && userRole.some((role) => role === specificRole)) {
-            setLoading(true);
-            getAllCategories()
-                .then((data: CategoryData[]) => {
-                    setCategoryData(data);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error al obtener categories:", error);
-                    setLoading(false);
-                });
-        } else {
-            navigate("/dashboard")
-        }
-    }, [userRole]);
+  useEffect(() => {
+    const specificRole: string = "ADMIN";
+    if (userRole && userRole.some((role) => role === specificRole)) {
+      setLoading(true);
+      getAllCategories()
+        .then((data: CategoryData[]) => {
+          setCategoryData(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error al obtener categories:", error);
+          setLoading(false);
+        });
+    } else {
+      navigate("/dashboard");
+    }
+  }, [userRole]);
 
-    const handleReload = () => {
-        try {
-            setLoading(true);
-            getAllCategories().then((data) => {
-                setCategoryData(data);
-            });
-        } catch (error) {
-            console.error("Error al recargar categorias:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleReload = () => {
+    try {
+      setLoading(true);
+      getAllCategories().then((data) => {
+        setCategoryData(data);
+      });
+    } catch (error) {
+      console.error("Error al recargar categorias:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const openCreateCategoryModal = () => {
-        setOpenCreateModal(true);
-    };
+  const openCreateCategoryModal = () => {
+    setOpenCreateModal(true);
+  };
 
-    const openEditCategoryModal = (id: number) => {
-        setEditId(id);
-        setOpenEditModal(true);
-    };
+  const openEditCategoryModal = (id: number) => {
+    setEditId(id);
+    setOpenEditModal(true);
+  };
 
-    const handleRemoveCategory = async (id: number) => {
-        try {
-            setLoading(true);
-            await deleteCategory(id);
-            handleReload();
-        } catch (error) {
-            console.error("Error al eliminar categoria:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-    const handleSearch = () => {
-        setCurrentPage(1);
-    };
+  const handleRemoveCategory = async (id: number) => {
+    try {
+      setLoading(true);
+      await deleteCategory(id);
+      handleReload();
+    } catch (error) {
+      console.error("Error al eliminar categoria:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleSearch = () => {
+    setCurrentPage(1);
+  };
 
-    const onPageChange = (page: number) => {
-        const filteredUsers = campusData.filter((category) =>
-            category.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        const indexOfLastUser: number = page * usersPerPage;
-        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        const currentUsers: CategoryData[] = filteredUsers.slice(
-            indexOfFirstUser,
-            indexOfLastUser
-        );
-
-        setCurrentPage(page);
-    };
-
-    const indexOfLastUser: number = currentPage * usersPerPage;
-    const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-
+  const onPageChange = (page: number) => {
     const filteredUsers = campusData.filter((category) =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
+    const indexOfLastUser: number = page * usersPerPage;
+    const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
     const currentUsers: CategoryData[] = filteredUsers.slice(
-        indexOfFirstUser,
-        indexOfLastUser
+      indexOfFirstUser,
+      indexOfLastUser
     );
 
-    return (
-        <div className="h-screen">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div className="flex justify-between">
-                    <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                        <label htmlFor="table-search" className="sr-only">
-                            Search
-                        </label>
-                        <div className="relative">
-                            <Input
-                                id="table-search-users"
-                                placeholder="Buscar por nombre"
-                                className="w-full rounded-xl p-1"
-                                size="small"
-                                prefix={
-                                    <CiSearch className="site-form-item-icon me-1" />
-                                }
-                                value={searchTerm}
-                                onChange={(e) => {
-                                    setSearchTerm(e.target.value);
-                                    handleSearch();
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center mb-5">
-                        <Button
-                            onClick={openCreateCategoryModal}
-                            className="flex items-center gap-x-2"
-                        >
-                            <HiMiniPlus className="text-lg" />
-                            Crear Categorias
-                        </Button>
-                        <CategoryModal
-                            create={true}
-                            open={openCreateModal}
-                            setOpen={setOpenCreateModal}
-                            handleReload={handleReload}
-                        />
-                        <CategoryModal
-                            create={false}
-                            id={editId}
-                            open={openEditModal}
-                            setOpen={setOpenEditModal}
-                            handleReload={handleReload}
-                        />
-                    </div>
-                </div>
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-3">
-                                ID
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Nombre
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Descripción
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Operaciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentUsers.map((user, index) => (
-                            <tr
-                                key={index}
-                                className="bg-white border-b hover:bg-gray-50"
-                            >
-                                <td className="px-6 py-4">{user.id}</td>
-                                <td className="px-6 py-4">{user.name}</td>
-                                <td className="px-6 py-4">
-                                    {user.description}
-                                </td>
-                                <td className="flex px-6 py-4 gap-x-2">
-                                    <button
-                                        className="bg-slate-300 rounded-md p-1"
-                                        onClick={() =>
-                                            openEditCategoryModal(user.id)
-                                        }
-                                    >
-                                        <FaEdit className="text-xl text-gray-700" />
-                                    </button>
-                                    <Popconfirm
-                                        title="Eliminar categoria?"
-                                        description="Esta acción no se puede deshacer."
-                                        onConfirm={() =>
-                                            handleRemoveCategory(user.id)
-                                        }
-                                        okText="Si"
-                                        cancelText="No"
-                                        okButtonProps={{
-                                            className:
-                                                "bg-red-500 text-white !hover:bg-red-600",
-                                        }}
-                                        icon={
-                                            <QuestionCircleOutlined
-                                                style={{ color: "red" }}
-                                            />
-                                        }
-                                    >
-                                        <button className="bg-red-300 rounded-md p-1">
-                                            <FaRegTrashAlt className="text-xl text-gray-700" />
-                                        </button>
-                                    </Popconfirm>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <Pagination
-                    className="mt-4"
-                    current={currentPage}
-                    total={filteredUsers.length}
-                    pageSize={usersPerPage}
-                    onChange={onPageChange}
-                    showSizeChanger={false}
-                />
+    setCurrentPage(page);
+  };
+
+  const indexOfLastUser: number = currentPage * usersPerPage;
+  const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+
+  const filteredUsers = campusData.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const currentUsers: CategoryData[] = filteredUsers.slice(
+    indexOfFirstUser,
+    indexOfLastUser
+  );
+
+  return (
+    <div className="h-screen">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="flex justify-between">
+          <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+            <label htmlFor="table-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative">
+              <Input
+                id="table-search-users"
+                placeholder="Buscar por nombre"
+                className="w-full rounded-xl p-1"
+                size="small"
+                prefix={<CiSearch className="site-form-item-icon me-1" />}
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  handleSearch();
+                }}
+              />
             </div>
+          </div>
+          <div className="flex justify-between items-center mb-5">
+            <Button
+              onClick={openCreateCategoryModal}
+              className="flex items-center gap-x-2"
+            >
+              <HiMiniPlus className="text-lg" />
+              Crear Categorias
+            </Button>
+            <CategoryModal
+              create={true}
+              open={openCreateModal}
+              setOpen={setOpenCreateModal}
+              handleReload={handleReload}
+            />
+            <CategoryModal
+              create={false}
+              id={editId}
+              open={openEditModal}
+              setOpen={setOpenEditModal}
+              handleReload={handleReload}
+            />
+          </div>
         </div>
-    );
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                ID
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Nombre
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Descripción
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Operaciones
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((user, index) => (
+              <tr key={index} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4">{user.id}</td>
+                <td className="px-6 py-4">{user.name}</td>
+                <td className="px-6 py-4">{user.description}</td>
+                <td className="flex px-6 py-4 gap-x-2">
+                  <button
+                    className="bg-slate-300 rounded-md p-1"
+                    onClick={() => openEditCategoryModal(user.id)}
+                  >
+                    <FaEdit className="text-xl text-gray-700" />
+                  </button>
+                  <Popconfirm
+                    title="Eliminar categoria?"
+                    description="Esta acción no se puede deshacer."
+                    onConfirm={() => handleRemoveCategory(user.id)}
+                    okText="Si"
+                    cancelText="No"
+                    okButtonProps={{
+                      className: "bg-red-500 text-white !hover:bg-red-600",
+                    }}
+                    icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                  >
+                    <button className="bg-red-300 rounded-md p-1">
+                      <FaRegTrashAlt className="text-xl text-gray-700" />
+                    </button>
+                  </Popconfirm>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Pagination
+          className="mt-4"
+          current={currentPage}
+          total={filteredUsers.length}
+          pageSize={usersPerPage}
+          onChange={onPageChange}
+          showSizeChanger={false}
+        />
+      </div>
+    </div>
+  );
 }
