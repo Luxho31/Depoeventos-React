@@ -52,11 +52,18 @@ export default function Products() {
   useEffect(() => {
     getAllProducts()
       .then((data) => {
-        setProductData(data);
-        setFilteredData(data);
+        const currentDate = new Date();
+        const filteredProducts = data.filter((product: Product) => {
+          const startDate = new Date(product.startDate);
+          const endDate = new Date(startDate);
+          endDate.setMonth(endDate.getMonth() + 6);
+          return currentDate >= startDate && currentDate <= endDate;
+        });
+        setProductData(filteredProducts);
+        setFilteredData(filteredProducts);
       })
       .catch((error) => {
-        console.error("Error al obtener disciplinas:", error);
+        console.error("Error al obtener productos:", error);
       });
 
     getAllCategories()
