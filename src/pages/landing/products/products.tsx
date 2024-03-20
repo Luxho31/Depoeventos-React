@@ -11,7 +11,7 @@ const { Panel } = Collapse;
 
 type Product = {
   id: number;
-  // image: string;
+  photo: string;
   name: string;
   price: number;
   description: string;

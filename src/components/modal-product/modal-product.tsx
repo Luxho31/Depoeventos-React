@@ -10,7 +10,7 @@ import { getChildrensByUserId } from "../../services/children-service";
 
 type Product = {
   id: number;
-  // image: string;
+  photo: string;
   name: string;
   price: number;
   description: string;
@@ -111,7 +111,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
           <div className="w-[40%] ">
             <img
               className="w-full h-full border-md object-cover object-center p-4"
-              src="https://img.freepik.com/vector-premium/futbol-infantil-ninos-juegan-juego-competitivo-deportivo-parque-portero-pequenos-jugadores-futbol-ninos-corriendo-al-aire-libre-atletas-pateando-pelota-esplendido-concepto-vector-campeonato-equipo_533410-2109.jpg"
+              src={product.photo}
               alt={product.name}
             />
           </div>

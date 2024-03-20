@@ -27,7 +27,7 @@ type productType = {
 
 export const createProduct = async (form: productType) => {
   try {
-    await fetch(`${BASE_URL}/api/products`, {
+    const productResponse = await fetch(`${BASE_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,6 +35,9 @@ export const createProduct = async (form: productType) => {
       },
       body: JSON.stringify(form),
     });
+    const response = await productResponse.json();
+    console.log(response);
+    return response;
   } catch (error) {
     console.error("Error al crear un producto:", error);
     throw error;
@@ -97,5 +100,29 @@ export const deleteProduct = async (id: number) => {
   } catch (error) {
     console.error("Error al eliminar un producto:", error);
     throw error;
+  }
+};
+
+export const uploadProductImage = async (productId: number, file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(
+      `${BASE_URL}/api/products/uploadProductPicture/${productId}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      return data; // Retorna los datos recibidos del servidor si la carga es exitosa
+    }
+    // else {
+    //     throw new Error(data.message || "Error al subir la imagen del voucher");
+    // }
+  } catch (error) {
+    console.error("Error al subir la imagen del producto:", error);
+    // throw error;
   }
 };
