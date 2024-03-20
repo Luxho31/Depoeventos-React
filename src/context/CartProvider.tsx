@@ -135,9 +135,12 @@ export const CartProvider = ({ children }: any) => {
   const clearCart = async () => {
     try {
       const user = await getUserId(token!);
-      const response = await fetch(`http://localhost:8080/api/cart/${user}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/cart/deleteAll/${user}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error al limpiar el carrito");
@@ -146,6 +149,26 @@ export const CartProvider = ({ children }: any) => {
       setProducts([]);
     } catch (error) {
       console.error("Error al limpiar el carrito:", error);
+    }
+  };
+
+  const removeProduct = async (productId: number) => {
+    try {
+      const user = await getUserId(token!);
+      const response = await fetch(
+        `http://localhost:8080/api/cart/${user}/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el producto del carrito");
+      }
+
+      updateCart();
+    } catch (error) {
+      console.error("Error al eliminar el producto del carrito:", error);
     }
   };
 

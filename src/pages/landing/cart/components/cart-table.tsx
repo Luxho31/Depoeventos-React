@@ -1,9 +1,10 @@
 import { FaInbox, FaRegTrashCan } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
 import { useCart } from "../../../../context/CartProvider";
+import { Popconfirm } from "antd";
 
 export default function CartTable() {
-  const { products, getTotalPrice } = useCart();
+  const { products, getTotalPrice, clearCart } = useCart();
 
   return (
     <div className="border rounded-3xl shadow-md p-8">
@@ -15,10 +16,18 @@ export default function CartTable() {
         {products.length == 0 ? (
           <></>
         ) : (
-          <button className="bg-transparent text-red-500 flex items-center p-2 rounded mb-4">
-            <FaRegTrashCan className="me-2" />
-            <span>Limpiar carrito</span>
-          </button>
+          <Popconfirm
+            title="¿Estás seguro de que deseas limpiar el carrito?"
+            onConfirm={clearCart}
+            okText="Sí"
+            okButtonProps={{ className: "bg-blue-700"}}
+            cancelText="No"
+          >
+            <button className="bg-transparent text-red-500 flex items-center p-2 rounded mb-4">
+              <FaRegTrashCan className="me-2" />
+              <span>Limpiar carrito</span>
+            </button>
+          </Popconfirm>
         )}
       </div>
       <ul className="list-disc p-0">

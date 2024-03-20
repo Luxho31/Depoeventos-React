@@ -1,6 +1,6 @@
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Avatar, Badge, Button, Dropdown, Space, Spin } from "antd";
+import { Avatar, Badge, Button, Dropdown, Popconfirm, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
@@ -15,7 +15,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { logout, isAuthenticated, userInfo, cargando } = useAuth();
-  const { products } = useCart();
+  const { products, clearCart } = useCart();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -137,9 +137,17 @@ export default function Navbar() {
                         )}
                       </tbody>
                     </table>
-                    <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">
-                      Vaciar Carrito
-                    </button>
+                    <Popconfirm
+                      title="¿Estás seguro de que deseas limpiar el carrito?"
+                      onConfirm={clearCart}
+                      okText="Sí"
+                      okButtonProps={{ className: "bg-blue-700" }}
+                      cancelText="No"
+                    >
+                      <button className="w-full text-neutral-400 border-neutral-300 border-[1px] rounded-md py-2 my-4">
+                        Vaciar Carrito
+                      </button>
+                    </Popconfirm>
                   </div>
                 }
                 className="border-none"
