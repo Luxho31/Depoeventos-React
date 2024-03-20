@@ -28,7 +28,7 @@ export default function Cart() {
         </div>
         <div className={`${progressPercent === 100 ? "block" : "hidden"}`}>
           <h1 className="animate__animated animate__backInDown">
-            Gracias por la compra
+            Compra realizada
           </h1>
         </div>
         <div className="relative mt-8 mb-12">
@@ -125,10 +125,10 @@ export default function Cart() {
             Gracias por adquirir nuestros servicios
           </h2>
           <span className="text-lg text-center text-neutral-400">
-            Número de orden: 2017182818828182881 El pago será verificado entre 1
-            a 3 días hábiles,
-            <br />
-            cuando se apruebe le llegará un correo con los detalles.
+            Su compra ha sido registrada y se encuentra en proceso de
+            aprobación, se ha separado un cupo en los productos que ha
+            adquirido. <br />
+            Se envió un correo con los detalles de su compra.
           </span>
           <Link
             to="/"
