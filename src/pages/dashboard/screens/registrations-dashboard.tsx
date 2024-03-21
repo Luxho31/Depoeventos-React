@@ -1,18 +1,45 @@
-import { Button, Input, Pagination, Popconfirm, Select } from "antd";
-import CustomTable from "../../../components/tables/custom-table";
-import { CiSearch } from "react-icons/ci";
-import DisciplineModal from "../modals/disciplines-modals-dashboard";
-import { HiMiniPlus } from "react-icons/hi2";
-import { FaEdit, FaEye, FaRegTrashAlt } from "react-icons/fa";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Input, Pagination, Select } from "antd";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthProvider";
+import { CiSearch } from "react-icons/ci";
+import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
+import { getAllCourseRegistration, getAllRegistration } from "../../../services/Inscriptions-service";
+
+type ProductType = {
+    id?: number;
+    name?: string;
+    campus: {
+        id?: number;
+        name?: string;
+    };
+    category: {
+        id?: number;
+        name?: string;
+    };
+};
+
+type ChildrenType = {
+    id?: number;
+    name?: string;
+    lastName?: number;
+    motherLastName?: string;
+};
+
+type UserType = {
+    id?: number;
+    firstName?: string;
+    lastName?: number;
+    motherLastName?: string;
+    contactNumber?: string;
+};
 
 type RegistrationData = {
     id: number;
-    name: string;
-    description: string;
+    inscriptionDate: string;
+    product: ProductType;
+    children: ChildrenType;
+    user: UserType;
 };
 
 export default function RegistrationsDashboard() {
@@ -34,15 +61,15 @@ export default function RegistrationsDashboard() {
         const specificRoles = ["USER", "ADMIN"];
         if (userRole && userRole.some((role) => specificRoles.includes(role))) {
             setLoading(true);
-            // getAllRegistration()
-            //     .then((data: RegistrationData[]) => {
-            //         setRegistrationData(data);
-            //         setLoading(false);
-            //     })
-            //     .catch((error) => {
-            //         console.error("Error al obtener matriculas:", error);
-            //         setLoading(false);
-            //     });
+            getAllRegistration()
+                .then((data: RegistrationData[]) => {
+                    setRegistrationData(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error("Error al obtener matriculas:", error);
+                    setLoading(false);
+                });
         } else {
             navigate("/dashboard");
         }
@@ -74,7 +101,9 @@ export default function RegistrationsDashboard() {
     const onPageChange = (page: number) => {
         // Mantén la búsqueda al cambiar de página
         const filteredUsers = registrationData.filter((registration) =>
-            registration.name.toLowerCase().includes(searchTerm.toLowerCase())
+            registration.product.name!
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
         );
         const indexOfLastUser: number = page * usersPerPage;
         const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
@@ -90,7 +119,9 @@ export default function RegistrationsDashboard() {
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
     const filteredUsers = registrationData.filter((registration) =>
-        registration.name.toLowerCase().includes(searchTerm.toLowerCase())
+        registration.product.name!
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
     );
 
     const currentUsers: RegistrationData[] = filteredUsers.slice(
@@ -131,8 +162,11 @@ export default function RegistrationsDashboard() {
                             style={{ width: 150 }}
                             // onChange={handleChange}
                             options={[
-                              { value: "Todos los productos", label: "Todos los productos" },
-                              { value: "Producto", label: "Producto" },
+                                {
+                                    value: "Todos los productos",
+                                    label: "Todos los productos",
+                                },
+                                { value: "Producto", label: "Producto" },
                                 { value: "Yiminghe", label: "yiminghe" },
                                 {
                                     value: "disabled",
@@ -172,10 +206,16 @@ export default function RegistrationsDashboard() {
                                 ID
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Nombre
+                                Fecha de inscripción
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Descripción
+                                Producto
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Sede/Categoría
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Hijo
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Operaciones
@@ -189,9 +229,24 @@ export default function RegistrationsDashboard() {
                                 className="bg-white border-b hover:bg-gray-50"
                             >
                                 <td className="px-6 py-4">{user.id}</td>
-                                <td className="px-6 py-4">{user.name}</td>
                                 <td className="px-6 py-4">
-                                    {user.description}
+                                    {user.inscriptionDate}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {user.product.name}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="text-base font-semibold">
+                                        {user.product.campus.name}
+                                    </div>
+                                    <div className="font-normal text-gray-500">
+                                        {user.product.category.name}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {user.children.name}{" "}
+                                    {user.children.lastName}{" "}
+                                    {user.children.motherLastName}
                                 </td>
                                 <td className="flex px-6 py-4 gap-x-2">
                                     <button

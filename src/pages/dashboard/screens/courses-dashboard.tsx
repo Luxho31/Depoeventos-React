@@ -1,15 +1,45 @@
-import { useEffect, useState } from "react";
-import CustomTable from "../../../components/tables/custom-table";
-import { useAuth } from "../../../context/AuthProvider";
-import { useNavigate } from "react-router-dom";
 import { Input, Pagination } from "antd";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
+import { getAllCourseRegistration } from "../../../services/Inscriptions-service";
+
+type ProductType = {
+    id?: number;
+    name?: string;
+    campus: {
+        id?: number;
+        name?: string;
+    };
+    category: {
+        id?: number;
+        name?: string;
+    };
+};
+
+type ChildrenType = {
+    id?: number;
+    name?: string;
+    lastName?: number;
+    motherLastName?: string;
+};
+
+// type UserType = {
+//     id?: number;
+//     firstName?: string;
+//     lastName?: number;
+//     motherLastName?: string;
+//     contactNumber?: string;
+// }
 
 type CourseRegistrationData = {
-  id: number;
-  name: string;
-  description: string;
+    id: number;
+    inscriptionDate: string;
+    product: ProductType;
+    children: ChildrenType;
+    //   user: UserType;
 };
 
 export default function CoursesDashboard() {
@@ -31,15 +61,19 @@ export default function CoursesDashboard() {
         const specificRoles = ["USER", "ADMIN"];
         if (userRole && userRole.some((role) => specificRoles.includes(role))) {
             setLoading(true);
-            // getAllCourseRegistration()
-            //     .then((data: CourseRegistrationData[]) => {
-            //         setCourseRegistrationData(data);
-            //         setLoading(false);
-            //     })
-            //     .catch((error) => {
-            //         console.error("Error al obtener matriculas por curso:", error);
-            //         setLoading(false);
-            //     });
+            getAllCourseRegistration()
+                .then((data: CourseRegistrationData[]) => {
+                    console.log(data);
+                    setCourseRegistrationData(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error(
+                        "Error al obtener matriculas por curso:",
+                        error
+                    );
+                    setLoading(false);
+                });
         } else {
             navigate("/dashboard");
         }
@@ -70,8 +104,11 @@ export default function CoursesDashboard() {
 
     const onPageChange = (page: number) => {
         // Mantén la búsqueda al cambiar de página
-        const filteredUsers = courseRegistrationData.filter((courseRegistration) =>
-            courseRegistration.name.toLowerCase().includes(searchTerm.toLowerCase())
+        const filteredUsers = courseRegistrationData.filter(
+            (courseRegistration) =>
+                courseRegistration.inscriptionDate
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
         );
         const indexOfLastUser: number = page * usersPerPage;
         const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
@@ -87,7 +124,9 @@ export default function CoursesDashboard() {
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
     const filteredUsers = courseRegistrationData.filter((courseRegistration) =>
-        courseRegistration.name.toLowerCase().includes(searchTerm.toLowerCase())
+        courseRegistration.inscriptionDate
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
     );
 
     const currentUsers: CourseRegistrationData[] = filteredUsers.slice(
@@ -135,10 +174,16 @@ export default function CoursesDashboard() {
                                 ID
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Nombre
+                                Fecha de inscripción
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Descripción
+                                Producto
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Sede/Categoría
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Hijo
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Operaciones
@@ -152,15 +197,32 @@ export default function CoursesDashboard() {
                                 className="bg-white border-b hover:bg-gray-50"
                             >
                                 <td className="px-6 py-4">{user.id}</td>
-                                <td className="px-6 py-4">{user.name}</td>
                                 <td className="px-6 py-4">
-                                    {user.description}
+                                    {user.inscriptionDate}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {user.product.name}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="text-base font-semibold">
+                                        {user.product.campus.name}
+                                    </div>
+                                    <div className="font-normal text-gray-500">
+                                        {user.product.category.name}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {user.children.name}{" "}
+                                    {user.children.lastName}{" "}
+                                    {user.children.motherLastName}
                                 </td>
                                 <td className="flex px-6 py-4 gap-x-2">
                                     <button
                                         className="bg-slate-300 rounded-md p-1"
                                         onClick={() =>
-                                            openSeeCourseRegistrationModal(user.id)
+                                            openSeeCourseRegistrationModal(
+                                                user.id
+                                            )
                                         }
                                     >
                                         <FaEye className="text-xl text-gray-700" />

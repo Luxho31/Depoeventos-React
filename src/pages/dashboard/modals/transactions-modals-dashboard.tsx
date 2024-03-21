@@ -223,6 +223,7 @@ export default function TransactionModal({
               { value: "SUCCESS", label: "SUCCESS" },
               { value: "DENIED", label: "DENIED" },
             ]}
+            disabled={type == "see"}
           />
         </Form.Item>
 
