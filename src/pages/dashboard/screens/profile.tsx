@@ -78,6 +78,7 @@ export default function Profile() {
     };
 
     useEffect(() => {
+        setPhoto(photo)
         handleReload();
     }, []);
 
@@ -93,7 +94,7 @@ export default function Profile() {
             if (profileImage) {
                 await handleImageUpload(profileImage.originFileObj); // Cambiado a voucherImage.originFileObj
             }
-            handleReload();
+            window.location.reload();
         } catch (error) {
             console.error("Error al actualizar datos de usuario:", error);
             throw error;
@@ -256,7 +257,7 @@ export default function Profile() {
                                 uploadButton
                             )}
                         </Upload> */}
-                        <Upload {...propsUpload} disabled={!fieldsEnabled}>
+                        <Upload {...propsUpload} disabled={!fieldsEnabled} showUploadList={false}>
                             <Button icon={<UploadOutlined />}>
                                 Subir foto
                             </Button>

@@ -4,7 +4,10 @@ import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { getAllCourseRegistration, getAllRegistration } from "../../../services/Inscriptions-service";
+import {
+    getAllCourseRegistration,
+    getAllRegistration,
+} from "../../../services/Inscriptions-service";
 
 type ProductType = {
     id?: number;
@@ -101,8 +104,8 @@ export default function RegistrationsDashboard() {
     const onPageChange = (page: number) => {
         // Mantén la búsqueda al cambiar de página
         const filteredUsers = registrationData.filter((registration) =>
-            registration.product.name!
-                .toLowerCase()
+            registration.product
+                .name!.toLowerCase()
                 .includes(searchTerm.toLowerCase())
         );
         const indexOfLastUser: number = page * usersPerPage;
@@ -119,8 +122,8 @@ export default function RegistrationsDashboard() {
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
     const filteredUsers = registrationData.filter((registration) =>
-        registration.product.name!
-            .toLowerCase()
+        registration.product
+            .name!.toLowerCase()
             .includes(searchTerm.toLowerCase())
     );
 
@@ -155,41 +158,37 @@ export default function RegistrationsDashboard() {
                         </div>
                     </div>
                     <div className="flex justify-between items-center gap-x-4 mb-5">
-                        <h2>Filtros:</h2>
+                        {/* <h2>Filtros:</h2>
                         <Select
-                            // defaultValue="Todos los productos"
-                            placeholder="Por producto"
-                            style={{ width: 150 }}
-                            // onChange={handleChange}
-                            options={[
-                                {
-                                    value: "Todos los productos",
-                                    label: "Todos los productos",
-                                },
-                                { value: "Producto", label: "Producto" },
-                                { value: "Yiminghe", label: "yiminghe" },
-                                {
-                                    value: "disabled",
-                                    label: "Disabled",
-                                    disabled: true,
-                                },
-                            ]}
+                            placeholder="Seleccionar Producto"
+                            className="w-full h-14"
+                            options={products.map((product: any) => {
+                                return {
+                                    value: product.id,
+                                    label: product.name,
+                                };
+                            })}
                         />
                         <Select
-                            defaultValue="lucy"
-                            style={{ width: 120 }}
-                            // onChange={handleChange}
-                            options={[
-                                { value: "jack", label: "Jack" },
-                                { value: "lucy", label: "Lucy" },
-                                { value: "Yiminghe", label: "yiminghe" },
-                                {
-                                    value: "disabled",
-                                    label: "Disabled",
-                                    disabled: true,
-                                },
-                            ]}
+                            placeholder="Seleccionar Sede"
+                            className="w-full h-14"
+                            options={campuses.map((campus: any) => {
+                                return {
+                                    value: campus.id,
+                                    label: campus.name,
+                                };
+                            })}
                         />
+                        <Select
+                            placeholder="Seleccionar Categoria"
+                            className="w-full h-14"
+                            options={categories.map((category: any) => {
+                                return {
+                                    value: category.id,
+                                    label: category.name,
+                                };
+                            })}
+                        /> */}
                         {/* <RegistrationModal
                                 type="see"
                                 id={seeId}
