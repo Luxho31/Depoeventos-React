@@ -211,21 +211,6 @@ export default function DiciplinesDashboard() {
                   >
                     <FaEdit className="text-xl text-gray-700" />
                   </button>
-                  <Popconfirm
-                    title="Eliminar disciplina?"
-                    description="Esta acción no se puede deshacer."
-                    onConfirm={() => handleRemoveProduct(user.id)}
-                    okText="Si"
-                    cancelText="No"
-                    okButtonProps={{
-                      className: "bg-red-500 text-white !hover:bg-red-600",
-                    }}
-                    icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-                  >
-                    <button className="bg-red-300 rounded-md p-1">
-                      <FaRegTrashAlt className="text-xl text-gray-700" />
-                    </button>
-                  </Popconfirm>
                 </td>
               </tr>
             ))}
