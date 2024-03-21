@@ -13,7 +13,7 @@ import {
   // UploadProps,
   message,
 } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "../../../../context/CartProvider";
 import {
   createOrder,
@@ -112,6 +112,15 @@ export default function PaymentStep({ setNextStep }: any) {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const [voucherImage, setVoucherImage] = useState<any>(null);
+  const [disableYapePlin, setDisableYapePlin] = useState(false);
+
+  useEffect(() => {
+    if (getTotalPrice() > 500) {
+      setDisableYapePlin(true);
+    } else {
+      setDisableYapePlin(false);
+    }
+  }, [getTotalPrice]);
 
   const onChange = (key: string | string[]) => {
     console.log(key);
@@ -166,6 +175,12 @@ export default function PaymentStep({ setNextStep }: any) {
     value: string;
     label: string;
   };
+
+  const paymentMethodOptions = [
+    { value: "YAPE", label: "YAPE", disabled: disableYapePlin },
+    { value: "PLIN", label: "PLIN", disabled: disableYapePlin },
+    { value: "TRANSFERENCIA_BANCARIA", label: "Transferencia bancaria" },
+  ];
 
   const YapeOptions: Options[] = [
     { value: "Mibanco", label: "Mibanco" },
@@ -320,16 +335,8 @@ export default function PaymentStep({ setNextStep }: any) {
               <Select
                 placeholder="Método de Pago"
                 className="w-full !h-16"
-                // style={{ width: 120 }}
                 size="large"
-                options={[
-                  { value: "YAPE", label: "YAPE" },
-                  { value: "PLIN", label: "PLIN" },
-                  {
-                    value: "TRANSFERENCIA_BANCARIA",
-                    label: "Transferencia bancaria",
-                  },
-                ]}
+                options={paymentMethodOptions}
                 onChange={handlePaymentMethodChange}
               />
             </Form.Item>
