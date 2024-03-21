@@ -1,5 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, Spin } from "antd";
+import { Form, Input, Modal, Popconfirm, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import {
@@ -37,6 +37,7 @@ export default function DisciplineModal({
   const updateDisciplineForm = async (values: any) => {
     try {
       setLoading(true);
+      values.photo = "";
       await updateDiscipline(values, id);
       setOpen(false);
       handleReload();
@@ -50,6 +51,7 @@ export default function DisciplineModal({
   const createDisciplineForm = async (values: any) => {
     try {
       setLoading(true);
+      values.photo = "";
       await createDiscipline(values);
       setOpen(false);
       form.resetFields();
@@ -76,7 +78,7 @@ export default function DisciplineModal({
         onFinish={(values) => {
           create ? createDisciplineForm(values) : updateDisciplineForm(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-md:mx-20 md:mx-32"
         form={form}
       >
@@ -122,40 +124,47 @@ export default function DisciplineModal({
           </Form.Item>
 
           {/* ------------------Fotografia de la Disciplina------------------ */}
-          <Form.Item
-            name="photo"
-            rules={[
-              {
-                required: true,
-                message: "Por favor ingrese fotografia de la disciplina.",
-              },
-            ]}
-            className="cursor-text"
-          >
-            <Input
-              className="w-full rounded-xl p-4"
-              placeholder="Ingresa la fotografia de la disciplina"
-              size="large"
-            ></Input>
-          </Form.Item>
+          <Form.Item name="photo"></Form.Item>
         </div>
 
         <Form.Item className="w-full flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
-            disabled={loading}
-          >
-            {loading ? (
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-              />
-            ) : create ? (
-              "Crear"
-            ) : (
-              "Actualizar"
-            )}
-          </button>
+          {create ? (
+            <button
+              type="submit"
+              className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+              disabled={loading}
+            >
+              {loading ? (
+                <Spin
+                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+                />
+              ) : (
+                "Crear"
+              )}
+            </button>
+          ) : (
+            <Popconfirm
+              title="¿Estás seguro de que deseas actualizar esta disciplina?"
+              okButtonProps={{ className: "bg-blue-500 text-white" }}
+              onConfirm={() => form.submit()}
+              okText="Sí"
+              cancelText="No"
+            >
+              <button
+                type="button"
+                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spin
+                    indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+                  />
+                ) : (
+                  "Actualizar"
+                )}
+              </button>
+            </Popconfirm>
+          )}
         </Form.Item>
       </Form>
     </Modal>
