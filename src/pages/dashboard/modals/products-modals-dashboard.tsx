@@ -101,7 +101,7 @@ export default function ProductModal({
       values.photo = null;
       const productId = await createProduct(values);
       if (productImage) {
-        await handleImageUpload(productId.id, productImage.originFileObj); // Cambiado a voucherImage.originFileObj
+        await handleImageUpload(productId.id, productImage.originFileObj);
       }
       setOpen(false);
       form.resetFields();
@@ -222,7 +222,7 @@ export default function ProductModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-md:mx-20 md:mx-32"
         form={form}
       >
@@ -231,7 +231,7 @@ export default function ProductModal({
           label="Nombre"
           rules={[
             {
-              required: selectedCoursesCount < 2,
+              required: selectedCoursesCount > 2,
               message: "El nombre es requerido",
             },
           ]}
@@ -248,7 +248,7 @@ export default function ProductModal({
         <Form.Item
           name="description"
           label="Descripción"
-          rules={[{ required: true, message: "El nombre es requerido" }]}
+          rules={[{ required: true, message: "La descripción es requerida" }]}
         >
           <TextArea
             className="w-full rounded-xl p-4"
@@ -261,7 +261,7 @@ export default function ProductModal({
         <Form.Item
           name="price"
           label="Precio"
-          rules={[{ required: true, message: "El nombre es requerido" }]}
+          rules={[{ required: true, message: "El precio es requerido" }]}
         >
           <InputNumber
             className="w-full rounded-xl p-4"
@@ -287,7 +287,7 @@ export default function ProductModal({
         <Form.Item
           name="maxStudents"
           label="Cantidad de estudiantes"
-          rules={[{ required: true, message: "El nombre es requerido" }]}
+          rules={[{ required: true, message: "La cantidad de estudiantes es requerida" }]}
         >
           <InputNumber
             className="w-full rounded-xl p-4"
@@ -315,7 +315,7 @@ export default function ProductModal({
         <Form.Item
           name="categoryId"
           label="Categoria"
-          rules={[{ required: true, message: "La sede es requerida" }]}
+          rules={[{ required: true, message: "La categoria es requerida" }]}
         >
           <Select
             placeholder="Seleccionar Categoria"
@@ -330,7 +330,7 @@ export default function ProductModal({
         <Form.Item
           name="coursesId"
           label="Disciplina"
-          rules={[{ required: true, message: "La sede es requerida" }]}
+          rules={[{ required: true, message: "Las disciplinas son requeridas" }]}
         >
           <Select
             mode="multiple"
