@@ -85,27 +85,6 @@ export default function Profile() {
     // const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
 
-    // const handleChange: UploadProps["onChange"] = (info) => {
-    //     if (info.file.status === "uploading") {
-    //         setLoading(true);
-    //         return;
-    //     }
-    //     if (info.file.status === "done") {
-    //         // Get this url from response in real world.
-    //         getBase64(info.file.originFileObj as FileType, (url) => {
-    //             setLoading(false);
-    //             setImageUrl(url);
-    //         });
-    //     }
-    // };
-
-    // const uploadButton = (
-    //     <button style={{ border: 0, background: "none" }} type="button">
-    //         {loading ? <LoadingOutlined /> : <PlusOutlined />}
-    //         <div style={{ marginTop: 8 }}>Upload</div>
-    //     </button>
-    // );
-
     const updateUserInformation = async (data: any) => {
         console.log(data);
         try {
@@ -134,42 +113,6 @@ export default function Profile() {
             });
         }
     };
-
-    // const handleImageUpload = async (file: any) => {
-    //     try {
-    //         setLoading(true);
-    //         const email = await getUserInfo(localStorage.getItem("token")).then(
-    //             (data) => {
-    //                 return data.username;
-    //             }
-    //         );
-    //         await uploadProfileImage(email, file); // Llamar a la función uploadProfileImage con el correo electrónico y el archivo de imagen
-    //         message.success("Imagen de perfil subida exitosamente");
-    //     } catch (error) {
-    //         console.error("Error al subir la imagen:", error);
-    //         message.error(
-    //             "Error al subir la imagen. Por favor, intenta de nuevo."
-    //         );
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const handleChange: UploadProps["onChange"] = async (info) => {
-    //     if (info.file.status === "uploading") {
-    //         setLoading(true);
-    //         return;
-    //     }
-    //     if (info.file.status === "done") {
-    //         // Get this url from response in real world.
-    //         getBase64(info.file.originFileObj as FileType, (url) => {
-    //             setLoading(false);
-    //             setImageUrl(url);
-    //         });
-    //         // Handle image upload
-    //         await handleImageUpload(info.file.originFileObj);
-    //     }
-    // };
 
     // Funcionalidad de deshabilitar los campos
 
@@ -217,6 +160,63 @@ export default function Profile() {
         },
     };
 
+    const handleChange: UploadProps["onChange"] = (info) => {
+        if (info.file.status === "uploading") {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === "done") {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as FileType, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
+
+    // const uploadButton = (
+    //     <button style={{ border: 0, background: "none" }} type="button">
+    //         {loading ? <LoadingOutlined /> : <PlusOutlined />}
+    //         <div style={{ marginTop: 8 }}>Upload</div>
+    //     </button>
+    // );
+
+    // const handleImageUpload = async (file: any) => {
+    //     try {
+    //         setLoading(true);
+    //         const email = await getUserInfo(localStorage.getItem("token")).then(
+    //             (data) => {
+    //                 return data.username;
+    //             }
+    //         );
+    //         await uploadProfileImage(file); // Llamar a la función uploadProfileImage con el correo electrónico y el archivo de imagen
+    //         message.success("Imagen de perfil subida exitosamente");
+    //     } catch (error) {
+    //         console.error("Error al subir la imagen:", error);
+    //         message.error(
+    //             "Error al subir la imagen. Por favor, intenta de nuevo."
+    //         );
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // const handleChange: UploadProps["onChange"] = async (info) => {
+    //     if (info.file.status === "uploading") {
+    //         setLoading(true);
+    //         return;
+    //     }
+    //     if (info.file.status === "done") {
+    //         // Get this url from response in real world.
+    //         getBase64(info.file.originFileObj as FileType, (url) => {
+    //             setLoading(false);
+    //             setImageUrl(url);
+    //         });
+    //         // Handle image upload
+    //         await handleImageUpload(info.file.originFileObj);
+    //     }
+    // };
+
     return (
         <div className="flex">
             <div className="w-full">
@@ -241,21 +241,21 @@ export default function Profile() {
                         </div>
                         {/* <button className="px-12 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600">Editar Foto</button> */}
                         {/* <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                    beforeUpload={beforeUpload}
-                    onChange={handleChange}
-                    disabled={!fieldsEnabled}
-                  >
-                    {imageUrl ? (
-                      <img alt="avatar" style={{ width: "100%" }} />
-                    ) : (
-                      uploadButton
-                    )}
-                  </Upload> */}
+                            name="avatar"
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            beforeUpload={beforeUpload}
+                            onChange={handleChange}
+                            disabled={!fieldsEnabled}
+                        >
+                            {imageUrl ? (
+                                <img alt="avatar" style={{ width: "100%" }} />
+                            ) : (
+                                uploadButton
+                            )}
+                        </Upload> */}
                         <Upload {...propsUpload} disabled={!fieldsEnabled}>
                             <Button icon={<UploadOutlined />}>
                                 Subir foto
