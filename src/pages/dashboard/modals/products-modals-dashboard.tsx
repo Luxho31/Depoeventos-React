@@ -194,6 +194,13 @@ export default function ProductModal({
     headers: {
       authorization: "authorization-text",
     },
+    beforeUpload: (file: any) => {
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('You can only upload image files!');
+      }
+      return isImage;
+    },
     onChange(info: any) {
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
