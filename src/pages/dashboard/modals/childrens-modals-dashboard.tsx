@@ -12,10 +12,12 @@ import { useEffect, useState } from "react";
 import { FaAddressCard, FaArrowRight, FaChevronLeft } from "react-icons/fa";
 import {
     createChildren,
+    deleteChildren,
     getChildrenById,
     getChildrensByUserId,
     updateChildren,
 } from "../../../services/children-service";
+import moment from "moment";
 
 export default function ChildrenModal({
     type,
@@ -66,39 +68,57 @@ export default function ChildrenModal({
     };
 
     useEffect(() => {
-        getChildrensByUserIdForm();
-        // traerHijoPorIdForm()
-    }, []);
+        setPaso(1)
+        if (id) {
+            getChildrenByIdForm(id);
+        }
+    }, [id]);
 
-    const getChildrensByUserIdForm = async () => {
+    const getChildrenByIdForm = async (id: number) => {
         try {
             setLoading(true);
-            const children = await getChildrensByUserId();
-            form.setFieldsValue(children);
+            const children = await getChildrenById(id);
+
+            setIsStudent(children.isStudent || false);
+            setIsClubMember(children.isClubMember || false);
+
+            form1.setFieldsValue({
+                name: children.name,
+                lastName: children.lastName,
+                motherLastName: children.motherLastName,
+                documentType: children.documentType,
+                documentNumber: children.documentNumber,
+                birthdate: moment(children.birthdate),
+                emergencyContactPhone: children.emergencyContactPhone,
+                gender: children.gender,
+            });
+            form2.setFieldsValue({
+                isStudent: children.isStudent || false,
+                school: children.school,
+                grade: children.grade,
+                section: children.section,
+            });
+            form3.setFieldsValue({
+                isClubMember: children.isClubMember || false,
+                club: children.club,
+                membershipCardNumber: children.membershipCardNumber,
+                memberName: children.memberName,
+                memberLastName: children.memberLastName,
+                memberMotherLastName: children.memberMotherLastName,
+            });
         } catch (error) {
-            console.error("Error al obtener datos del hijo:", error);
+            console.log(error);
         } finally {
             setLoading(false);
         }
     };
-
-    // const traerHijoPorIdForm = async () => {
-    //     try {
-    //         setLoading(true)
-    //         const children = await getChildrenById();
-    //         form.setFieldsValue(children)
-    //     } catch (error) {
-    //         console.log(error);
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
 
     const updateChildrenForm = async (values: any) => {
         try {
             setLoading(true);
             await updateChildren(values, id);
             setOpen(false);
+            setPaso(1);
             handleReload();
         } catch (error) {
             console.error("Error al actualizar un hijo:", error);
@@ -168,8 +188,6 @@ export default function ChildrenModal({
             }
 
             setLoading(true);
-            // await createChildrenForm(finalFormData);
-            // await updateChildrenForm(finalFormData);
             chooseMethod(type)(finalFormData);
             getChildrensByUserId().then((data) => {
                 setUserData(data);
@@ -431,6 +449,7 @@ export default function ChildrenModal({
                             placeholder="Fecha de Nacimiento"
                             size="large"
                             allowClear={false}
+                            disabled={type == "edit"}
                         />
                     </Form.Item>
 
@@ -520,11 +539,14 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es estudiante?------------------ */}
                     <Form.Item<SecondStepType> name="isStudent">
-                        <span className="me-2">¿Es estudiante?</span>
-                        <Switch
-                            className="bg-neutral-400"
-                            onChange={handleSwitchChangeIsStudent}
-                        />
+                        <>
+                            <span className="me-2">¿Es estudiante?</span>
+                            <Switch
+                                className="bg-neutral-400"
+                                checked={isStudent}
+                                onChange={handleSwitchChangeIsStudent}
+                            />
+                        </>
                     </Form.Item>
 
                     {/* ------------------Input Nombre de la Escuela del Hijo------------------ */}
@@ -641,11 +663,16 @@ export default function ChildrenModal({
                 >
                     {/* ------------------Switch ¿Es miembro de un club?------------------ */}
                     <Form.Item<ThirdStepType> name="isClubMember">
-                        <span className="me-2">¿Es miembro de un club?</span>
-                        <Switch
-                            className="bg-neutral-400"
-                            onChange={handleSwitchChangeIsClubMember}
-                        />
+                        <>
+                            <span className="me-2">
+                                ¿Es miembro de un club?
+                            </span>
+                            <Switch
+                                className="bg-neutral-400"
+                                checked={isClubMember}
+                                onChange={handleSwitchChangeIsClubMember}
+                            />
+                        </>
                     </Form.Item>
 
                     {/* ------------------Input Nombre del Club del Miembro------------------ */}

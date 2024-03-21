@@ -37,7 +37,7 @@ export default function DisciplineModal({
   const updateDisciplineForm = async (values: any) => {
     try {
       setLoading(true);
-      values.photo = "";
+      values.photo = "-";
       await updateDiscipline(values, id);
       setOpen(false);
       handleReload();
@@ -51,7 +51,7 @@ export default function DisciplineModal({
   const createDisciplineForm = async (values: any) => {
     try {
       setLoading(true);
-      values.photo = "";
+      values.photo = "-";
       await createDiscipline(values);
       setOpen(false);
       form.resetFields();

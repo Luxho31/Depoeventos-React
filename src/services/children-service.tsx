@@ -42,6 +42,18 @@ export const updateChildren = async (form: ChildrenType, id?: number) => {
   }
 };
 
+export const deleteChildren = async (childrenId: number) => {
+  try {
+    const token = localStorage.getItem("token");
+    const user = await getUserInfo(token);
+    await fetch(`${BASE_URL}/api/children/${childrenId}/${user.id}`, {
+      method: "DELETE"
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const getChildrensByUserId = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -65,23 +77,16 @@ export const getChildrensByUserId = async () => {
   }
 };
 
-export const getChildrenById = async () => {
+export const getChildrenById = async (childrenId: number) => {
   try {
-    const token = localStorage.getItem("token");
-    const user = await getUserInfo(token);
-    const response = await fetch(`${BASE_URL}/api/children/getOnlyChildren/${user.id}`, {
+    const response = await fetch(`${BASE_URL}/api/children/getOnlyChildren/${childrenId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
       },
     });
     const data = await response.json();
-    const dataWithKeys = data.map((item: any, index: any) => ({
-      ...item,
-      key: index,
-    }));
-    return dataWithKeys;
+    return data;
   } catch (error) {
     console.error("Error al obtener los hijos:", error);
     throw error;

@@ -6,7 +6,7 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { getChildrensByUserId } from "../../../services/children-service";
+import { deleteChildren, getChildrensByUserId } from "../../../services/children-service";
 import ChildrenModal from "../modals/childrens-modals-dashboard";
 
 type ChildrenData = {
@@ -87,7 +87,7 @@ export default function ChildrensDashboard() {
   const handleRemoveChildren = async (id: number) => {
     try {
       setLoading(true);
-      // await deleteChildren(id);
+      await deleteChildren(id);
       handleReload();
     } catch (error) {
       console.error("Error al eliminar disciplina:", error);
