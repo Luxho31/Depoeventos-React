@@ -366,7 +366,7 @@ export default function PaymentStep({ setNextStep }: any) {
               name="operationNumber"
               rules={[
                 {
-                  required: paymentMethod !== "TRANSFERENCIA_BANCARIA",
+                  required: paymentMethod == "TRANSFERENCIA_BANCARIA",
                   message: "Por favor ingrese su número de operación.",
                 },
               ]}
