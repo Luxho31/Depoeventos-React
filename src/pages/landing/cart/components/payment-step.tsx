@@ -401,7 +401,7 @@ export default function PaymentStep({ setNextStep }: any) {
               className="cursor-text"
             >
               <Upload {...propsUpload}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                <Button icon={<UploadOutlined />}>Subir voucher</Button>
               </Upload>
             </Form.Item>
           </div>

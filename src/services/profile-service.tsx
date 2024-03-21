@@ -1,4 +1,5 @@
 import { generalRoutes } from "../utils/routes/general.routes";
+import { getUserInfo } from "./basic-service";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
@@ -20,12 +21,14 @@ export const updateUserInfo = async (data: any, id: any) => {
   }
 };
 
-export const uploadProfileImage = async (email: string, file: File) => {
+export const uploadProfileImage = async (file: File) => {
   try {
+    const token = localStorage.getItem("token");
+    const user = await getUserInfo(token);
     const formData = new FormData();
     formData.append("file", file); // Cambiado 'avatar' por 'file' según el requerimiento
     const response = await fetch(
-      `${BASE_URL}/api/uploadProfilePicture/${email}`,
+      `${BASE_URL}/api/uploadProfilePicture/${user.username}`,
       {
         method: "POST",
         body: formData,
@@ -42,3 +45,5 @@ export const uploadProfileImage = async (email: string, file: File) => {
     throw error;
   }
 };
+
+
