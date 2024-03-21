@@ -209,6 +209,7 @@ export const AuthProvider = ({ children }: any) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUserRole(null);
+    window.location.href = "/";
   };
 
   const verifyToken = async (token: string) => {
@@ -218,11 +219,9 @@ export const AuthProvider = ({ children }: any) => {
       if (response.ok) {
         return true;
       } else {
-        // Si el servidor responde con un estado no exitoso, lanzamos un error
         throw new Error(`Error al verificar el token: ${response.statusText}`);
       }
     } catch (error) {
-      // Capturamos cualquier error de red u otros errores que puedan ocurrir
       console.error("Error al verificar el token:", error);
       return false;
     }
