@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { FaAddressCard, FaArrowRight, FaChevronLeft } from "react-icons/fa";
 import {
     createChildren,
+    getChildrenById,
     getChildrensByUserId,
     updateChildren,
 } from "../../../services/children-service";
@@ -65,10 +66,11 @@ export default function ChildrenModal({
     };
 
     useEffect(() => {
-        getChildrenByIdForm();
+        getChildrensByUserIdForm();
+        // traerHijoPorIdForm()
     }, []);
 
-    const getChildrenByIdForm = async () => {
+    const getChildrensByUserIdForm = async () => {
         try {
             setLoading(true);
             const children = await getChildrensByUserId();
@@ -79,6 +81,18 @@ export default function ChildrenModal({
             setLoading(false);
         }
     };
+
+    // const traerHijoPorIdForm = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const children = await getChildrenById();
+    //         form.setFieldsValue(children)
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     const updateChildrenForm = async (values: any) => {
         try {
@@ -154,8 +168,9 @@ export default function ChildrenModal({
             }
 
             setLoading(true);
-            await createChildrenForm(finalFormData);
-            await updateChildrenForm(finalFormData);
+            // await createChildrenForm(finalFormData);
+            // await updateChildrenForm(finalFormData);
+            chooseMethod(type)(finalFormData);
             getChildrensByUserId().then((data) => {
                 setUserData(data);
             });
@@ -614,7 +629,6 @@ export default function ChildrenModal({
                 name="thirdStep"
                 onFinish={(values) => {
                     onFinishStep3(values);
-                    chooseMethod(type)(values);
                 }}
                 autoComplete="off"
                 className="my-10 max-md:mx-20 md:mx-32"
