@@ -3,7 +3,6 @@ import { DatePicker, Form, Input, Modal, Select, Spin } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
-  getAllOrders,
   getOrderById,
   updateOrder,
 } from "../../../services/cart-service/cart-service";
@@ -13,13 +12,12 @@ export default function TransactionModal({
   id,
   open,
   setOpen,
-  handleReload,
+  handleReload
 }: any) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    getAllOrders();
     if (id) getOrderByIdForm(id);
   }, [id]);
 
@@ -105,7 +103,7 @@ export default function TransactionModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-md:mx-20 md:mx-32"
         form={form}
       >

@@ -83,9 +83,8 @@ export default function TransactionsDashboard() {
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const filteredOrders = orderData.filter((order) =>
       searchTerms.some((term) =>
-        `${order.operationNumber.toLowerCase()} ${order.paymentMethod.toLowerCase()} ${
-          order.bankName
-        }`.includes(term)
+        `${order.operationNumber.toLowerCase()} ${order.paymentMethod.toLowerCase()} ${order.bankName
+          }`.includes(term)
       )
     );
     setFilteredOrders(filteredOrders);
