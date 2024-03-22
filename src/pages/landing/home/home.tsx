@@ -43,7 +43,6 @@ export default function Home() {
       <div className="mt-12">
         <Intro />
         <Courses />
-        {/* <Packages /> */}
         <Campuses slide={data} />
         <Team />
         <FloatButton.BackTop />

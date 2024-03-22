@@ -234,7 +234,7 @@ export default function Navbar() {
                                 <Link
                                     to="/login"
                                     className="w-fit text-center border rounded-lg hover:shadow-md px-6 py-2"
-                                    
+
                                 >
                                     Acceder
                                 </Link>
@@ -266,9 +266,8 @@ export default function Navbar() {
                         </li>
 
                         <li
-                            className={`${
-                                isAuthenticated ? "block" : "hidden"
-                            }`}
+                            className={`${isAuthenticated ? "block" : "hidden"
+                                }`}
                         >
                             <Link to="/dashboard">Dashboard</Link>
                         </li>

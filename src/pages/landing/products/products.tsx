@@ -93,23 +93,7 @@ export default function Products() {
         setSelectedProduct(null);
     };
 
-    // const handleFilterCategory = (categoryId: number) => {
-    //   if (categoryId === 0) {
-    //     setFilteredData(productData)
-    //   } else {
-    //     const filtered = productData.filter((product: Product) => product.category.id === categoryId);
-    //     setFilteredData(filtered);
-    //   }
-    // };
 
-    // const handleFilterCampus = (campusId: number) => {
-    //   if (campusId === 0) {
-    //     setFilteredData(productData)
-    //   } else {
-    //     const filtered = productData.filter((product: Product) => product.campus.id === campusId);
-    //     setFilteredData(filtered);
-    //   }
-    // };
 
     const applyFilters = () => {
         let filtered = productData;

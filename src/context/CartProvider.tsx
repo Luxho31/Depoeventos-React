@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthProvider";
 
 type Product = {
   children: any;
@@ -49,9 +48,9 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: any) => {
-  const { getUserId } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,8 +58,7 @@ export const CartProvider = ({ children }: any) => {
         if (!token) {
           return;
         }
-        const user = await getUserId(token!);
-        const response = await fetch(`http://localhost:8080/api/cart/${user}`);
+        const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos del carrito");
         }
@@ -79,13 +77,14 @@ export const CartProvider = ({ children }: any) => {
     };
 
     fetchData();
-  }, [token, getUserId]);
+  }, [token, userId]);
 
   // Función para agregar un producto al carrito
   const addToCart = async (product: Product, childrenIds: number[]) => {
     try {
-      const userId = await getUserId(token!);
-      // Iterar sobre cada hijo seleccionado y realizar una solicitud HTTP individual
+      if (!token) {
+        throw new Error("No se ha iniciado sesión");
+      }
       for (const childId of childrenIds) {
         const body = {
           productId: product.id,
@@ -104,8 +103,7 @@ export const CartProvider = ({ children }: any) => {
           throw new Error("Error al guardar el producto en el carrito");
         }
       }
-      // Actualizar el estado de productos combinando los productos existentes con el nuevo producto
-      // setProducts((prevProducts) => [...prevProducts, product]);
+
       updateCart();
     } catch (error) {
       console.error("Error al agregar el producto al carrito:", error);
@@ -114,8 +112,7 @@ export const CartProvider = ({ children }: any) => {
 
   const updateCart = async () => {
     try {
-      const user = await getUserId(token!);
-      const response = await fetch(`http://localhost:8080/api/cart/${user}`);
+      const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos del carrito");
       }
@@ -135,9 +132,8 @@ export const CartProvider = ({ children }: any) => {
 
   const clearCart = async () => {
     try {
-      const user = await getUserId(token!);
       const response = await fetch(
-        `http://localhost:8080/api/cart/deleteAll/${user}`,
+        `http://localhost:8080/api/cart/deleteAll/${userId}`,
         {
           method: "DELETE",
         }

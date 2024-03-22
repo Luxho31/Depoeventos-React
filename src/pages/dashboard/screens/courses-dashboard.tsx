@@ -98,12 +98,10 @@ export default function CoursesDashboard() {
     };
 
     const handleSearch = () => {
-        // Actualiza la página actual a 1 después de la búsqueda
         setCurrentPage(1);
     };
 
     const onPageChange = (page: number) => {
-        // Mantén la búsqueda al cambiar de página
         const filteredUsers = courseRegistrationData.filter(
             (courseRegistration) =>
                 courseRegistration.inscriptionDate

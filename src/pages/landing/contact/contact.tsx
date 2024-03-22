@@ -71,7 +71,7 @@ export default function Contact() {
                 <Form
                     name="contact-us"
                     onFinish={handleSendMessage}
-                    onFinishFailed={() => {}}
+                    onFinishFailed={() => { }}
                     className="max-w-lg mx-auto"
                     ref={(ref) => (formRef.current = ref)}
                 >
@@ -200,29 +200,8 @@ export default function Contact() {
                     src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
                     alt="Mike Wazowski"
                     className="rounded-tl-full rounded-br-full w-[70%] object-cover"
-                    // className="rounded-tl-[50%] rounded-br-[50%] h-[80%] lg:h-full w-[90%] lg:w-full object-cover absolute top-0 left-0"
                 />
             </div>
-
-            {/* <div className="lg:w-1/2  relative">
-        <div className="bg-gray-200 rounded-lg h-[80%] lg:h-full w-[90%] lg:w-full absolute top-0 left-0"></div>
-        <img
-          src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
-          alt="Mike Wazowski"
-          className="rounded-tl-[50%] rounded-br-[50%] h-[80%] lg:h-full w-[90%] lg:w-full object-cover absolute top-0 left-0"
-        />
-      </div> */}
-
-            {/* 
-                  <div className="flex-1 pt-[90px] flex items-center justify-center relative">
-                <div className="bg-gray-200 rounded-lg h-[90%] w-[90%] absolute"></div>
-                <img
-                    src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
-                    alt="Mike Wazowski"
-                    className="rounded-tl-[50%] rounded-br-[50%] h-[90%] w-[90%] object-cover absolute"
-                />
-            </div>
-      */}
         </div>
     );
 }

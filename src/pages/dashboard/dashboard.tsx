@@ -150,16 +150,11 @@ export default function Dashboard() {
     },
   ];
 
-  // const keyOfThirdItem = menuItems[2].key;
 
   const selectedItem = menuItems.find(
     (item) => item.path === location.pathname
   );
 
-  // if (selectedItem) {
-  //     const { key } = selectedItem;
-  // } else {
-  // }
 
 
   const handleLogout = () => {

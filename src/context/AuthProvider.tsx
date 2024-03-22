@@ -14,7 +14,7 @@ interface AuthContextType {
   register: (user: User) => Promise<void>;
   logout: () => void;
   userInfo: User | null;
-  getUserId: (token: string) => Promise<number>;
+  // getUserId: (token: string) => Promise<number>;
 }
 
 interface User {
@@ -105,26 +105,26 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const getUserId = async (token: string) => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/userInfo/${token}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Error al obtener la información del usuario");
-      }
-      setCargando(false);
-      const userData = await response.json();
-      const userId = userData.id;
-      return userId;
-    } catch (error) {
-      console.error("Error al obtener la información del usuario:", error);
-    }
-  };
+  // const getUserId = async (token: string) => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/api/userInfo/${token}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Error al obtener la información del usuario");
+  //     }
+  //     setCargando(false);
+  //     const userData = await response.json();
+  //     const userId = userData.id;
+  //     return userId;
+  //   } catch (error) {
+  //     console.error("Error al obtener la información del usuario:", error);
+  //   }
+  // };
 
   const login = async (username: string, password: string) => {
     try {
@@ -242,7 +242,7 @@ export const AuthProvider = ({ children }: any) => {
         cargando,
         userRole,
         userInfo,
-        getUserId,
+        // getUserId,
       }}
     >
       {children}

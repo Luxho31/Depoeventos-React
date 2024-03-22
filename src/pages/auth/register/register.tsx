@@ -42,7 +42,6 @@ export default function Register() {
         documentNumber?: string;
         contactNumber?: string;
         emergencyContactNumber?: string;
-        // address?: string;
         birthDate?: string;
         country?: string;
         username?: string;
