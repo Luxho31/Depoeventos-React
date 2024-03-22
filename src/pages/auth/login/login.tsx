@@ -133,7 +133,7 @@ export default function Login() {
                     <div className="w-full flex justify-center">
                         <button
                             type="submit"
-                            className="bg-[#f46e16] text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
                             disabled={loading}
                         >
                             {loading ? (

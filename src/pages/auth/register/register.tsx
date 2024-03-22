@@ -98,8 +98,8 @@ export default function Register() {
         }
     };
 
-    return (
-        <div className="flex flex-col  md:flex-row items-center h-screen">
+	return (
+        <div className="flex flex-col md:flex-row items-center h-screen max-md:mt-24">
             <Toaster richColors />
             {/* <div className="w-1/4 h-screen object-cover max-md:hidden"> */}
             <img
@@ -117,7 +117,7 @@ export default function Register() {
                 </Link>
             </div>
             <div className="w-full md:w-[750px] md:mx-auto px-6">
-                <div className="relative mb-10">
+                {/* <div className="relative mb-10">
                     {paso === 2 && (
                         <button
                             type="button"
@@ -127,7 +127,7 @@ export default function Register() {
                             <FaChevronLeft className="text-2xl" />
                         </button>
                     )}
-                </div>
+                </div> */}
                 <Form
                     name="firstStep"
                     onFinish={(values) => {
@@ -418,7 +418,7 @@ export default function Register() {
                         <Form.Item className="w-full flex justify-center">
                             <button
                                 type="submit"
-                                className="w-full md:w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4 flex justify-center items-center"
+                                className="flex items-center gap-x-2 bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
                             >
                                 Siguiente
                                 <FaArrowRight className="ms-1" />
@@ -571,7 +571,7 @@ export default function Register() {
                         <Form.Item className="w-full flex justify-center">
                             <button
                                 type="submit"
-                                className="w-full md:w-96 bg-[#f46e16] text-white font-semibold rounded-xl p-4"
+                                className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
                             >
                                 {loading ? (
                                     <Spin
@@ -588,7 +588,8 @@ export default function Register() {
                             </button>
                         </Form.Item>
                     )}
-                    <p className="text-center">
+
+                    <p className="text-center mb-8">
                         ¿Ya tienes una cuenta?{" "}
                         <Link to="/login" className="text-gray-500">
                             Iniciar sesión
