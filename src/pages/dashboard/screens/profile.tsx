@@ -1,7 +1,6 @@
 import {
     LoadingOutlined,
-    PlusOutlined,
-    UploadOutlined,
+    UploadOutlined
 } from "@ant-design/icons";
 import {
     Button,
@@ -42,17 +41,6 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
     reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-        message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 export default function Profile() {
     const [loading, setLoading] = useState(false);
@@ -90,7 +78,7 @@ export default function Profile() {
         console.log(data);
         try {
             setLoading(true);
-            updateUserInfo(data, data.id).then((res) => {});
+            updateUserInfo(data, data.id).then((res) => { });
             if (profileImage) {
                 await handleImageUpload(profileImage.originFileObj); // Cambiado a voucherImage.originFileObj
             }
@@ -161,62 +149,6 @@ export default function Profile() {
         },
     };
 
-    const handleChange: UploadProps["onChange"] = (info) => {
-        if (info.file.status === "uploading") {
-            setLoading(true);
-            return;
-        }
-        if (info.file.status === "done") {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj as FileType, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-            });
-        }
-    };
-
-    // const uploadButton = (
-    //     <button style={{ border: 0, background: "none" }} type="button">
-    //         {loading ? <LoadingOutlined /> : <PlusOutlined />}
-    //         <div style={{ marginTop: 8 }}>Upload</div>
-    //     </button>
-    // );
-
-    // const handleImageUpload = async (file: any) => {
-    //     try {
-    //         setLoading(true);
-    //         const email = await getUserInfo(localStorage.getItem("token")).then(
-    //             (data) => {
-    //                 return data.username;
-    //             }
-    //         );
-    //         await uploadProfileImage(file); // Llamar a la función uploadProfileImage con el correo electrónico y el archivo de imagen
-    //         message.success("Imagen de perfil subida exitosamente");
-    //     } catch (error) {
-    //         console.error("Error al subir la imagen:", error);
-    //         message.error(
-    //             "Error al subir la imagen. Por favor, intenta de nuevo."
-    //         );
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const handleChange: UploadProps["onChange"] = async (info) => {
-    //     if (info.file.status === "uploading") {
-    //         setLoading(true);
-    //         return;
-    //     }
-    //     if (info.file.status === "done") {
-    //         // Get this url from response in real world.
-    //         getBase64(info.file.originFileObj as FileType, (url) => {
-    //             setLoading(false);
-    //             setImageUrl(url);
-    //         });
-    //         // Handle image upload
-    //         await handleImageUpload(info.file.originFileObj);
-    //     }
-    // };
 
     return (
         <div className="flex">
@@ -402,7 +334,7 @@ export default function Profile() {
                                                 return Promise.reject("");
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "DNI" &&
+                                                "DNI" &&
                                                 !/^\d{8}$/.test(value)
                                             ) {
                                                 return Promise.reject(
@@ -410,7 +342,7 @@ export default function Profile() {
                                                 );
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "PASSPORT" &&
+                                                "PASSPORT" &&
                                                 !/^[A-Za-z0-9]{6,10}$/.test(
                                                     value
                                                 )
@@ -420,7 +352,7 @@ export default function Profile() {
                                                 );
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "CARNET DE EXTRANJERIA" &&
+                                                "CARNET DE EXTRANJERIA" &&
                                                 !/^\d{9}$/.test(value)
                                             ) {
                                                 return Promise.reject(
@@ -447,12 +379,12 @@ export default function Profile() {
                                         selectedDocumentType === "DNI"
                                             ? 8
                                             : selectedDocumentType ===
-                                              "PASSPORT"
-                                            ? 10
-                                            : selectedDocumentType ===
-                                              "CARNET DE EXTRANJERIA"
-                                            ? 9
-                                            : undefined
+                                                "PASSPORT"
+                                                ? 10
+                                                : selectedDocumentType ===
+                                                    "CARNET DE EXTRANJERIA"
+                                                    ? 9
+                                                    : undefined
                                     }
                                 />
                             </Form.Item>
@@ -567,11 +499,10 @@ export default function Profile() {
                             <Form.Item className="">
                                 <button
                                     type="button"
-                                    className={`w-60 ${
-                                        fieldsEnabled
-                                            ? "bg-red-500 hover:bg-red-700"
-                                            : "bg-gray-950 hover:bg-gray-700"
-                                    } flex justify-center text-white font-semibold rounded-xl p-4`}
+                                    className={`w-60 ${fieldsEnabled
+                                        ? "bg-red-500 hover:bg-red-700"
+                                        : "bg-gray-950 hover:bg-gray-700"
+                                        } flex justify-center text-white font-semibold rounded-xl p-4`}
                                     onClick={
                                         fieldsEnabled ? resetForm : toggleFields
                                     }
@@ -599,11 +530,10 @@ export default function Profile() {
                             <Form.Item className="">
                                 <button
                                     type="submit"
-                                    className={`w-60 ${
-                                        fieldsEnabled
-                                            ? "bg-blue-500 hover:bg-blue-600"
-                                            : "bg-blue-300"
-                                    } flex justify-center text-white font-semibold rounded-xl p-4`}
+                                    className={`w-60 ${fieldsEnabled
+                                        ? "bg-blue-500 hover:bg-blue-600"
+                                        : "bg-blue-300"
+                                        } flex justify-center text-white font-semibold rounded-xl p-4`}
                                     disabled={!fieldsEnabled}
                                 >
                                     {loading ? (

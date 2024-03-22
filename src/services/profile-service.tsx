@@ -1,6 +1,5 @@
-import { generalRoutes } from "../utils/routes/general.routes";
-import { getUserInfo } from "./basic-service";
 import * as jose from 'jose';
+import { generalRoutes } from "../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 

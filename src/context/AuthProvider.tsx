@@ -1,8 +1,8 @@
 // authContext.tsx
 
+import * as jose from 'jose';
 import { createContext, useContext, useEffect, useState } from "react";
 import { generalRoutes } from "../utils/routes/general.routes.ts";
-import * as jose from 'jose';
 
 const BASE_URL = generalRoutes.BASE_URL;
 
