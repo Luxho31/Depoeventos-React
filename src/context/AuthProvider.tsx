@@ -58,25 +58,23 @@ export const AuthProvider = ({ children }: any) => {
       verifyToken(token)
         .then((isValid) => {
           if (isValid) {
-            // get userInfo and set it
-            getUserInfo(token);
+            if (userInfo === null) {
+              getUserInfo(token);
+            }
             setIsAuthenticated(true);
           } else {
             setIsAuthenticated(false);
             localStorage.removeItem("token");
           }
-          // Establece cargando en false cuando haya terminado la verificación
           setCargando(false);
         })
         .catch((error) => {
           console.error("Error al verificar el token:", error);
           setIsAuthenticated(false);
           localStorage.removeItem("token");
-          // También establece cargando en false en caso de error
           setCargando(false);
         });
 
-      // Verificar Rol
       const tokenPayload = JSON.parse(atob(token.split(".")[1]));
       const userRoles = tokenPayload.roles;
       setUserRole(userRoles);

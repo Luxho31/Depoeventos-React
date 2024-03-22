@@ -1,11 +1,13 @@
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Button, Input, Pagination, Popconfirm } from "antd";
+import { Button, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEdit, FaEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
+import { getAllCampuses } from "../../../services/campuses-service";
+import { getAllCategories } from "../../../services/categories-service";
+import { getAllDisciplines } from "../../../services/disciplines-service";
 import {
   deleteProduct,
   getAllProducts,
@@ -29,15 +31,21 @@ export default function DiciplinesDashboard() {
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
 
+  const [campuses, setCampuses] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [disciplines, setDisciplines] = useState([]);
+
   const { userRole } = useAuth();
   const usersPerPage: number = 5;
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("useEffect" + userRole)
     const specificRole: string = "ADMIN";
     if (userRole && userRole.some((role) => role === specificRole)) {
       setLoading(true);
+      getAllData()
       getAllProducts()
         .then((data: ProductData[]) => {
           setProductData(data);
@@ -51,6 +59,25 @@ export default function DiciplinesDashboard() {
       navigate("/dashboard");
     }
   }, [userRole]);
+
+  const getAllData = async () => {
+    try {
+        setLoading(true);
+        await Promise.all([
+            getAllDisciplines(),
+            getAllCampuses(),
+            getAllCategories(),
+        ]).then(([disciplinesData, campusesData, categoriesData]) => {
+            setDisciplines(disciplinesData);
+            setCampuses(campusesData);
+            setCategories(categoriesData);
+        });
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+    } finally {
+        setLoading(false);
+    }
+};
 
   const handleReload = () => {
     try {
@@ -158,6 +185,9 @@ export default function DiciplinesDashboard() {
               open={openCreateModal}
               setOpen={setOpenCreateModal}
               handleReload={handleReload}
+              campuses={campuses}
+              categories={categories}
+              disciplines={disciplines}
             />
             <ProductModal
               type="edit"
@@ -165,6 +195,9 @@ export default function DiciplinesDashboard() {
               open={openEditModal}
               setOpen={setOpenEditModal}
               handleReload={handleReload}
+              campuses={campuses}
+              categories={categories}
+              disciplines={disciplines}
             />
             <ProductModal
               type="see"
@@ -172,6 +205,9 @@ export default function DiciplinesDashboard() {
               open={openSeeModal}
               setOpen={setOpenSeeModal}
               handleReload={handleReload}
+              campuses={campuses}
+              categories={categories}
+              disciplines={disciplines}
             />
           </div>
         </div>

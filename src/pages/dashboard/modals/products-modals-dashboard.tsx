@@ -14,9 +14,6 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { getAllCampuses } from "../../../services/campuses-service";
-import { getAllCategories } from "../../../services/categories-service";
-import { getAllDisciplines } from "../../../services/disciplines-service";
 import {
     createProduct,
     getProductById,
@@ -37,11 +34,11 @@ export default function ProductModal({
     open,
     setOpen,
     handleReload,
+    campuses,
+    categories,
+    disciplines
 }: any) {
     const [loading, setLoading] = useState(false);
-    const [campuses, setCampuses] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [disciplines, setDisciplines] = useState([]);
     const [imageUrl, setImageUrl] = useState();
     const [productImage, setProductImage] = useState<any>(null);
     const [selectedCoursesCount, setSelectedCoursesCount] = useState(0);
@@ -49,7 +46,6 @@ export default function ProductModal({
     const [form] = Form.useForm();
 
     useEffect(() => {
-        getAllData();
         if (id) getProductByIdForm(id);
     }, [id]);
 
@@ -151,25 +147,6 @@ export default function ProductModal({
                 return seeProductForm;
             default:
                 return createProductForm;
-        }
-    };
-
-    const getAllData = async () => {
-        try {
-            setLoading(true);
-            await Promise.all([
-                getAllDisciplines(),
-                getAllCampuses(),
-                getAllCategories(),
-            ]).then(([disciplinesData, campusesData, categoriesData]) => {
-                setDisciplines(disciplinesData);
-                setCampuses(campusesData);
-                setCategories(categoriesData);
-            });
-        } catch (error) {
-            console.error("Error al obtener los datos:", error);
-        } finally {
-            setLoading(false);
         }
     };
 

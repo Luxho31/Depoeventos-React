@@ -1,5 +1,6 @@
 import { generalRoutes } from "../utils/routes/general.routes";
-import { getUserInfo } from "./basic-service";
+
+import * as jose from 'jose';
 
 const BASE_URL = generalRoutes.BASE_URL;
 
@@ -10,8 +11,9 @@ type ChildrenType = {
 export const createChildren = async (form: ChildrenType) => {
   try {
     const token = localStorage.getItem("token");
-    const user = await getUserInfo(token);
-    await fetch(`${BASE_URL}/api/children/${user.id}`, {
+    const claims = jose.decodeJwt(token!);
+    const userId = claims.userId;
+    await fetch(`${BASE_URL}/api/children/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,8 +47,9 @@ export const updateChildren = async (form: ChildrenType, id?: number) => {
 export const deleteChildren = async (childrenId: number) => {
   try {
     const token = localStorage.getItem("token");
-    const user = await getUserInfo(token);
-    await fetch(`${BASE_URL}/api/children/${childrenId}/${user.id}`, {
+    const claims = jose.decodeJwt(token!);
+    const userId = claims.userId;
+    await fetch(`${BASE_URL}/api/children/${childrenId}/${userId}`, {
       method: "DELETE"
     })
   } catch (error) {
@@ -57,8 +60,9 @@ export const deleteChildren = async (childrenId: number) => {
 export const getChildrensByUserId = async () => {
   try {
     const token = localStorage.getItem("token");
-    const user = await getUserInfo(token);
-    const response = await fetch(`${BASE_URL}/api/children/${user.id}`, {
+    const claims = jose.decodeJwt(token!);
+    const userId = claims.userId;
+    const response = await fetch(`${BASE_URL}/api/children/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
