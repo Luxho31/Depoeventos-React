@@ -59,8 +59,6 @@ export default function Courses() {
         </p>
       </div>
       <div className="place-items-center grid grid-rows-2 grid-flow-col gap-4 gap-y-12 max-sm:grid-rows-6 max-lg:grid-rows-4">
-        // add key to this map
-
         {projects.map((project) => (
           <CustomCard data={project} key={project.title} />
         ))}
