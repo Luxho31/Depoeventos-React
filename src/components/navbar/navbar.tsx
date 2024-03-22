@@ -233,10 +233,10 @@ export default function Navbar() {
                             <li className="">
                                 <Link
                                     to="/login"
-                                    className=""
-                                    style={{ padding: "10px 15px" }}
+                                    className="w-fit text-center border rounded-lg hover:shadow-md px-6 py-2"
+                                    
                                 >
-                                    Log in
+                                    Acceder
                                 </Link>
                             </li>
                         )}
@@ -254,15 +254,15 @@ export default function Navbar() {
                 <div className="flex flex-col justify-between h-full">
                     <ul className="flex flex-col justify-center items-center gap-6">
                         <li className="">
-                            <NavLink to="/">Inicio</NavLink>
+                            <NavLink to="/" onClick={onClose}>Inicio</NavLink>
                         </li>
 
                         <li className="">
-                            <NavLink to="/products">Productos</NavLink>
+                            <NavLink to="/products" onClick={onClose}>Productos</NavLink>
                         </li>
 
                         <li className="">
-                            <NavLink to="/contact">Contacto</NavLink>
+                            <NavLink to="/contact" onClick={onClose}>Contacto</NavLink>
                         </li>
 
                         <li
@@ -293,13 +293,12 @@ export default function Navbar() {
                                 </Button>
                             </li>
                         ) : (
-                            <li className="w-full">
+                            <li className="w-full flex justify-center my-8">
                                 <Link
                                     to="/login"
-                                    className="w-full text-center border rounded-lg shadow-md"
-                                    style={{ padding: "10px 15px" }}
+                                    className="w-fit text-center border rounded-lg shadow-md px-8 py-2"
                                 >
-                                    Log in
+                                    Acceder
                                 </Link>
                             </li>
                         )}
