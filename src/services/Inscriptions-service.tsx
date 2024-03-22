@@ -18,9 +18,8 @@ export const getAllRegistration = async () => {
 };
 export const getAllCourseRegistration = async () => {
     try {
-        const token = localStorage.getItem("token");
-        const user = await getUserInfo(token);
-        const response = await fetch(`${BASE_URL}/api/inscription/${user.id}`, {
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(`${BASE_URL}/api/inscription/${userId}`, {
             headers: {
                 "Content-Type": "application/json",
             },

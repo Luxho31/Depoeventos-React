@@ -30,13 +30,7 @@ export const getAllCategories = async () => {
       },
     });
     const data = await response.json();
-
-    const dataWithKeys = data.map((item: any, index: any) => ({
-      ...item,
-      key: index,
-    }));
-
-    return dataWithKeys;
+    return data;
   } catch (error) {
     console.error("Error al obtener datos de categorias:", error);
     throw error;

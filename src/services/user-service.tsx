@@ -10,13 +10,8 @@ export const getAllUsers = async () => {
       },
     });
     const data = await response.json();
+    return data;
 
-    const dataWithKeys = data.map((item: any, index: any) => ({
-      ...item,
-      key: index,
-    }));
-
-    return dataWithKeys;
   } catch (error) {
     console.error("Error al obtener datos de usuarios:", error);
     throw error;

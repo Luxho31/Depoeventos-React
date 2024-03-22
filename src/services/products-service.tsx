@@ -116,13 +116,9 @@ export const uploadProductImage = async (productId: number, file: File) => {
     );
     const data = await response.json();
     if (response.ok) {
-      return data; // Retorna los datos recibidos del servidor si la carga es exitosa
+      return data;
     }
-    // else {
-    //     throw new Error(data.message || "Error al subir la imagen del voucher");
-    // }
   } catch (error) {
     console.error("Error al subir la imagen del producto:", error);
-    // throw error;
   }
 };

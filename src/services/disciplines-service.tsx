@@ -17,7 +17,6 @@ export const createDiscipline = async (form: disciplineType) => {
       },
       body: JSON.stringify(form),
     });
-    getAllDisciplines();
   } catch (error) {
     console.error("Error al crear una disciplina:", error);
     throw error;
@@ -32,13 +31,7 @@ export const getAllDisciplines = async () => {
       },
     });
     const data = await response.json();
-
-    const dataWithKeys = data.map((item: any, index: any) => ({
-      ...item,
-      key: index,
-    }));
-
-    return dataWithKeys;
+    return data;
   } catch (error) {
     console.error("Error al obtener datos de disciplinas:", error);
     throw error;
@@ -55,7 +48,6 @@ export const updateDiscipline = async (form: disciplineType, id?: number) => {
       },
       body: JSON.stringify(form),
     });
-    getAllDisciplines();
   } catch (error) {
     console.error("Error al actualizar una disciplina:", error);
     throw error;
@@ -85,7 +77,6 @@ export const deleteDiscipline = async (id: number) => {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    getAllDisciplines();
   } catch (error) {
     console.error("Error al eliminar una disciplina:", error);
     throw error;

@@ -17,12 +17,13 @@ export const createOrder = async (data: any) => {
   const token = localStorage.getItem("token");
 
   try {
-    const user = await getUserInfo(token!); // Esperar a que se resuelva la promesa
+
+    const userId = localStorage.getItem("userId");
 
     let products: any = [];
 
     // Obtener los productos del carrito
-    const response = await fetch(`http://localhost:8080/api/cart/${user.id}`);
+    const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
     if (!response.ok) {
       throw new Error("Error al obtener los productos del carrito");
     }
@@ -41,7 +42,7 @@ export const createOrder = async (data: any) => {
     // Crear la solicitud de creación de la orden
     const createRequest = {
       user: {
-        id: user.id,
+        id: userId,
       },
       paymentMethod: data.paymentMethod,
       bankName: data.bankName,
@@ -61,7 +62,7 @@ export const createOrder = async (data: any) => {
       throw new Error("Error al crear una orden");
     }
     const res = await orderResponse.json();
-    await fetch(`http://localhost:8080/api/cart/${user.id}`);
+    await fetch(`http://localhost:8080/api/cart/${userId}`);
     return res;
   } catch (error) {
     console.error("Error al crear una orden:", error);
@@ -77,13 +78,7 @@ export const getAllOrders = async () => {
       },
     });
     const data = await response.json();
-
-    const dataWithKeys = data.map((item: any, index: any) => ({
-      ...item,
-      key: index,
-    }));
-
-    return dataWithKeys;
+    return data;
   } catch (error) {
     console.error("Error al obtener datos de ordenes:", error);
     throw error;
@@ -103,14 +98,10 @@ export const uploadVoucherImage = async (orderId: number, file: File) => {
     );
     const data = await response.json();
     if (response.ok) {
-      return data; // Retorna los datos recibidos del servidor si la carga es exitosa
+      return data;
     }
-    // else {
-    //     throw new Error(data.message || "Error al subir la imagen del voucher");
-    // }
   } catch (error) {
     console.error("Error al subir la imagen del voucher:", error);
-    // throw error;
   }
 };
 

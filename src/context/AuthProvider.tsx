@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { generalRoutes } from "../utils/routes/general.routes.ts";
+import * as jose from 'jose';
 
 const BASE_URL = generalRoutes.BASE_URL;
 
@@ -144,6 +145,11 @@ export const AuthProvider = ({ children }: any) => {
       if (userData.token) {
         localStorage.setItem("token", userData.token);
 
+        // get userId from token
+        const claims = jose.decodeJwt(localStorage.getItem("token")!);
+        const userId: any = claims.userId;
+        localStorage.setItem("userId", userId);
+
         // get userdata
         getUserInfo(userData.token);
         setUserInfo(userData);
@@ -205,6 +211,7 @@ export const AuthProvider = ({ children }: any) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     setIsAuthenticated(false);
     setUserRole(null);
     window.location.href = "/";
