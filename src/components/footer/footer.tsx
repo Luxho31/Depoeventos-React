@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <div className="bg-gray-100 w-full">
             <div className="w-[90%] m-auto py-4 flex flex-col md:flex-row gap-y-8 items-center justify-center">
-                <h3 className="text-xl italic font-bold">
+                <h3 className="text-xl italic font-bold max-md:hidden">
                     Depo<span className="text-orange-600">Eventos</span>
                 </h3>
                 <p className="m-auto text-slate-400">

@@ -37,8 +37,12 @@ function App() {
               <Route index path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route
+              {/* <Route
                 path="/change-password/:token"
+                element={<ChangePassword />}
+              /> */}
+              <Route
+                path="/change-password"
                 element={<ChangePassword />}
               />
             </Route>

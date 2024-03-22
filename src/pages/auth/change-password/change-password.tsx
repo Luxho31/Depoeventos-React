@@ -10,139 +10,151 @@ import { Toaster, toast } from "sonner";
 import { forgotPassword } from "../../../services/forgot-password/change-password-service";
 
 export default function ChangePassword() {
-  const [loading, setLoading] = React.useState(false);
-  const navigate = useNavigate();
-  const [form] = Form.useForm();
+    const [loading, setLoading] = React.useState(false);
+    const navigate = useNavigate();
+    const [form] = Form.useForm();
 
-  type ChangePasswordType = {
-    password?: string;
-    confirmPassword?: string;
-  };
+    type ChangePasswordType = {
+        password?: string;
+        confirmPassword?: string;
+    };
 
-  const token = window.location.pathname.split("/")[2];
-  const handleChangePassword = async (values: any) => {
-    if (values.password !== values.confirmPassword) {
-      toast.error("Las contraseñas no coinciden");
-      form.setFields([
-        {
-          name: "password",
-          errors: [""],
-        },
-        {
-          name: "confirmPassword",
-          errors: [""],
-        },
-      ]);
-      return;
-    }
+    const token = window.location.pathname.split("/")[2];
+    const handleChangePassword = async (values: any) => {
+        if (values.password !== values.confirmPassword) {
+            toast.error("Las contraseñas no coinciden");
+            form.setFields([
+                {
+                    name: "password",
+                    errors: [""],
+                },
+                {
+                    name: "confirmPassword",
+                    errors: [""],
+                },
+            ]);
+            return;
+        }
 
-    try {
-      setLoading(true);
-      await forgotPassword(token, values.password);
-      toast.success("Contraseña cambiada con éxito");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      navigate("/login");
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+        try {
+            setLoading(true);
+            await forgotPassword(token, values.password);
+            toast.success("Contraseña cambiada con éxito");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            navigate("/login");
+        } catch (error: any) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return (
-    <>
-      <div className="flex items-center w-full h-screen">
-        <>
-          <Toaster duration={5000} richColors />
-          <img
-            className="w-1/4 h-screen object-cover max-md:hidden relative"
-            src="https://media.tenor.com/AM6-qYuMWs8AAAAC/bully-maguire-emo-peter-parker.gif"
-            alt=""
-          />
-          <Link className="pointer flexNullCenter absolute top-5 left-5" to="/">
+    return (
+        <div className="flex flex-col justify-center md:flex-row items-center h-screen">
+            <Toaster duration={5000} richColors />
             <img
-              src={LogoIcon}
-              alt="DepoEventos"
-              style={{ width: "70px", marginBottom: "30px" }}
+                className="w-1/4 h-screen object-cover max-md:hidden"
+                src="https://media.tenor.com/AM6-qYuMWs8AAAAC/bully-maguire-emo-peter-parker.gif"
+                alt=""
             />
-          </Link>
-        </>
+            <div className="md:absolute top-5 left-5">
+                <Link
+                    // className="pointer flexNullCenter absolute top-5 left-5"
+                    to="/"
+                >
+                    <img
+                        src={LogoIcon}
+                        alt="DepoEventos"
+                        style={{ width: "70px", marginBottom: "30px" }}
+                    />
+                </Link>
+            </div>
 
-        <Form
-          name="change-password"
-          form={form}
-          onFinish={handleChangePassword}
-          onFinishFailed={() => {}}
-          className="w-[750px] max-md:mx-20 md:mx-32"
-        >
-          <h2 className="text-3xl text-center font-semibold mb-8">
-            Cambiar contraseña
-          </h2>
+            <div className="w-full md:w-[750px] md:mx-auto px-6 ">
+                <Form
+                    name="change-password"
+                    form={form}
+                    onFinish={handleChangePassword}
+                    onFinishFailed={() => {}}
+                    // className="w-full md:w-[750px] mx-4 md:mx-0 md:ml-auto md:mr-auto mt-8 md:mt-0"
+                >
+                    <h2 className="text-3xl text-center font-semibold mb-8">
+                        Cambiar contraseña
+                    </h2>
 
-          <div className="flex flex-col gap-y-2">
-            {/* Input Password */}
-            <Form.Item<ChangePasswordType>
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese su contraseña.",
-                },
-              ]}
-              className="cursor-text"
-            >
-              <Input.Password
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa tu contraseña"
-                size="large"
-                prefix={<FaKey className="site-form-item-icon me-1" />}
-              />
-            </Form.Item>
+                    <div className="flex flex-col gap-y-2">
+                        {/* Input Password */}
+                        <Form.Item
+                            name="password"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Por favor ingrese su contraseña.",
+                                },
+                            ]}
+                            className="cursor-text"
+                        >
+                            <Input.Password
+                                className="w-full rounded-xl p-4"
+                                placeholder="Ingresa tu contraseña"
+                                size="large"
+                                prefix={
+                                    <FaKey className="site-form-item-icon me-1" />
+                                }
+                            />
+                        </Form.Item>
 
-            {/* Input Password */}
-            <Form.Item<ChangePasswordType>
-              name="confirmPassword"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese su contraseña.",
-                },
-              ]}
-              className="cursor-text"
-            >
-              <Input.Password
-                className="w-full rounded-xl p-4"
-                placeholder="Confirma tu contraseña"
-                size="large"
-                prefix={<FaKey className="site-form-item-icon me-1" />}
-              />
-            </Form.Item>
-          </div>
+                        {/* Input Password */}
+                        <Form.Item
+                            name="confirmPassword"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Por favor ingrese su contraseña.",
+                                },
+                            ]}
+                            className="cursor-text"
+                        >
+                            <Input.Password
+                                className="w-full rounded-xl p-4"
+                                placeholder="Confirma tu contraseña"
+                                size="large"
+                                prefix={
+                                    <FaKey className="site-form-item-icon me-1" />
+                                }
+                            />
+                        </Form.Item>
+                    </div>
 
-          <Form.Item className="w-full flex justify-center">
-            <button
-              type="submit"
-              className="w-96 bg-[#f46e16] text-white font-semibold rounded-xl  !h-12"
-              disabled={loading}
-            >
-              {loading ? (
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-                />
-              ) : (
-                "Cambiar contraseña"
-              )}
-            </button>
-          </Form.Item>
+                    <Form.Item className="w-full flex justify-center">
+                        <button
+                            type="submit"
+                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <Spin
+                                    indicator={
+                                        <LoadingOutlined
+                                            style={{ fontSize: 24 }}
+                                            spin
+                                        />
+                                    }
+                                />
+                            ) : (
+                                "Cambiar contraseña"
+                            )}
+                        </button>
+                    </Form.Item>
 
-          <p className="text-center">
-            Volver a {""}
-            <Link to="/login" className="text-gray-500">
-              Sign in
-            </Link>
-          </p>
-        </Form>
-      </div>
-    </>
-  );
+                    <p className="text-center">
+                        Volver a {""}
+                        <Link to="/login" className="text-gray-500">
+                            Iniciar Sesión
+                        </Link>
+                    </p>
+                </Form>
+            </div>
+        </div>
+    );
 }

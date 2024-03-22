@@ -8,6 +8,7 @@ type Product = {
   description: string;
   startDate: string;
   maxStudents: number;
+  photo: string;
   campus: {
     id: number;
     name: string;
@@ -56,7 +57,7 @@ export const CartProvider = ({ children }: any) => {
     const fetchData = async () => {
       try {
         if (!token) {
-          return;
+          throw new Error;
         }
         const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
         if (!response.ok) {

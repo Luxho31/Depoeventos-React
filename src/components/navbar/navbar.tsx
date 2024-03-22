@@ -131,14 +131,13 @@ export default function Navbar() {
                                             className="u-full-width"
                                         >
                                             <thead>
-                                                <tr className="flex gap-12 leading-10">
+                                                <tr className="flex gap-12 leading-10 border-b-2">
                                                     <th>Nombre</th>
                                                     <th>Precio</th>
                                                     <th>Cantidad</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <hr className="h-px" />
                                             <tbody>
                                                 {products.length === 0 ? (
                                                     <tr>
@@ -234,7 +233,6 @@ export default function Navbar() {
                                 <Link
                                     to="/login"
                                     className="w-fit text-center border rounded-lg hover:shadow-md px-6 py-2"
-
                                 >
                                     Acceder
                                 </Link>
@@ -254,20 +252,27 @@ export default function Navbar() {
                 <div className="flex flex-col justify-between h-full">
                     <ul className="flex flex-col justify-center items-center gap-6">
                         <li className="">
-                            <NavLink to="/" onClick={onClose}>Inicio</NavLink>
+                            <NavLink to="/" onClick={onClose}>
+                                Inicio
+                            </NavLink>
                         </li>
 
                         <li className="">
-                            <NavLink to="/products" onClick={onClose}>Productos</NavLink>
+                            <NavLink to="/products" onClick={onClose}>
+                                Productos
+                            </NavLink>
                         </li>
 
                         <li className="">
-                            <NavLink to="/contact" onClick={onClose}>Contacto</NavLink>
+                            <NavLink to="/contact" onClick={onClose}>
+                                Contacto
+                            </NavLink>
                         </li>
 
                         <li
-                            className={`${isAuthenticated ? "block" : "hidden"
-                                }`}
+                            className={`${
+                                isAuthenticated ? "block" : "hidden"
+                            }`}
                         >
                             <Link to="/dashboard">Dashboard</Link>
                         </li>
