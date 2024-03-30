@@ -4,6 +4,14 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { sendMessage } from "../../../services/contact-us-service";
 
+type ContactUsType = {
+    fullName: string;
+    email: string;
+    phone: string;
+    message: string;
+    privacyPolice: boolean;
+};
+
 export default function Contact() {
     const { Option } = Select;
     const { TextArea } = Input;
@@ -12,7 +20,7 @@ export default function Contact() {
 
     const [loading, setLoading] = useState(false);
 
-    const handleSendMessage = async (values: any) => {
+    const handleSendMessage = async (values: ContactUsType) => {
         try {
             setLoading(true);
             await sendMessage(values);
@@ -27,13 +35,7 @@ export default function Contact() {
         }
     };
 
-    type ContactUsType = {
-        fullName?: string;
-        email?: string;
-        phone?: string;
-        message?: string;
-        privacyPolice?: boolean;
-    };
+
 
     const prefixSelector = (
         <Form.Item

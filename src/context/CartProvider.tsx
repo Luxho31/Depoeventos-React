@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Product = {
-  children: any;
+  children: ChildrenData;
   id: number;
   name: string;
   price: number;
@@ -24,10 +24,42 @@ type Product = {
   courses: Course[];
 };
 
+type ChildrenData = {
+  id: number;
+  name: string;
+  lastName: string;
+  motherLastName: string;
+  birthdate: string;
+  documentType: string;
+  documentNumber: string;
+  emergencyContactPhone: string;
+  gender: string;
+  isStudent: boolean;
+  school: string;
+  grade: string;
+  section: string;
+  isClubMember: boolean;
+  club: string;
+  membershipCardNumber: string;
+  memberName: string;
+  memberLastName: string;
+  memberMotherLastName: string;
+};
+
 type Course = {
   id: number;
   name: string;
   description: string;
+};
+
+type CartData = {
+  id: number;
+  product: {
+    name: string;
+    price: number;
+    description: string;
+  };
+  children: ChildrenData;
 };
 
 type CartContextType = {
@@ -48,7 +80,7 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider = ({ children }: any) => {
+export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -64,7 +96,7 @@ export const CartProvider = ({ children }: any) => {
           throw new Error("Error al obtener los productos del carrito");
         }
         const data = await response.json();
-        const mappedProducts: Product[] = data.map((item: any) => ({
+        const mappedProducts: Product[] = data.map((item: CartData) => ({
           id: item.id,
           name: item.product.name,
           price: item.product.price,
@@ -118,7 +150,7 @@ export const CartProvider = ({ children }: any) => {
         throw new Error("Error al obtener los productos del carrito");
       }
       const data = await response.json();
-      const mappedProducts: Product[] = data.map((item: any) => ({
+      const mappedProducts: Product[] = data.map((item: CartData) => ({
         id: item.id,
         name: item.product.name,
         price: item.product.price,

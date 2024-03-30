@@ -12,29 +12,84 @@ type orderType = {
   status: string;
 };
 
-export const createOrder = async (data: any) => {
-  const token = localStorage.getItem("token");
+type Product = {
+  id: number;
+  photo: string;
+  name: string;
+  price: number;
+  description: string;
+  startDate: string;
+  maxStudents: number;
+  campus: Campus;
+  category: Category;
+  startDateInscription: string;
+  endDateInscription: string;
+  courses: Course[];
+  children: Children;
+};
 
+type Campus = {
+  id: number;
+  name: string;
+  description: string;
+}
+
+type Category = {
+  id: number;
+  name: string;
+  description: string;
+}
+
+type Course = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+type Children = {
+  id: number;
+  name: string;
+  lastName: string;
+  motherLastName: string;
+  birthdate: string;
+  documentType: string;
+  documentNumber: string;
+  emergencyContactPhone: string;
+  gender: string;
+  isStudent: boolean;
+  school: string;
+  grade: string;
+  section: string;
+  isClubMember: boolean;
+  club: string;
+  membershipCardNumber: string;
+  memberName: string;
+  memberLastName: string;
+  memberMotherLastName: string;
+};
+
+export const createOrder = async (data: orderType) => {
   try {
 
     const userId = localStorage.getItem("userId");
 
-    let products: any = [];
+    // let products = [];
 
     // Obtener los productos del carrito
     const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
     if (!response.ok) {
       throw new Error("Error al obtener los productos del carrito");
     }
-    products = await response.json();
+    const products = await response.json();
 
     // Crear el array de items para la orden
-    const items = products.map((product: any) => ({
+    const items = products.map((product: Product) => ({
       product: {
-        id: product.product.id,
+        id: product.id,
       },
       children: {
-        id: 1,
+        // id: 1,
+        id: product.children.id,
       },
     }));
 
@@ -60,9 +115,14 @@ export const createOrder = async (data: any) => {
     if (!orderResponse.ok) {
       throw new Error("Error al crear una orden");
     }
-    const res = await orderResponse.json();
-    await fetch(`http://localhost:8080/api/cart/${userId}`);
-    return res;
+    const orderData = await orderResponse.json();
+    // await fetch(`http://localhost:8080/api/cart/${userId}`);
+    console.log(orderData);
+    return orderData;
+    // Crear la preferencia de MercadoPago
+    // const preferenceId = await createMercadoPagoPreference(orderData);
+
+    // return { orderId: orderData.id, preferenceId };
   } catch (error) {
     console.error("Error al crear una orden:", error);
     throw error;

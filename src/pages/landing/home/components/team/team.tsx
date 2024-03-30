@@ -84,16 +84,16 @@ export default function Team() {
   ];
 
   return (
-    <div className="w-[80%] m-auto mt-20 mb-20">
+    <div className="w-[80%] m-auto my-20">
       <div className="mb-12">
-        <h1 className="text-4xl font-extrabold mb-3">Equipo</h1>
+        <h1 className="text-2xl lg:text-4xl font-extrabold mb-3">Equipo</h1>
         <p>
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
           nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
           sed diam voluptua.
         </p>
       </div>
-      <div className="w-full m-auto flex flex-col justify-around max-xl:w-full max-lg:flex-col max-lg:items-center max-lg:gap-10">
+      <div className="w-full m-auto flex flex-col justify-around max-lg:flex-col max-lg:items-center max-lg:gap-10 max-xl:w-full">
         <InfiniteMovingCards items={testimonials1} direction="right" />
         <InfiniteMovingCards items={testimonials2} direction="left" />
       </div>

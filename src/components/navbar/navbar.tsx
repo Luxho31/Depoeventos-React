@@ -96,7 +96,7 @@ export default function Navbar() {
                     className="flex items-center gap-x-4 cursor-pointer"
                 >
                     <img src={LogoIcon} alt="DepoEventos" className="w-10" />
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg font-semibold max-sm:hidden">
                         Depo<span className="text-orange-500">Eventos</span>
                     </h2>
                 </Link>
@@ -125,7 +125,7 @@ export default function Navbar() {
                             <Dropdown
                                 placement="bottomRight"
                                 overlay={
-                                    <div className="bg-white rounded-md px-4 py-2">
+                                    <div className="bg-white rounded-md px-4 py-2 max-md:hidden">
                                         <table
                                             id="lista-carrito"
                                             className="u-full-width"

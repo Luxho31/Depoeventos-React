@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import "./typing-effect.css"; // Archivo CSS para los estilos de la animación
 
-const TypingEffect = ({ text }: any) => {
+interface TypingEffectProps {
+  text: string;
+}
+
+const TypingEffect: React.FC<TypingEffectProps> = ({ text }) => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 

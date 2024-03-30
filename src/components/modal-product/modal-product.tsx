@@ -29,13 +29,36 @@ type Product = {
     startDateInscription: string;
     endDateInscription: string;
     courses: Course[];
-    children: any;
+    children: Children;
 };
 
 type Course = {
     id: number;
     name: string;
     description: string;
+};
+
+type Children = {
+    id: number;
+    name: string;
+    lastName: string;
+    motherLastName: string;
+    birthdate: string;
+    documentType: string;
+    documentNumber: string;
+    emergencyContactPhone: string;
+    gender: string;
+    isStudent: boolean;
+    school: string;
+    grade: string;
+    section: string;
+    isClubMember: boolean;
+    club: string;
+    membershipCardNumber: string;
+    memberName: string;
+    memberLastName: string;
+    memberMotherLastName: string;
+    selected: boolean;
 };
 
 type ModalProps = {
@@ -46,7 +69,8 @@ type ModalProps = {
 export default function ModalProduct({ product, onClose }: ModalProps) {
     const { isAuthenticated, cargando } = useAuth();
     const { addToCart } = useCart();
-    const [children, setChildren] = useState([]);
+    const [children, setChildren] = useState<Children[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchChildren = async () => {
@@ -61,11 +85,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
         return "cargando...";
     }
 
-    const navigate = useNavigate();
-
     const handleChange = (selectedValues: string[]) => {
         // Actualizar el estado de los hijos para marcar si están seleccionados o no
-        const updatedChildren: any = children.map((child: any) => ({
+        const updatedChildren: Children[] = children.map((child: Children) => ({
             ...child,
             selected: selectedValues.includes(child.name), // Marcar como seleccionado si el nombre está en los valores seleccionados
         }));
@@ -80,8 +102,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
             navigate("/login");
         } else {
             const selectedChildrenIds = children
-                .filter((child: any) => child.selected)
-                .map((selectedChild: any) => selectedChild.id);
+                .filter((child: Children) => child.selected)
+                .map((selectedChild: Children) => selectedChild.id);
 
             if (selectedChildrenIds.length === 0) {
                 console.error("No se han seleccionado hijos");
@@ -173,9 +195,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                                     placeholder="Por favor, selecciona los hijos a matricular"
                                     onChange={handleChange}
                                     value={children
-                                        .filter((child: any) => child.selected)
-                                        .map((child: any) => child.name)} // Especificar los valores seleccionados
-                                    options={children.map((child: any) => ({
+                                        .filter((child: Children) => child.selected)
+                                        .map((child: Children) => child.name)} // Especificar los valores seleccionados
+                                    options={children.map((child: Children) => ({
                                         value: child.name,
                                         label: child.name,
                                     }))}

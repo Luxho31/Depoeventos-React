@@ -7,6 +7,7 @@ import VentaGIF from "../../../assets/gif/ventas.gif";
 import { useCart } from "../../../context/CartProvider";
 import CartTable from "./components/cart-table";
 import PaymentStep from "./components/payment-step";
+import PaymentButton from "./components/payment-button";
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
@@ -118,12 +119,13 @@ export default function Cart() {
                                 </div>
                             </div>
                             <div className="w-full flex justify-center">
-                                <button
+                                {/* <button
                                     className="w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"
                                     onClick={() => setProgressPercent(50)}
                                 >
                                     Pagar
-                                </button>
+                                </button> */}
+                                <PaymentButton />
                             </div>
                         </div>
                     </div>

@@ -17,21 +17,25 @@ type Product = {
     description: string;
     startDate: string;
     maxStudents: number;
-    campus: {
-        id: number;
-        name: string;
-        description: string;
-    };
-    category: {
-        id: number;
-        name: string;
-        description: string;
-    };
+    campus: Campus;
+    category: Category;
     startDateInscription: string;
     endDateInscription: string;
     courses: Course[];
-    children: any;
+    children: Children;
 };
+
+type Campus = {
+    id: number;
+    name: string;
+    description: string;
+}
+
+type Category = {
+    id: number;
+    name: string;
+    description: string;
+}
 
 type Course = {
     id: number;
@@ -39,12 +43,35 @@ type Course = {
     description: string;
 };
 
+type Children = {
+    id: number;
+    name: string;
+    lastName: string;
+    motherLastName: string;
+    birthdate: string;
+    documentType: string;
+    documentNumber: string;
+    emergencyContactPhone: string;
+    gender: string;
+    isStudent: boolean;
+    school: string;
+    grade: string;
+    section: string;
+    isClubMember: boolean;
+    club: string;
+    membershipCardNumber: string;
+    memberName: string;
+    memberLastName: string;
+    memberMotherLastName: string;
+    selected: boolean;
+  };
+
 export default function Products() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
         null
     );
-    const [productData, setProductData] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
+    const [productData, setProductData] = useState<Product[]>([]);
+    const [filteredData, setFilteredData] = useState<Product[]>([]);
     const [categoryData, setCategoryData] = useState([]);
     const [campusData, setCampusData] = useState([]);
 
@@ -99,13 +126,13 @@ export default function Products() {
         let filtered = productData;
 
         if (selectedCategories.length > 0) {
-            filtered = filtered.filter((product: Product) =>
+            filtered = filtered.filter((product) =>
                 selectedCategories.includes(product.category.id)
             );
         }
 
         if (selectedCampuses.length > 0) {
-            filtered = filtered.filter((product: Product) =>
+            filtered = filtered.filter((product) =>
                 selectedCampuses.includes(product.campus.id)
             );
         }
@@ -142,7 +169,7 @@ export default function Products() {
                                     setSelectedCategories(values)
                                 }
                             >
-                                {categoryData.map((category: any) => (
+                                {categoryData.map((category: Category) => (
                                     <Checkbox
                                         key={category.id}
                                         value={category.id}
@@ -160,7 +187,7 @@ export default function Products() {
                                     setSelectedCampuses(values)
                                 }
                             >
-                                {campusData.map((campus: any) => (
+                                {campusData.map((campus: Campus) => (
                                     <Checkbox key={campus.id} value={campus.id}>
                                         {campus.name}
                                     </Checkbox>
@@ -191,7 +218,7 @@ export default function Products() {
                         </h2>
                     )}
                     <div className="grid grid-cols-1 min-[820px]:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-2 min-[1750px]:grid-cols-3 gap-8">
-                        {filteredData.map((product: any) => (
+                        {filteredData.map((product: Product) => (
                             <ProductCard
                                 key={product.id}
                                 product={product}

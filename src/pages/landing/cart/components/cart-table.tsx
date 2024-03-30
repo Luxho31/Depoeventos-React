@@ -1,7 +1,7 @@
-import { FaInbox, FaRegTrashCan } from "react-icons/fa6";
+import { Empty, Popconfirm } from "antd";
+import { FaRegTrashCan } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
 import { useCart } from "../../../../context/CartProvider";
-import { Popconfirm } from "antd";
 
 export default function CartTable() {
     const { products, getTotalPrice, clearCart, removeProduct } = useCart();
@@ -76,14 +76,12 @@ export default function CartTable() {
                             <tr>
                                 <td
                                     className="px-6 py-4 text-center whitespace-nowrap"
-                                    col-span="5"
+                                    colSpan={5}
                                 >
-                                    <div className="flex flex-col items-center gap-2">
-                                        <FaInbox className="text-8xl text-gray-200" />
-                                        <span className="text-gray-400">
-                                            No hay elementos
-                                        </span>
-                                    </div>
+                                    <Empty
+                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                        description="No hay elementos"
+                                    />
                                 </td>
                             </tr>
                         )}

@@ -46,11 +46,11 @@ export default function CoursesDashboard() {
     const [courseRegistrationData, setCourseRegistrationData] = useState<
         CourseRegistrationData[]
     >([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [seeId, setSeeId] = useState<number | undefined>(undefined);
-    const [openSeeModal, setOpenSeeModal] = useState(false);
+    const [, setSeeId] = useState<number | undefined>(undefined);
+    const [, setOpenSeeModal] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
     const navigate = useNavigate();
@@ -79,18 +79,18 @@ export default function CoursesDashboard() {
         }
     }, [userRole]);
 
-    const handleReload = () => {
-        try {
-            setLoading(true);
-            // getAllCourseRegistrations().then((data) => {
-            //   setCourseRegistrationData(data);
-            // });
-        } catch (error) {
-            console.error("Error al recargar matriculas por curso:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const handleReload = () => {
+    //     try {
+    //         setLoading(true);
+    //         // getAllCourseRegistrations().then((data) => {
+    //         //   setCourseRegistrationData(data);
+    //         // });
+    //     } catch (error) {
+    //         console.error("Error al recargar matriculas por curso:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     const openSeeCourseRegistrationModal = (id: number) => {
         setSeeId(id);
@@ -102,17 +102,23 @@ export default function CoursesDashboard() {
     };
 
     const onPageChange = (page: number) => {
-        const filteredUsers = courseRegistrationData.filter(
-            (courseRegistration) =>
-                courseRegistration.inscriptionDate
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
-        );
-        const indexOfLastUser: number = page * usersPerPage;
-        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        const currentUsers: CourseRegistrationData[] = filteredUsers.slice(
-            indexOfFirstUser,
-            indexOfLastUser
+        // const filteredUsers = courseRegistrationData.filter(
+        //     (courseRegistration) =>
+        //         courseRegistration.inscriptionDate
+        //             .toLowerCase()
+        //             .includes(searchTerm.toLowerCase())
+        // );
+        // const indexOfLastUser: number = page * usersPerPage;
+        // const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+        // const currentUsers: CourseRegistrationData[] = filteredUsers.slice(
+        //     indexOfFirstUser,
+        //     indexOfLastUser
+        // );
+
+        courseRegistrationData.filter((courseRegistration) =>
+            courseRegistration.inscriptionDate
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
         );
 
         setCurrentPage(page);

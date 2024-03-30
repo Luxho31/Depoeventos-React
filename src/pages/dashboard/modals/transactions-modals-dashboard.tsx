@@ -7,13 +7,31 @@ import {
   updateOrder,
 } from "../../../services/cart-service/cart-service";
 
+type TransactionData = {
+  id: number;
+  paymentMethod: string;
+  bankName: string;
+  operationNumber: string;
+  date: string;
+  totalPrice: number;
+  status: string;
+}
+
+interface TransactionModalProps {
+  type: string;
+  id: number | undefined;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleReload: () => void;
+}
+
 export default function TransactionModal({
   type,
   id,
   open,
   setOpen,
   handleReload
-}: any) {
+}: TransactionModalProps) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -42,7 +60,7 @@ export default function TransactionModal({
     }
   };
 
-  const updateOrderForm = async (values: any) => {
+  const updateOrderForm = async (values: TransactionData) => {
     try {
       setLoading(true);
       await updateOrder(values, id);

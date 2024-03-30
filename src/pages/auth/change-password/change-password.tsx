@@ -20,7 +20,12 @@ export default function ChangePassword() {
     };
 
     const token = window.location.pathname.split("/")[2];
-    const handleChangePassword = async (values: any) => {
+    const handleChangePassword = async (values: ChangePasswordType) => {
+        if (!values.password || !values.confirmPassword) {
+            toast.error("Por favor ingrese su contraseña en ambos campos");
+            return;
+        }
+
         if (values.password !== values.confirmPassword) {
             toast.error("Las contraseñas no coinciden");
             form.setFields([
@@ -42,8 +47,12 @@ export default function ChangePassword() {
             toast.success("Contraseña cambiada con éxito");
             await new Promise((resolve) => setTimeout(resolve, 2000));
             navigate("/login");
-        } catch (error: any) {
-            toast.error(error.message);
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                console.log("Error desconocido");
+            }
         } finally {
             setLoading(false);
         }
@@ -78,11 +87,11 @@ export default function ChangePassword() {
                     onFinishFailed={() => {}}
                     // className="w-full md:w-[750px] mx-4 md:mx-0 md:ml-auto md:mr-auto mt-8 md:mt-0"
                 >
-                    <h2 className="text-3xl text-center font-semibold mb-8">
+                    <h2 className="text-3xl max-sm:text-xl max-md:text-2xl text-center font-semibold mb-8">
                         Cambiar contraseña
                     </h2>
 
-                    <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-col gap-y-2 mb-8">
                         {/* Input Password */}
                         <Form.Item
                             name="password"
@@ -126,10 +135,10 @@ export default function ChangePassword() {
                         </Form.Item>
                     </div>
 
-                    <Form.Item className="w-full flex justify-center">
+                    <div className="w-full flex justify-center">
                         <button
                             type="submit"
-                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
                             disabled={loading}
                         >
                             {loading ? (
@@ -145,9 +154,9 @@ export default function ChangePassword() {
                                 "Cambiar contraseña"
                             )}
                         </button>
-                    </Form.Item>
+                    </div>
 
-                    <p className="text-center">
+                    <p className="text-center mt-8">
                         Volver a {""}
                         <Link to="/login" className="text-gray-500">
                             Iniciar Sesión

@@ -20,12 +20,17 @@ export default function Login() {
         password?: string;
     };
 
-    const handleSignIn = async (values: any) => {
+    const handleSignIn = async (values: LoginType) => {
         try {
             setLoading(true);
 
-            await login(values.email, values.password);
-            navigate("/");
+            if (values.email && values.password) {
+                await login(values.email, values.password);
+                navigate("/");
+            } else {
+                // Manejar el caso en el que email o password es undefined
+                throw new Error("Correo o contraseña no válidos");
+            }
         } catch (error) {
             toast.error("Correo o contraseña incorrecta");
             form.setFields([
@@ -133,7 +138,7 @@ export default function Login() {
                     <div className="w-full flex justify-center">
                         <button
                             type="submit"
-                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                            className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4" //max-sm:w-full sm:px-24 py-4
                             disabled={loading}
                         >
                             {loading ? (

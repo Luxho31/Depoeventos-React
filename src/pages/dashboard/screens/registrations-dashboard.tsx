@@ -1,13 +1,10 @@
-import { Input, Pagination, Select } from "antd";
+import { Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import {
-    getAllCourseRegistration,
-    getAllRegistration,
-} from "../../../services/Inscriptions-service";
+import { getAllRegistration } from "../../../services/Inscriptions-service";
 
 type ProductType = {
     id?: number;
@@ -49,11 +46,11 @@ export default function RegistrationsDashboard() {
     const [registrationData, setRegistrationData] = useState<
         RegistrationData[]
     >([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [seeId, setSeeId] = useState<number | undefined>(undefined);
-    const [openSeeModal, setOpenSeeModal] = useState(false);
+    const [, setSeeId] = useState<number | undefined>(undefined);
+    const [, setOpenSeeModal] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
     const navigate = useNavigate();
@@ -78,19 +75,6 @@ export default function RegistrationsDashboard() {
         }
     }, [userRole]);
 
-    const handleReload = () => {
-        try {
-            setLoading(true);
-            // getAllRegistrations().then((data) => {
-            //   setRegistrationData(data);
-            // });
-        } catch (error) {
-            console.error("Error al recargar matriculas:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const openSeeRegistrationModal = (id: number) => {
         setSeeId(id);
         setOpenSeeModal(true);
@@ -103,16 +87,22 @@ export default function RegistrationsDashboard() {
 
     const onPageChange = (page: number) => {
         // Mantén la búsqueda al cambiar de página
-        const filteredUsers = registrationData.filter((registration) =>
+        // const filteredUsers = registrationData.filter((registration) =>
+        //     registration.product
+        //         .name!.toLowerCase()
+        //         .includes(searchTerm.toLowerCase())
+        // );
+        // const indexOfLastUser: number = page * usersPerPage;
+        // const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
+        // const currentUsers: RegistrationData[] = filteredUsers.slice(
+        //     indexOfFirstUser,
+        //     indexOfLastUser
+        // );
+
+        registrationData.filter((registration) =>
             registration.product
                 .name!.toLowerCase()
                 .includes(searchTerm.toLowerCase())
-        );
-        const indexOfLastUser: number = page * usersPerPage;
-        const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        const currentUsers: RegistrationData[] = filteredUsers.slice(
-            indexOfFirstUser,
-            indexOfLastUser
         );
 
         setCurrentPage(page);

@@ -8,13 +8,27 @@ import {
   updateCampus,
 } from "../../../services/campuses-service";
 
+type Campus = {
+  id: number;
+  name: string;
+  description: string;
+}
+
+type CampusModalProps = {
+  create: boolean;
+  id: number | undefined;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleReload: () => void;
+};
+
 export default function CampusModal({
   create,
   id,
   open,
   setOpen,
   handleReload,
-}: any) {
+}: CampusModalProps) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -34,10 +48,10 @@ export default function CampusModal({
     }
   };
 
-  const updateCampusForm = async (values: any) => {
+  const updateCampusForm = async (values: Campus) => {
     try {
       setLoading(true);
-      values.photo = ""
+      // values.photo = ""
       await updateCampus(values, id);
       setOpen(false);
       handleReload();
@@ -48,10 +62,10 @@ export default function CampusModal({
     }
   };
 
-  const createCampusForm = async (values: any) => {
+  const createCampusForm = async (values: Campus) => {
     try {
       setLoading(true);
-      values.photo = ""
+      // values.photo = ""
       await createCampus(values);
       setOpen(false);
       form.resetFields();
@@ -79,7 +93,7 @@ export default function CampusModal({
           create ? createCampusForm(values) : updateCampusForm(values);
         }}
         onFinishFailed={() => { }}
-        className="my-10 max-md:mx-20 md:mx-32"
+        className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
         <div className="flex flex-col gap-y-4">
@@ -124,14 +138,15 @@ export default function CampusModal({
           </Form.Item>
 
           {/* ------------------Fotografia de la Sede------------------ */}
-          <Form.Item name="photo"></Form.Item>
+          {/* <Form.Item name="photo"></Form.Item> */}
         </div>
 
-        <Form.Item className="w-full flex justify-end">
+        <div className="w-full flex justify-end max-sm:justify-center">
           {create ? (
             <button
               type="submit"
-              className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
+                        // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
               disabled={loading}
             >
               {loading ? (
@@ -152,7 +167,8 @@ export default function CampusModal({
             >
               <button
                 type="button"
-                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
+                          // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
                 disabled={loading}
               >
                 {loading ? (
@@ -165,7 +181,7 @@ export default function CampusModal({
               </button>
             </Popconfirm>
           )}
-        </Form.Item>
+        </div>
       </Form>
     </Modal>
   );

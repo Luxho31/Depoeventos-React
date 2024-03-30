@@ -9,7 +9,7 @@ export const InfiniteMovingCards = ({
 }: {
   items: {
     name: string;
-    img: any;
+    img: string;
   }[];
   direction?: "left" | "right";
   pauseOnHover?: boolean;
@@ -68,7 +68,7 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item) => (
           <li
-            className="w-10  max-w-full relative rounded-xl shadow-md border flex-shrink-0 px-8 py-2 md:w-[270px]"
+            className="w-[200px]  relative rounded-xl shadow-md border flex-shrink-0 px-8 py-2 md:w-[270px]"
             key={item.name}
           >
             <blockquote>

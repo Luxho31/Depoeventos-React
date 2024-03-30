@@ -8,13 +8,27 @@ import {
   updateCategory,
 } from "../../../services/categories-service";
 
+type Category = {
+  id: number;
+  name: string;
+  description: string;
+}
+
+type CategoryModalProps = {
+  create: boolean;
+  id: number | undefined;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleReload: () => void;
+};
+
 export default function CategoryModal({
   create,
   id,
   open,
   setOpen,
   handleReload,
-}: any) {
+}: CategoryModalProps) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -34,10 +48,10 @@ export default function CategoryModal({
     }
   };
 
-  const updateCategoryForm = async (values: any) => {
+  const updateCategoryForm = async (values: Category) => {
     try {
       setLoading(true);
-      values.photo = "";
+      // values.photo = "";
       await updateCategory(values, id);
       setOpen(false);
       handleReload();
@@ -48,10 +62,10 @@ export default function CategoryModal({
     }
   };
 
-  const createCategoryForm = async (values: any) => {
+  const createCategoryForm = async (values: Category) => {
     try {
       setLoading(true);
-      values.photo = "";
+      // values.photo = "";
       await createCategory(values);
       setOpen(false);
       form.resetFields();
@@ -79,7 +93,7 @@ export default function CategoryModal({
           create ? createCategoryForm(values) : updateCategoryForm(values);
         }}
         onFinishFailed={() => { }}
-        className="my-10 max-md:mx-20 md:mx-32"
+        className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
         <div className="flex flex-col gap-y-4">
@@ -124,14 +138,14 @@ export default function CategoryModal({
           </Form.Item>
 
           {/* ------------------Fotografia de la Categoria------------------ */}
-          <Form.Item name="photo"></Form.Item>
+          {/* <Form.Item name="photo"></Form.Item> */}
         </div>
 
-        <Form.Item className="w-full flex justify-end">
+        <div className="w-full flex justify-end max-sm:justify-center">
           {create ? (
             <button
               type="submit"
-              className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
               disabled={loading}
             >
               {loading ? (
@@ -152,7 +166,7 @@ export default function CategoryModal({
             >
               <button
                 type="button"
-                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
                 disabled={loading}
               >
                 {loading ? (
@@ -165,7 +179,7 @@ export default function CategoryModal({
               </button>
             </Popconfirm>
           )}
-        </Form.Item>
+        </div>
       </Form>
     </Modal>
   );

@@ -10,6 +10,7 @@ import {
     Tour,
     TourProps,
     Upload,
+    UploadFile,
     // UploadProps,
     message,
 } from "antd";
@@ -20,6 +21,38 @@ import {
     uploadVoucherImage,
 } from "../../../../services/cart-service/cart-service";
 import { useForm } from "antd/es/form/Form";
+import { UploadChangeParam } from "antd/lib/upload/interface";
+
+// type Order = {
+//     user: {
+//         id: number;
+//     };
+//     paymentMethod: string;
+//     items: {
+//         product: {
+//             id: number;
+//         };
+//         children: {
+//             id: number;
+//         };
+//     }[];
+// };
+
+type Order = {
+    id: number;
+    paymentMethod: string;
+    bankName: string;
+    operationNumber: string;
+    date: string;
+    totalPrice: number;
+    status: string;
+    photo: string;
+};
+
+type VoucherImage = {
+    originFileObj: File;
+    // Otros campos si es necesario
+};
 
 const itemsNest: CollapseProps["items"] = [
     {
@@ -101,17 +134,25 @@ function PlinInfo() {
 }
 
 // Define la función getBase64
-function getBase64(file: any, callback: any) {
+function getBase64(file: File, callback: (result: string) => void) {
     const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
+    reader.addEventListener("load", () => {
+        if (typeof reader.result === "string") {
+            callback(reader.result);
+        }
+    });
     reader.readAsDataURL(file);
 }
 
-export default function PaymentStep({ setNextStep }: any) {
+export default function PaymentStep({
+    setNextStep,
+}: {
+    setNextStep: (step: number) => void;
+}) {
     const { getTotalPrice, clearCart } = useCart();
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState();
-    const [voucherImage, setVoucherImage] = useState<any>(null);
+    const [, setImageUrl] = useState<string | undefined>(undefined);
+    const [voucherImage, setVoucherImage] = useState<File | null>(null);
     const [disableYapePlin, setDisableYapePlin] = useState(false);
 
     useEffect(() => {
@@ -126,14 +167,15 @@ export default function PaymentStep({ setNextStep }: any) {
         console.log(key);
     };
 
-    const createOrderForm = async (values: any) => {
+    const createOrderForm = async (values: Order) => {
         try {
             setLoading(true);
             const orderId = await createOrder(values);
+            values.photo = "-";
 
             // Subir la imagen del voucher si existe
             if (voucherImage) {
-                await handleImageUpload(orderId.id, voucherImage.originFileObj); // Cambiado a voucherImage.originFileObj
+                await handleImageUpload(orderId.id, voucherImage); // Cambiado a voucherImage.originFileObj
             }
 
             setNextStep(100);
@@ -266,17 +308,28 @@ export default function PaymentStep({ setNextStep }: any) {
         },
     ];
 
-    const handleImageUpload = async (orderId: any, file: any) => {
+    const handleImageUpload = async (orderId: number, file: File) => {
         setLoading(true);
         try {
             await uploadVoucherImage(orderId, file);
             message.success("Imagen de voucher subida exitosamente");
-            setVoucherImage(file);
-            getBase64(file.originFileObj, (imageUrl: any) => {
-                setImageUrl(imageUrl);
+            // Crear un nuevo objeto VoucherImage con la propiedad originFileObj establecida como el archivo proporcionado
+            // const newVoucherImage: VoucherImage = {
+            //     originFileObj: file,
+            //     // Otros campos si es necesario
+            // };
+
+            setVoucherImage(file); // Actualizar el estado con el nuevo objeto VoucherImage
+            getBase64(file, (imageUrl: string | ArrayBuffer | null) => {
+                if (imageUrl && typeof imageUrl === "string") {
+                    setImageUrl(imageUrl);
+                }
             });
         } catch (error) {
-            console.error("Error al subir la imagen del voucher:", error);
+            console.error("Error al subir la imagen del producto:", error);
+            message.error(
+                "Error al subir la imagen del producto. Por favor, intenta de nuevo."
+            );
         } finally {
             setLoading(false);
         }
@@ -288,15 +341,29 @@ export default function PaymentStep({ setNextStep }: any) {
         headers: {
             authorization: "authorization-text",
         },
-        onChange(info: any) {
-            if (info.file.status === "done") {
-                message.success(`${info.file.name} file uploaded successfully`);
-                setVoucherImage(info.file);
-                getBase64(info.file.originFileObj, (imageUrl: any) => {
-                    setImageUrl(imageUrl);
-                });
-            } else if (info.file.status === "error") {
-                message.error(`${info.file.name} file upload failed.`);
+        // onChange(info: UploadChangeParam<any>) {
+        //     console.log(info);
+        //     const { file } = info;
+        //     if (file.status === "done") {
+        //         message.success(`${file.name} file uploaded successfully`);
+        //         setVoucherImage(file);
+        //         getBase64(file.originFileObj, (imageUrl: string) => {
+        //             setImageUrl(imageUrl);
+        //         });
+        //     } else if (file.status === "error") {
+        //         message.error(`${file.name} file upload failed.`);
+        //     }
+        // },
+        onChange(info: UploadChangeParam<UploadFile>) {
+            const { file } = info;
+            if (file.status === "done") {
+                message.success(`${file.name} file uploaded successfully`);
+                // setProductImage(file.originFileObj); // Assuming setProductImage expects a File object
+                // getBase64(file.originFileObj, (imageUrl: string) => {
+                //     setImageUrl(imageUrl);
+                // });
+            } else if (file.status === "error") {
+                message.error(`${file.name} file upload failed.`);
             }
         },
     };
@@ -372,6 +439,7 @@ export default function PaymentStep({ setNextStep }: any) {
                             {/* Input Número de Operación */}
                             <Form.Item
                                 name="operationNumber"
+                                initialValue={paymentMethod === "YAPE" || paymentMethod === "PLIN" ? "-" : ""}
                                 rules={[
                                     {
                                         required:
@@ -390,7 +458,6 @@ export default function PaymentStep({ setNextStep }: any) {
                                         placeholder="Ingresa tu número de operación"
                                         size="large"
                                         disabled
-                                        defaultValue="-"
                                     />
                                 ) : (
                                     <Input

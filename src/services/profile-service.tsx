@@ -3,7 +3,20 @@ import { generalRoutes } from "../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-export const updateUserInfo = async (data: any, id: any) => {
+interface UserInfoProps {
+  firstName: string,
+  lastName: string,
+  motherLastName: string,
+  documentType: string,
+  documentNumber: string,
+  contactNumber: string,
+  emergencyContactNumber: string,
+  address: string,
+  birthDate: string,
+  country: string,
+}
+
+export const updateUserInfo = async (data: UserInfoProps, id: number) => {
   try {
     const response = await fetch(`${BASE_URL}/updateUser/${id}`, {
       method: "PATCH",

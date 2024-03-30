@@ -4,14 +4,13 @@ import LogoIcon from "../../../assets/image/logo.png";
 import { DatePicker, Form, Input, InputNumber, Select, Spin } from "antd";
 import { FaArrowRight, FaChevronLeft } from "react-icons/fa";
 
-import moment from "moment";
+import dayjs, { Dayjs } from "dayjs";
 
 // React Icons
 import {
     FaAddressCard,
     FaEnvelope,
     FaKey,
-    FaMapMarkerAlt,
     FaPhone,
     FaUser,
 } from "react-icons/fa";
@@ -42,64 +41,78 @@ export default function Register() {
         documentNumber?: string;
         contactNumber?: string;
         emergencyContactNumber?: string;
-        birthDate?: string;
+        birthDate?: Dayjs;
         country?: string;
         username?: string;
         password?: string;
     };
 
-    const disabledDate = (current: any) => {
-        return current && current > moment().subtract(18, "years");
+    const disabledDate = (current: Dayjs | undefined): boolean => {
+        return (
+            current !== undefined &&
+            current.isAfter(dayjs().subtract(18, "years"), "day")
+        );
     };
 
-    const onFinishStep1 = (values: any) => {
+    const onFinishStep1 = (values: RegisterType) => {
         setFormData({
             ...formData,
             ...values,
         });
         setPaso(paso + 1);
     };
-    const onFinishStep2 = async (values: any) => {
+    const onFinishStep2 = async (values: RegisterType) => {
         try {
             setLoading(true);
             const finalFormData = {
                 ...formData,
                 ...values,
-                birthDate: values.birthDate.format("YYYY-MM-DD"),
+                birthDate: values.birthDate?.format("YYYY-MM-DD"),
                 address: "-",
             };
 
             await register(finalFormData);
 
             navigate("/");
-        } catch (error: any) {
-            toast.error(error.message);
-            if (error.message === "El correo electrónico ya está en uso") {
-                form.setFields([
-                    {
-                        name: "username",
-                        errors: ["El correo electrónico ya está en uso"],
-                    },
-                ]);
-            } else if (
-                error.message === "El número de documento ya está en uso"
+        } catch (error) {
+            if (
+                typeof error === "object" &&
+                error !== null &&
+                "message" in error
             ) {
-                form.setFields([
-                    {
-                        name: "documentNumber",
-                        errors: ["El número de documento ya está en uso"],
-                    },
-                ]);
+                const errorMessage = (error as Error).message;
+                toast.error(errorMessage);
+
+                if (errorMessage === "El correo electrónico ya está en uso") {
+                    form.setFields([
+                        {
+                            name: "username",
+                            errors: ["El correo electrónico ya está en uso"],
+                        },
+                    ]);
+                } else if (
+                    errorMessage === "El número de documento ya está en uso"
+                ) {
+                    form.setFields([
+                        {
+                            name: "documentNumber",
+                            errors: ["El número de documento ya está en uso"],
+                        },
+                    ]);
+                } else {
+                    toast.error("Error al registrar el usuario");
+                }
             } else {
-                toast.error("Error al registrar el usuario");
+                // Si el error no tiene una propiedad 'message' o no es un objeto, se maneja aquí
+                toast.error("Error desconocido al registrar el usuario");
             }
         } finally {
             setLoading(false);
         }
     };
 
-	return (
-        <div className="flex flex-col md:flex-row items-center h-screen max-md:mt-24">
+    return (
+        <div className="flex flex-col justify-center md:flex-row items-center h-screen max-md:my-24">
             <Toaster richColors />
             {/* <div className="w-1/4 h-screen object-cover max-md:hidden"> */}
             <img
@@ -415,15 +428,15 @@ export default function Register() {
                         </Form.Item>
                     </div>
                     {paso === 1 && (
-                        <Form.Item className="w-full flex justify-center">
+                        <div className="w-full flex justify-center max-sm:justify-center">
                             <button
                                 type="submit"
-                                className="flex items-center gap-x-2 bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                                className="flex justify-center items-center gap-x-2 bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
                             >
                                 Siguiente
                                 <FaArrowRight className="ms-1" />
                             </button>
-                        </Form.Item>
+                        </div>
                     )}
                 </Form>
                 <Form
@@ -536,7 +549,7 @@ export default function Register() {
                                 ]}
                                 className="w-full cursor-text"
                             >
-                                <DatePicker
+                                <DatePicker<Dayjs>
                                     className="w-full border rounded-xl p-4"
                                     placeholder="Fecha de Nacimiento"
                                     size="large"
@@ -568,10 +581,10 @@ export default function Register() {
               </Form.Item> */}
                     </div>
                     {paso === 2 && (
-                        <Form.Item className="w-full flex justify-center">
+                        <div className="w-full flex justify-center max-sm:justify-center">
                             <button
                                 type="submit"
-                                className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4"
+                                className="bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
                             >
                                 {loading ? (
                                     <Spin
@@ -586,10 +599,10 @@ export default function Register() {
                                     "Registrarse"
                                 )}
                             </button>
-                        </Form.Item>
+                        </div>
                     )}
 
-                    <p className="text-center mb-8">
+                    <p className="text-center mt-8">
                         ¿Ya tienes una cuenta?{" "}
                         <Link to="/login" className="text-gray-500">
                             Iniciar sesión

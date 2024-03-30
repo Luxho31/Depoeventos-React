@@ -1,7 +1,7 @@
 // authContext.tsx
 
 import * as jose from 'jose';
-import { createContext, useContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { generalRoutes } from "../utils/routes/general.routes.ts";
 
 const BASE_URL = generalRoutes.BASE_URL;
@@ -44,7 +44,7 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider = ({ children }: any) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [cargando, setCargando] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string[] | null>(null);

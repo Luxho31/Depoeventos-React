@@ -2,7 +2,7 @@ import { generalRoutes } from "../../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-export const forgotPassword = async (token: any, password: any) => {
+export const forgotPassword = async (token: string, password: string) => {
   try {
     const response = await fetch(`${BASE_URL}/api/forgot-password/${token}`, {
       method: "PATCH",

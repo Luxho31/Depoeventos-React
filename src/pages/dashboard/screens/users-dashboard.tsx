@@ -15,8 +15,8 @@ type UserData = {
   motherLastName: string;
   documentType: string;
   documentNumber: string;
-  contactNumber: any;
-  emergencyContactNumber: any;
+  contactNumber: string;
+  emergencyContactNumber: string;
   address: string;
   birthDate: string;
   photo: string;
