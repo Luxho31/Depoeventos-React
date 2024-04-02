@@ -25,6 +25,7 @@ import Contact from "./pages/landing/contact/contact";
 import Home from "./pages/landing/home/home";
 import Products from "./pages/landing/products/products";
 import NotFound from "./pages/not-found/not-found";
+import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/purchase-completed" element={<PurchaseCompleted />} />
             </Route>
 
             {/* Rutas Protegidas */}
