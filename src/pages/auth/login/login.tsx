@@ -1,5 +1,5 @@
 import { Form, Input, Spin } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
 import { useAuth } from "../../../context/AuthProvider";
 
@@ -12,7 +12,7 @@ import { Toaster, toast } from "sonner";
 export default function Login() {
     const [loading, setLoading] = React.useState(false);
     const { login } = useAuth();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [form] = Form.useForm();
 
     type LoginType = {
@@ -26,7 +26,8 @@ export default function Login() {
 
             if (values.email && values.password) {
                 await login(values.email, values.password);
-                navigate("/");
+                // navigate("/");
+                window.location.href = "/";
             } else {
                 // Manejar el caso en el que email o password es undefined
                 throw new Error("Correo o contraseña no válidos");

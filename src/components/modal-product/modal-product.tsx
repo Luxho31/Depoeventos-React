@@ -214,9 +214,11 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                                         : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600"
                                 }
                                 onClick={
-                                    children.length > 0
+                                    isAuthenticated
+                                    ? children.length > 0
                                         ? handleAddToCart
                                         : () => navigate("/dashboard/childrens")
+                                    : () => navigate("/login")
                                 }
                             >
                                 {isAuthenticated ? (
