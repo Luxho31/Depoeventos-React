@@ -4,9 +4,6 @@ const BASE_URL = generalRoutes.BASE_URL;
 
 type orderType = {
   id: number;
-  paymentMethod: string;
-  bankName: string;
-  operationNumber: string;
   date: string;
   totalPrice: number;
   status: string;
@@ -26,6 +23,7 @@ type Product = {
   endDateInscription: string;
   courses: Course[];
   children: Children;
+  product: Product;
 };
 
 type Campus = {
@@ -68,7 +66,7 @@ type Children = {
   memberMotherLastName: string;
 };
 
-export const createOrder = async (data: orderType) => {
+export const createOrder = async () => {
   try {
 
     const userId = localStorage.getItem("userId");
@@ -85,10 +83,9 @@ export const createOrder = async (data: orderType) => {
     // Crear el array de items para la orden
     const items = products.map((product: Product) => ({
       product: {
-        id: product.id,
+        id: product.product.id,
       },
       children: {
-        // id: 1,
         id: product.children.id,
       },
     }));
@@ -98,9 +95,6 @@ export const createOrder = async (data: orderType) => {
       user: {
         id: userId,
       },
-      paymentMethod: data.paymentMethod,
-      bankName: data.bankName,
-      operationNumber: data.operationNumber,
       items: items,
     };
 
@@ -116,13 +110,8 @@ export const createOrder = async (data: orderType) => {
       throw new Error("Error al crear una orden");
     }
     const orderData = await orderResponse.json();
-    // await fetch(`http://localhost:8080/api/cart/${userId}`);
     console.log(orderData);
     return orderData;
-    // Crear la preferencia de MercadoPago
-    // const preferenceId = await createMercadoPagoPreference(orderData);
-
-    // return { orderId: orderData.id, preferenceId };
   } catch (error) {
     console.error("Error al crear una orden:", error);
     throw error;
@@ -144,25 +133,25 @@ export const getAllOrders = async () => {
   }
 };
 
-export const uploadVoucherImage = async (orderId: number, file: File) => {
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await fetch(
-      `${BASE_URL}/api/orders/uploadVoucherPicture/${orderId}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const data = await response.json();
-    if (response.ok) {
-      return data;
-    }
-  } catch (error) {
-    console.error("Error al subir la imagen del voucher:", error);
-  }
-};
+// export const uploadVoucherImage = async (orderId: number, file: File) => {
+//   try {
+//     const formData = new FormData();
+//     formData.append("file", file);
+//     const response = await fetch(
+//       `${BASE_URL}/api/orders/uploadVoucherPicture/${orderId}`,
+//       {
+//         method: "POST",
+//         body: formData,
+//       }
+//     );
+//     const data = await response.json();
+//     if (response.ok) {
+//       return data;
+//     }
+//   } catch (error) {
+//     console.error("Error al subir la imagen del voucher:", error);
+//   }
+// };
 
 export const getOrderById = async (orderId: number) => {
   try {

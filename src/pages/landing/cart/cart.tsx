@@ -2,16 +2,27 @@ import { SmileOutlined } from "@ant-design/icons";
 import "animate.css";
 import { Progress, Tooltip } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import VentaGIF from "../../../assets/gif/ventas.gif";
 import { useCart } from "../../../context/CartProvider";
+import { createOrder } from "../../../services/cart-service/cart-service";
 import CartTable from "./components/cart-table";
 import PaymentStep from "./components/payment-step";
-import PaymentButton from "./components/payment-button";
 
 export default function Cart() {
     const [progressPercent, setProgressPercent] = useState(0);
     const { products, getTotalPrice } = useCart();
+    const [preferenceId, setPreferenceId] = useState("");
+
+
+    const createOrderForm = async () => {
+        try {
+            const response = await createOrder();
+            const preferenceId = response.preferenceId;
+            setPreferenceId(preferenceId);
+            setProgressPercent(50);
+        } catch (error) {
+            console.error("Error al crear la orden:", error);
+        }
+    };
 
     return (
         <div className="flex flex-col w-[80%] m-auto mt-24 min-h-screen">
@@ -32,9 +43,8 @@ export default function Cart() {
                     </h1>
                 </div>
                 <div
-                    className={`${
-                        progressPercent === 100 ? "block" : "hidden"
-                    }`}
+                    className={`${progressPercent === 100 ? "block" : "hidden"
+                        }`}
                 >
                     <h1 className="animate__animated animate__backInDown">
                         Compra realizada
@@ -57,9 +67,8 @@ export default function Cart() {
 
             {/* Table Cart */}
             <div
-                className={`${
-                    progressPercent === 0 ? "block" : "hidden"
-                } flex max-xl:flex-col items-start gap-x-12 `}
+                className={`${progressPercent === 0 ? "block" : "hidden"
+                    } flex max-xl:flex-col items-start gap-x-12 `}
             >
                 {/* <div className="w-[60rem] mb-24"> */}
                 <div className="w-full mb-12">
@@ -119,13 +128,14 @@ export default function Cart() {
                                 </div>
                             </div>
                             <div className="w-full flex justify-center">
-                                {/* <button
+                                <button
                                     className="w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"
-                                    onClick={() => setProgressPercent(50)}
+                                    onClick={() => {
+                                        createOrderForm();
+                                    }}
                                 >
                                     Pagar
-                                </button> */}
-                                <PaymentButton />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -136,18 +146,16 @@ export default function Cart() {
 
             {/* Pasarela de Pago */}
             <div
-                className={`${
-                    progressPercent === 50 ? "block" : "hidden"
-                } mb-24`}
+                className={`${progressPercent === 50 ? "block" : "hidden"
+                    } mb-24`}
             >
-                <PaymentStep setNextStep={setProgressPercent} />
+                <PaymentStep preferenceId={preferenceId} />
             </div>
 
             {/* Pasarela de Pago */}
-            <div
-                className={`${
-                    progressPercent === 100 ? "block" : "hidden"
-                } mb-24`}
+            {/* <div
+                className={`${progressPercent === 100 ? "block" : "hidden"
+                    } mb-24`}
             >
                 <div className="h-[34rem] flex flex-col justify-center items-center gap-y-8 BackgroundMessage">
                     <img src={VentaGIF} className="w-60" alt="" />
@@ -167,7 +175,7 @@ export default function Cart() {
                         Seguir Comprando
                     </Link>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
