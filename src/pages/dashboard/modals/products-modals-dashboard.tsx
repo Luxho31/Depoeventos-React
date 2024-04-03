@@ -6,6 +6,8 @@ import {
     Input,
     InputNumber,
     Modal,
+    Radio,
+    RadioChangeEvent,
     Select,
     Spin,
     Upload,
@@ -40,12 +42,16 @@ type Product = {
     price: number;
     description: string;
     startDate: string;
+    endDate: string;
     maxStudents: number;
-    campus: Campus;
+    campus: Campus[];
     category: Category;
     startDateInscription: string;
     endDateInscription: string;
     products: Course[];
+    gender: string;
+    ages: string[];
+    grades: string[];
 };
 
 type Campus = {
@@ -95,6 +101,7 @@ export default function ProductModal({
     const [, setImageUrl] = useState<string | undefined>();
     const [productImage, setProductImage] = useState<File | null>(null);
     const [selectedCoursesCount, setSelectedCoursesCount] = useState(0);
+    const [value, setValue] = useState(0);
 
     const [form] = Form.useForm();
 
@@ -115,9 +122,10 @@ export default function ProductModal({
                 description: product.description,
                 price: product.price,
                 maxStudents: product.maxStudents,
-                campusId: product.campus.id,
+                campusId: product.campus.map((camp: Campus) => camp.id),
                 categoryId: product.category.id,
                 startDate: moment(product.startDate),
+                endDate: moment(product.endDate),
                 coursesId: product.courses.map((course: Course) => course.id),
                 startDateInscription: product.startDateInscription,
                 endDateInscription: product.endDateInscription,
@@ -134,6 +142,7 @@ export default function ProductModal({
         try {
             setLoading(true);
             values.startDate = moment(values.startDate).format("YYYY-MM-DD");
+            values.endDate = moment(values.endDate).format("YYYY-MM-DD");
             await updateProduct(values, id);
             setOpen(false);
             handleReload();
@@ -148,6 +157,7 @@ export default function ProductModal({
         try {
             setLoading(true);
             values.startDate = moment(values.startDate).format("YYYY-MM-DD");
+            values.endDate = moment(values.endDate).format("YYYY-MM-DD");
             values.photo = "-";
             const productId = await createProduct(values);
             if (productImage) {
@@ -222,6 +232,11 @@ export default function ProductModal({
         } finally {
             setLoading(false);
         }
+    };
+
+    const onChangeRadioButton = (e: RadioChangeEvent) => {
+        console.log("radio checked", e.target.value);
+        setValue(e.target.value);
     };
 
     const propsUpload = {
@@ -344,23 +359,23 @@ export default function ProductModal({
                                     <span className="text-red-500">*</span>{" "}
                                     Disciplina:
                                 </label> */}
-                                <Select
-                                    mode="multiple"
-                                    allowClear
-                                    style={{ width: "100%" }}
-                                    placeholder="Por favor, selecciona las disciplinas"
-                                    className="w-full h-14"
-                                    options={disciplines.map(
-                                        (discipline: Course) => {
-                                            return {
-                                                value: discipline.id,
-                                                label: discipline.name,
-                                            };
-                                        }
-                                    )}
-                                    onChange={handleCoursesChange}
-                                    disabled={type === "see"}
-                                />
+                            <Select
+                                mode="multiple"
+                                allowClear
+                                style={{ width: "100%" }}
+                                placeholder="Por favor, selecciona las disciplinas"
+                                className="w-full h-14"
+                                options={disciplines.map(
+                                    (discipline: Course) => {
+                                        return {
+                                            value: discipline.id,
+                                            label: discipline.name,
+                                        };
+                                    }
+                                )}
+                                onChange={handleCoursesChange}
+                                disabled={type === "see"}
+                            />
                             {/* </div> */}
                         </Form.Item>
 
@@ -380,35 +395,35 @@ export default function ProductModal({
                                     <span className="text-red-500">*</span>{" "}
                                     Categoría:
                                 </label> */}
-                                <Select
-                                    placeholder="Seleccionar Categoria"
-                                    className="w-full h-14"
-                                    options={categories.map(
-                                        (category: Category) => {
-                                            return {
-                                                value: category.id,
-                                                label: category.name,
-                                            };
-                                        }
-                                    )}
-                                    disabled={type === "see"}
-                                />
+                            <Select
+                                placeholder="Seleccionar Categoria"
+                                className="w-full h-14"
+                                options={categories.map(
+                                    (category: Category) => {
+                                        return {
+                                            value: category.id,
+                                            label: category.name,
+                                        };
+                                    }
+                                )}
+                                disabled={type === "see"}
+                            />
                             {/* </div> */}
                         </Form.Item>
                     </div>
 
                     {/* Input Sede del Producto */}
-                    <Form.Item
+                    {/* <Form.Item
                         name="campusId"
                         rules={[
                             { required: true, message: "La sede es requerida" },
                         ]}
-                    >
-                        {/* <div className="flex flex-col gap-y-2">
+                    > */}
+                    {/* <div className="flex flex-col gap-y-2">
                             <label>
                                 <span className="text-red-500">*</span> Sede:
                             </label> */}
-                            <Select
+                    {/* <Select
                                 placeholder="Seleccionar Sede"
                                 className="w-full h-14"
                                 options={campuses.map((campus: Campus) => {
@@ -418,8 +433,128 @@ export default function ProductModal({
                                     };
                                 })}
                                 disabled={type === "see"}
-                            />
+                            /> */}
+                    {/* </div> */}
+                    {/* </Form.Item> */}
+
+                    {/* Input Sede del Producto */}
+                    <Form.Item
+                        name="campusId"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Las sede son requeridas",
+                            },
+                        ]}
+                        className="w-full cursor-text"
+                    >
+                        {/* <div className="flex flex-col gap-y-2">
+                                <label>
+                                    <span className="text-red-500">*</span>{" "}
+                                    Disciplina:
+                                </label> */}
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            style={{ width: "100%" }}
+                            placeholder="Por favor, selecciona las sedes"
+                            className="w-full h-14"
+                            options={campuses.map((camp: Campus) => {
+                                return {
+                                    value: camp.id,
+                                    label: camp.name,
+                                };
+                            })}
+                            onChange={handleCoursesChange}
+                            disabled={type === "see"}
+                        />
                         {/* </div> */}
+                    </Form.Item>
+
+                    <div className="flex gap-x-4 max-sm:flex-col">
+                        {/* Input Edad del Producto */}
+                        <Form.Item
+                            name="ages"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "La edad es requerida",
+                                },
+                            ]}
+                            className="w-full cursor-text"
+                        >
+                            <Select
+                                placeholder="Seleccionar Edad"
+                                className="w-full h-14"
+                                options={Array.from({ length: 20 }, (_, i) => ({
+                                    label: `${i + 1}`,
+                                    value: `${i + 1}`,
+                                }))}
+                                disabled={type === "see"}
+                            />
+                        </Form.Item>
+
+                        {/* Input Género del Producto */}
+                        <Form.Item
+                            name="ages"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "La edad es requerida",
+                                },
+                            ]}
+                            className="w-full cursor-text"
+                        >
+                            <div className="flex flex-col gap-y-2">
+                                <label>
+                                    <span className="text-red-500">*</span>{" "}
+                                    Genero:
+                                </label>
+                                <Radio.Group
+                                    onChange={onChangeRadioButton}
+                                    value={value}
+                                >
+                                    <Radio value={1}>Masculino</Radio>
+                                    <Radio value={2}>Femenino</Radio>
+                                    <Radio value={3}>Mixto</Radio>
+                                </Radio.Group>
+                            </div>
+                        </Form.Item>
+                    </div>
+
+                    {/* Input Grado del Producto */}
+                    <Form.Item
+                        name="grades"
+                        rules={[
+                            {
+                                required: true,
+                                message: "El grado es requerido",
+                            },
+                        ]}
+                        className="w-full cursor-text"
+                    >
+                        <Select
+                            placeholder="Seleccionar grado"
+                            className="w-full h-14"
+                            options={[
+                                { value: "Nido", label: "Nido" },
+                                { value: "Pre-Kinder", label: "Pre-Kinder" },
+                                { value: "Kinder", label: "Kinder" },
+                                { value: "1er grado", label: "1er grado" },
+                                { value: "2do grado", label: "2do grado" },
+                                { value: "3er grado", label: "3er grado" },
+                                { value: "4to grado", label: "4to grado" },
+                                { value: "5to grado", label: "5to grado" },
+                                { value: "6to grado", label: "6to grado" },
+                                { value: "7mo grado", label: "7mo grado" },
+                                { value: "8vo grado", label: "8vo grado" },
+                                { value: "9no grado", label: "9no grado" },
+                                { value: "10mo grado", label: "10mo grado" },
+                                { value: "11vo grado", label: "11vo grado" },
+                                { value: "12vo grado", label: "12vo grado" },
+                            ]}
+                            disabled={type === "see"}
+                        />
                     </Form.Item>
 
                     <div className="flex gap-x-4 max-sm:flex-col">
@@ -476,13 +611,13 @@ export default function ProductModal({
                     </div>
 
                     <div className="flex gap-x-4 max-sm:flex-col">
-                        {/* Input Fecha del Producto */}
+                        {/* Input Fecha Inicial del Producto */}
                         <Form.Item
                             name="startDate"
                             rules={[
                                 {
                                     required: true,
-                                    message: "La fecha es requerida",
+                                    message: "La fecha inicial es requerida",
                                 },
                             ]}
                             className="w-full cursor-text"
@@ -492,60 +627,84 @@ export default function ProductModal({
                                     <span className="text-red-500">*</span>{" "}
                                     Fecha de inicio:
                                 </label> */}
-                                <DatePicker
-                                    className="w-full rounded-xl p-4"
-                                    placeholder="Fecha de inicio del producto"
-                                    size="large"
-                                    disabled={type === "see"}
-                                />
+                            <DatePicker
+                                className="w-full rounded-xl p-4"
+                                placeholder="Fecha inicial del producto"
+                                size="large"
+                                disabled={type === "see"}
+                            />
                             {/* </div> */}
                         </Form.Item>
 
-                        {/* Input Foto del Producto */}
-                        {type === "see" && form.getFieldValue("photo") ? (
-                            <Form.Item
-                                name="photo"
-                                label="Foto del Producto"
-                                className="w-full cursor-text"
-                            >
-                                <div className="flex flex-col gap-y-2">
-                                    <label>
-                                        <span className="text-red-500">*</span>{" "}
-                                        Foto:
-                                    </label>
-                                    <img
-                                        src={form.getFieldValue("photo")}
-                                        alt="Producto"
-                                        className="w-60"
-                                    />
-                                </div>
-                            </Form.Item>
-                        ) : (
-                            <Form.Item
-                                name="photo"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            "Por favor ingrese foto del Producto.",
-                                    },
-                                ]}
-                                className="w-full cursor-text"
-                            >
-                                <div className="flex flex-col gap-y-2">
-                                    <label>
-                                        <span className="text-red-500">*</span>{" "}
-                                        Foto:
-                                    </label>
-                                    <Upload {...propsUpload}>
-                                        <Button icon={<UploadOutlined />}>
-                                            Subir foto
-                                        </Button>
-                                    </Upload>
-                                </div>
-                            </Form.Item>
-                        )}
+                        {/* Input Fecha Final del Producto */}
+                        <Form.Item
+                            name="endDate"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "La fecha final es requerida",
+                                },
+                            ]}
+                            className="w-full cursor-text"
+                        >
+                            {/* <div className="flex flex-col gap-y-2">
+                                <label>
+                                    <span className="text-red-500">*</span>{" "}
+                                    Fecha de inicio:
+                                </label> */}
+                            <DatePicker
+                                className="w-full rounded-xl p-4"
+                                placeholder="Fecha final del producto"
+                                size="large"
+                                disabled={type === "see"}
+                            />
+                            {/* </div> */}
+                        </Form.Item>
                     </div>
+                    {/* Input Foto del Producto */}
+                    {type === "see" && form.getFieldValue("photo") ? (
+                        <Form.Item
+                            name="photo"
+                            label="Foto del Producto"
+                            className="w-full cursor-text"
+                        >
+                            <div className="flex flex-col gap-y-2">
+                                <label>
+                                    <span className="text-red-500">*</span>{" "}
+                                    Foto:
+                                </label>
+                                <img
+                                    src={form.getFieldValue("photo")}
+                                    alt="Producto"
+                                    className="w-60"
+                                />
+                            </div>
+                        </Form.Item>
+                    ) : (
+                        <Form.Item
+                            name="photo"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        "Por favor ingrese foto del Producto.",
+                                },
+                            ]}
+                            className="w-full cursor-text"
+                        >
+                            <div className="flex flex-col gap-y-2">
+                                <label>
+                                    <span className="text-red-500">*</span>{" "}
+                                    Foto:
+                                </label>
+                                <Upload {...propsUpload}>
+                                    <Button icon={<UploadOutlined />}>
+                                        Subir foto
+                                    </Button>
+                                </Upload>
+                            </div>
+                        </Form.Item>
+                    )}
                 </div>
                 {type === "see" && (
                     <div className="w-full flex flex-row justify-between">

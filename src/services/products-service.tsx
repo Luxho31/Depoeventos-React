@@ -19,10 +19,14 @@ type productType = {
   description: string;
   price: number;
   startDate: string;
+  endDate: string;
   maxStudents: number;
-  campus: CampusType;
+  campus: CampusType[];
   category: CategoryType;
   products: CourseType[];
+  gender: string;
+  ages: string[];
+  grades: string[];
 };
 
 export const createProduct = async (form: productType) => {
