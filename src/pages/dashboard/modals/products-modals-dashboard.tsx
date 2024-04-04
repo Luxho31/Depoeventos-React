@@ -456,7 +456,6 @@ export default function ProductModal({
                         <Select
                             mode="multiple"
                             allowClear
-                            style={{ width: "100%" }}
                             placeholder="Por favor, selecciona las sedes"
                             className="w-full h-14"
                             options={campuses.map((camp: Campus) => {
@@ -465,7 +464,6 @@ export default function ProductModal({
                                     label: camp.name,
                                 };
                             })}
-                            onChange={handleCoursesChange}
                             disabled={type === "see"}
                         />
                         {/* </div> */}
@@ -496,11 +494,11 @@ export default function ProductModal({
 
                         {/* Input Género del Producto */}
                         <Form.Item
-                            name="ages"
+                            name="gender"
                             rules={[
                                 {
                                     required: true,
-                                    message: "La edad es requerida",
+                                    message: "El genero es requerido",
                                 },
                             ]}
                             className="w-full cursor-text"
@@ -514,9 +512,9 @@ export default function ProductModal({
                                     onChange={onChangeRadioButton}
                                     value={value}
                                 >
-                                    <Radio value={1}>Masculino</Radio>
-                                    <Radio value={2}>Femenino</Radio>
-                                    <Radio value={3}>Mixto</Radio>
+                                    <Radio value={"Masculino"}>Masculino</Radio>
+                                    <Radio value={"Femenino"}>Femenino</Radio>
+                                    <Radio value={"Mixto"}>Mixto</Radio>
                                 </Radio.Group>
                             </div>
                         </Form.Item>
@@ -661,6 +659,7 @@ export default function ProductModal({
                             {/* </div> */}
                         </Form.Item>
                     </div>
+                    
                     {/* Input Foto del Producto */}
                     {type === "see" && form.getFieldValue("photo") ? (
                         <Form.Item
