@@ -130,24 +130,12 @@ export default function Register() {
                 </Link>
             </div>
             <div className="w-full md:w-[750px] md:mx-auto px-6">
-                {/* <div className="relative mb-10">
-                    {paso === 2 && (
-                        <button
-                            type="button"
-                            onClick={() => setPaso(paso - 1)}
-                            className="absolute left-32 font-semibold rounded-xl p-4 duration-300 hover:bg-gray-200 hover:duration-300 hover:animate-pulse"
-                        >
-                            <FaChevronLeft className="text-2xl" />
-                        </button>
-                    )}
-                </div> */}
                 <Form
                     name="firstStep"
                     onFinish={(values) => {
                         onFinishStep1(values);
                     }}
                     autoComplete="off"
-                    // className="w-full max-w-lg mx-auto"
                     form={form}
                 >
                     <div className="relative mb-8">
@@ -167,14 +155,14 @@ export default function Register() {
                         </div>
                     </div>
                     <div
-                        // className={`grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                        className={`flex flex-col  gap-y-2 mb-8 ${
-                            paso === 1 ? "block" : "hidden"
-                        }`}
+                        className={`flex flex-col  gap-y-2 mb-8 ${paso === 1 ? "block" : "hidden"
+                            }`}
                     >
                         {/* ------------------Input Nombre------------------ */}
                         <Form.Item<RegisterType>
                             name="firstName"
+                            label="Nombre"
+                            labelCol={{ span: 24 }}
                             rules={[
                                 {
                                     required: true,
@@ -203,6 +191,8 @@ export default function Register() {
                             {/* ------------------Input Apellido Paterno------------------ */}
                             <Form.Item<RegisterType>
                                 name="lastName"
+                                label="Apellido Paterno"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -231,6 +221,8 @@ export default function Register() {
                             {/* ------------------Input Apellido Materno------------------ */}
                             <Form.Item<RegisterType>
                                 name="motherLastName"
+                                label="Apellido Materno"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -261,6 +253,8 @@ export default function Register() {
                             {/* ------------------Input Tipo de Documento------------------ */}
                             <Form.Item<RegisterType>
                                 name="documentType"
+                                label="Tipo de Documento"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -298,6 +292,8 @@ export default function Register() {
                             {/* ------------------Input Número de Documento------------------ */}
                             <Form.Item<RegisterType>
                                 name="documentNumber"
+                                label="Número de Documento"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -310,7 +306,7 @@ export default function Register() {
                                                 return Promise.reject("");
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "DNI" &&
+                                                "DNI" &&
                                                 !/^\d{8}$/.test(value)
                                             ) {
                                                 return Promise.reject(
@@ -318,7 +314,7 @@ export default function Register() {
                                                 );
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "PASSPORT" &&
+                                                "PASSPORT" &&
                                                 !/^[A-Za-z0-9]{6,10}$/.test(
                                                     value
                                                 )
@@ -328,7 +324,7 @@ export default function Register() {
                                                 );
                                             } else if (
                                                 selectedDocumentType ===
-                                                    "CARNET DE EXTRANJERIA" &&
+                                                "CARNET DE EXTRANJERIA" &&
                                                 !/^\d{9}$/.test(value)
                                             ) {
                                                 return Promise.reject(
@@ -355,12 +351,12 @@ export default function Register() {
                                         selectedDocumentType === "DNI"
                                             ? 8
                                             : selectedDocumentType ===
-                                              "PASSPORT"
-                                            ? 10
-                                            : selectedDocumentType ===
-                                              "CARNET DE EXTRANJERIA"
-                                            ? 9
-                                            : undefined
+                                                "PASSPORT"
+                                                ? 10
+                                                : selectedDocumentType ===
+                                                    "CARNET DE EXTRANJERIA"
+                                                    ? 9
+                                                    : undefined
                                     }
                                 />
                             </Form.Item>
@@ -369,6 +365,8 @@ export default function Register() {
                         {/* ------------------Input Correo Electronico------------------ */}
                         <Form.Item<RegisterType>
                             name="username"
+                            label="Correo Electrónico"
+                            labelCol={{ span: 24 }}
                             rules={[
                                 {
                                     required: true,
@@ -396,6 +394,8 @@ export default function Register() {
                         {/* ------------------Input Contraseña------------------ */}
                         <Form.Item<RegisterType>
                             name="password"
+                            label="Contraseña"
+                            labelCol={{ span: 24 }}
                             rules={[
                                 {
                                     required: true,
@@ -443,18 +443,19 @@ export default function Register() {
                     name="register"
                     onFinish={onFinishStep2}
                     autoComplete="off"
-                    // className="w-full max-w-lg mx-auto"
+                // className="w-full max-w-lg mx-auto"
                 >
                     <div
                         // className={`grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-                        className={`flex flex-col  gap-y-2 mb-8 ${
-                            paso === 2 ? "block" : "hidden"
-                        }`}
+                        className={`flex flex-col  gap-y-2 mb-8 ${paso === 2 ? "block" : "hidden"
+                            }`}
                     >
                         <div className="flex gap-x-4 max-sm:flex-col">
                             {/* ------------------Input Número de Contacto------------------ */}
                             <Form.Item<RegisterType>
                                 name="contactNumber"
+                                label="Número de Contacto"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -478,6 +479,8 @@ export default function Register() {
                             {/* ------------------Input Número de Emergencia------------------ */}
                             <Form.Item<RegisterType>
                                 name="emergencyContactNumber"
+                                label="Número de Emergencia"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -503,6 +506,8 @@ export default function Register() {
                             {/* ------------------Input País------------------ */}
                             <Form.Item
                                 name="country"
+                                label="País de Nacimiento"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -540,6 +545,8 @@ export default function Register() {
                             {/* ------------------Input Fecha de Nacimiento------------------ */}
                             <Form.Item
                                 name="birthDate"
+                                label="Fecha de Nacimiento"
+                                labelCol={{ span: 24 }}
                                 rules={[
                                     {
                                         required: true,
@@ -559,26 +566,6 @@ export default function Register() {
                             </Form.Item>
                         </div>
 
-                        {/* ------------------Input Dirección------------------ */}
-                        {/* <Form.Item<RegisterType>
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor ingrese su dirección",
-                  },
-                ]}
-                className="col-span-2 cursor-text"
-              >
-                <Input
-                  className="w-full border rounded-xl p-4 hidden"
-                  placeholder="Dirección"
-                  size="large"
-                  prefix={
-                    <FaMapMarkerAlt className="site-form-item-icon me-1" />
-                  }
-                />
-              </Form.Item> */}
                     </div>
                     {paso === 2 && (
                         <div className="w-full flex justify-center max-sm:justify-center">
