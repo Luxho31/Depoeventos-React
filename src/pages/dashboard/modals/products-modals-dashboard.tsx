@@ -23,6 +23,7 @@ import {
   uploadProductImage,
 } from "../../../services/products-service";
 import { UploadFile, UploadChangeParam } from "antd/lib/upload/interface";
+import ProductSchedule from "./product-schedule-dashboard";
 
 // Define la función getBase64
 function getBase64(file: File, callback: (result: string) => void) {
@@ -98,6 +99,9 @@ export default function ProductModal({
   const [productImage, setProductImage] = useState<File | null>(null);
   const [selectedCoursesCount, setSelectedCoursesCount] = useState(0);
   const [value, setValue] = useState(0);
+  const [selectedDisciplineIds, setSelectedDisciplineIds] = useState<Product[]>(
+    []
+  );
 
   const [form] = Form.useForm();
 
@@ -107,6 +111,9 @@ export default function ProductModal({
 
   const handleCoursesChange = (value: Product[]) => {
     setSelectedCoursesCount(value ? value.length : 0);
+
+    // Actualiza el estado de las disciplinas seleccionadas
+    setSelectedDisciplineIds(value);
   };
 
   const getProductByIdForm = async (id: number) => {
@@ -620,6 +627,17 @@ export default function ProductModal({
             </Form.Item>
           )}
         </div>
+        <Form
+          name="schedule"
+          layout="vertical"
+          onFinish={() => {}}
+          className="flex flex-col"
+        >
+          {selectedDisciplineIds.map((disciplineId) => (
+            <ProductSchedule key={disciplineId} id={disciplineId} />
+          ))}
+        </Form>
+
         {type === "see" && (
           <div className="w-full flex flex-row justify-between">
             <Form.Item
