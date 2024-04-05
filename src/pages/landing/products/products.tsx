@@ -150,7 +150,7 @@ export default function Products() {
 
     return (
         <div className="mt-8 mb-24 lg:mt-20 w-[80%] max-xl:w-full max-xl:px-16 min-h-[84vh] m-auto">
-            <h1 className="text-3xl font-bold mb-8 text-center lg:text-left">
+            <h1 className="text-2xl font-semibold mb-8 text-center lg:text-left">
                 Productos
             </h1>
 
