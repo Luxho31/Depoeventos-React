@@ -324,17 +324,13 @@ export default function ProductModal({
               },
             ]}
           >
-            {/* <div className="flex flex-col gap-y-2"> */}
-            {/* <label>
-                <span className="text-red-500">*</span> Descripción:
-              </label> */}
             <TextArea
               className="w-full rounded-xl p-4"
               placeholder="Descripción del producto"
               size="large"
               disabled={type === "see"}
+              autoSize={{ minRows: 1, maxRows: 1 }}
             />
-            {/* </div> */}
           </Form.Item>
 
           <div className="flex gap-x-4 max-sm:flex-col">
@@ -352,11 +348,7 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              {/* <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Disciplina:
-                                </label> */}
+
               <Select
                 mode="multiple"
                 allowClear
@@ -388,11 +380,7 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              {/* <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Categoría:
-                                </label> */}
+
               <Select
                 placeholder="Seleccionar Categoria"
                 className="w-full h-14"
@@ -404,7 +392,7 @@ export default function ProductModal({
                 })}
                 disabled={type === "see"}
               />
-              {/* </div> */}
+
             </Form.Item>
           </div>
 
@@ -530,6 +518,7 @@ export default function ProductModal({
             <Form.Item
               name="maxStudents"
               label="Cantidad de Estudiantes"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -550,6 +539,7 @@ export default function ProductModal({
             <Form.Item
               name="price"
               label="Precio del Producto"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -574,6 +564,7 @@ export default function ProductModal({
             <Form.Item
               name="startDate"
               label="Fecha Inicial del Producto"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -596,6 +587,7 @@ export default function ProductModal({
             <Form.Item
               name="endDate"
               label="Fecha Final del Producto"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -678,7 +670,6 @@ export default function ProductModal({
             </div>
           )
         }
-
         <Form.Item className="w-full flex justify-end">
           <button
             type="submit"
@@ -699,15 +690,6 @@ export default function ProductModal({
             )}
           </button>
         </Form.Item>
-
-        {/* Sección solo para see
-                
-                "startDateInscription": "2024-03-19",
-                "endDateInscription": "2024-04-09",
-                "campusname"
-                "categoryname"
-
-                */}
       </Form >
     </Modal >
   );
