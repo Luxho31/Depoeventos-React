@@ -44,6 +44,11 @@ export default function ProductCard({ product, onClick }: CardProps) {
   const isOutOfDateRange =
     currentDate < startDateInscription || currentDate > endDateInscription;
 
+  console.log("Fecha actual", currentDate);
+  console.log("Fecha de inicio de inscripción", startDateInscription);
+  console.log("Fecha de fin de inscripción", endDateInscription);
+  console.log("Fuera de rango de inscripción -- ", isOutOfDateRange);
+
   const isOutOfStock = product.currentStudents === product.maxStudents;
 
   return (
