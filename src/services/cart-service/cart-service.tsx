@@ -30,13 +30,13 @@ type Campus = {
   id: number;
   name: string;
   description: string;
-}
+};
 
 type Category = {
   id: number;
   name: string;
   description: string;
-}
+};
 
 type Course = {
   id: number;
@@ -68,7 +68,6 @@ type Children = {
 
 export const createOrder = async () => {
   try {
-
     const userId = localStorage.getItem("userId");
 
     // let products = [];
@@ -160,6 +159,24 @@ export const getOrderById = async (orderId: number) => {
     return data;
   } catch (error) {
     console.error("Error al obtener datos de ordenes:", error);
+  }
+};
+
+export const getPaymentInfo = async (paymentId?: number) => {
+  try {
+    const response = await fetch(
+      `https://api.mercadopago.com/v1/payments/${paymentId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer TEST-8021851533821614-032518-5e2291ab742081851d0e8355030bbab8-485417535`,
+        },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.error(error);
   }
 };
 

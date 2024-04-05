@@ -1,9 +1,10 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { DatePicker, Form, Input, Modal, Select, Spin } from "antd";
+import { Form, Input, Modal, Spin } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
   getOrderById,
+  getPaymentInfo,
   updateOrder,
 } from "../../../services/cart-service/cart-service";
 
@@ -15,7 +16,7 @@ type TransactionData = {
   date: string;
   totalPrice: number;
   status: string;
-}
+};
 
 interface TransactionModalProps {
   type: string;
@@ -30,28 +31,45 @@ export default function TransactionModal({
   id,
   open,
   setOpen,
-  handleReload
+  handleReload,
 }: TransactionModalProps) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (id) getOrderByIdForm(id);
+    if (id) {
+      getOrderByIdForm(id);
+    }
   }, [id]);
 
   const getOrderByIdForm = async (orderId: number) => {
     try {
       setLoading(true);
       const order = await getOrderById(orderId);
+      const paymentInfo = await getPaymentInfo(order.paymentId);
+
+      // switch if payment_method_id is master or visa
+      if (paymentInfo.payment_method_id === "master") {
+        paymentInfo.payment_method_id = "MasterCard";
+      } else if (paymentInfo.payment_method_id === "visa") {
+        paymentInfo.payment_method_id = "Visa";
+      }
+
+      // switch if payment_type_id is credit_card or debit_card
+      if (paymentInfo.payment_type_id === "credit_card") {
+        paymentInfo.payment_type_id = "Tarjeta de crédito";
+      } else if (paymentInfo.payment_type_id === "debit_card") {
+        paymentInfo.payment_type_id = "Tarjeta de débito";
+      }
+
       form.setFieldsValue({
-        // id: order.;
-        paymentMethod: order.paymentMethod,
-        bankName: order.bankName,
-        operationNumber: order.operationNumber,
-        date: moment(order.date),
-        totalPrice: order.totalPrice,
-        status: order.status,
-        photo: order.photo,
+        payment_method_id: paymentInfo.payment_method_id,
+        payment_type_id: paymentInfo.payment_type_id,
+        orderId: paymentInfo.order.id,
+        date_approved: moment(paymentInfo.date_approved).format("YYYY-MM-DD"),
+        transaction_amount: paymentInfo.transaction_amount,
+        currency_id: paymentInfo.currency_id,
+        net_amount: paymentInfo.transaction_details.net_received_amount,
       });
     } catch (error) {
       console.error("Error al obtener datos del producto:", error);
@@ -121,159 +139,84 @@ export default function TransactionModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => { }}
+        onFinishFailed={() => {}}
         className="my-10 max-md:mx-20 md:mx-32"
         form={form}
       >
         {/* ------------------ Método de Pago ------------------ */}
-        <Form.Item
-          name="paymentMethod"
-          label="Método de pago"
-          rules={[
-            {
-              required: true,
-              message: "El método de pago es requerido",
-            },
-          ]}
-        >
-          <Input
-            className="w-full rounded-xl p-4"
-            placeholder="Método de pago"
-            size="large"
-            disabled={type === "see" || type === "edit"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Nombre del Banco ------------------ */}
-        <Form.Item
-          name="bankName"
-          label="Nombre del banco"
-          rules={[
-            {
-              required: true,
-              message: "El nombre del banco es requerido",
-            },
-          ]}
-        >
-          <Input
-            className="w-full rounded-xl p-4"
-            placeholder="Nombre del banco"
-            size="large"
-            disabled={type === "see" || type === "edit"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Número de Operación ------------------ */}
-        <Form.Item
-          name="operationNumber"
-          label="Número de operación"
-          rules={[
-            {
-              required: true,
-              message: "El número de operación es requerido",
-            },
-          ]}
-        >
-          <Input
-            className="w-full rounded-xl p-4"
-            placeholder="Número de operación"
-            size="large"
-            disabled={type === "see" || type === "edit"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Fecha de Operación ------------------ */}
-        <Form.Item
-          name="date"
-          label="Fecha de operación"
-          rules={[
-            {
-              required: true,
-              message: "La fecha de operación es requerida",
-            },
-          ]}
-        >
-          <DatePicker
-            className="w-full rounded-xl p-4"
-            placeholder="Fecha de operación"
-            size="large"
-            disabled={type === "see" || type === "edit"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Precio Total Pagado ------------------ */}
-        <Form.Item
-          name="totalPrice"
-          label="Precio total pagado"
-          rules={[
-            {
-              required: true,
-              message: "El precio total pagado es requerido",
-            },
-          ]}
-        >
-          <Input
-            className="w-full rounded-xl p-4"
-            placeholder="Precio total pagado"
-            size="large"
-            disabled={type === "see" || type === "edit"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Estado ------------------ */}
-        <Form.Item
-          name="status"
-          label="Estado"
-          rules={[{ required: true, message: "El estado es requerido" }]}
-        >
-          {/* <Input
-                        className="w-full rounded-xl p-4"
-                        placeholder="Estado"
-                        size="large"
-                        disabled={type === "see"}
-                    /> */}
-          <Select
-            style={{ width: 120 }}
-            options={[
-              { value: "PENDING", label: "PENDING" },
-              { value: "SUCCESS", label: "SUCCESS" },
-              { value: "DENIED", label: "DENIED" },
-            ]}
-            disabled={type == "see"}
-          />
-        </Form.Item>
-
-        {/* ------------------ Foto Voucher ------------------ */}
-        <Form.Item name="photo" label="Foto voucher">
-          {form.getFieldValue("photo") && (
-            <img
-              src={form.getFieldValue("photo")}
-              alt="Voucher"
-              className="w-60"
-            />
-          )}
-        </Form.Item>
-
-        <Form.Item className="w-full flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
-            disabled={loading}
-            onClick={() => {
-              if (type === "see") setOpen(false);
-            }}
+        <div className="flex gap-x-4 max-sm:flex-col">
+          <Form.Item
+            name="payment_method_id"
+            label="Método de pago"
+            labelCol={{ span: 24 }}
+            className="w-full"
           >
-            {loading ? (
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-              />
-            ) : type === "see" ? (
-              "Cerrar"
-            ) : (
-              getTitle(type)
-            )}
-          </button>
-        </Form.Item>
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+
+          {/* ------------------ Tipo de Pago ------------------ */}
+          <Form.Item
+            name="payment_type_id"
+            label="Tipo de pago"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+        </div>
+        {/* ------------------ Número de Orden ------------------ */}
+        <div className="flex gap-x-4 max-sm:flex-col">
+          <Form.Item
+            name="orderId"
+            label="Número de orden"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+
+          {/* ------------------ Fecha de Operación ------------------ */}
+          <Form.Item
+            name="date_approved"
+            label="Fecha de operación"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+        </div>
+
+        <div className="flex gap-x-4 max-sm:flex-col">
+          {/* ------------------ Precio Total Pagado ------------------ */}
+          <Form.Item
+            name="transaction_amount"
+            label="Precio total pagado"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+
+          {/* ------------------ Precio Total Pagado ------------------ */}
+          <Form.Item
+            name="net_amount"
+            label="Precio neto"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+
+          {/* ------------------ Moneda ------------------ */}
+          <Form.Item
+            name="currency_id"
+            label="Moneda"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <Input className="w-full rounded-xl p-4" size="large" disabled />
+          </Form.Item>
+        </div>
       </Form>
     </Modal>
   );
