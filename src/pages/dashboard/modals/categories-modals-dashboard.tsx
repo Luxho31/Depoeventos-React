@@ -100,6 +100,7 @@ export default function CategoryModal({
           {/* ------------------Input Nombre Categoria------------------ */}
           <Form.Item
             name="name"
+            label="Nombre"
             rules={[
               {
                 required: true,
@@ -122,6 +123,7 @@ export default function CategoryModal({
           {/* ------------------Input Descripcion Categoria------------------ */}
           <Form.Item
             name="description"
+            label="Descripción"
             rules={[
               {
                 required: true,

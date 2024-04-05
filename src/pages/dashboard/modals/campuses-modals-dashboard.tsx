@@ -100,6 +100,7 @@ export default function CampusModal({
           {/* ------------------Input Nombre Sede------------------ */}
           <Form.Item
             name="name"
+            label="Nombre"
             rules={[
               {
                 required: true,
@@ -122,6 +123,7 @@ export default function CampusModal({
           {/* ------------------Input Descripcion Sede------------------ */}
           <Form.Item
             name="description"
+            label="Descripción"
             rules={[
               {
                 required: true,
@@ -146,7 +148,7 @@ export default function CampusModal({
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
-                        // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
+              // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
               disabled={loading}
             >
               {loading ? (
@@ -168,7 +170,7 @@ export default function CampusModal({
               <button
                 type="button"
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4"
-                          // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
+                // bg-[#f46e16] hover:bg-orange-600 text-white font-semibold rounded-xl px-32 max-md:px-24 py-4
                 disabled={loading}
               >
                 {loading ? (

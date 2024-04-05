@@ -101,6 +101,7 @@ export default function DisciplineModal({
           {/* ------------------Input Nombre Disciplina------------------ */}
           <Form.Item
             name="name"
+            label="Nombre"
             rules={[
               {
                 required: true,
@@ -123,6 +124,7 @@ export default function DisciplineModal({
           {/* ------------------Input Descripcion Disciplina------------------ */}
           <Form.Item
             name="description"
+            label="Descripción"
             rules={[
               {
                 required: true,

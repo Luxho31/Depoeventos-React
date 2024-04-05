@@ -11,6 +11,7 @@ import {
     getAllDisciplines,
 } from "../../../services/disciplines-service";
 import DisciplineModal from "../modals/disciplines-modals-dashboard";
+import { Toaster, toast } from "sonner";
 
 type DisciplineData = {
     id: number;
@@ -76,6 +77,7 @@ export default function DiciplinesDashboard() {
             await deleteDiscipline(id);
             handleReload();
         } catch (error) {
+            toast.error("La disciplina se está utilizando en algún producto.")
             console.error("Error al eliminar disciplina:", error);
         } finally {
             setLoading(false);

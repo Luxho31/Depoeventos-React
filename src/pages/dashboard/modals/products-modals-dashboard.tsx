@@ -113,22 +113,25 @@ export default function ProductModal({
     try {
       setLoading(true);
       const product = await getProductById(id);
+      console.log("Producto obtenido:", product);
       form.setFieldsValue({
         name: product.name,
         description: product.description,
-        price: product.price,
         maxStudents: product.maxStudents,
-        campusId: product.campus.map((camp: Campus) => camp.id),
+        price: product.price,
         categoryId: product.category.id,
         startDate: moment(product.startDate),
         endDate: moment(product.endDate),
         coursesId: product.courses.map((course: Course) => course.id),
         startDateInscription: product.startDateInscription,
         endDateInscription: product.endDateInscription,
-        //TODO: Agregar los nuevos campos
-        // ages: product.ages,
+        campusesId: product.campus.map((camp: Campus) => camp.id),
+        ages: product.ages,
+        grades: product.grades,
+        gender: product.gender,
         photo: product.photo,
       });
+      setValue(product.gender);
     } catch (error) {
       console.error("Error al obtener datos del producto:", error);
     } finally {
@@ -154,7 +157,7 @@ export default function ProductModal({
   const createProductForm = async (values: Product) => {
     try {
       setLoading(true);
-    //   console.log("Antes de moment", values.startDate.$d, values.endDate);
+      //   console.log("Antes de moment", values.startDate.$d, values.endDate);
       values.startDate = moment(values.startDate).format("YYYY-MM-DD");
       values.endDate = moment(values.endDate).format("YYYY-MM-DD");
       console.log("Después de moment", values.startDate, values.endDate);
@@ -237,7 +240,6 @@ export default function ProductModal({
   };
 
   const onChangeRadioButton = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
@@ -283,7 +285,7 @@ export default function ProductModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
@@ -291,6 +293,8 @@ export default function ProductModal({
           {/* Input Nombre del Producto */}
           <Form.Item
             name="name"
+            label="Nombre del Producto"
+            labelCol={{ span: 24 }}
             rules={[
               {
                 required: selectedCoursesCount > 2,
@@ -299,25 +303,20 @@ export default function ProductModal({
             ]}
             initialValue={selectedCoursesCount <= 2 ? "-" : undefined}
           >
-            <div className="flex flex-col gap-y-2">
-              <label>
-                <span className="text-red-500">*</span> Nombre del producto:
-              </label>
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see" || selectedCoursesCount <= 2}
-                // defaultValue={
-                //     selectedCoursesCount <= 2 ? "-" : undefined
-                // }
-              />
-            </div>
+            <Input
+              className="w-full rounded-xl p-4"
+              placeholder="Nombre del producto"
+              size="large"
+              disabled={type === "see" || selectedCoursesCount <= 2}
+            />
+            {/* </div> */}
           </Form.Item>
 
           {/* Input Descripcion del Producto */}
           <Form.Item
             name="description"
+            label="Descripción del Producto"
+            labelCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -325,23 +324,26 @@ export default function ProductModal({
               },
             ]}
           >
-            <div className="flex flex-col gap-y-2">
-              <label>
+            {/* <div className="flex flex-col gap-y-2"> */}
+            {/* <label>
                 <span className="text-red-500">*</span> Descripción:
-              </label>
-              <TextArea
-                className="w-full rounded-xl p-4"
-                placeholder="Descripción del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </div>
+              </label> */}
+            <TextArea
+              className="w-full rounded-xl p-4"
+              placeholder="Descripción del producto"
+              size="large"
+              disabled={type === "see"}
+            />
+            {/* </div> */}
           </Form.Item>
 
           <div className="flex gap-x-4 max-sm:flex-col">
             {/* Input Disciplinas del Producto */}
             <Form.Item
               name="coursesId"
+              label="Disciplinas del Producto"
+              labelCol={{ span: 24 }}
+
               rules={[
                 {
                   required: true,
@@ -376,6 +378,8 @@ export default function ProductModal({
             {/* Input Categoria del Producto */}
             <Form.Item
               name="categoryId"
+              label="Categoria del Producto"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -404,34 +408,13 @@ export default function ProductModal({
             </Form.Item>
           </div>
 
-          {/* Input Sede del Producto */}
-          {/* <Form.Item
-                        name="campusId"
-                        rules={[
-                            { required: true, message: "La sede es requerida" },
-                        ]}
-                    > */}
-          {/* <div className="flex flex-col gap-y-2">
-                            <label>
-                                <span className="text-red-500">*</span> Sede:
-                            </label> */}
-          {/* <Select
-                                placeholder="Seleccionar Sede"
-                                className="w-full h-14"
-                                options={campuses.map((campus: Campus) => {
-                                    return {
-                                        value: campus.id,
-                                        label: campus.name,
-                                    };
-                                })}
-                                disabled={type === "see"}
-                            /> */}
-          {/* </div> */}
-          {/* </Form.Item> */}
+
 
           {/* Input Sede del Producto */}
           <Form.Item
             name="campusesId"
+            label="Sede(s) del Producto"
+            labelCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -459,6 +442,8 @@ export default function ProductModal({
             {/* Input Edad del Producto */}
             <Form.Item
               name="ages"
+              label="Edad(es)"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -482,6 +467,8 @@ export default function ProductModal({
             {/* Input Género del Producto */}
             <Form.Item
               name="gender"
+              label="Género"
+              labelCol={{ span: 24 }}
               rules={[
                 {
                   required: true,
@@ -490,22 +477,21 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              <div className="flex flex-col gap-y-2">
-                <label>
-                  <span className="text-red-500">*</span> Genero:
-                </label>
-                <Radio.Group onChange={onChangeRadioButton} value={value}>
-                  <Radio value={"Masculino"}>Masculino</Radio>
-                  <Radio value={"Femenino"}>Femenino</Radio>
-                  <Radio value={"Mixto"}>Mixto</Radio>
-                </Radio.Group>
-              </div>
+
+              <Radio.Group onChange={onChangeRadioButton} value={value}
+                disabled={type === "see"}
+              >
+                <Radio value={"Masculino"}>Masculino</Radio>
+                <Radio value={"Femenino"}>Femenino</Radio>
+                <Radio value={"Mixto"}>Mixto</Radio>
+              </Radio.Group>
             </Form.Item>
           </div>
 
           {/* Input Grado del Producto */}
           <Form.Item
             name="grades"
+            label="Grado(s)"
             rules={[
               {
                 required: true,
@@ -543,6 +529,7 @@ export default function ProductModal({
             {/* Input Cantidad de Estudiantes */}
             <Form.Item
               name="maxStudents"
+              label="Cantidad de Estudiantes"
               rules={[
                 {
                   required: true,
@@ -551,23 +538,18 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              <div className="flex flex-col gap-y-2">
-                <label>
-                  <span className="text-red-500">*</span> Cantidad de
-                  estudiantes:
-                </label>
-                <InputNumber
-                  className="w-full rounded-xl p-2"
-                  placeholder="Cantidad de estudiantes"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </div>
+              <InputNumber
+                className="w-full rounded-xl p-2"
+                placeholder="Cantidad de estudiantes"
+                size="large"
+                disabled={type === "see"}
+              />
             </Form.Item>
 
             {/* Input Precio del Producto */}
             <Form.Item
               name="price"
+              label="Precio del Producto"
               rules={[
                 {
                   required: true,
@@ -576,17 +558,14 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              <div className="flex flex-col gap-y-2">
-                <label>
-                  <span className="text-red-500">*</span> Precio:
-                </label>
-                <InputNumber
-                  className="w-full rounded-xl p-2"
-                  placeholder="Precio del producto"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </div>
+
+              <InputNumber
+                className="w-full rounded-xl p-2"
+                placeholder="Precio del producto"
+                size="large"
+                disabled={type === "see"}
+              />
+              {/* </div> */}
             </Form.Item>
           </div>
 
@@ -594,6 +573,7 @@ export default function ProductModal({
             {/* Input Fecha Inicial del Producto */}
             <Form.Item
               name="startDate"
+              label="Fecha Inicial del Producto"
               rules={[
                 {
                   required: true,
@@ -602,11 +582,7 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              {/* <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Fecha de inicio:
-                                </label> */}
+
               <DatePicker
                 className="w-full rounded-xl p-4"
                 placeholder="Fecha inicial del producto"
@@ -619,6 +595,7 @@ export default function ProductModal({
             {/* Input Fecha Final del Producto */}
             <Form.Item
               name="endDate"
+              label="Fecha Final del Producto"
               rules={[
                 {
                   required: true,
@@ -676,29 +653,31 @@ export default function ProductModal({
             </Form.Item>
           )}
         </div>
-        {type === "see" && (
-          <div className="w-full flex flex-row justify-between">
-            <Form.Item
-              name="startDateInscription"
-              label="Inicio de inscripción"
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-            <Form.Item name="endDateInscription" label="Fin de inscripción">
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-          </div>
-        )}
+        {
+          type === "see" && (
+            <div className="w-full flex flex-row justify-between">
+              <Form.Item
+                name="startDateInscription"
+                label="Inicio de inscripción"
+              >
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Nombre del producto"
+                  size="large"
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+              <Form.Item name="endDateInscription" label="Fin de inscripción">
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Nombre del producto"
+                  size="large"
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+            </div>
+          )
+        }
 
         <Form.Item className="w-full flex justify-end">
           <button
@@ -729,7 +708,7 @@ export default function ProductModal({
                 "categoryname"
 
                 */}
-      </Form>
-    </Modal>
+      </Form >
+    </Modal >
   );
 }
