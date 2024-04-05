@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
 
 // React Icons
-import { UploadChangeParam, UploadFile } from "antd/lib/upload/interface";
 import {
     FaAddressCard,
     FaMapMarkerAlt,
@@ -28,14 +27,6 @@ import {
     updateUserInfo,
     uploadProfileImage,
 } from "../../../services/profile-service";
-
-// type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-// const getBase64 = (img: FileType, callback: (url: string) => void) => {
-//     const reader = new FileReader();
-//     reader.addEventListener("load", () => callback(reader.result as string));
-//     reader.readAsDataURL(img);
-// };
 
 export default function Profile() {
     const [loading, setLoading] = useState(false);
@@ -69,7 +60,6 @@ export default function Profile() {
 
     // Funcionalidad de subida de imagen
     // const [loading, setLoading] = useState(false);
-    const [, setImageUrl] = useState<string>();
 
     const updateUserInformation = async (data: RegisterType) => {
         console.log(data);
@@ -81,7 +71,8 @@ export default function Profile() {
             if (profileImage) {
                 await handleImageUpload(profileImage); // Cambiado a voucherImage.originFileObj
             }
-            window.location.reload();
+            // window.location.reload();
+            handleReload()
         } catch (error) {
             console.error("Error al actualizar datos de usuario:", error);
             throw error;
@@ -119,17 +110,6 @@ export default function Profile() {
         try {
             await uploadProfileImage(file);
             message.success("Imagen de perfil subida exitosamente");
-            // setProfileImage(file);
-            // getBase64(file.originFileObj, (imageUrl: any) => {
-            //     setImageUrl(imageUrl);
-            // });
-            // Convertir el archivo a base64
-            // const reader = new FileReader();
-            // reader.onload = () => {
-            //     const base64String = reader.result as string;
-            //     setImageUrl(base64String);
-            // };
-            // reader.readAsDataURL(file);
         } catch (error) {
             console.error("Error al subir la imagen del perfil:", error);
         } finally {
@@ -143,29 +123,6 @@ export default function Profile() {
         headers: {
             authorization: "authorization-text",
         },
-        // onChange(info: any) {
-        //     if (info.file.status === "done") {
-        //         message.success(`${info.file.name} file uploaded successfully`);
-        //         setProfileImage(info.file);
-        //         getBase64(info.file.originFileObj, (imageUrl: any) => {
-        //             setImageUrl(imageUrl);
-        //         });
-        //     } else if (info.file.status === "error") {
-        //         message.error(`${info.file.name} file upload failed.`);
-        //     }
-        // },
-        // onChange(info: UploadChangeParam<UploadFile>) {
-        //     const { file } = info;
-        //     if (file.status === "done") {
-        //         message.success(`${file.name} file uploaded successfully`);
-        //         // setProductImage(file.originFileObj); // Assuming setProductImage expects a File object
-        //         // getBase64(file.originFileObj, (imageUrl: string) => {
-        //         //     setImageUrl(imageUrl);
-        //         // });
-        //     } else if (file.status === "error") {
-        //         message.error(`${file.name} file upload failed.`);
-        //     }
-        // },
     };
 
     return (
@@ -191,27 +148,10 @@ export default function Profile() {
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                        {/* <button className="px-12 py-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600">Editar Foto</button> */}
-                        {/* <Upload
-                            name="avatar"
-                            listType="picture-card"
-                            className="avatar-uploader"
-                            showUploadList={false}
-                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                            beforeUpload={beforeUpload}
-                            onChange={handleChange}
-                            disabled={!fieldsEnabled}
-                        >
-                            {imageUrl ? (
-                                <img alt="avatar" style={{ width: "100%" }} />
-                            ) : (
-                                uploadButton
-                            )}
-                        </Upload> */}
                         <Upload
                             {...propsUpload}
                             disabled={!fieldsEnabled}
-                            showUploadList={false}
+                            // showUploadList={false}
                             maxCount={1}
                             onChange={(info) => {
                                 const { file } = info;
