@@ -83,10 +83,6 @@ type ProductModalProps = {
   disciplines: Course[]; // Arreglo de objetos de tipo Discipline
 };
 
-// interface FileInfo {
-//     file: RcFile;
-// }
-
 export default function ProductModal({
   type,
   id,
@@ -129,6 +125,8 @@ export default function ProductModal({
         coursesId: product.courses.map((course: Course) => course.id),
         startDateInscription: product.startDateInscription,
         endDateInscription: product.endDateInscription,
+        //TODO: Agregar los nuevos campos
+        // ages: product.ages,
         photo: product.photo,
       });
     } catch (error) {
@@ -156,11 +154,12 @@ export default function ProductModal({
   const createProductForm = async (values: Product) => {
     try {
       setLoading(true);
+    //   console.log("Antes de moment", values.startDate.$d, values.endDate);
       values.startDate = moment(values.startDate).format("YYYY-MM-DD");
       values.endDate = moment(values.endDate).format("YYYY-MM-DD");
+      console.log("Después de moment", values.startDate, values.endDate);
+
       values.photo = "-";
-      values.ages = ["1", "2", "3"];
-      values.grades = ["1", "2", "3"];
 
       const productId = await createProduct(values);
       if (productImage) {
@@ -219,9 +218,9 @@ export default function ProductModal({
       await uploadProductImage(productId, file);
       message.success("Imagen de Product subida exitosamente");
       setProductImage(file); // Actualiza el estado con la imagen subida
-      // getBase64(file.originFileObj, (imageUrl: any) => {
+      //   getBase64(file.originFileObj, (imageUrl: any) => {
       //     setImageUrl(imageUrl);
-      // });
+      //   });
       getBase64(file, (imageUrl: string | ArrayBuffer | null) => {
         if (imageUrl && typeof imageUrl === "string") {
           setImageUrl(imageUrl);
@@ -441,11 +440,6 @@ export default function ProductModal({
             ]}
             className="w-full cursor-text"
           >
-            {/* <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Disciplina:
-                                </label> */}
             <Select
               mode="multiple"
               allowClear
@@ -459,7 +453,6 @@ export default function ProductModal({
               })}
               disabled={type === "see"}
             />
-            {/* </div> */}
           </Form.Item>
 
           <div className="flex gap-x-4 max-sm:flex-col">
@@ -475,10 +468,11 @@ export default function ProductModal({
               className="w-full cursor-text"
             >
               <Select
+                mode="multiple"
                 placeholder="Seleccionar Edad"
                 className="w-full h-14"
-                options={Array.from({ length: 20 }, (_, i) => ({
-                  label: `${i + 1}`,
+                options={Array.from({ length: 17 }, (_, i) => ({
+                  label: `${i + 1} año(s)`,
                   value: `${i + 1}`,
                 }))}
                 disabled={type === "see"}
@@ -523,6 +517,7 @@ export default function ProductModal({
             <Select
               placeholder="Seleccionar grado"
               className="w-full h-14"
+              mode="multiple"
               options={[
                 { value: "Nido", label: "Nido" },
                 { value: "Pre-Kinder", label: "Pre-Kinder" },
@@ -632,18 +627,12 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-              {/* <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Fecha de inicio:
-                                </label> */}
               <DatePicker
                 className="w-full rounded-xl p-4"
                 placeholder="Fecha final del producto"
                 size="large"
                 disabled={type === "see"}
               />
-              {/* </div> */}
             </Form.Item>
           </div>
 

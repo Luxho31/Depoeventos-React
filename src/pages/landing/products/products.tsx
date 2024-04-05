@@ -217,7 +217,7 @@ export default function Products() {
                             Se encontraron {filteredData.length} elementos
                         </h2>
                     )}
-                    <div className="grid grid-cols-1 min-[820px]:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-2 min-[1750px]:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 min-[820px]:grid-cols-2 lg:grid-cols-3 min-[1750px]:grid-cols-4 min-[1920px]:grid-cols-5 gap-8">
                         {filteredData.map((product: Product) => (
                             <ProductCard
                                 key={product.id}

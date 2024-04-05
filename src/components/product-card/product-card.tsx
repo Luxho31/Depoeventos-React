@@ -41,7 +41,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
         currentDate < startDateInscription || currentDate > endDateInscription;
 
         return (
-          <div className="w-full sm:w-[350px] md:w-[340px] min-[821px]:w-[350px] h-[500px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto shadow-lg rounded-2xl flex flex-col justify-between">
+          <div className="w-full sm:w-[350px] md:w-[340px] min-[821px]:w-full h-[400px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto shadow-lg rounded-2xl flex flex-col justify-between">
               <div className="flex justify-between p-4 sm:p-8">
                   <FaTableTennis className="text-2xl sm:text-3xl opacity-70" />
                   <h3 className="text-lg sm:text-2xl font-bold text-green-400">
