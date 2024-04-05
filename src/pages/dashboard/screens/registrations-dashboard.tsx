@@ -1,10 +1,11 @@
 import { Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllRegistration } from "../../../services/Inscriptions-service";
+import RegistrationsModal from "../modals/registrations-modals-dashboard";
 
 type ProductType = {
     id?: number;
@@ -49,8 +50,9 @@ export default function RegistrationsDashboard() {
     const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [, setSeeId] = useState<number | undefined>(undefined);
-    const [, setOpenSeeModal] = useState(false);
+    const [seeId, setSeeId] = useState<number | undefined>(undefined);
+    const [openSeeModal, setOpenSeeModal] = useState(false);
+    const [openChildrenModal, setOpenChildrenModal] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
     const navigate = useNavigate();
@@ -80,25 +82,16 @@ export default function RegistrationsDashboard() {
         setOpenSeeModal(true);
     };
 
+    const openSeeRegistrationChildrenModal = (id: number) => {
+        setSeeId(id);
+        setOpenChildrenModal(true);
+    };
+
     const handleSearch = () => {
-        // Actualiza la página actual a 1 después de la búsqueda
         setCurrentPage(1);
     };
 
     const onPageChange = (page: number) => {
-        // Mantén la búsqueda al cambiar de página
-        // const filteredUsers = registrationData.filter((registration) =>
-        //     registration.product
-        //         .name!.toLowerCase()
-        //         .includes(searchTerm.toLowerCase())
-        // );
-        // const indexOfLastUser: number = page * usersPerPage;
-        // const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        // const currentUsers: RegistrationData[] = filteredUsers.slice(
-        //     indexOfFirstUser,
-        //     indexOfLastUser
-        // );
-
         registrationData.filter((registration) =>
             registration.product && registration.product.name &&
             registration.product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -128,6 +121,17 @@ export default function RegistrationsDashboard() {
                         <label htmlFor="table-search" className="sr-only">
                             Search
                         </label>
+                        <RegistrationsModal
+                            id={seeId}
+                            open={openSeeModal}
+                            setOpen={setOpenSeeModal}
+                        />
+                        <RegistrationsModal
+                            id={seeId}
+                            open={openChildrenModal}
+                            setOpen={setOpenChildrenModal}
+                            type="children"
+                        />
                         <div className="relative">
                             <Input
                                 id="table-search-users"
@@ -150,7 +154,7 @@ export default function RegistrationsDashboard() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            
+
                             <th scope="col" className="px-6 py-3">
                                 Fecha de inscripción
                             </th>
@@ -161,7 +165,7 @@ export default function RegistrationsDashboard() {
                                 Sede/Categoría
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Hijo
+                                Alumno
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Operaciones
@@ -202,6 +206,14 @@ export default function RegistrationsDashboard() {
                                         }
                                     >
                                         <FaEye className="text-xl text-gray-700" />
+                                    </button>
+                                    <button
+                                        className="bg-slate-300 rounded-md p-1"
+                                        onClick={() =>
+                                            openSeeRegistrationChildrenModal(user.id)
+                                        }
+                                    >
+                                        <FaUser className="text-xl text-gray-700" />
                                     </button>
                                 </td>
                             </tr>

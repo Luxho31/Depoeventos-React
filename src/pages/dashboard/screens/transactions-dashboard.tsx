@@ -1,7 +1,7 @@
 import { Input, Pagination } from "antd";
 import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -44,7 +44,7 @@ export default function TransactionsDashboard() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [editId, setEditId] = useState<number | undefined>(undefined);
+  const [editId, ] = useState<number | undefined>(undefined);
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
   const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
@@ -88,11 +88,6 @@ export default function TransactionsDashboard() {
         console.error("Error reloading orders:", error);
         setLoading(false);
       });
-  };
-
-  const openEditTransactionModal = (id: number) => {
-    setEditId(id);
-    setOpenEditModal(true);
   };
 
   const openSeeTransactionModal = (id: number) => {
