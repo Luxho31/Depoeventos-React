@@ -150,9 +150,7 @@ export default function RegistrationsDashboard() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                ID
-                            </th>
+                            
                             <th scope="col" className="px-6 py-3">
                                 Fecha de inscripción
                             </th>
@@ -176,7 +174,6 @@ export default function RegistrationsDashboard() {
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
                             >
-                                <td className="px-6 py-4">{user.id}</td>
                                 <td className="px-6 py-4">
                                     {user.inscriptionDate}
                                 </td>

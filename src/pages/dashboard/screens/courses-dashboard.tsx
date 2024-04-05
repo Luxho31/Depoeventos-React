@@ -5,6 +5,7 @@ import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllCourseRegistration } from "../../../services/Inscriptions-service";
+import CoursesModal from "../modals/courses-modals-dashboard";
 
 type ProductType = {
     id?: number;
@@ -49,16 +50,14 @@ export default function CoursesDashboard() {
     const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [, setSeeId] = useState<number | undefined>(undefined);
-    const [, setOpenSeeModal] = useState(false);
+    const [seeId, setSeeId] = useState<number | undefined>(undefined);
+    const [openSeeModal, setOpenSeeModal] = useState(false);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
     const navigate = useNavigate();
+    const specificRoles: string[] = ["USER", "ADMIN"];
 
     useEffect(() => {
-        // const specificRole: string = "USER";
-        // if (userRole && userRole.some((role) => role === specificRole)) {
-        const specificRoles = ["USER", "ADMIN"];
         if (userRole && userRole.some((role) => specificRoles.includes(role))) {
             setLoading(true);
             getAllCourseRegistration()
@@ -79,20 +78,8 @@ export default function CoursesDashboard() {
         }
     }, [userRole]);
 
-    // const handleReload = () => {
-    //     try {
-    //         setLoading(true);
-    //         // getAllCourseRegistrations().then((data) => {
-    //         //   setCourseRegistrationData(data);
-    //         // });
-    //     } catch (error) {
-    //         console.error("Error al recargar matriculas por curso:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
-    const openSeeCourseRegistrationModal = (id: number) => {
+    const openSeeCourseModal = (id: number) => {
         setSeeId(id);
         setOpenSeeModal(true);
     };
@@ -102,19 +89,6 @@ export default function CoursesDashboard() {
     };
 
     const onPageChange = (page: number) => {
-        // const filteredUsers = courseRegistrationData.filter(
-        //     (courseRegistration) =>
-        //         courseRegistration.inscriptionDate
-        //             .toLowerCase()
-        //             .includes(searchTerm.toLowerCase())
-        // );
-        // const indexOfLastUser: number = page * usersPerPage;
-        // const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-        // const currentUsers: CourseRegistrationData[] = filteredUsers.slice(
-        //     indexOfFirstUser,
-        //     indexOfLastUser
-        // );
-
         courseRegistrationData.filter((courseRegistration) =>
             courseRegistration.inscriptionDate
                 .toLowerCase()
@@ -146,6 +120,12 @@ export default function CoursesDashboard() {
                         <label htmlFor="table-search" className="sr-only">
                             Search
                         </label>
+
+                        <CoursesModal
+                            id={seeId}
+                            open={openSeeModal}
+                            setOpen={setOpenSeeModal}
+                        />
                         <div className="relative">
                             <Input
                                 id="table-search-users"
@@ -163,20 +143,10 @@ export default function CoursesDashboard() {
                             />
                         </div>
                     </div>
-                    {/* <RegistrationModal
-                    type="see"
-                    id={seeId}
-                    open={openSeeModal}
-                    setOpen={setOpenSeeModal}
-                    handleReload={handleReload}
-                /> */}
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                ID
-                            </th>
                             <th scope="col" className="px-6 py-3">
                                 Fecha de inscripción
                             </th>
@@ -200,7 +170,6 @@ export default function CoursesDashboard() {
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
                             >
-                                <td className="px-6 py-4">{user.id}</td>
                                 <td className="px-6 py-4">
                                     {user.inscriptionDate}
                                 </td>
@@ -224,7 +193,7 @@ export default function CoursesDashboard() {
                                     <button
                                         className="bg-slate-300 rounded-md p-1"
                                         onClick={() =>
-                                            openSeeCourseRegistrationModal(
+                                            openSeeCourseModal(
                                                 user.id
                                             )
                                         }

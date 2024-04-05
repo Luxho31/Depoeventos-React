@@ -186,9 +186,7 @@ export default function ChildrensDashboard() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                ID
-                            </th>
+
                             <th scope="col" className="px-6 py-3">
                                 Hijo
                             </th>
@@ -212,7 +210,6 @@ export default function ChildrensDashboard() {
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
                             >
-                                <td className="px-6 py-4">{user.id}</td>
                                 <td
                                     scope="row"
                                     className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"

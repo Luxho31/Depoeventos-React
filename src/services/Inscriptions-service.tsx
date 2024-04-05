@@ -29,3 +29,18 @@ export const getAllCourseRegistration = async () => {
         console.log(error);
     }
 };
+
+
+export const getInscriptionById = async (id: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}/api/inscription/product/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
