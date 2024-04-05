@@ -75,6 +75,8 @@ export default function Profile() {
         console.log(data);
         try {
             setLoading(true);
+            let foto = data.photo;
+            console.log(foto);
             updateUserInfo(data, data.id);
             if (profileImage) {
                 await handleImageUpload(profileImage); // Cambiado a voucherImage.originFileObj
@@ -117,17 +119,17 @@ export default function Profile() {
         try {
             await uploadProfileImage(file);
             message.success("Imagen de perfil subida exitosamente");
-            setProfileImage(file);
+            // setProfileImage(file);
             // getBase64(file.originFileObj, (imageUrl: any) => {
             //     setImageUrl(imageUrl);
             // });
             // Convertir el archivo a base64
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64String = reader.result as string;
-                setImageUrl(base64String);
-            };
-            reader.readAsDataURL(file);
+            // const reader = new FileReader();
+            // reader.onload = () => {
+            //     const base64String = reader.result as string;
+            //     setImageUrl(base64String);
+            // };
+            // reader.readAsDataURL(file);
         } catch (error) {
             console.error("Error al subir la imagen del perfil:", error);
         } finally {
@@ -152,18 +154,18 @@ export default function Profile() {
         //         message.error(`${info.file.name} file upload failed.`);
         //     }
         // },
-        onChange(info: UploadChangeParam<UploadFile>) {
-            const { file } = info;
-            if (file.status === "done") {
-                message.success(`${file.name} file uploaded successfully`);
-                // setProductImage(file.originFileObj); // Assuming setProductImage expects a File object
-                // getBase64(file.originFileObj, (imageUrl: string) => {
-                //     setImageUrl(imageUrl);
-                // });
-            } else if (file.status === "error") {
-                message.error(`${file.name} file upload failed.`);
-            }
-        },
+        // onChange(info: UploadChangeParam<UploadFile>) {
+        //     const { file } = info;
+        //     if (file.status === "done") {
+        //         message.success(`${file.name} file uploaded successfully`);
+        //         // setProductImage(file.originFileObj); // Assuming setProductImage expects a File object
+        //         // getBase64(file.originFileObj, (imageUrl: string) => {
+        //         //     setImageUrl(imageUrl);
+        //         // });
+        //     } else if (file.status === "error") {
+        //         message.error(`${file.name} file upload failed.`);
+        //     }
+        // },
     };
 
     return (
@@ -210,6 +212,28 @@ export default function Profile() {
                             {...propsUpload}
                             disabled={!fieldsEnabled}
                             showUploadList={false}
+                            maxCount={1}
+                            onChange={(info) => {
+                                const { file } = info;
+                                if (file.status === "done") {
+                                    message.success(
+                                        `${file.name} se subió correctamente`
+                                    );
+                                    if (file.originFileObj) {
+                                        setProfileImage(file.originFileObj); // Actualiza el estado de la imagen de perfil
+                                        handleImageUpload(file.originFileObj); // Llama a la función handleImageUpload con el archivo subido
+                                    } else {
+                                        // Manejar el caso en que originFileObj sea undefined
+                                        console.error(
+                                            "El archivo subido no tiene un objeto de archivo original."
+                                        );
+                                    }
+                                } else if (file.status === "error") {
+                                    message.error(
+                                        `La subida de ${file.name} falló.`
+                                    );
+                                }
+                            }}
                         >
                             <Button icon={<UploadOutlined />}>
                                 Subir foto
