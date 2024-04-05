@@ -4,7 +4,7 @@ import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
-import { Checkbox, Collapse } from "antd";
+import { Checkbox, Collapse, Slider } from "antd";
 import { IoFilter } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
@@ -16,6 +16,7 @@ type Product = {
     price: number;
     description: string;
     startDate: string;
+    endDate: string;
     maxStudents: number;
     campus: Campus;
     category: Category;
@@ -23,19 +24,22 @@ type Product = {
     endDateInscription: string;
     courses: Course[];
     children: Children;
+    gender: string;
+    ages: string[];
+    grades: string[];
 };
 
 type Campus = {
     id: number;
     name: string;
     description: string;
-}
+};
 
 type Category = {
     id: number;
     name: string;
     description: string;
-}
+};
 
 type Course = {
     id: number;
@@ -64,7 +68,7 @@ type Children = {
     memberLastName: string;
     memberMotherLastName: string;
     selected: boolean;
-  };
+};
 
 export default function Products() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
@@ -77,17 +81,12 @@ export default function Products() {
 
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const [selectedCampuses, setSelectedCampuses] = useState<number[]>([]);
+    const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
+    const [selectedAges, setSelectedAges] = useState<number[]>([6, 18]);
 
     useEffect(() => {
         getAllProducts()
             .then((data) => {
-                // const currentDate = new Date();
-                // const filteredProducts = data.filter((product: Product) => {
-                //   const startDate = new Date(product.startDate);
-                //   const endDate = new Date(startDate);
-                //   endDate.setMonth(endDate.getMonth() + 6);
-                //   return currentDate >= startDate && currentDate <= endDate;
-                // });
                 setProductData(data);
                 setFilteredData(data);
             })
@@ -120,8 +119,6 @@ export default function Products() {
         setSelectedProduct(null);
     };
 
-
-
     const applyFilters = () => {
         let filtered = productData;
 
@@ -137,6 +134,19 @@ export default function Products() {
             );
         }
 
+        if (selectedGrades.length > 0) {
+            filtered = filtered.filter((product) =>
+              product.grades.some((grade) => selectedGrades.includes(grade))
+            );
+          }
+        
+          filtered = filtered.filter((product) =>
+            product.ages.some((age) => {
+              const [min, max] = age.split('-').map(Number);
+              return selectedAges[0] <= max && selectedAges[1] >= min;
+            })
+          );
+
         setFilteredData(filtered);
     };
 
@@ -146,6 +156,8 @@ export default function Products() {
         // Verifica si los elementos existen antes de asignarles valores
         setSelectedCategories([]);
         setSelectedCampuses([]);
+        setSelectedGrades([]);
+        setSelectedAges([6, 18]);
     };
 
     return (
@@ -194,6 +206,43 @@ export default function Products() {
                                 ))}
                             </Checkbox.Group>
                         </Panel>
+                        <Panel header="Grados" key="3">
+                            <Checkbox.Group
+                                value={selectedGrades}
+                                className="flex flex-col gap-y-2 sm:gap-y-4"
+                                onChange={(values) => setSelectedGrades(values)}
+                            >
+                                {/* Assuming grades are strings */}
+                                <Checkbox value="Nido">Nido</Checkbox>
+                                <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
+                                <Checkbox value="Kinder">Kinder</Checkbox>
+                                <Checkbox value="1er grado">1er grado</Checkbox>
+                                <Checkbox value="2do grado">2do grado</Checkbox>
+                                <Checkbox value="3ro grado">3ro grado</Checkbox>
+                                <Checkbox value="4to grado">4to grado</Checkbox>
+                                <Checkbox value="5to grado">5to grado</Checkbox>
+                                <Checkbox value="6to grado">6to grado</Checkbox>
+                                <Checkbox value="7mo grado">7mo grado</Checkbox>
+                                <Checkbox value="8vo grado">8vo grado</Checkbox>
+                                <Checkbox value="9no grado">9no grado</Checkbox>
+                                <Checkbox value="10mo grado">10mo grado</Checkbox>
+                                <Checkbox value="11vo grado">11vo grado</Checkbox>
+                                <Checkbox value="12vo grado">12vo grado</Checkbox>
+                                {/* Add more grades as needed */}
+                            </Checkbox.Group>
+                        </Panel>
+                        <Panel header="Edades" key="4">
+                            <Slider
+                                range
+                                min={1}
+                                max={18}
+                                value={selectedAges}
+                                onChange={(values) => setSelectedAges(values)}
+                            />
+                            <p>
+                                Edad: {selectedAges[0]}-{selectedAges[1]}
+                            </p>
+                        </Panel>
                     </Collapse>
 
                     <div className="flex flex-col sm:flex-row justify-between mt-8">
@@ -212,7 +261,7 @@ export default function Products() {
                     </div>
                 </div>
                 <div className="w-full lg:flex-1">
-                    {filteredData.length && (
+                    {filteredData.length | productData.length && (
                         <h2 className="text-lg font-semibold mb-4">
                             Se encontraron {filteredData.length} elementos
                         </h2>

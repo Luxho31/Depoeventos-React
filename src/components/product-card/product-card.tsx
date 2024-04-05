@@ -6,6 +6,7 @@ type Product = {
     price: number;
     description: string;
     startDate: string;
+    endDate: string;
     maxStudents: number;
     campus: {
         id: number;
@@ -20,6 +21,8 @@ type Product = {
     startDateInscription: string;
     endDateInscription: string;
     courses: Course[];
+    ages: string[];
+    grades: string[];
 };
 
 type Course = {
