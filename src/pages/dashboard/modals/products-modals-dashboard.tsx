@@ -157,11 +157,8 @@ export default function ProductModal({
   const createProductForm = async (values: Product) => {
     try {
       setLoading(true);
-      //   console.log("Antes de moment", values.startDate.$d, values.endDate);
-      values.startDate = moment(values.startDate).format("YYYY-MM-DD");
-      values.endDate = moment(values.endDate).format("YYYY-MM-DD");
-      console.log("Después de moment", values.startDate, values.endDate);
-
+      values.startDate = new Date(values.startDate).toISOString().split("T")[0];
+      values.endDate = new Date(values.endDate).toISOString().split("T")[0];
       values.photo = "-";
 
       const productId = await createProduct(values);
@@ -285,7 +282,7 @@ export default function ProductModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => { }}
+        onFinishFailed={() => {}}
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
@@ -339,7 +336,6 @@ export default function ProductModal({
               name="coursesId"
               label="Disciplinas del Producto"
               labelCol={{ span: 24 }}
-
               rules={[
                 {
                   required: true,
@@ -348,7 +344,6 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-
               <Select
                 mode="multiple"
                 allowClear
@@ -380,7 +375,6 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-
               <Select
                 placeholder="Seleccionar Categoria"
                 className="w-full h-14"
@@ -392,11 +386,8 @@ export default function ProductModal({
                 })}
                 disabled={type === "see"}
               />
-
             </Form.Item>
           </div>
-
-
 
           {/* Input Sede del Producto */}
           <Form.Item
@@ -465,8 +456,9 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-
-              <Radio.Group onChange={onChangeRadioButton} value={value}
+              <Radio.Group
+                onChange={onChangeRadioButton}
+                value={value}
                 disabled={type === "see"}
               >
                 <Radio value={"Masculino"}>Masculino</Radio>
@@ -548,7 +540,6 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-
               <InputNumber
                 className="w-full rounded-xl p-2"
                 placeholder="Precio del producto"
@@ -573,7 +564,6 @@ export default function ProductModal({
               ]}
               className="w-full cursor-text"
             >
-
               <DatePicker
                 className="w-full rounded-xl p-4"
                 placeholder="Fecha inicial del producto"
@@ -606,23 +596,8 @@ export default function ProductModal({
           </div>
 
           {/* Input Foto del Producto */}
-          {type === "see" && form.getFieldValue("photo") ? (
-            <Form.Item
-              name="photo"
-              label="Foto del Producto"
-              className="w-full cursor-text"
-            >
-              <div className="flex flex-col gap-y-2">
-                <label>
-                  <span className="text-red-500">*</span> Foto:
-                </label>
-                <img
-                  src={form.getFieldValue("photo")}
-                  alt="Producto"
-                  className="w-60"
-                />
-              </div>
-            </Form.Item>
+          {type === "see" ? (
+            <></>
           ) : (
             <Form.Item
               name="photo"
@@ -645,31 +620,29 @@ export default function ProductModal({
             </Form.Item>
           )}
         </div>
-        {
-          type === "see" && (
-            <div className="w-full flex flex-row justify-between">
-              <Form.Item
-                name="startDateInscription"
-                label="Inicio de inscripción"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Nombre del producto"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </Form.Item>
-              <Form.Item name="endDateInscription" label="Fin de inscripción">
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Nombre del producto"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </Form.Item>
-            </div>
-          )
-        }
+        {type === "see" && (
+          <div className="w-full flex flex-row justify-between">
+            <Form.Item
+              name="startDateInscription"
+              label="Inicio de inscripción"
+            >
+              <Input
+                className="w-full rounded-xl p-4"
+                placeholder="Nombre del producto"
+                size="large"
+                disabled={type === "see"}
+              />
+            </Form.Item>
+            <Form.Item name="endDateInscription" label="Fin de inscripción">
+              <Input
+                className="w-full rounded-xl p-4"
+                placeholder="Nombre del producto"
+                size="large"
+                disabled={type === "see"}
+              />
+            </Form.Item>
+          </div>
+        )}
         <Form.Item className="w-full flex justify-end">
           <button
             type="submit"
@@ -690,7 +663,7 @@ export default function ProductModal({
             )}
           </button>
         </Form.Item>
-      </Form >
-    </Modal >
+      </Form>
+    </Modal>
   );
 }
