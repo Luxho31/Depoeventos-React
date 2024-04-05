@@ -1,5 +1,5 @@
 import { Input, Pagination } from "antd";
-import { useEffect, useState } from "react";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
@@ -16,6 +16,26 @@ type OrderData = {
   date: string;
   totalPrice: number;
   status: string;
+  user: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+  };
+  items: {
+    length: number;
+    map(arg0: (item: {
+      children: any; product: { name: string | number | boolean | ReactPortal | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined; };
+    }, itemIndex: Key | null | undefined) => import("react/jsx-runtime").JSX.Element): ReactNode;
+    products: Product[];
+  };
+};
+
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
 };
 
 export default function TransactionsDashboard() {
@@ -33,13 +53,15 @@ export default function TransactionsDashboard() {
 
   const navigate = useNavigate();
 
+  const specificRole: string = "ADMIN";
+
   useEffect(() => {
-    const specificRole: string = "ADMIN";
     if (userRole && userRole.some((role) => role === specificRole)) {
       setLoading(true);
       getAllOrders()
         .then((data: OrderData[]) => {
-          setOrderData(data);
+          const successfulOrders = data.filter(order => order.status === "SUCCESS");
+          setOrderData(successfulOrders);
           setLoading(false);
         })
         .catch((error) => {
@@ -83,8 +105,7 @@ export default function TransactionsDashboard() {
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const filteredOrders = orderData.filter((order) =>
       searchTerms.some((term) =>
-        `${order.operationNumber.toLowerCase()} ${order.paymentMethod.toLowerCase()} ${order.bankName
-          }`.includes(term)
+        `${order.status.toLowerCase()}`.includes(term)
       )
     );
     setFilteredOrders(filteredOrders);
@@ -147,16 +168,10 @@ export default function TransactionsDashboard() {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Método de pago
+                Usuario
               </th>
               <th scope="col" className="px-6 py-3">
-                Banco
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Número de operación
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Fecha de la operación
+                Productos adquiridos
               </th>
               <th scope="col" className="px-6 py-3">
                 Precio total pagado
@@ -172,10 +187,28 @@ export default function TransactionsDashboard() {
           <tbody>
             {currentUsers.map((user, index) => (
               <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                <td className="px-6 py-4">{user.paymentMethod}</td>
-                <td className="px-6 py-4">{user.bankName}</td>
-                <td className="px-6 py-4">{user.operationNumber}</td>
-                <td className="px-6 py-4">{user.date}</td>
+                <th
+                  scope="row"
+                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                >
+                  <div className="ps-3">
+                    <div className="text-base font-semibold">
+                      {user.user.firstName} {user.user.lastName}
+                    </div>
+                    <div className="font-normal text-gray-500">
+                      {user.user.username}
+                    </div>
+                  </div>
+                </th>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.items.map((item, itemIndex) => (
+                    <span key={itemIndex}>
+                      {item.product.name} ({item.children.name})
+                      {itemIndex !== user.items.length - 1 && ", "}
+                    </span>
+                  ))}
+                </td>
                 <td className="px-6 py-4">{user.totalPrice}</td>
                 <td className="px-6 py-4 flex items-center gap-x-2">
                   <span className={validateStatus(user.status)} />
@@ -187,12 +220,6 @@ export default function TransactionsDashboard() {
                     onClick={() => openSeeTransactionModal(user.id)}
                   >
                     <FaEye className="text-xl text-gray-700" />
-                  </button>
-                  <button
-                    className="bg-slate-300 rounded-md p-1"
-                    onClick={() => openEditTransactionModal(user.id)}
-                  >
-                    <FaEdit className="text-xl text-gray-700" />
                   </button>
                 </td>
               </tr>

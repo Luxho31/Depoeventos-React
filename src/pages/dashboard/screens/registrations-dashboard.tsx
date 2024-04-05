@@ -100,9 +100,8 @@ export default function RegistrationsDashboard() {
         // );
 
         registrationData.filter((registration) =>
-            registration.product
-                .name!.toLowerCase()
-                .includes(searchTerm.toLowerCase())
+            registration.product && registration.product.name &&
+            registration.product.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
         setCurrentPage(page);
@@ -112,9 +111,8 @@ export default function RegistrationsDashboard() {
     const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
 
     const filteredUsers = registrationData.filter((registration) =>
-        registration.product
-            .name!.toLowerCase()
-            .includes(searchTerm.toLowerCase())
+        registration.product && registration.product.name &&
+        registration.product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const currentUsers: RegistrationData[] = filteredUsers.slice(
@@ -147,46 +145,7 @@ export default function RegistrationsDashboard() {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-between items-center gap-x-4 mb-5">
-                        {/* <h2>Filtros:</h2>
-                        <Select
-                            placeholder="Seleccionar Producto"
-                            className="w-full h-14"
-                            options={products.map((product: any) => {
-                                return {
-                                    value: product.id,
-                                    label: product.name,
-                                };
-                            })}
-                        />
-                        <Select
-                            placeholder="Seleccionar Sede"
-                            className="w-full h-14"
-                            options={campuses.map((campus: any) => {
-                                return {
-                                    value: campus.id,
-                                    label: campus.name,
-                                };
-                            })}
-                        />
-                        <Select
-                            placeholder="Seleccionar Categoria"
-                            className="w-full h-14"
-                            options={categories.map((category: any) => {
-                                return {
-                                    value: category.id,
-                                    label: category.name,
-                                };
-                            })}
-                        /> */}
-                        {/* <RegistrationModal
-                                type="see"
-                                id={seeId}
-                                open={openSeeModal}
-                                setOpen={setOpenSeeModal}
-                                handleReload={handleReload}
-                            /> */}
-                    </div>
+
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -226,7 +185,8 @@ export default function RegistrationsDashboard() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="text-base font-semibold">
-                                        {user.product.campus.name}
+                                        {/* {user.product.campus.name} */}
+
                                     </div>
                                     <div className="font-normal text-gray-500">
                                         {user.product.category.name}

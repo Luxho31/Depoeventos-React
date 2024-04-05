@@ -134,7 +134,7 @@ export default function Cart() {
                                         createOrderForm();
                                     }}
                                 >
-                                    Pagar
+                                    Continuar compra
                                 </button>
                             </div>
                         </div>

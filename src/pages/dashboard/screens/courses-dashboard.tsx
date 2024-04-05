@@ -209,7 +209,7 @@ export default function CoursesDashboard() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="text-base font-semibold">
-                                        {user.product.campus.name}
+                                        {/* {user.product.campus.name} */}
                                     </div>
                                     <div className="font-normal text-gray-500">
                                         {user.product.category.name}
