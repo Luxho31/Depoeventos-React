@@ -1,26 +1,26 @@
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Radio,
-  RadioChangeEvent,
-  Select,
-  Spin,
-  Upload,
-  message,
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Radio,
+    RadioChangeEvent,
+    Select,
+    Spin,
+    Upload,
+    message,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
-  createProduct,
-  getProductById,
-  updateProduct,
-  uploadProductImage,
+    createProduct,
+    getProductById,
+    updateProduct,
+    uploadProductImage,
 } from "../../../services/products-service";
 import ProductSchedule from "./product-schedule-dashboard";
 
@@ -86,6 +86,10 @@ export default function ProductModal({
     const [productImage, setProductImage] = useState<File | null>(null);
     const [selectedCoursesCount, setSelectedCoursesCount] = useState(0);
     const [value, setValue] = useState(0);
+    const [photo, setPhoto] = useState("");
+    const [photoPreview, setPhotoPreview] = useState<string | undefined>(
+        undefined
+    );
     const [selectedDisciplineIds, setSelectedDisciplineIds] = useState<
         Product[]
     >([]);
@@ -94,6 +98,8 @@ export default function ProductModal({
 
     useEffect(() => {
         if (id) getProductByIdForm(id);
+        setPhoto(photo);
+        handleReload();
     }, [id]);
 
     const handleCoursesChange = (value: Product[]) => {
@@ -108,6 +114,7 @@ export default function ProductModal({
             setLoading(true);
             const product = await getProductById(id);
             console.log("Producto obtenido:", product);
+            setPhoto(product.photo);
             form.setFieldsValue({
                 name: product.name,
                 description: product.description,
@@ -162,6 +169,7 @@ export default function ProductModal({
             const productId = await createProduct(values);
             if (productImage) {
                 await handleImageUpload(productId.id, productImage);
+                setPhoto(values.photo);
             }
             setOpen(false);
             form.resetFields();
@@ -575,25 +583,24 @@ export default function ProductModal({
                     </div>
 
                     {/* Input Foto del Producto */}
-                    {type === "see" ? (
+                    {/* {type === "see" ? (
                         <></>
-                    ) : (
-                        <Form.Item
-                            name="photo"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        "Por favor ingrese foto del Producto.",
-                                },
-                            ]}
-                            className="w-full cursor-text"
-                        >
-                            <div className="flex flex-col gap-y-2">
-                                <label>
-                                    <span className="text-red-500">*</span>{" "}
-                                    Foto:
-                                </label>
+                    ) : ( */}
+                    <Form.Item
+                        name="photo"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Por favor ingrese foto del Producto.",
+                            },
+                        ]}
+                        className="w-full"
+                    >
+                        <div className="flex flex-col gap-y-2">
+                            <label>
+                                <span className="text-red-500">*</span> Foto:
+                            </label>
+                            <div className="flex gap-x-8">
                                 <Upload
                                     {...propsUpload}
                                     maxCount={1}
@@ -607,6 +614,11 @@ export default function ProductModal({
                                                 setProductImage(
                                                     file.originFileObj
                                                 ); // Actualiza el estado de la imagen de perfil
+                                                setPhotoPreview(
+                                                    URL.createObjectURL(
+                                                        file.originFileObj
+                                                    )
+                                                );
                                                 // handleImageUpload(1,
                                                 //     file.originFileObj
                                                 // ); // Llama a la función handleImageUpload con el archivo subido
@@ -622,14 +634,33 @@ export default function ProductModal({
                                             );
                                         }
                                     }}
+                                    onRemove={() => {
+                                        // Si se cancela la subida, borrar la imagen de perfil y la vista previa
+                                        setProductImage(null);
+                                        setPhotoPreview("");
+                                    }}
+                                    className="w-56"
                                 >
-                                    <Button icon={<UploadOutlined />}>
+                                    <Button
+                                        icon={<UploadOutlined />}
+                                        disabled={type === "see"}
+                                    >
                                         Subir foto
                                     </Button>
                                 </Upload>
+                                {type == "create" ? (
+                                    <img
+                                        src={photoPreview}
+                                        alt=""
+                                        className="border-solid border-2 border-neutral-300 w-96 h-96 object-cover"
+                                    />
+                                ) : (
+                                    <img src={photo} alt="" className="border-solid border-2 border-neutral-300 w-96 h-96 object-cover" />
+                                )}
                             </div>
-                        </Form.Item>
-                    )}
+                        </div>
+                    </Form.Item>
+                    {/* )} */}
                 </div>
                 <Form
                     name="schedule"
