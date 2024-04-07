@@ -21,6 +21,7 @@ type Product = {
   maxStudents: number;
   currentStudents: number;
   campus: {
+    length: number;
     map(arg0: (campus: any) => any): unknown;
     id: number;
     name: string;
@@ -167,10 +168,17 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 ${product.price}
               </p>
             </div>
-            <ul className=" text-gray-400 text-md list-disc max-sm:text-xs ">
-              <li>
-                Se enseñan los siguientes cursos: {courseNames.join(", ")}.
-              </li>
+            <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1">
+              {product.campus.length > 1 ? (
+                <li>
+                  {product.courses.length > 1
+                    ? "Los cursos son: "
+                    : "El curso es: "}
+                  {courseNames.join(", ")}.
+                </li>
+              ) : (
+                <></>
+              )}
               <li>
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
@@ -219,7 +227,6 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                     value: child.name,
                     label: child.name,
                   }))}
-                  // Agregar la clase text-sm solo en dispositivos sm o más pequeños
                   rootClassName="max-sm:text-xs"
                 />
               </div>
@@ -230,7 +237,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               <button
                 className={
                   children.length > 0
-                    ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600 max-sm:text-sm max-sm:px-4 max-sm:py-2"
+                    ? "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-blue-600 max-sm:text-xs max-sm:px-4 max-sm:py-2"
                     : "flex items-center bg-blue-500 px-10 py-3 rounded-lg text-white hover:bg-slate-600 max-sm:text-sm max-sm:px-4 max-sm:py-2"
                 }
                 onClick={

@@ -248,7 +248,7 @@ export default function Products() {
         </div>
         <div className="w-full lg:flex-1">
           {filteredData.length | productData.length && (
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-md text-gray-400 mb-4">
               Se encontraron {filteredData.length} elementos
             </h2>
           )}

@@ -10,6 +10,7 @@ type Product = {
   maxStudents: number;
   currentStudents: number;
   campus: {
+    map: any;
     id: number;
     name: string;
     description: string;
@@ -44,39 +45,58 @@ export default function ProductCard({ product, onClick }: CardProps) {
   const isOutOfDateRange =
     currentDate < startDateInscription || currentDate > endDateInscription;
 
-  console.log("Fecha actual", currentDate);
-  console.log("Fecha de inicio de inscripción", startDateInscription);
-  console.log("Fecha de fin de inscripción", endDateInscription);
-  console.log("Fuera de rango de inscripción -- ", isOutOfDateRange);
-
   const isOutOfStock = product.currentStudents === product.maxStudents;
+
+  const courseNames =
+    product.courses.length > 3
+      ? product.courses
+          .slice(0, 3)
+          .map((course: { name: string }) => course.name)
+          .join(", ") + "..."
+      : product.courses
+          .map((course: { name: string }) => course.name)
+          .join(", ");
 
   return (
     <div className="w-full sm:w-[350px] md:w-[340px] min-[821px]:w-full h-[400px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto shadow-lg rounded-2xl flex flex-col justify-between">
-      <div className="flex justify-between p-4 sm:p-8">
+      <div className="flex justify-between p-4 sm:p-6">
         <FaTableTennis className="text-2xl sm:text-3xl opacity-70" />
-        <h3 className="text-lg sm:text-2xl font-bold text-green-400">
+        <h3 className="text-lg sm:text-xl font-semibold text-green-400">
           S/.{product.price}.00
         </h3>
       </div>
       <div className="px-4 py-2 sm:px-8 sm:py-4">
-        <h3 className="text-base sm:text-xl font-bold mb-2 sm:mb-3 text-center">
+        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-center">
           {product.name}
         </h3>
-        <p className="text-sm sm:text-base">{product.description}</p>
+        <div className="flex justify-center">
+          <p className="text-xs text-gray-400">{courseNames}</p>
+        </div>
       </div>
       <ul className="px-4 py-2 sm:px-8 sm:py-4">
-        <li className="flex items-center mb-2 sm:mb-4">
-          <FaCheck className="text-green-700" />
-          <p className="ml-2 sm:ml-4 text-base sm:text-lg font-bold">
-            {product.campus.name}
+        <li className="flex items-center mb-2">
+          <div>
+            <FaCheck className="text-green-700 text-xs" />
+          </div>
+          <p className="ml-2 text-sm sm:ml-4">
+            {product.campus
+              .map((campus: { name: string }) => campus.name)
+              .join(" - ")}
+          </p>
+        </li>
+        <li className="flex items-center mb-2">
+          <FaCheck className="text-green-700 text-xs" />
+          <p className="ml-2 text-sm sm:ml-4">{product.category.name}</p>
+        </li>
+        <li className="flex items-center mb-2">
+          <FaCheck className="text-green-700 text-xs" />
+          <p className="ml-2 text-sm sm:ml-4">
+            {product.ages.map((age) => `${age} años`).join(", ")}
           </p>
         </li>
         <li className="flex items-center">
-          <FaCheck className="text-green-700" />
-          <p className="ml-2 sm:ml-4 text-base sm:text-lg font-bold">
-            {product.category.name}
-          </p>
+          <FaCheck className="text-green-700 text-xs" />
+          <p className="ml-2 text-sm sm:ml-4">{product.grades.join(", ")}</p>
         </li>
       </ul>
       <div className="w-full flex justify-center">
