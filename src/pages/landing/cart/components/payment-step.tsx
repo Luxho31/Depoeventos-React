@@ -51,16 +51,16 @@ export default function PaymentStep({ preferenceId }: string | any) {
     }
 
     return (
-        <div className="flex justify-between gap-4">
-            <div className="w-2/5 flex flex-col gap-4">
+        <div className="flex flex-col justify-between gap-4 xl:flex-row">
+            <div className="w-full flex flex-col gap-4 md:flex-row xl:flex-col xl:w-2/5">
                 {/* Cart Summary */}
-                <div className="border rounded-md shadow-md p-8">
+                <div className="border rounded-md shadow-md p-8 w-full">
                     <h2 className="text-xl mb-4">Cart Summary</h2>
                     <h2 className="text-lg">Total S/. {getTotalPrice()}</h2>
                 </div>
 
                 {/* Información del pagador */}
-                <div className="border rounded-md shadow-md p-8">
+                <div className="border rounded-md shadow-md p-8 w-full">
                     <h2 className="text-lg font-semibold mb-4">
                         Información del pagador
                     </h2>
@@ -85,12 +85,12 @@ export default function PaymentStep({ preferenceId }: string | any) {
                 </div>
             </div>
             {/* Información de pago */}
-            <div className="w-3/5">
+            <div className="w-full xl:w-3/5">
                 <div className="h-full border rounded-md shadow-md p-8">
                     <h2 className="text-lg font-semibold mb-4">
                         Información de pago
                     </h2>
-                    <div className="flex justify-between mx-16 my-8">
+                    <div className="flex flex-col mx-4 sm:flex-row sm:justify-between sm:mx-16 my-8">
                         <div className="mb-2">
                             <p className="text-sm font-semibold text-gray-600">
                                 Productos adquiridos
@@ -136,7 +136,7 @@ export default function PaymentStep({ preferenceId }: string | any) {
                         </div>
                     </div>
                     {/* Renderizar el Wallet una vez que ha cargado */}
-                    <div className=" flex items-center justify-center ">
+                    <div className="flex items-center justify-center">
                         <Wallet
                             initialization={{ preferenceId: preferenceId }}
                             customization={{
