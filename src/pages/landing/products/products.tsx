@@ -119,7 +119,7 @@ export default function Products() {
   };
 
   const applyFilters = () => {
-    let filtered = productData;
+    let filtered = [...productData];
 
     if (selectedCategories.length > 0) {
       filtered = filtered.filter((product) =>
@@ -138,14 +138,12 @@ export default function Products() {
         product.grades.some((grade) => selectedGrades.includes(grade))
       );
     }
-
     filtered = filtered.filter((product) =>
       product.ages.some((age) => {
-        const [min, max] = age.split("-").map(Number);
-        return selectedAges[0] <= max && selectedAges[1] >= min;
+        const ageNumber = parseInt(age); // Convertir la edad de texto a número
+        return ageNumber >= selectedAges[0] && ageNumber <= selectedAges[1];
       })
     );
-
     setFilteredData(filtered);
   };
 
