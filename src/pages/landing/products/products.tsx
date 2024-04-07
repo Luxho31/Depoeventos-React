@@ -5,7 +5,7 @@ import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
 import { Checkbox, Collapse, Slider } from "antd";
-import { IoFilter } from "react-icons/io5";
+import { IoFilter, IoReload } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
 
@@ -81,7 +81,7 @@ export default function Products() {
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedCampuses, setSelectedCampuses] = useState<number[]>([]);
   const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
-  const [selectedAges, setSelectedAges] = useState<number[]>([6, 18]);
+  const [selectedAges, setSelectedAges] = useState<number[]>([1, 18]);
 
   useEffect(() => {
     getAllProducts()
@@ -152,11 +152,10 @@ export default function Products() {
   const resetFilter = () => {
     setFilteredData(productData);
 
-    // Verifica si los elementos existen antes de asignarles valores
     setSelectedCategories([]);
     setSelectedCampuses([]);
     setSelectedGrades([]);
-    setSelectedAges([6, 18]);
+    setSelectedAges([1, 18]);
   };
 
   return (
@@ -168,8 +167,13 @@ export default function Products() {
       <div className="flex flex-col min-[1180px]:flex-row lg:gap-x-8">
         <div className="w-full lg:w-auto lg:min-w-[300px]">
           <div className="flex items-center justify-between mb-4 select-none">
-            <h2 className="text-lg font-semibold">Filtros</h2>
-            <IoFilter />
+            <h2 className="text-sm font-semibold">Filtros</h2>
+            <button
+              onClick={resetFilter}
+              className="w-full sm:w-auto text-center sm:text-left rounded-lg py-1 px-2 hover:bg-red-400"
+            >
+              <IoReload />
+            </button>
           </div>
           <Collapse defaultActiveKey={["1"]}>
             <Panel header="Categorías" key="1">
@@ -199,23 +203,25 @@ export default function Products() {
               </Checkbox.Group>
             </Panel>
             <Panel header="Grados" key="3">
-              <Checkbox.Group
-                value={selectedGrades}
-                className="flex flex-col gap-y-2 sm:gap-y-4"
-                onChange={(values) => setSelectedGrades(values)}
-              >
-                <Checkbox value="Nido">Nido</Checkbox>
-                <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
-                <Checkbox value="Kinder">Kinder</Checkbox>
-                {[...Array(12).keys()].map((index) => (
-                  <Checkbox
-                    key={`grade-${index + 1}`}
-                    value={`${index + 1}ro grado`}
-                  >
-                    {`${index + 1}ro grado`}
-                  </Checkbox>
-                ))}
-              </Checkbox.Group>
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                <Checkbox.Group
+                  value={selectedGrades}
+                  className="flex flex-col gap-y-2 sm:gap-y-4"
+                  onChange={(values) => setSelectedGrades(values)}
+                >
+                  <Checkbox value="Nido">Nido</Checkbox>
+                  <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
+                  <Checkbox value="Kinder">Kinder</Checkbox>
+                  {[...Array(12).keys()].map((index) => (
+                    <Checkbox
+                      key={`grade-${index + 1}`}
+                      value={`${index + 1}ro grado`}
+                    >
+                      {`${index + 1}ro grado`}
+                    </Checkbox>
+                  ))}
+                </Checkbox.Group>
+              </div>
             </Panel>
             <Panel header="Edades" key="4">
               <Slider
@@ -231,18 +237,12 @@ export default function Products() {
             </Panel>
           </Collapse>
 
-          <div className="flex flex-col sm:flex-row justify-between mt-8">
+          <div className="flex items-center justify-center mt-5">
             <button
               onClick={applyFilters}
-              className="border w-full sm:w-auto text-center sm:text-left border-blue-500 rounded-lg py-2 px-4 mb-4 sm:mb-0 sm:mr-4 hover:bg-blue-400"
+              className="w-full border rounded-md py-2 hover:border-blue-400 hover:transition-all"
             >
               Aplicar
-            </button>
-            <button
-              onClick={resetFilter}
-              className="border w-full sm:w-auto text-center sm:text-left border-red-500 rounded-lg py-1 px-2 hover:bg-red-400"
-            >
-              Reset
             </button>
           </div>
         </div>
