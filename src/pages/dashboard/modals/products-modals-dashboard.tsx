@@ -145,7 +145,18 @@ export default function ProductModal({
             setLoading(true);
             values.startDate = moment(values.startDate).format("YYYY-MM-DD");
             values.endDate = moment(values.endDate).format("YYYY-MM-DD");
+            // values.photo = "-"
+
+            // let foto = values.photo
+            // console.log(foto);
+
             await updateProduct(values, id);
+            if (productImage && id !== undefined) {
+                await handleImageUpload(id, productImage);
+                setPhoto(values.photo);
+                getProductByIdForm(id);
+                // handleReload();
+            }
             setOpen(false);
             handleReload();
         } catch (error) {
@@ -171,6 +182,7 @@ export default function ProductModal({
                 await handleImageUpload(productId.id, productImage);
                 setPhoto(values.photo);
             }
+            console.log(productId.id);
             setOpen(false);
             form.resetFields();
             handleReload();
@@ -655,7 +667,11 @@ export default function ProductModal({
                                         className="border-solid border-2 border-neutral-300 w-96 h-96 object-cover"
                                     />
                                 ) : (
-                                    <img src={photo} alt="" className="border-solid border-2 border-neutral-300 w-96 h-96 object-cover" />
+                                    <img
+                                        src={photo}
+                                        alt=""
+                                        className="border-solid border-2 border-neutral-300 w-96 h-96 object-cover"
+                                    />
                                 )}
                             </div>
                         </div>
