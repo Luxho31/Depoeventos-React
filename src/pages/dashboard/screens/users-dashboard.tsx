@@ -1,4 +1,4 @@
-import { Input, Pagination } from "antd";
+import { Input, Pagination, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoReload } from "react-icons/io5";
@@ -95,24 +95,23 @@ function UsersDashboard() {
 
   return (
     <div className="h-screen">
-      <button
-        onClick={handleReload}
-        className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-      >
-        {loading ? "Loading..." : <IoReload className="text-lg" />}
-      </button>
-
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
           <Input
             id="table-search-users"
             placeholder="Buscar por nombre, número de documento..."
-            className="w-[20%] rounded-xl p-1"
+            className="w-[20%] rounded-xl p-1 ml-2"
             size="small"
             prefix={<CiSearch className="site-form-item-icon me-1" />}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button
+            onClick={handleReload}
+            className="pb-8 mb-5 flex h-2 px-4 py-2 text-gray-700"
+          >
+            {loading ? <Spin/> : <IoReload className="text-lg" />}
+          </button>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">

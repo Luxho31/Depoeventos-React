@@ -166,7 +166,7 @@ export default function DiciplinesDashboard() {
                                 className="w-full rounded-xl p-1"
                                 size="small"
                                 prefix={
-                                    <CiSearch className="site-form-item-icon me-1" />
+                                    <CiSearch className="site-form-item-icon me-1 ml-2" />
                                 }
                                 value={searchTerm}
                                 onChange={(e) => {

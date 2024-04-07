@@ -128,7 +128,7 @@ export default function Dashboard() {
             key: "8",
             path: "/dashboard/transactions",
             icon: <FaCartShopping />,
-            label: "Transacciones FALTA",
+            label: "Transacciones",
             onClick: () => handleItemClick("/dashboard/transactions"),
             role: ["ADMIN"],
         },

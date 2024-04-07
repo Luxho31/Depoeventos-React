@@ -144,7 +144,7 @@ export default function RegistrationsDashboard() {
               <Input
                 id="table-search-users"
                 placeholder="Buscar por nombre"
-                className="w-44 rounded-xl p-1"
+                className="w-44 rounded-xl p-1 ml-2"
                 size="small"
                 prefix={<CiSearch className="site-form-item-icon me-1" />}
                 value={searchTerm}

@@ -1,5 +1,13 @@
-import { Input, Pagination } from "antd";
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
+import { Input, Pagination, Spin } from "antd";
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
@@ -24,9 +32,25 @@ type OrderData = {
   };
   items: {
     length: number;
-    map(arg0: (item: {
-      children: any; product: { name: string | number | boolean | ReactPortal | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined; };
-    }, itemIndex: Key | null | undefined) => import("react/jsx-runtime").JSX.Element): ReactNode;
+    map(
+      arg0: (
+        item: {
+          children: any;
+          product: {
+            name:
+              | string
+              | number
+              | boolean
+              | ReactPortal
+              | ReactElement<any, string | JSXElementConstructor<any>>
+              | Iterable<ReactNode>
+              | null
+              | undefined;
+          };
+        },
+        itemIndex: Key | null | undefined
+      ) => import("react/jsx-runtime").JSX.Element
+    ): ReactNode;
     products: Product[];
   };
 };
@@ -44,7 +68,7 @@ export default function TransactionsDashboard() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [editId, ] = useState<number | undefined>(undefined);
+  const [editId] = useState<number | undefined>(undefined);
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
   const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
@@ -60,7 +84,9 @@ export default function TransactionsDashboard() {
       setLoading(true);
       getAllOrders()
         .then((data: OrderData[]) => {
-          const successfulOrders = data.filter(order => order.status === "SUCCESS");
+          const successfulOrders = data.filter(
+            (order) => order.status === "SUCCESS"
+          );
           setOrderData(successfulOrders);
           setLoading(false);
         })
@@ -81,7 +107,10 @@ export default function TransactionsDashboard() {
     setLoading(true);
     getAllOrders()
       .then((data: OrderData[]) => {
-        setOrderData(data);
+        const successfulOrders = data.filter(
+          (order) => order.status === "SUCCESS"
+        );
+        setOrderData(successfulOrders);
         setLoading(false);
       })
       .catch((error) => {
@@ -99,9 +128,7 @@ export default function TransactionsDashboard() {
     setCurrentPage(1);
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const filteredOrders = orderData.filter((order) =>
-      searchTerms.some((term) =>
-        `${order.status.toLowerCase()}`.includes(term)
-      )
+      searchTerms.some((term) => `${order.status.toLowerCase()}`.includes(term))
     );
     setFilteredOrders(filteredOrders);
   };
@@ -126,12 +153,6 @@ export default function TransactionsDashboard() {
 
   return (
     <div className="h-screen">
-      <button
-        onClick={handleReload}
-        className="pb-8 border mb-5 shadow-md flex h-2 px-4 py-2 bg-white rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-      >
-        {loading ? "Loading..." : <IoReload className="text-lg" />}
-      </button>
       <TransactionModal
         type="edit"
         id={editId}
@@ -152,12 +173,18 @@ export default function TransactionsDashboard() {
           <Input
             id="table-search-users"
             placeholder="Buscar por nombre, número de documento..."
-            className="w-[20%] rounded-xl p-1"
+            className="w-[20%] rounded-xl p-1 ml-2"
             size="small"
             prefix={<CiSearch className="site-form-item-icon me-1" />}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button
+            onClick={handleReload}
+            className="pb-8 mb-5 flex h-2 px-4 py-2 text-gray-700 "
+          >
+            {loading ? <Spin /> : <IoReload className="text-lg" />}
+          </button>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">

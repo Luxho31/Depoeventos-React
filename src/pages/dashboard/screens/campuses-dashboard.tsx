@@ -129,7 +129,7 @@ export default function DiciplinesDashboard() {
                             <Input
                                 id="table-search-users"
                                 placeholder="Buscar por nombre"
-                                className="w-full rounded-xl p-1"
+                                className="w-full rounded-xl p-1  ml-2"
                                 size="small"
                                 prefix={
                                     <CiSearch className="site-form-item-icon me-1" />
