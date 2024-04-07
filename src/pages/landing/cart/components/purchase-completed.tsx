@@ -8,7 +8,7 @@ export default function PurchaseCompleted() {
     const [progressPercent, setProgressPercent] = useState(100);
 
     return (
-        <div className="flex flex-col w-[80%] m-auto mt-24">
+        <div className="min-h-screen flex flex-col mx-auto mt-24 w-[80%] px-4">
             {/* Progress Bar */}
             <div className="w-full text-center">
                 <div
@@ -40,11 +40,11 @@ export default function PurchaseCompleted() {
                 } mb-24`}
             >
                 <div className="h-[34rem] flex flex-col justify-center items-center gap-y-8 BackgroundMessage">
-                    <img src={VentaGIF} className="w-60" alt="" />
-                    <h2 className="text-4xl font-light">
+                    <img src={VentaGIF} className="w-44 sm:w-52" alt="" />
+                    <h2 className="text-2xl md:text-4xl font-light text-center">
                         Gracias por adquirir nuestros servicios
                     </h2>
-                    <span className="text-lg text-center text-neutral-400">
+                    <span className="text-base md:text-lg text-center text-gray-400">
                         Su compra ha sido registrada y se encuentra en proceso
                         de aprobación, se ha separado un cupo en los productos
                         que ha adquirido. <br />
