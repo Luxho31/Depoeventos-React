@@ -124,8 +124,81 @@ export default function RegistrationsDashboard() {
   return (
     <div className="h-screen">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="flex justify-between">
-          <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+          
+          <div className="flex justify-between mx-2 pt-2">
+            <Input
+              id="table-search-users"
+              placeholder="Buscar por nombre"
+              className="w-44 rounded-xl p-1"
+              size="small"
+              prefix={<CiSearch className="site-form-item-icon me-1" />}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                handleSearch();
+              }}
+            />
+
+            {/* Filtros */}
+            <div className="flex justify-end gap-x-1">
+              {/* Por producto */}
+              <Select
+                className="text-black"
+                placeholder="Filtrar por producto"
+                allowClear
+                showSearch
+                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+                mode="multiple"
+              >
+                {registrationData.map((data) => (
+                  <Select.Option
+                    key={data.product.id}
+                    value={data.product.name}
+                  >
+                    {data.product.name}
+                  </Select.Option>
+                ))}
+              </Select>
+
+              {/* Por categoria */}
+
+              <Select
+                className="text-black"
+                placeholder="Filtrar por categoría"
+                allowClear
+                showSearch
+                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+                mode="multiple"
+              >
+                {registrationData.map((data) => (
+                  <Select.Option
+                    key={data.product.category.id}
+                    value={data.product.category.id}
+                  >
+                    {data.product.category.name}
+                  </Select.Option>
+                ))}
+              </Select>
+
+              {/* Por sede */}
+              <Select
+                className="text-black"
+                placeholder="Filtrar por campus"
+                allowClear
+                showSearch
+                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+              >
+                {registrationData.map((data) =>
+                  data.product.campuses.map((campus) => (
+                    <Select.Option key={campus.id} value={campus.name}>
+                      {campus.name}
+                    </Select.Option>
+                  ))
+                )}
+              </Select>
+            </div>
+          </div>
+          <div className=" flex-column flex-wrap w-full md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
             <label htmlFor="table-search" className="sr-only">
               Search
             </label>
@@ -140,93 +213,6 @@ export default function RegistrationsDashboard() {
               setOpen={setOpenChildrenModal}
               type="children"
             />
-            <div className="flex items-center justify-between ">
-              <Input
-                id="table-search-users"
-                placeholder="Buscar por nombre"
-                className="w-44 rounded-xl p-1 ml-2"
-                size="small"
-                prefix={<CiSearch className="site-form-item-icon me-1" />}
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  handleSearch();
-                }}
-              />
-              {/* Filtros */}
-              <div className="flex gap-x-4">
-                {/* Por producto */}
-                <div className="flex items-center gap-x-2">
-                  <label htmlFor="campus" className="text-gray-500">
-                    Filtrar por producto
-                  </label>
-                  <Select
-                    className="w-1/4 text-black"
-                    placeholder="Filtrar por producto"
-                    allowClear
-                    showSearch
-                    style={{ width: 200 }}
-                    mode="multiple"
-                  >
-                    {registrationData.map((data) => (
-                      <Select.Option
-                        key={data.product.id}
-                        value={data.product.name}
-                      >
-                        {data.product.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
-
-                {/* Por categoria */}
-                <div className="flex items-center gap-x-2">
-                  <label htmlFor="campus" className="text-gray-500">
-                    Filtrar por categoría
-                  </label>
-                  <Select
-                    className="w-1/4 text-black"
-                    placeholder="Filtrar por categoría"
-                    allowClear
-                    showSearch
-                    mode="multiple"
-                    style={{ width: 200 }}
-                  >
-                    {registrationData.map((data) => (
-                      <Select.Option
-                        key={data.product.category.id}
-                        value={data.product.category.id}
-                      >
-                        {data.product.category.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
-
-                {/* Por sede */}
-                <div className="flex items-center gap-x-2">
-                  <label htmlFor="campus" className="text-gray-500">
-                    Filtrar por campus
-                  </label>
-                  <Select
-                    className="w-1/4 text-black"
-                    placeholder="Filtrar por campus"
-                    allowClear
-                    showSearch
-                    style={{ width: 200 }}
-                  >
-                    {registrationData.map((data) =>
-                      data.product.campuses.map((campus) => (
-                        <Select.Option key={campus.id} value={campus.name}>
-                          {campus.name}
-                        </Select.Option>
-                      ))
-                    )}
-                  </Select>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
