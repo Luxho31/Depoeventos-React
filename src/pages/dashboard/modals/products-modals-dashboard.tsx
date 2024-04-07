@@ -677,17 +677,11 @@ export default function ProductModal({
                         </div>
                     </Form.Item>
                     {/* )} */}
-                </div>
-                <Form
-                    name="schedule"
-                    layout="vertical"
-                    onFinish={() => {}}
-                    className="flex flex-col"
-                >
+
                     {selectedDisciplineIds.map((disciplineId) => (
                         <ProductSchedule key={disciplineId} id={disciplineId} />
                     ))}
-                </Form>
+                </div>
 
                 {type === "see" && (
                     <div className="w-full flex flex-row justify-between">
