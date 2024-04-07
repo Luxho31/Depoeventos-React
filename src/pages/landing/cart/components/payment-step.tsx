@@ -69,7 +69,7 @@ export default function PaymentStep({ preferenceId }: string | any) {
             <p className="text-sm">{payerData.email}</p>
           </div>
           <div className="mb-2">
-            <p className="text-sm font-semibold text-gray-600">Dirección:</p>
+            <p className="text-sm font-semibold text-gray-600">País:</p>
             <p className="text-sm">{payerData.country}</p>
           </div>
         </div>
