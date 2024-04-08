@@ -149,11 +149,14 @@ export default function DiciplinesDashboard() {
 
     return (
         <div className="h-screen">
+            <button
+                onClick={openCreateProductModal}
+                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full"
+            >
+                <HiMiniPlus className="text-white text-2xl" />
+            </button>
             <div className="flex justify-between">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
                     <div className="relative">
                         <Input
                             id="table-search-users"
@@ -174,7 +177,7 @@ export default function DiciplinesDashboard() {
                 <div className="flex justify-between items-center mb-5">
                     <Button
                         onClick={openCreateProductModal}
-                        className="flex items-center gap-x-2"
+                        className="max-sm:hidden flex items-center gap-x-2"
                     >
                         <HiMiniPlus className="text-lg" />
                         Crear Productos

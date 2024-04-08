@@ -284,7 +284,7 @@ export default function Dashboard() {
                                     onClick: () => item.onClick(),
                                 }))}
                             />
-                            <div className={`${window.innerWidth > 768 ? "hidden" : "block"} flex justify-center gap-2 mt-auto mb-4`}>
+                            <div className={`${window.innerWidth > 640 ? "hidden" : "block"} flex justify-center gap-2 mt-auto mb-4`}>
                                 <Button
                                     className="border-none h-12 p-2 bg-white rounded-lg"
                                     onClick={() =>
@@ -337,7 +337,7 @@ export default function Dashboard() {
                                 />
                                 <Dropdown
                                     menu={menuProps}
-                                    className="hidden md:block md:border-none md:me-10"
+                                    className="hidden sm:block sm:border-none sm:me-10"
                                 >
                                     <Button className="p-0">
                                         <Space>

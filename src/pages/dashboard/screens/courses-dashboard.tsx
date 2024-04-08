@@ -123,10 +123,6 @@ export default function CoursesDashboard() {
         <div className="h-screen">
             <div className="flex justify-between">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
-
                     <CoursesModal
                         id={seeId}
                         open={openSeeModal}

@@ -77,7 +77,7 @@ export default function DiciplinesDashboard() {
             await deleteDiscipline(id);
             handleReload();
         } catch (error) {
-            toast.error("La disciplina se está utilizando en algún producto.")
+            toast.error("La disciplina se está utilizando en algún producto.");
             console.error("Error al eliminar disciplina:", error);
         } finally {
             setLoading(false);
@@ -121,52 +121,55 @@ export default function DiciplinesDashboard() {
 
     return (
         <div className="h-screen">
-                <div className="flex justify-between">
-                    <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                        <label htmlFor="table-search" className="sr-only">
-                            Search
-                        </label>
-                        <div className="relative">
-                            <Input
-                                id="table-search-users"
-                                placeholder="Buscar por nombre"
-                                className="w-full rounded-xl p-1"
-                                size="small"
-                                prefix={
-                                    <CiSearch className="site-form-item-icon me-1 ml-2" />
-                                }
-                                value={searchTerm}
-                                onChange={(e) => {
-                                    setSearchTerm(e.target.value);
-                                    handleSearch();
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center mb-5">
-                        <Button
-                            onClick={openCreateDisciplineModal}
-                            className="flex items-center gap-x-2"
-                        >
-                            <HiMiniPlus className="text-lg" />
-                            Crear Disciplinas
-                        </Button>
-                        <DisciplineModal
-                            create={true}
-                            id={undefined}
-                            open={openCreateModal}
-                            setOpen={setOpenCreateModal}
-                            handleReload={handleReload}
-                        />
-                        <DisciplineModal
-                            create={false}
-                            id={editId}
-                            open={openEditModal}
-                            setOpen={setOpenEditModal}
-                            handleReload={handleReload}
+            <button
+                onClick={openCreateDisciplineModal}
+                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full"
+            >
+                <HiMiniPlus className="text-white text-2xl" />
+            </button>
+            <div className="flex justify-between">
+                <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+                    <div className="relative">
+                        <Input
+                            id="table-search-users"
+                            placeholder="Buscar por nombre"
+                            className="w-full rounded-xl p-1"
+                            size="small"
+                            prefix={
+                                <CiSearch className="site-form-item-icon me-1 ml-2" />
+                            }
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                handleSearch();
+                            }}
                         />
                     </div>
                 </div>
+                <div className="flex justify-between items-center mb-5">
+                    <Button
+                        onClick={openCreateDisciplineModal}
+                        className="max-sm:hidden flex items-center gap-x-2"
+                    >
+                        <HiMiniPlus className="text-lg" />
+                        Crear Disciplinas
+                    </Button>
+                    <DisciplineModal
+                        create={true}
+                        id={undefined}
+                        open={openCreateModal}
+                        setOpen={setOpenCreateModal}
+                        handleReload={handleReload}
+                    />
+                    <DisciplineModal
+                        create={false}
+                        id={editId}
+                        open={openEditModal}
+                        setOpen={setOpenEditModal}
+                        handleReload={handleReload}
+                    />
+                </div>
+            </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -233,14 +236,14 @@ export default function DiciplinesDashboard() {
                     </tbody>
                 </table>
             </div>
-                <Pagination
-                    className="mt-4"
-                    current={currentPage}
-                    total={filteredUsers.length}
-                    pageSize={usersPerPage}
-                    onChange={onPageChange}
-                    showSizeChanger={false}
-                />
+            <Pagination
+                className="mt-4"
+                current={currentPage}
+                total={filteredUsers.length}
+                pageSize={usersPerPage}
+                onChange={onPageChange}
+                showSizeChanger={false}
+            />
         </div>
     );
 }

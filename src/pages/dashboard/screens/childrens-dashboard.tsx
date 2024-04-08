@@ -136,11 +136,14 @@ export default function ChildrensDashboard() {
 
     return (
         <div className="h-screen">
+            <button
+                onClick={openCreateChildrenModal}
+                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full"
+            >
+                <HiMiniPlus className="text-white text-2xl" />
+            </button>
             <div className="flex justify-between">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
                     <div className="relative">
                         <Input
                             id="table-search-users"
@@ -161,7 +164,7 @@ export default function ChildrensDashboard() {
                 <div className="flex justify-between items-center mb-5">
                     <Button
                         onClick={openCreateChildrenModal}
-                        className="flex items-center gap-x-2"
+                        className="max-sm:hidden flex items-center gap-x-2"
                     >
                         <HiMiniPlus className="text-lg" />
                         Crear Hijo
@@ -186,7 +189,6 @@ export default function ChildrensDashboard() {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-
                             <th scope="col" className="px-6 py-3">
                                 Hijo
                             </th>

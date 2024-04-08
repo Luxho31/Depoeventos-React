@@ -97,9 +97,6 @@ function UsersDashboard() {
         <div className="h-screen">
             <div className="flex justify-between">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
                     <div className="relative">
                         <Input
                             id="table-search-users"
@@ -114,12 +111,12 @@ function UsersDashboard() {
                         />
                     </div>
                 </div>
-                <button
+                {/* <button
                     onClick={handleReload}
                     className="pb-8 mb-5 flex h-2 px-4 py-2 text-gray-700"
                 >
                     {loading ? <Spin /> : <IoReload className="text-lg" />}
-                </button>
+                </button> */}
             </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
