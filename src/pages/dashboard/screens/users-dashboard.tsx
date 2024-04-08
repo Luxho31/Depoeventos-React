@@ -1,7 +1,6 @@
-import { Input, Pagination, Spin } from "antd";
+import { Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllUsers } from "../../../services/user-service";
@@ -25,7 +24,7 @@ type UserData = {
 
 function UsersDashboard() {
     const [userData, setUserData] = useState<UserData[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
@@ -56,18 +55,18 @@ function UsersDashboard() {
         handleSearch();
     }, [searchTerm, userData]);
 
-    const handleReload = () => {
-        setLoading(true);
-        getAllUsers()
-            .then((data: UserData[]) => {
-                setUserData(data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error reloading users:", error);
-                setLoading(false);
-            });
-    };
+    // const handleReload = () => {
+    //     setLoading(true);
+    //     getAllUsers()
+    //         .then((data: UserData[]) => {
+    //             setUserData(data);
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error reloading users:", error);
+    //             setLoading(false);
+    //         });
+    // };
 
     const handleSearch = () => {
         setCurrentPage(1);

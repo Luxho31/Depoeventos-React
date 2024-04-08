@@ -1,8 +1,7 @@
-import { Input, Pagination, Spin } from "antd";
+import { Input, Pagination } from "antd";
 import { Key, ReactNode, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
-import { IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import { getAllOrders } from "../../../services/cart-service/cart-service";
@@ -59,7 +58,7 @@ type Product = {
 
 export default function TransactionsDashboard() {
     const [orderData, setOrderData] = useState<OrderData[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [openEditModal, setOpenEditModal] = useState(false);
