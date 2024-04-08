@@ -1,5 +1,4 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, Spin } from "antd";
+import { Form, Input, Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
@@ -33,7 +32,7 @@ export default function TransactionModal({
   setOpen,
   handleReload,
 }: TransactionModalProps) {
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {

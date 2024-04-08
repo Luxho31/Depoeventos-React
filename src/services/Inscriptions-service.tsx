@@ -44,7 +44,16 @@ export const getInscriptionById = async (id: number) => {
   }
 };
 
-export const getInscriptionsWithFilters = async (values: any) => {
+type InscriptionFilters = {
+  productIds: number[];
+  campusesIds: number[];
+  categoriesIds: number[];
+  [key: string]: number[];
+};
+
+export const getInscriptionsWithFilters = async (
+  values: InscriptionFilters
+) => {
   try {
     const queryParams = new URLSearchParams();
 
@@ -52,10 +61,9 @@ export const getInscriptionsWithFilters = async (values: any) => {
       if (
         values[key] !== undefined &&
         values[key] !== null &&
-        (Array.isArray(values[key]) ? values[key].length > 0 : true) &&
-        values[key] !== ""
+        (Array.isArray(values[key]) ? values[key].length > 0 : true)
       ) {
-        queryParams.append(key, values[key]);
+        queryParams.append(key, values[key].join(","));
       }
     }
 
@@ -69,12 +77,24 @@ export const getInscriptionsWithFilters = async (values: any) => {
     return data;
   } catch (error) {
     console.log(error);
+    return undefined;
   }
 };
 
 // Download Excel
 
-export const generateExcel = async (values: any) => {
+type GenerateExcelValues = {
+  productIds: number[];
+  campusesIds: number[];
+  categoriesIds: number[];
+  [key: string]: number[];
+};
+
+type GenerateExcelResponse = Blob;
+
+export const generateExcel = async (
+  values: GenerateExcelValues
+): Promise<GenerateExcelResponse | undefined> => {
   try {
     const queryParams = new URLSearchParams();
 
@@ -82,10 +102,10 @@ export const generateExcel = async (values: any) => {
       if (
         values[key] !== undefined &&
         values[key] !== null &&
-        (Array.isArray(values[key]) ? values[key].length > 0 : true) &&
-        values[key] !== ""
+        Array.isArray(values[key]) &&
+        values[key].length > 0
       ) {
-        queryParams.append(key, values[key]);
+        queryParams.append(key, values[key].join(","));
       }
     }
 
@@ -107,7 +127,10 @@ export const generateExcel = async (values: any) => {
 
     URL.revokeObjectURL(blobUrl);
     document.body.removeChild(link);
+
+    return blob;
   } catch (error) {
     console.log(error);
+    return undefined;
   }
 };

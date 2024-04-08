@@ -1,6 +1,6 @@
 import { Form, Input, Select } from "antd";
 
-export default function ProductSchedule(id: number | any) {
+export default function ProductSchedule(id: number ) {
     console.log("Horario para ", id);
     const generateOptions = () => {
         const options = [];

@@ -5,7 +5,7 @@ import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
 import { Checkbox, Collapse, Slider } from "antd";
-import { IoFilter, IoReload } from "react-icons/io5";
+import { IoReload } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
 

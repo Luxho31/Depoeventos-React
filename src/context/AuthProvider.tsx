@@ -1,7 +1,13 @@
 // authContext.tsx
 
-import * as jose from 'jose';
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import * as jose from "jose";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { generalRoutes } from "../utils/routes/general.routes.ts";
 
 const BASE_URL = generalRoutes.BASE_URL;
@@ -147,7 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         // get userId from token
         const claims = jose.decodeJwt(localStorage.getItem("token")!);
-        const userId: any = claims.userId;
+        const userId: string = `${claims.userId}`;
         localStorage.setItem("userId", userId);
 
         // get userdata

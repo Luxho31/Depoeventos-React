@@ -55,7 +55,7 @@ type Course = {
 type CartData = {
   id: number;
   product: {
-    photo: any;
+    photo: string;
     name: string;
     price: number;
     description: string;

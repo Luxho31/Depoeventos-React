@@ -11,7 +11,8 @@ type ProductType = {
   id?: number;
   name?: string;
   campuses: {
-    map(arg0: (campus: any) => any): import("react").ReactNode;
+    map: (arg0: (campus: CampusType) => JSX.Element) => JSX.Element[];
+
     id?: number;
     name?: string;
   };
@@ -19,6 +20,12 @@ type ProductType = {
     id?: number;
     name?: string;
   };
+};
+
+type CampusType = {
+  id?: number;
+  name?: string;
+  description?: string;
 };
 
 type ChildrenType = {
@@ -149,7 +156,10 @@ export default function CoursesDashboard() {
                 Producto
               </th>
               <th scope="col" className="px-6 py-3">
-                Sede/Categoría
+                Sede
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Categoría
               </th>
               <th scope="col" className="px-6 py-3">
                 Hijo
@@ -164,14 +174,14 @@ export default function CoursesDashboard() {
               <tr key={index} className="bg-white border-b hover:bg-gray-50">
                 <td className="px-6 py-4">{user.inscriptionDate}</td>
                 <td className="px-6 py-4">{user.product.name}</td>
+
                 <td className="px-6 py-4">
-                  <div className="text-base font-semibold">
-                    {user.product.campuses.map((campus) => campus.name)}
-                  </div>
-                  <div className="font-normal text-gray-500">
-                    {user.product.category.name}
-                  </div>
+                  {user.product.campuses.map((campus: CampusType) => (
+                    <>{campus.name}</>
+                  ))}
                 </td>
+
+                <td className="px-6 py-4">{user.product.category.name}</td>
                 <td className="px-6 py-4">
                   {user.children.name} {user.children.lastName}{" "}
                   {user.children.motherLastName}

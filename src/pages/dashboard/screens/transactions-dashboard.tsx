@@ -1,12 +1,9 @@
 import { Input, Pagination, Spin } from "antd";
 import {
-  JSXElementConstructor,
   Key,
-  ReactElement,
   ReactNode,
-  ReactPortal,
   useEffect,
-  useState,
+  useState
 } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
@@ -35,17 +32,9 @@ type OrderData = {
     map(
       arg0: (
         item: {
-          children: any;
+          children: Children;
           product: {
-            name:
-              | string
-              | number
-              | boolean
-              | ReactPortal
-              | ReactElement<any, string | JSXElementConstructor<any>>
-              | Iterable<ReactNode>
-              | null
-              | undefined;
+            name: string;
           };
         },
         itemIndex: Key | null | undefined
@@ -53,6 +42,17 @@ type OrderData = {
     ): ReactNode;
     products: Product[];
   };
+};
+
+type Children = {
+  id: number;
+  name: string;
+  lastName: string;
+  motherLastName: string;
+  birthdate: string;
+  documentType: string;
+  documentNumber: string;
+  emergencyContactPhone: string;
 };
 
 type Product = {

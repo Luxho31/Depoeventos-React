@@ -5,13 +5,13 @@ import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useAuth } from "../../../context/AuthProvider";
 import {
     deleteDiscipline,
     getAllDisciplines,
 } from "../../../services/disciplines-service";
 import DisciplineModal from "../modals/disciplines-modals-dashboard";
-import { Toaster, toast } from "sonner";
 
 type DisciplineData = {
     id: number;

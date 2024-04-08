@@ -120,7 +120,7 @@ export default function Dashboard() {
             key: "7",
             path: "/dashboard/registrations",
             icon: <IoDocumentTextOutline />,
-            label: "Matriculas FALTA",
+            label: "Matriculas",
             onClick: () => handleItemClick("/dashboard/registrations"),
             role: ["ADMIN"],
         },

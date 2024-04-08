@@ -1,7 +1,8 @@
 import { Form, Input, Pagination, Select, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaDownload, FaEye, FaUser } from "react-icons/fa";
+import { FaEye, FaUser } from "react-icons/fa";
+import { IoDownload, IoSend } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 import {
@@ -10,8 +11,6 @@ import {
   getInscriptionsWithFilters,
 } from "../../../services/Inscriptions-service";
 import RegistrationsModal from "../modals/registrations-modals-dashboard";
-import { IoDownload, IoSend } from "react-icons/io5";
-import { IoMdDownload } from "react-icons/io";
 
 type ProductType = {
   id?: number;
@@ -49,6 +48,16 @@ type RegistrationData = {
   product: ProductType;
   children: ChildrenType;
   user: UserType;
+};
+
+type CampusType = {
+  id: number;
+  name: string;
+};
+
+type CategoryType = {
+  id: number;
+  name: string;
 };
 
 export default function RegistrationsDashboard() {
@@ -129,7 +138,13 @@ export default function RegistrationsDashboard() {
     indexOfLastUser
   );
 
-  const getInscriptionsWithFiltersForm = async (values: any) => {
+  type InscriptionFilters = {
+    productIds: number[];
+    campusesIds: number[];
+    categoriesIds: number[];
+    [key: string]: number[];
+  };
+  const getInscriptionsWithFiltersForm = async (values: InscriptionFilters) => {
     try {
       const response = await getInscriptionsWithFilters(values);
       setRegistrationData(response);
@@ -137,6 +152,7 @@ export default function RegistrationsDashboard() {
       console.error("Error al obtener matriculas con filtros:", error);
     }
   };
+
   const downloadData = async (values: any) => {
     try {
       await generateExcel(values);
@@ -181,7 +197,7 @@ export default function RegistrationsDashboard() {
                   mode="multiple"
                 >
                   {fullData
-                    .reduce((uniqueProducts: any[], data) => {
+                    .reduce((uniqueProducts: ProductType[], data) => {
                       if (
                         !uniqueProducts.some(
                           (product) => product.id === data.product.id
@@ -191,7 +207,7 @@ export default function RegistrationsDashboard() {
                       }
                       return uniqueProducts;
                     }, [])
-                    .map((product: any) => (
+                    .map((product: ProductType) => (
                       <Select.Option key={product.id} value={product.id}>
                         {product.name}
                       </Select.Option>
@@ -220,7 +236,7 @@ export default function RegistrationsDashboard() {
                       }
                       return uniqueCategories;
                     }, [])
-                    .map((category: any) => (
+                    .map((category: CategoryType) => (
                       <Select.Option key={category.id} value={category.id}>
                         {category.name}
                       </Select.Option>
@@ -239,7 +255,7 @@ export default function RegistrationsDashboard() {
                   mode="multiple"
                 >
                   {fullData
-                    .reduce((uniqueCampuses: any[], data) => {
+                    .reduce((uniqueCampuses: CampusType[], data) => {
                       data.product.campuses.forEach((campus: any) => {
                         if (!uniqueCampuses.some((c) => c.id === campus.id)) {
                           uniqueCampuses.push(campus);
@@ -247,7 +263,7 @@ export default function RegistrationsDashboard() {
                       });
                       return uniqueCampuses;
                     }, [])
-                    .map((campus: any) => (
+                    .map((campus: CampusType) => (
                       <Select.Option key={campus.id} value={campus.id}>
                         {campus.name}
                       </Select.Option>

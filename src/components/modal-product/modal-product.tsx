@@ -2,15 +2,15 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FaCartPlus, FaCheck, FaHome, FaUserLock } from "react-icons/fa";
+import { FaCartPlus, FaUserLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
 import { getChildrensByUserId } from "../../services/children-service";
 
 type Product = {
-  grades: any;
-  ages: any;
+  grades: string[];
+  ages: number[];
   id: number;
   photo: string;
   name: string;
@@ -22,7 +22,7 @@ type Product = {
   currentStudents: number;
   campus: {
     length: number;
-    map(arg0: (campus: any) => any): unknown;
+    map(arg0: (campus: Campus) => any): unknown;
     id: number;
     name: string;
     description: string;
@@ -36,6 +36,12 @@ type Product = {
   endDateInscription: string;
   courses: Course[];
   children: Children;
+};
+
+type Campus = {
+  id: number;
+  name: string;
+  description: string;
 };
 
 type Course = {

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import VentaGIF from "../../../../assets/gif/ventas.gif";
 
 export default function PurchaseCompleted() {
-    const [progressPercent, setProgressPercent] = useState(100);
+    const [progressPercent, ] = useState(100);
 
     return (
         <div className="min-h-screen flex flex-col mx-auto mt-24 w-[80%] px-4">
