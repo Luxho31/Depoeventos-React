@@ -121,7 +121,6 @@ export default function DiciplinesDashboard() {
 
     return (
         <div className="h-screen">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="flex justify-between">
                     <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
                         <label htmlFor="table-search" className="sr-only">
@@ -134,7 +133,7 @@ export default function DiciplinesDashboard() {
                                 className="w-full rounded-xl p-1"
                                 size="small"
                                 prefix={
-                                    <CiSearch className="site-form-item-icon me-1  ml-2" />
+                                    <CiSearch className="site-form-item-icon me-1 ml-2" />
                                 }
                                 value={searchTerm}
                                 onChange={(e) => {
@@ -168,6 +167,7 @@ export default function DiciplinesDashboard() {
                         />
                     </div>
                 </div>
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
@@ -232,6 +232,7 @@ export default function DiciplinesDashboard() {
                         ))}
                     </tbody>
                 </table>
+            </div>
                 <Pagination
                     className="mt-4"
                     current={currentPage}
@@ -240,7 +241,6 @@ export default function DiciplinesDashboard() {
                     onChange={onPageChange}
                     showSizeChanger={false}
                 />
-            </div>
         </div>
     );
 }

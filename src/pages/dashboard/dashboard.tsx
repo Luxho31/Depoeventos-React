@@ -26,7 +26,7 @@ import {
 
 import type { MenuProps } from "antd";
 import { CiBadgeDollar } from "react-icons/ci";
-import { FaSchool, FaUser } from "react-icons/fa";
+import { FaChevronLeft, FaSchool, FaUser } from "react-icons/fa";
 import { FaCartShopping, FaChildren } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
 import {
@@ -206,55 +206,109 @@ export default function Dashboard() {
                         collapsible
                         collapsed={collapsed}
                         breakpoint="md" // Define el breakpoint en el que el sidebar se colapsará
-                        collapsedWidth={collapsed && window.innerWidth < 768 ? 0 : undefined} // Se establece en 0 cuando colapsado y la pantalla es menor que md, de lo contrario, se deja sin definir
-                        className={window.innerWidth < 768 ? 'fixed' : ''}
+                        collapsedWidth={
+                            collapsed && window.innerWidth < 768 ? 0 : undefined
+                        } // Se establece en 0 cuando colapsado y la pantalla es menor que md, de lo contrario, se deja sin definir
+                        className={
+                            window.innerWidth > 768
+                                ? "fixed"
+                                : `!fixed ${
+                                      collapsed ? "z-0" : "z-50"
+                                  } top-0 left-0 h-screen relative`
+                        }
                         onBreakpoint={(broken) => {
                             if (broken) {
                                 setCollapsed(true); // Oculta el sidebar cuando el breakpoint se activa
                             }
                         }}
                     >
-                        <div>
-                            {collapsed ? (
-                                <Link
-                                    to={"/"}
-                                    className="w-full flex justify-center items-center py-4 cursor-pointer"
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                height: "100%",
+                            }}
+                        >
+                            <div>
+                                {collapsed ? (
+                                    <Link
+                                        to={"/"}
+                                        className="w-full flex justify-center items-center py-4 cursor-pointer"
+                                    >
+                                        <img
+                                            src={LogoIcon}
+                                            alt="DepoEventos"
+                                            className="w-8"
+                                        />
+                                    </Link>
+                                ) : (
+                                    <>
+                                        <Link
+                                            to={"/"}
+                                            className="w-full flex justify-center items-center py-4 cursor-pointer"
+                                        >
+                                            <img
+                                                src={LogoIcon}
+                                                alt="DepoEventos"
+                                                className="w-8"
+                                            />
+                                            <h2 className="ms-2 text-lg text-white font-semibold">
+                                                Depo
+                                                <span className="text-orange-500">
+                                                    Eventos
+                                                </span>
+                                            </h2>
+                                        </Link>
+                                        <button
+                                            onClick={() => {
+                                                setCollapsed(true);
+                                            }}
+                                            className={`${
+                                                window.innerWidth > 768
+                                                    ? "hidden"
+                                                    : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
+                                            }`}
+                                        >
+                                            <FaChevronLeft className="text-lg" />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                            <Menu
+                                theme="dark"
+                                mode="inline"
+                                //   defaultSelectedKeys={["1"]}
+                                selectedKeys={[selectedItem?.key || ""]}
+                                items={filteredMenuItems.map((item) => ({
+                                    ...item,
+                                    onClick: () => item.onClick(),
+                                }))}
+                            />
+                            <div className={`${window.innerWidth > 768 ? "hidden" : "block"} flex justify-center gap-2 mt-auto mb-4`}>
+                                <Button
+                                    className="border-none h-12 p-2 bg-white rounded-lg"
+                                    onClick={() =>
+                                        handleItemClick("/dashboard/profile")
+                                    }
                                 >
-                                    <img
-                                        src={LogoIcon}
-                                        alt="DepoEventos"
-                                        className="w-8"
-                                    />
-                                </Link>
-                            ) : (
-                                <Link
-                                    to={"/"}
-                                    className="w-full flex justify-center items-center py-4 cursor-pointer"
+                                    <Space>
+                                        <Avatar
+                                            size={30}
+                                            src={userInfo?.photo}
+                                        />
+                                        {userInfo?.firstName +
+                                            " " +
+                                            userInfo?.lastName}
+                                    </Space>
+                                </Button>
+                                <button
+                                    className="p-2 rounded-lg duration-300 hover:bg-red-400"
+                                    onClick={() => handleLogout()}
                                 >
-                                    <img
-                                        src={LogoIcon}
-                                        alt="DepoEventos"
-                                        className="w-8"
-                                    />
-                                    <h2 className="ms-2 text-lg text-white font-semibold">
-                                        Depo
-                                        <span className="text-orange-500">
-                                            Eventos
-                                        </span>
-                                    </h2>
-                                </Link>
-                            )}
+                                    <IoIosLogOut className="text-xl text-white" />
+                                </button>
+                            </div>
                         </div>
-                        <Menu
-                            theme="dark"
-                            mode="inline"
-                            //   defaultSelectedKeys={["1"]}
-                            selectedKeys={[selectedItem?.key || ""]}
-                            items={filteredMenuItems.map((item) => ({
-                                ...item,
-                                onClick: () => item.onClick(),
-                            }))}
-                        />
                     </Sider>
                     <Layout>
                         <Header
@@ -283,7 +337,7 @@ export default function Dashboard() {
                                 />
                                 <Dropdown
                                     menu={menuProps}
-                                    className="border-none me-10 "
+                                    className="hidden md:block md:border-none md:me-10"
                                 >
                                     <Button className="p-0">
                                         <Space>
