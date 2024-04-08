@@ -6,7 +6,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../../context/AuthProvider";
 
-export default function PaymentStep(preferenceId: string) {
+export default function PaymentStep({ preferenceId }: string | undefined) {
   const [walletLoading, setWalletLoading] = useState(true);
   const [pageLoading, setPageLoading] = useState(true);
 

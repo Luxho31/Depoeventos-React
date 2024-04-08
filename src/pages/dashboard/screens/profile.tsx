@@ -65,7 +65,7 @@ export default function Profile() {
         console.log(data);
         try {
             setLoading(true);
-            let foto = data.photo;
+            const foto = data.photo;
             console.log(foto);
             updateUserInfo(data, data.id);
             if (profileImage) {

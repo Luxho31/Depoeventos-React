@@ -153,6 +153,7 @@ export default function RegistrationsDashboard() {
     }
   };
 
+  
   const downloadData = async (values: any) => {
     try {
       await generateExcel(values);

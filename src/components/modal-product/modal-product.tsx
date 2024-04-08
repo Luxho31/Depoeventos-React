@@ -22,7 +22,7 @@ type Product = {
   currentStudents: number;
   campus: {
     length: number;
-    map(arg0: (campus: Campus) => any): unknown;
+    map(arg0: (campus: Campus) => Campus[] | Campus): unknown;
     id: number;
     name: string;
     description: string;
