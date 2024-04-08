@@ -16,7 +16,7 @@ export default function Intro() {
             integralmente en valores y fundamentos que les permitan
             desenvolverse de manera óptima en la disciplina que elijan.
           </p>
-          <p className="text-sm italic bg-[#0b093b] text-white p-2 rounded-2xl text-center mt-10">
+          <p className="hidden max-sm:block max-sm:text-sm max-sm:italic max-sm:bg-[#0b093b] max-sm:text-white max-sm:p-2 max-sm:rounded-2xl max-sm:text-center max-sm:mt-10">
             Familia <span className="text-orange-400">Depoeventos</span> - 2024
           </p>
         </div>
