@@ -1,11 +1,17 @@
-import { Input, Pagination, Select, Tooltip } from "antd";
+import { Form, Input, Pagination, Select, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEye, FaUser } from "react-icons/fa";
+import { FaDownload, FaEye, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { getAllRegistration } from "../../../services/Inscriptions-service";
+import {
+  generateExcel,
+  getAllRegistration,
+  getInscriptionsWithFilters,
+} from "../../../services/Inscriptions-service";
 import RegistrationsModal from "../modals/registrations-modals-dashboard";
+import { IoDownload, IoSend } from "react-icons/io5";
+import { IoMdDownload } from "react-icons/io";
 
 type ProductType = {
   id?: number;
@@ -55,6 +61,7 @@ export default function RegistrationsDashboard() {
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
   const [openChildrenModal, setOpenChildrenModal] = useState(false);
+  const [fullData, setFullData] = useState<RegistrationData[]>([]);
   const { userRole } = useAuth();
   const usersPerPage: number = 5;
   const navigate = useNavigate();
@@ -68,6 +75,7 @@ export default function RegistrationsDashboard() {
       getAllRegistration()
         .then((data: RegistrationData[]) => {
           setRegistrationData(data);
+          setFullData(data);
           setLoading(false);
         })
         .catch((error) => {
@@ -121,98 +129,164 @@ export default function RegistrationsDashboard() {
     indexOfLastUser
   );
 
+  const getInscriptionsWithFiltersForm = async (values: any) => {
+    try {
+      const response = await getInscriptionsWithFilters(values);
+      setRegistrationData(response);
+    } catch (error) {
+      console.error("Error al obtener matriculas con filtros:", error);
+    }
+  };
+  const downloadData = async (values: any) => {
+    try {
+      await generateExcel(values);
+    } catch (error) {
+      console.error("Error al descargar matriculas:", error);
+    }
+  };
+
   return (
     <div className="h-screen">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          
-          <div className="flex justify-between mx-2 pt-2">
-            <Input
-              id="table-search-users"
-              placeholder="Buscar por nombre"
-              className="w-44 rounded-xl p-1"
-              size="small"
-              prefix={<CiSearch className="site-form-item-icon me-1" />}
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                handleSearch();
-              }}
-            />
+        <div className="flex justify-between mx-2 pt-2">
+          <Input
+            id="table-search-users"
+            placeholder="Buscar por nombre"
+            className="w-44 rounded-xl p-1"
+            size="small"
+            prefix={<CiSearch className="site-form-item-icon me-1" />}
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              handleSearch();
+            }}
+          />
 
-            {/* Filtros */}
-            <div className="flex justify-end gap-x-1">
-              {/* Por producto */}
-              <Select
-                className="text-black"
-                placeholder="Filtrar por producto"
-                allowClear
-                showSearch
-                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
-                mode="multiple"
-              >
-                {registrationData.map((data) => (
-                  <Select.Option
-                    key={data.product.id}
-                    value={data.product.name}
-                  >
-                    {data.product.name}
-                  </Select.Option>
-                ))}
-              </Select>
+          {/* Filtros */}
+          <div className="flex justify-end gap-x-1">
+            {/* Por producto */}
+            <Form
+              layout="inline"
+              className="flex gap-x-1"
+              style={{ minWidth: 200 }}
+              onFinish={getInscriptionsWithFiltersForm}
+            >
+              <Form.Item name="productIds" className="text-black">
+                <Select
+                  className="text-black"
+                  placeholder="Filtrar por producto"
+                  allowClear
+                  showSearch
+                  style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+                  mode="multiple"
+                >
+                  {fullData
+                    .reduce((uniqueProducts: any[], data) => {
+                      if (
+                        !uniqueProducts.some(
+                          (product) => product.id === data.product.id
+                        )
+                      ) {
+                        uniqueProducts.push(data.product);
+                      }
+                      return uniqueProducts;
+                    }, [])
+                    .map((product: any) => (
+                      <Select.Option key={product.id} value={product.id}>
+                        {product.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
 
               {/* Por categoria */}
-
-              <Select
-                className="text-black"
-                placeholder="Filtrar por categoría"
-                allowClear
-                showSearch
-                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
-                mode="multiple"
-              >
-                {registrationData.map((data) => (
-                  <Select.Option
-                    key={data.product.category.id}
-                    value={data.product.category.id}
-                  >
-                    {data.product.category.name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Form.Item name="categoriesIds" className="text-black">
+                <Select
+                  className="text-black"
+                  placeholder="Filtrar por categoría"
+                  allowClear
+                  showSearch
+                  style={{ minWidth: 200 }}
+                  mode="multiple"
+                >
+                  {fullData
+                    .reduce((uniqueCategories: any[], data) => {
+                      if (
+                        !uniqueCategories.some(
+                          (category) => category.id === data.product.category.id
+                        )
+                      ) {
+                        uniqueCategories.push(data.product.category);
+                      }
+                      return uniqueCategories;
+                    }, [])
+                    .map((category: any) => (
+                      <Select.Option key={category.id} value={category.id}>
+                        {category.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
 
               {/* Por sede */}
-              <Select
-                className="text-black"
-                placeholder="Filtrar por campus"
-                allowClear
-                showSearch
-                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
-              >
-                {registrationData.map((data) =>
-                  data.product.campuses.map((campus) => (
-                    <Select.Option key={campus.id} value={campus.name}>
-                      {campus.name}
-                    </Select.Option>
-                  ))
-                )}
-              </Select>
-            </div>
+              <Form.Item name="campusesIds" className="text-black">
+                <Select
+                  className="text-black"
+                  placeholder="Filtrar por campus"
+                  allowClear
+                  showSearch
+                  style={{ minWidth: 200 }}
+                  mode="multiple"
+                >
+                  {fullData
+                    .reduce((uniqueCampuses: any[], data) => {
+                      data.product.campuses.forEach((campus: any) => {
+                        if (!uniqueCampuses.some((c) => c.id === campus.id)) {
+                          uniqueCampuses.push(campus);
+                        }
+                      });
+                      return uniqueCampuses;
+                    }, [])
+                    .map((campus: any) => (
+                      <Select.Option key={campus.id} value={campus.id}>
+                        {campus.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
+              {/* Botón de descarga */}
+              <Form.Item>
+                <button type="submit" className="rounded-md p-1 ">
+                  <IoSend className="text-xl text-gray-700 hover:text-blue-500" />
+                </button>
+              </Form.Item>
+
+              <Form.Item>
+                <button
+                  className="rounded-md p-1"
+                  onClick={() => downloadData({})}
+                >
+                  <IoDownload className="text-xl text-gray-700  hover:text-green-500" />
+                </button>
+              </Form.Item>
+            </Form>
           </div>
-          <div className=" flex-column flex-wrap w-full md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-            <label htmlFor="table-search" className="sr-only">
-              Search
-            </label>
-            <RegistrationsModal
-              id={seeId}
-              open={openSeeModal}
-              setOpen={setOpenSeeModal}
-            />
-            <RegistrationsModal
-              id={seeId}
-              open={openChildrenModal}
-              setOpen={setOpenChildrenModal}
-              type="children"
-            />
+        </div>
+        <div className=" flex-column flex-wrap w-full md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+          <label htmlFor="table-search" className="sr-only">
+            Search
+          </label>
+          <RegistrationsModal
+            id={seeId}
+            open={openSeeModal}
+            setOpen={setOpenSeeModal}
+          />
+          <RegistrationsModal
+            id={seeId}
+            open={openChildrenModal}
+            setOpen={setOpenChildrenModal}
+            type="children"
+          />
         </div>
 
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
