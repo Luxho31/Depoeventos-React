@@ -72,7 +72,7 @@ type Children = {
 };
 
 export default function Products() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [productData, setProductData] = useState<Product[]>([]);
   const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [categoryData, setCategoryData] = useState([]);
@@ -251,7 +251,7 @@ export default function Products() {
             </h2>
           )}
           <div className="grid grid-cols-1 min-[820px]:grid-cols-2 lg:grid-cols-3 min-[1750px]:grid-cols-4 min-[1920px]:grid-cols-5 gap-8">
-            {filteredData.map((product: Product) => (
+            {filteredData.map((product: any) => (
               <ProductCard
                 key={product.id}
                 product={product}

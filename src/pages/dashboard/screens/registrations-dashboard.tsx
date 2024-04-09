@@ -157,7 +157,7 @@ export default function RegistrationsDashboard() {
         }
     };
 
-    const downloadData = async (values) => {
+    const downloadData = async (values: any) => {
         try {
             await generateExcel(values);
         } catch (error) {
@@ -245,7 +245,7 @@ export default function RegistrationsDashboard() {
                             mode="multiple"
                         >
                             {fullData
-                                .reduce((uniqueCategories, data) => {
+                                .reduce((uniqueCategories: any[], data) => {
                                     if (
                                         !uniqueCategories.some(
                                             (category) =>
@@ -282,7 +282,7 @@ export default function RegistrationsDashboard() {
                         >
                             {fullData
                                 .reduce(
-                                    (uniqueCampuses: CampusType[], data) => {
+                                    (uniqueCampuses: any[], data) => {
                                         data.product.campuses.forEach(
                                             (campus) => {
                                                 if (

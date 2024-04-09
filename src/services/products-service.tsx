@@ -29,7 +29,7 @@ type productType = {
   grades: string[];
 };
 
-export const createProduct = async (form: productType) => {
+export const createProduct = async (form: any) => {
   try {
     console.log("Form Service -> ", form);
     const body = {

@@ -4,13 +4,13 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { sendMessage } from "../../../services/contact-us-service";
 
-type ContactUsType = {
-  fullName: string;
-  email: string;
-  phone: string;
-  message: string;
-  privacyPolice: boolean;
-};
+// type ContactUsType = {
+//   fullName: string;
+//   email: string;
+//   phone: string;
+//   message: string;
+//   privacyPolice: boolean;
+// };
 
 export default function Contact() {
   const { Option } = Select;
@@ -20,7 +20,7 @@ export default function Contact() {
 
   const [loading, setLoading] = useState(false);
 
-  const handleSendMessage = async (values: ContactUsType) => {
+  const handleSendMessage = async (values: any) => {
     try {
       setLoading(true);
       await sendMessage(values);
