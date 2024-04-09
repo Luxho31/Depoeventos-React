@@ -26,6 +26,7 @@ import Home from "./pages/landing/home/home";
 import Products from "./pages/landing/products/products";
 import NotFound from "./pages/not-found/not-found";
 import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
+import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 
 function App() {
   return (
@@ -90,6 +91,10 @@ function App() {
               <Route
                 path="/dashboard/categories"
                 element={<CategoriesDashboard />}
+              />
+              <Route
+                path="/dashboard/schedule"
+                element={<ScheduleDashboard />}
               />
             </Route>
 

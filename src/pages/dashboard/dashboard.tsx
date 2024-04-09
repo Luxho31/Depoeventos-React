@@ -38,6 +38,7 @@ import { MdOutlineSportsFootball } from "react-icons/md";
 import { toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
+import { GrSchedule } from "react-icons/gr";
 
 const { Header, Sider, Content } = Layout;
 
@@ -147,6 +148,14 @@ export default function Dashboard() {
             label: "Categorias",
             onClick: () => handleItemClick("/dashboard/categories"),
             role: ["ADMIN"],
+        },
+        {
+            key: "11",
+            path: "/dashboard/schedule",
+            icon: <GrSchedule />,
+            label: "Horario",
+            onClick: () => handleItemClick("/dashboard/schedule"),
+            role: ["ADMIN", "USER"],
         },
     ];
 
