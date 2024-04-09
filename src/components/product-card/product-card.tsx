@@ -57,6 +57,11 @@ export default function ProductCard({ product, onClick }: CardProps) {
           .map((course: { name: string }) => course.name)
           .join(", ");
 
+          const agesNames =
+          product.ages.length > 3
+            ? product.ages.slice(0, 3).join(", ") + "..."
+            : product.ages.join(", ");
+
   return (
     <div className="w-full sm:w-[350px] md:w-[340px] min-[821px]:w-full h-[400px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto shadow-lg rounded-2xl flex flex-col justify-between">
       <div className="flex justify-between p-4 sm:p-6">
@@ -91,7 +96,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
           <p className="ml-2 text-sm sm:ml-4">
-            {product.ages.map((age) => `${age} años`).join(", ")}
+            {agesNames}
           </p>
         </li>
         <li className="flex items-center">
