@@ -29,15 +29,19 @@ type productType = {
   grades: string[];
 };
 
-export const createProduct = async (form: productType) => {
+export const createProduct = async (form: any) => {
   try {
-    const productResponse = await fetch(`${BASE_URL}/api/products`, {
+    console.log("Form Service -> ", form);
+    const body = {
+      ...form,
+    };
+    const productResponse = await fetch(`${BASE_URL}/api/products/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(body),
     });
     const response = await productResponse.json();
     console.log(response);
