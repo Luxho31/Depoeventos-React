@@ -1,63 +1,62 @@
-import bootstrap5Plugin from "@fullcalendar/bootstrap5";
 import esLocale from "@fullcalendar/core/locales/es";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
+import { getAllCourseRegistration } from "../../../services/Inscriptions-service";
 
 export default function ScheduleDashboard() {
   const { userRole } = useAuth();
   const navigate = useNavigate();
   const [, setLoading] = useState(false);
+  const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
     const specificRoles = ["USER", "ADMIN"];
     if (userRole && userRole.some((role) => specificRoles.includes(role))) {
       setLoading(true);
+      getAllCourseRegistration()
+        .then((data) => {
+          const currentDate = new Date();
+          const filteredData = data.filter((item: ScheduleType) => {
+            const startDate = new Date(item.product.startDateInscription);
+            const endDate = new Date(item.product.endDate);
+            return currentDate >= startDate && currentDate <= endDate;
+          });
+          setScheduleData(filteredData);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error al obtener matriculas:", error);
+          setLoading(false);
+        });
     } else {
       navigate("/dashboard");
     }
-  }, [userRole]);
+  }, [userRole, navigate]);
 
-  const events = [
-    {
-      title: "Tennis",
-      daysOfWeek: [1, 3, 5],
-      startTime: "10:00",
-      endTime: "11:30",
-      color: "#252850",
-    },
-    {
-      title: "Rook",
-      daysOfWeek: [1, 3, 5, 2],
-      startTime: "10:00",
-      endTime: "11:30",
-      color: "#252850",
-    },
-    {
-      title: "Futbol",
-      daysOfWeek: [2, 4],
-      startTime: "14:00",
-      endTime: "15:30",
-      color: "#FF5733",
-    },
-    {
-      title: "Basket",
-      daysOfWeek: [2, 4],
-      startTime: "14:00",
-      endTime: "15:30",
-      color: "#A9A9A9",
-    },
-    {
-      title: "Natación",
-      daysOfWeek: [2, 4],
-      startTime: "14:00",
-      endTime: "15:30",
-      color: "#yellow",
-    },
-  ];
+  type ScheduleType = {
+    product: {
+      endDate: string | number | Date;
+      startDateInscription: string | number | Date;
+      name: string;
+    };
+    coursesWithSchedule: {
+      dayOfWeek: number;
+      startTime: string;
+      endTime: string;
+    }[];
+  };
+
+  const events = scheduleData.map((item: ScheduleType) => ({
+    title: item.product.name,
+    daysOfWeek: [1],
+    startTime: "10:00",
+    endTime: "11:30",
+    color: "#252850",
+  }));
 
   return (
     <>
