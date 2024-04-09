@@ -20,8 +20,6 @@
     "animate.css": "^4.1.1",
     "antd": "^5.14.2",
     "autoprefixer": "^10.4.17",
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.8",
     "install": "^0.13.0",
