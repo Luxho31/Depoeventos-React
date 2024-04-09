@@ -701,7 +701,7 @@ export default function ProductModal({
               <label>
                 <span className="text-red-500">*</span> Foto:
               </label>
-              <div className="flex gap-x-8">
+              <div className="flex flex-col gap-x-8">
                 <Upload
                   {...propsUpload}
                   maxCount={1}
@@ -728,7 +728,7 @@ export default function ProductModal({
                     setProductImage(null);
                     setPhotoPreview("");
                   }}
-                  className="w-30 sm:w-40 md:w-56 pb-8"
+                  className="w-full min-[460]:w-30 sm:w-40 md:w-56 pb-8"
                 >
                   <Button icon={<UploadOutlined />} disabled={type === "see"}>
                     Subir foto
@@ -738,13 +738,13 @@ export default function ProductModal({
                   <img
                     src={photoPreview}
                     alt=""
-                    className="border-solid border-2 border-neutral-300 w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
+                    className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
                   />
                 ) : (
                   <img
                     src={photo}
                     alt=""
-                    className="border-solid border-2 border-neutral-300 w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
+                    className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
                   />
                 )}
               </div>
