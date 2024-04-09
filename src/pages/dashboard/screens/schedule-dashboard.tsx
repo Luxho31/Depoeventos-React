@@ -94,7 +94,7 @@ export default function ScheduleDashboard() {
           hiddenDays={[0]} // Oculta el domingo (0 es domingo, 1 es lunes, etc.)
         />
       </div>
-      <div className="w-full h-full flex flex-col justify-center items-center">
+      <div className="w-full h-full flex flex-col justify-center items-center lg:hidden">
         <p className="text-neutral-500 text-lg text-center md:text-xl">
           Lo sentimos, esta sección no está disponible para dispositivos móviles
           en este momento.
