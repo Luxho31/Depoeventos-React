@@ -14,7 +14,7 @@ export default function ScheduleDashboard() {
   const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
-    const specificRoles = ["USER", "ADMIN"];
+    const specificRoles = [""];
     if (userRole && userRole.some((role) => specificRoles.includes(role))) {
       setLoading(true);
       getAllCourseRegistration()
