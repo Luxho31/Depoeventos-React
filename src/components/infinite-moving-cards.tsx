@@ -72,7 +72,7 @@ export const InfiniteMovingCards = ({
             key={item.name}
           >
             <blockquote>
-              <img src={item.img} alt={item.name} className="" />
+              <img src={item.img} alt={item.name} loading="lazy"/>
               <div className="relative z-20 mt-6 flex flex-row items-center">
                 <span className="flex flex-col gap-1">
                   <span className="text-sm leading-[1.6] text-gray-400 font-normal">

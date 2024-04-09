@@ -40,7 +40,7 @@ export default function Campuses({ slide }: { slide: SlideData }) {
                 modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                 spaceBetween={50}
                 slidesPerView={1}
-                navigation
+                // navigation
                 pagination={{ clickable: true }}
                 loop={true}
                 autoplay={{

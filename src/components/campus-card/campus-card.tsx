@@ -19,7 +19,7 @@ export default function CampusCard(data: CampusCardProps) {
                     </h2>
                     <p className="text-xs max-sm:hidden md:text-sm">{data.description}</p>
                 </div>
-                <img src={data.logo} className="w-16 md:w-20 pt-8" alt="" />
+                <img src={data.logo} className="w-16 md:w-20 pt-8" alt="" loading="lazy"/>
             </div>
             {/* Contenido derecho */}
             <div className="hidden lg:flex lg:justify-center lg:items-center lg:w-1/2 ">
@@ -27,6 +27,7 @@ export default function CampusCard(data: CampusCardProps) {
                     src={data.image}
                     className="rounded-3xl object-cover !w-[90%] !h-[80%] shadow-xl"
                     alt=""
+                    loading="lazy"
                 />
             </div>
         </div>
