@@ -10,11 +10,11 @@ type Product = {
   maxStudents: number;
   currentStudents: number;
   campus: {
-    map: any;
+    // map: any;
     id: number;
     name: string;
     description: string;
-  };
+  }[];
   category: {
     id: number;
     name: string;

@@ -181,7 +181,7 @@ export default function ProductModal({
     }
   };
 
-  const createProductForm = async (values: any) => {
+  const createProductForm = async (values) => {
     try {
       setLoading(true);
       values.startDate = new Date(values.startDate).toISOString().split("T")[0];
