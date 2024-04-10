@@ -1,4 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { generalRoutes } from "../utils/routes/general.routes.ts";
+
+const BASE_URL = generalRoutes.BASE_URL;
 
 type Product = {
   children: ChildrenData;
@@ -92,7 +95,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         if (!token) {
           throw new Error;
         }
-        const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
+        const response = await fetch(`${BASE_URL}/api/cart/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener los productos del carrito");
         }
@@ -126,7 +129,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           userId: userId,
           childrenId: childId,
         };
-        const response = await fetch("http://localhost:8080/api/cart", {
+        const response = await fetch(`${BASE_URL}/api/cart`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -147,7 +150,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateCart = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
+      const response = await fetch(`${BASE_URL}/api/cart/${userId}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos del carrito");
       }
@@ -169,7 +172,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const clearCart = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/cart/deleteAll/${userId}`,
+        `${BASE_URL}/cart/deleteAll/${userId}`,
         {
           method: "DELETE",
         }
@@ -188,7 +191,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const removeProduct = async (cartItem: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/cart/${cartItem}`,
+        `${BASE_URL}/cart/${cartItem}`,
         {
           method: "DELETE",
         }

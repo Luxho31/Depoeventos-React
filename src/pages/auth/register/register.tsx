@@ -112,7 +112,7 @@ export default function Register() {
     };
 
     return (
-        <div className="flex flex-col justify-center md:flex-row items-center h-screen max-md:my-24">
+        <div className="flex flex-col justify-center md:flex-row items-center max-md:my-8">
             <Toaster richColors />
             {/* <div className="w-1/4 h-screen object-cover max-md:hidden"> */}
             <img

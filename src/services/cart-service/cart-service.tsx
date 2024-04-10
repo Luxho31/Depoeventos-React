@@ -73,7 +73,7 @@ export const createOrder = async () => {
     // let products = [];
 
     // Obtener los productos del carrito
-    const response = await fetch(`http://localhost:8080/api/cart/${userId}`);
+    const response = await fetch(`${BASE_URL}/api/cart/${userId}`);
     if (!response.ok) {
       throw new Error("Error al obtener los productos del carrito");
     }
