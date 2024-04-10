@@ -4,12 +4,12 @@ import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
-import { Button, Checkbox, Collapse, Drawer, Slider } from "antd";
+import { Checkbox, Collapse, Drawer, Slider } from "antd";
+import { BiSliderAlt } from "react-icons/bi";
+import { IoIosClose } from "react-icons/io";
 import { IoReload } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
-import { BiSliderAlt } from "react-icons/bi";
-import { IoIosClose } from "react-icons/io";
 
 type Product = {
     id: number;
