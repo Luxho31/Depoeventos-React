@@ -4,11 +4,12 @@ import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
-import { Checkbox, Collapse, Drawer, Slider } from "antd";
+import { Button, Checkbox, Collapse, Drawer, Slider } from "antd";
 import { IoReload } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
 const { Panel } = Collapse;
 import { BiSliderAlt } from "react-icons/bi";
+import { IoIosClose } from "react-icons/io";
 
 type Product = {
     id: number;
@@ -166,6 +167,7 @@ export default function Products() {
             })
         );
         setFilteredData(filtered);
+		onClose();
     };
 
     const showDrawer = () => {
@@ -195,23 +197,21 @@ export default function Products() {
                 <div className="w-full lg:w-auto lg:min-w-[300px]">
                     <div className="flex justify-between mb-4 select-none">
                         <button
-                            className="w-full flex justify-center lg:justify-between rounded-tl-lg rounded-bl-lg p-2 max-lg:border-2 transition max-lg:hover:bg-neutral-200"
+                            className="max-lg:w-full flex justify-center items-center gap-x-2 lg:justify-between rounded-tl-lg rounded-bl-lg p-2 max-lg:border-2 transition max-lg:hover:bg-neutral-200"
                             onClick={showDrawer}
                             disabled={windowWidth >= 1024 ? true : false}
                         >
-                            <div className="flex items-center gap-x-2">
-                                <BiSliderAlt className="max-sm:hidden"/>
-                                <h2 className="text-sm font-semibold">
-                                    Filtros
-                                </h2>
-                            </div>
+                            <BiSliderAlt className="max-sm:hidden" />
+                            <h2 className="text-sm">Filtros</h2>
                         </button>
                         <button
                             onClick={resetFilter}
-                            className="max-lg:w-full flex justify-center items-center gap-x-2 lg:justify-end rounded-tr-lg rounded-br-lg p-2 max-lg:border-2 transition hover:bg-neutral-200"
+                            className="max-lg:w-full flex justify-center items-center gap-x-2 lg:justify-end rounded-tr-lg rounded-br-lg lg:rounded-lg p-2 max-lg:border-2 transition hover:bg-neutral-200"
                         >
                             <IoReload className="max-sm:hidden" />
-                            <span className="lg:hidden">Resetear Filtros</span>
+                            <span className="text-sm lg:hidden">
+                                Resetear Filtros
+                            </span>
                         </button>
                     </div>
 
@@ -317,8 +317,24 @@ export default function Products() {
                         closable={false}
                         onClose={onClose}
                         open={open}
-                        getContainer={false}
+                        // getContainer={false}
+                        style={{ position: "relative" }} // Establecer posición relativa para Drawer
                     >
+                        {/* Botón de cerrar */}
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                                marginTop: "15px",
+                                marginRight: "15px",
+                            }}
+                        >
+                            <button onClick={onClose}>
+                                <IoIosClose className="text-3xl text-neutral-400 hover:text-neutral-500"/>
+                            </button>
+                        </div>
+
                         <Collapse defaultActiveKey={["1"]}>
                             <Panel header="Categorías" key="1">
                                 <Checkbox.Group

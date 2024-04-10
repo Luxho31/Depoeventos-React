@@ -12,34 +12,22 @@ export default function Footer() {
                     © 2024 Depoeventos, Perú
                 </p>
                 <div className="flex flex-row gap-2 text-2xl ">
-                    <a
-                        className="text-slate-600"
-                        href="https://www.facebook.com"
-                        target="_blank"
-                    >
+                    <div className="text-slate-400 cursor-default">
                         <FaFacebook />
-                    </a>
+                    </div>
                     <a
                         className="text-slate-600"
-                        href="https://www.instagram.com"
+                        href="https://www.instagram.com/depo.eventos/"
                         target="_blank"
                     >
                         <FaInstagramSquare />
                     </a>
-                    <a
-                        className="text-slate-600"
-                        href="https://www.twitter.com"
-                        target="_blank"
-                    >
+                    <div className="text-slate-400 cursor-default">
                         <FaXTwitter />
-                    </a>
-                    <a
-                        className="text-slate-600"
-                        href="https://www.pinterest.com"
-                        target="_blank"
-                    >
+                    </div>
+                    <div className="text-slate-400 cursor-default">
                         <FaPinterest />
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
