@@ -5,11 +5,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import {
-    A11y,
-    Autoplay,
-    Navigation,
-    Pagination,
-    Scrollbar,
+  A11y,
+  Autoplay,
+  Navigation,
+  Pagination,
+  Scrollbar,
 } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CampusCard from "../../../../../components/campus-card/campus-card";
@@ -26,41 +26,44 @@ type SlideItem = {
 type SlideData = SlideItem[];
 
 export default function Campuses({ slide }: { slide: SlideData }) {
-    return (
-        <div className="w-[80%] m-auto mb-10 mt-20">
-            <div className="mb-12">
-                <h1 className="text-2xl lg:text-4xl font-extrabold mb-3">Sedes</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua.
-                </p>
-            </div>
-            <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-                spaceBetween={50}
-                slidesPerView={1}
-                // navigation
-                pagination={{ clickable: true }}
-                loop={true}
-                autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                }}
-            >
-                {slide.map((item: SlideItem) => (
-                    <SwiperSlide key={item.id}>
-                        <CampusCard
-                            id={item.id}
-                            direction={item.direction}
-                            title={item.title}
-                            description={item.description}
-                            logo={item.logo}
-                            image={item.image}
-                        />
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-        </div>
-    );
+  return (
+    <div className="w-[80%] m-auto mb-10 mt-20">
+      <div className="mb-12">
+        <h1 className="text-2xl lg:text-4xl font-bold mb-3">Sedes</h1>
+        <p>
+          En nuestras sedes, colaboramos con colegios y clubes de alto prestigio
+          para brindarte instalaciones de calidad y un ambiente propicio para el
+          aprendizaje y la práctica deportiva. Con ubicaciones convenientes y
+          facilidades excepcionales, nuestras sedes son el lugar perfecto para
+          explorar tu pasión por el deporte y desarrollar tus habilidades junto
+          a profesionales comprometidos con tu éxito.
+        </p>
+      </div>
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+        spaceBetween={50}
+        slidesPerView={1}
+        // navigation
+        pagination={{ clickable: true }}
+        loop={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+      >
+        {slide.map((item: SlideItem) => (
+          <SwiperSlide key={item.id}>
+            <CampusCard
+              id={item.id}
+              direction={item.direction}
+              title={item.title}
+              description={item.description}
+              logo={item.logo}
+              image={item.image}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  );
 }

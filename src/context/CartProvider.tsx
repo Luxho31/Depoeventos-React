@@ -172,7 +172,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const clearCart = async () => {
     try {
       const response = await fetch(
-        `${BASE_URL}/cart/deleteAll/${userId}`,
+        `${BASE_URL}/api/cart/deleteAll/${userId}`,
         {
           method: "DELETE",
         }
@@ -191,7 +191,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const removeProduct = async (cartItem: number) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/cart/${cartItem}`,
+        `${BASE_URL}/api/cart/${cartItem}`,
         {
           method: "DELETE",
         }

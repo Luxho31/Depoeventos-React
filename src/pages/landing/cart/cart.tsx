@@ -1,6 +1,6 @@
-import { SmileOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SmileOutlined } from "@ant-design/icons";
 import "animate.css";
-import { Progress, Tooltip } from "antd";
+import { Progress, Spin, Tooltip } from "antd";
 import { useState } from "react";
 import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
@@ -11,15 +11,18 @@ export default function Cart() {
   const [progressPercent, setProgressPercent] = useState(0);
   const { products, getTotalPrice } = useCart();
   const [preferenceId, setPreferenceId] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const createOrderForm = async () => {
     try {
+      setLoading(true);
       const response = await createOrder();
       const preferenceId = response.preferenceId;
       setPreferenceId(preferenceId);
       setProgressPercent(50);
     } catch (error) {
       console.error("Error al crear la orden:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,8 +120,17 @@ export default function Cart() {
                   onClick={() => {
                     createOrderForm();
                   }}
+                  disabled={loading}
                 >
-                  Continuar compra
+                  {loading ? (
+                    <Spin
+                      indicator={
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      }
+                    />
+                  ) : (
+                    "Realizar Pago"
+                  )}
                 </button>
               </div>
             </div>

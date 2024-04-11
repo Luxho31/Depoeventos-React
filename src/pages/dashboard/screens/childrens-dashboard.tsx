@@ -240,7 +240,7 @@ export default function ChildrensDashboard() {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4">{user.birthdate}</td>
+                                <td className="px-6 py-4">{user.emergencyContactPhone}</td>
                                 <td className="flex px-6 py-4 gap-x-2">
                                     <button
                                         className="bg-slate-300 rounded-md p-1"

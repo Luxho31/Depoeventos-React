@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { Select, Tooltip } from "antd";
+import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Select, Spin, Tooltip } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaCartPlus, FaUserLock } from "react-icons/fa";
@@ -83,14 +83,17 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
   const { addToCart } = useCart();
   const [children, setChildren] = useState<Children[]>([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchChildren = async () => {
       const children = await getChildrensByUserId();
       setChildren(children);
       console.log(product);
     };
     fetchChildren();
+    setLoading(false);
   }, []);
 
   if (cargando) {
@@ -220,21 +223,25 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 <label htmlFor="" className="me-2 max-sm:text-[0.75rem]">
                   Alumnos:
                 </label>
-                <Select
-                  mode="multiple"
-                  allowClear
-                  className="w-full h-10"
-                  placeholder="Selecciona los hijos a matricular"
-                  onChange={handleChange}
-                  value={children
-                    .filter((child: Children) => child.selected)
-                    .map((child: Children) => child.name)}
-                  options={children.map((child: Children) => ({
-                    value: child.name,
-                    label: child.name,
-                  }))}
-                  rootClassName="max-sm:text-xs"
-                />
+                {loading ? (
+                  <Spin indicator={<LoadingOutlined />} />
+                ) : (
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    className="w-full h-10"
+                    placeholder="Selecciona los hijos a matricular"
+                    onChange={handleChange}
+                    value={children
+                      .filter((child: Children) => child.selected)
+                      .map((child: Children) => child.name)}
+                    options={children.map((child: Children) => ({
+                      value: child.name,
+                      label: child.name,
+                    }))}
+                    rootClassName="max-sm:text-xs"
+                  />
+                )}
               </div>
             ) : (
               <></>

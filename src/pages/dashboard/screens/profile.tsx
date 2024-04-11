@@ -155,7 +155,7 @@ export default function Profile() {
                   message.success(`${file.name} se subió correctamente`);
                   if (file.originFileObj) {
                     setProfileImage(file.originFileObj); // Actualiza el estado de la imagen de perfil
-                    handleImageUpload(file.originFileObj); // Llama a la función handleImageUpload con el archivo subido
+                    // handleImageUpload(file.originFileObj);
                   } else {
                     // Manejar el caso en que originFileObj sea undefined
                     console.error(

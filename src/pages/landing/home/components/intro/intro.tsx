@@ -1,6 +1,6 @@
 import "animate.css";
 import "./intro.css";
-
+import FotoPrincipal from "../../../../../assets/image/imagen_principal.png";
 export default function Intro() {
   return (
     <div className="w-[80%] m-auto my-20 flex items-center min-h-[37rem] max-lg:h-[20rem] ">
@@ -11,10 +11,12 @@ export default function Intro() {
             <span>extracurriculares</span>
           </h1>
           <p className="font-normal text-sm pe-20 max-lg:p-0">
-            Somos una empresa especializada en el desarrollo de talleres
-            deportivos para niños y adolescentes, con el objetivo de formarlos
-            integralmente en valores y fundamentos que les permitan
-            desenvolverse de manera óptima en la disciplina que elijan.
+            Depoeventos, fundada hace más de tres años, se ha destacado en la
+            formación de talleres deportivos de alta calidad. Con más de 15
+            disciplinas y un equipo de profesionales capacitados, hemos
+            impactado positivamente en cientos de niños y adolescentes,
+            promoviendo un estilo de vida activo y saludable. Con nosotros, el
+            deporte es una oportunidad para crecer, aprender y disfrutar juntos.
           </p>
           <p className="hidden max-sm:block max-sm:text-sm max-sm:italic max-sm:bg-[#0b093b] max-sm:text-white max-sm:p-2 max-sm:rounded-2xl max-sm:text-center max-sm:mt-10">
             Familia <span className="text-orange-400">Depoeventos</span> - 2024
@@ -24,18 +26,16 @@ export default function Intro() {
 
       <div className="w-1/2 max-lg:hidden flex justify-center relative">
         <img
-          src="https://w0.peakpx.com/wallpaper/58/22/HD-wallpaper-spider-man-game-art-vertical-artwork-comic-art-portrait-display-marvel-super-heroes.jpg"
+          src={FotoPrincipal}
           className="!h-[36rem] !w-[24rem] rounded-2xl  max-xl:ms-0 max-xl:w-[17rem] max-xl:h-[29rem] animate__animated animate__bounceInRight"
           alt=""
           loading="lazy"
         />
-        <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[18rem] h-[8rem] flex flex-col justify-center z-40 lg:hidden xl:block xl:absolute xl:left-10 xl:bottom-20 animate__animated animate__pulse">
+        <div className="bg-[#0b093b] text-white p-8 rounded-2xl w-[18rem] h-[8rem] flex flex-col justify-center z-40 lg:hidden xl:block xl:absolute xl:left-8 xl:bottom-4 animate__animated animate__pulse">
           <p className="text-sm italic">
-            "Que crecer no signifique dejar de ser niños."
+            "Promover el deporte como herramienta para la educación en valores y
+            la salud."
           </p>
-          <span className="flex justify-end text-orange-500 pt-1 text-sm">
-            - Familia Depoeventos
-          </span>
         </div>
       </div>
     </div>
