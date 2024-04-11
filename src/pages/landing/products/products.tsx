@@ -4,15 +4,16 @@ import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllProducts } from "../../../services/products-service";
 
-import { Checkbox, Collapse, Drawer, Slider, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Checkbox, Collapse, Drawer, Input, Slider, Spin } from "antd";
 import { BiSliderAlt } from "react-icons/bi";
 import { IoIosClose } from "react-icons/io";
 import { IoReload } from "react-icons/io5";
 import ProductCard from "../../../components/product-card/product-card";
-import { LoadingOutlined } from "@ant-design/icons";
 const { Panel } = Collapse;
 
 type Product = {
+  coursesWithSchedules: any;
   id: number;
   photo: string;
   name: string;
@@ -34,6 +35,7 @@ type Product = {
 };
 
 type Campus = {
+  some: any;
   id: number;
   name: string;
   description: string;
@@ -80,6 +82,7 @@ export default function Products() {
   const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [categoryData, setCategoryData] = useState([]);
   const [campusData, setCampusData] = useState([]);
+  const [selectedHours, setSelectedHours] = useState<[string, string]>(["00:00", "23:59"]);
 
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedCampuses, setSelectedCampuses] = useState<number[]>([]);
@@ -87,7 +90,7 @@ export default function Products() {
   const [selectedAges, setSelectedAges] = useState<number[]>([1, 18]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(false);
-
+  const [endTimeEnabled, setEndTimeEnabled] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -141,7 +144,7 @@ export default function Products() {
 
     if (selectedCampuses.length > 0) {
       filtered = filtered.filter((product) =>
-        selectedCampuses.includes(product.campus.id)
+        product.campus.some((campus: any) => selectedCampuses.includes(campus.id))
       );
     }
 
@@ -152,10 +155,28 @@ export default function Products() {
     }
     filtered = filtered.filter((product) =>
       product.ages.some((age) => {
-        const ageNumber = parseInt(age); // Convertir la edad de texto a número
+        const ageNumber = parseInt(age);
         return ageNumber >= selectedAges[0] && ageNumber <= selectedAges[1];
       })
     );
+
+    filtered = filtered.filter((product) =>
+      product.coursesWithSchedules.some((course: any) =>
+        course.schedules.some((schedule: any) => {
+          const startHour = schedule.startHour;
+          const selectedStartHour = selectedHours[0];
+          const selectedEndHour = selectedHours[1] || '23:59';
+
+          console.log("Horario de inicio", startHour)
+          console.log("Horario seleccionado", selectedStartHour)
+          console.log("Horario seleccionado fin", selectedEndHour)
+
+          return startHour >= selectedStartHour && schedule.endHour <= selectedEndHour;
+        })
+      )
+    );
+    console.log("Filtrado por horario", filtered)
+
     setFilteredData(filtered);
     onClose();
   };
@@ -175,6 +196,8 @@ export default function Products() {
     setSelectedCampuses([]);
     setSelectedGrades([]);
     setSelectedAges([1, 18]);
+    setEndTimeEnabled(false);
+    setSelectedHours(["00:00", "23:59"]);
   };
 
   return (
@@ -219,11 +242,15 @@ export default function Products() {
                   ))}
                 </Checkbox.Group>
               </Panel>
+
               <Panel header="Sedes" key="2">
                 <Checkbox.Group
                   value={selectedCampuses}
                   className="flex flex-col gap-y-2 sm:gap-y-4"
-                  onChange={(values) => setSelectedCampuses(values)}
+                  onChange={(values) => {
+                    setSelectedCampuses(values);
+                    console.log(values)
+                  }}
                 >
                   {campusData.map((campus: Campus) => (
                     <Checkbox key={campus.id} value={campus.id}>
@@ -232,6 +259,7 @@ export default function Products() {
                   ))}
                 </Checkbox.Group>
               </Panel>
+
               <Panel header="Grados" key="3">
                 <div
                   style={{
@@ -270,6 +298,35 @@ export default function Products() {
                   Edad: {selectedAges[0]}-{selectedAges[1]}
                 </p>
               </Panel>
+
+
+              <Panel header="Horarios" key="5">
+                <div className="flex flex-col gap-y-2 sm:gap-y-4">
+                  <label htmlFor="startHour">Hora de inicio:</label>
+                  <Input
+                    type="time"
+                    id="startHour"
+                    value={selectedHours[0]}
+                    onChange={(e) => setSelectedHours([e.target.value, selectedHours[1]])}
+                  />
+                  <div className="flex items-center gap-x-2">
+                    <label htmlFor="endHour">Hora de fin:</label>
+                    <Checkbox checked={endTimeEnabled} onChange={() => setEndTimeEnabled(!endTimeEnabled)} />
+                  </div>
+                  <Input
+                    type="time"
+                    id="endHour"
+                    value={selectedHours[1]}
+                    onChange={(e) => setSelectedHours([selectedHours[0], e.target.value])}
+                    disabled={!endTimeEnabled} // Deshabilita el campo si endTimeEnabled es falso
+                  />
+
+                </div>
+                <p>
+                  Horario seleccionado: {selectedHours[0]} - {selectedHours[1] || "Desde la hora de inicio"}
+                </p>
+              </Panel>
+
             </Collapse>
 
             <div className="flex items-center justify-center mt-5">
@@ -369,6 +426,31 @@ export default function Products() {
                 />
                 <p>
                   Edad: {selectedAges[0]}-{selectedAges[1]}
+                </p>
+              </Panel>
+              <Panel header="Horarios" key="5">
+                <div className="flex flex-col gap-y-2 sm:gap-y-4">
+                  <label htmlFor="startHour">Hora de inicio:</label>
+                  <Input
+                    type="time"
+                    id="startHour"
+                    value={selectedHours[0]}
+                    onChange={(e) => setSelectedHours([e.target.value, selectedHours[1]])}
+                  />
+                  <div className="flex items-center gap-x-2">
+                    <label htmlFor="endHour">Hora de fin:</label>
+                    <Checkbox checked={endTimeEnabled} onChange={() => setEndTimeEnabled(!endTimeEnabled)} />
+                  </div>
+                  <Input
+                    type="time"
+                    id="endHour"
+                    value={selectedHours[1]}
+                    onChange={(e) => setSelectedHours([selectedHours[0], e.target.value])}
+                    disabled={!endTimeEnabled}
+                  />
+                </div>
+                <p>
+                  Horario seleccionado: {selectedHours[0]} - {selectedHours[1] || "Desde la hora de inicio"}
                 </p>
               </Panel>
             </Collapse>
