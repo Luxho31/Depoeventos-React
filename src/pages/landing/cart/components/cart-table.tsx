@@ -52,7 +52,7 @@ export default function CartTable() {
                     <img
                       src={product.photo}
                       alt={product.name}
-                      className="h-14 w-auto bg-gray-300 rounded-xl"
+                      className="!h-14 !w-10 bg-gray-300 rounded-xl"
                     />
                   </td>
 

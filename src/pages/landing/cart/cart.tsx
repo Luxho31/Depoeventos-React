@@ -1,6 +1,6 @@
 import { LoadingOutlined, SmileOutlined } from "@ant-design/icons";
 import "animate.css";
-import { Progress, Spin, Tooltip } from "antd";
+import { Checkbox, Progress, Spin, Tooltip } from "antd";
 import { useState } from "react";
 import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
@@ -12,6 +12,7 @@ export default function Cart() {
   const { products, getTotalPrice } = useCart();
   const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [disabledTerms, setDisabledTerms] = useState(true);
   const createOrderForm = async () => {
     try {
       setLoading(true);
@@ -62,9 +63,8 @@ export default function Cart() {
 
       {/* Table Cart */}
       <div
-        className={`${
-          progressPercent === 0 ? "block" : "hidden"
-        } flex max-xl:flex-col items-start gap-x-12 `}
+        className={`${progressPercent === 0 ? "block" : "hidden"
+          } flex max-xl:flex-col items-start gap-x-12 `}
       >
         {/* <div className="w-[60rem] mb-24"> */}
         <div className="w-full mb-12">
@@ -114,13 +114,28 @@ export default function Cart() {
                   </h2>
                 </div>
               </div>
-              <div className="w-full flex justify-center">
-                <button
-                  className="w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"
-                  onClick={() => {
-                    createOrderForm();
-                  }}
+              <div className="w-full flex flex-col justify-center items-center gap-y-3">
+
+                <Checkbox className="text-md"
+                  onChange={() => setDisabledTerms(!disabledTerms)}
                   disabled={loading}
+                >Acepto {" "}
+                  <a
+                    className="text-blue-500"
+                    href=""
+                    target="_blank"
+                  >
+                    términos y condiciones</a>
+                </Checkbox>
+
+                <button
+                  className={disabledTerms ? "w-[90%] bg-neutral-400 text-white rounded-2xl py-4 hover:bg-neutral-600" : "w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"}
+                  onClick={() => {
+                    if (!disabledTerms) {
+                      createOrderForm();
+                    }
+                  }}
+                  disabled={disabledTerms || loading}
                 >
                   {loading ? (
                     <Spin

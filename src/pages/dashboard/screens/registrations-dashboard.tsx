@@ -1,4 +1,4 @@
-import { Form, Input, Pagination, Select, Tooltip } from "antd";
+import { Form, Input, Pagination, Select, Spin, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye, FaUser } from "react-icons/fa";
@@ -11,6 +11,7 @@ import {
     getInscriptionsWithFilters,
 } from "../../../services/Inscriptions-service";
 import RegistrationsModal from "../modals/registrations-modals-dashboard";
+import { LoadingOutlined } from "@ant-design/icons";
 
 type ProductType = {
     id?: number;
@@ -64,7 +65,9 @@ export default function RegistrationsDashboard() {
     const [registrationData, setRegistrationData] = useState<
         RegistrationData[]
     >([]);
-    const [, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [loadingFilters, setLoadingFilters] = useState<boolean>(false);
+    const [loadingExcel, setLoadingExcel] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [seeId, setSeeId] = useState<number | undefined>(undefined);
@@ -150,18 +153,24 @@ export default function RegistrationsDashboard() {
         values: InscriptionFilters
     ) => {
         try {
+            setLoadingFilters(true);
             const response = await getInscriptionsWithFilters(values);
             setRegistrationData(response);
         } catch (error) {
             console.error("Error al obtener matriculas con filtros:", error);
+        } finally {
+            setLoadingFilters(false);
         }
     };
 
     const downloadData = async (values: any) => {
         try {
+            setLoadingExcel(true);
             await generateExcel(values);
         } catch (error) {
             console.error("Error al descargar matriculas:", error);
+        } finally {
+            setLoadingExcel(false);
         }
     };
 
@@ -312,7 +321,7 @@ export default function RegistrationsDashboard() {
                     {/* Botón de descarga */}
                     <Form.Item>
                         <button type="submit" className="rounded-md p-1 ">
-                            <IoSend className="text-xl text-gray-700 hover:text-blue-500" />
+                            {loadingFilters ? <Spin indicator={<LoadingOutlined />} /> : <IoSend className="text-xl text-gray-700 hover:text-blue-500" />}
                         </button>
                     </Form.Item>
 
@@ -321,12 +330,12 @@ export default function RegistrationsDashboard() {
                             className="rounded-md p-1"
                             onClick={() => downloadData({})}
                         >
-                            <IoDownload className="text-xl text-gray-700  hover:text-green-500" />
+                            {loadingExcel ? <Spin indicator={<LoadingOutlined />} /> : <IoDownload className="text-xl text-gray-700 hover:text-green-500" />}
                         </button>
                     </Form.Item>
                 </Form>
             </div>
-            
+
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className=" flex-column flex-wrap w-full md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
                     <label htmlFor="table-search" className="sr-only">

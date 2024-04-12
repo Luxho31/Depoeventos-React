@@ -298,11 +298,17 @@ export default function Products() {
                   Edad: {selectedAges[0]}-{selectedAges[1]}
                 </p>
               </Panel>
-
-
               <Panel header="Horarios" key="5">
                 <div className="flex flex-col gap-y-2 sm:gap-y-4">
-                  <label htmlFor="startHour">Hora de inicio:</label>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="startHour">Hora de inicio:</label>
+                    <button onClick={() => {
+                      setEndTimeEnabled(false);
+                      setSelectedHours(["00:00", "23:59"]);
+                    }}>
+                      <IoReload />
+                    </button>
+                  </div>
                   <Input
                     type="time"
                     id="startHour"
@@ -318,9 +324,8 @@ export default function Products() {
                     id="endHour"
                     value={selectedHours[1]}
                     onChange={(e) => setSelectedHours([selectedHours[0], e.target.value])}
-                    disabled={!endTimeEnabled} // Deshabilita el campo si endTimeEnabled es falso
+                    disabled={!endTimeEnabled}
                   />
-
                 </div>
                 <p>
                   Horario seleccionado: {selectedHours[0]} - {selectedHours[1] || "Desde la hora de inicio"}
@@ -345,8 +350,7 @@ export default function Products() {
             closable={false}
             onClose={onClose}
             open={open}
-            // getContainer={false}
-            style={{ position: "relative" }} // Establecer posición relativa para Drawer
+            style={{ position: "relative" }}
           >
             {/* Botón de cerrar */}
             <div
@@ -430,7 +434,15 @@ export default function Products() {
               </Panel>
               <Panel header="Horarios" key="5">
                 <div className="flex flex-col gap-y-2 sm:gap-y-4">
-                  <label htmlFor="startHour">Hora de inicio:</label>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="startHour">Hora de inicio:</label>
+                    <button onClick={() => {
+                      setEndTimeEnabled(false);
+                      setSelectedHours(["00:00", "23:59"]);
+                    }}>
+                      <IoReload />
+                    </button>
+                  </div>
                   <Input
                     type="time"
                     id="startHour"
