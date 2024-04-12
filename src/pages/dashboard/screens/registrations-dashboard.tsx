@@ -1,4 +1,13 @@
-import { Form, Input, Pagination, Select, Spin, Tooltip } from "antd";
+import {
+    Button,
+    Drawer,
+    Form,
+    Input,
+    Pagination,
+    Select,
+    Spin,
+    Tooltip,
+} from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye, FaUser } from "react-icons/fa";
@@ -12,6 +21,7 @@ import {
 } from "../../../services/Inscriptions-service";
 import RegistrationsModal from "../modals/registrations-modals-dashboard";
 import { LoadingOutlined } from "@ant-design/icons";
+import { BiSliderAlt } from "react-icons/bi";
 
 type ProductType = {
     id?: number;
@@ -73,6 +83,8 @@ export default function RegistrationsDashboard() {
     const [seeId, setSeeId] = useState<number | undefined>(undefined);
     const [openSeeModal, setOpenSeeModal] = useState(false);
     const [openChildrenModal, setOpenChildrenModal] = useState(false);
+    const [, setWindowWidth] = useState(window.innerWidth);
+    const [open, setOpen] = useState(false);
     const [fullData, setFullData] = useState<RegistrationData[]>([]);
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
@@ -98,6 +110,21 @@ export default function RegistrationsDashboard() {
             navigate("/dashboard");
         }
     }, [userRole]);
+
+    // Función para manejar el cambio en el tamaño de la ventana
+    const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+        if (window.innerWidth >= 300) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const openSeeRegistrationModal = (id: number) => {
         setSeeId(id);
@@ -161,6 +188,7 @@ export default function RegistrationsDashboard() {
         } finally {
             setLoadingFilters(false);
         }
+        onClose();
     };
 
     const downloadData = async (values: any) => {
@@ -174,13 +202,24 @@ export default function RegistrationsDashboard() {
         }
     };
 
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div className="h-screen">
+            <button
+                onClick={showDrawer}
+                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full"
+            >
+                <BiSliderAlt className="text-white text-2xl" />
+            </button>
             <div className="flex justify-between">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
                     <div className="relative">
                         <Input
                             id="table-search-users"
@@ -203,7 +242,7 @@ export default function RegistrationsDashboard() {
                 {/* Por producto */}
                 <Form
                     layout="inline"
-                    className="flex gap-x-1"
+                    className="flex gap-x-1 max-xl:hidden"
                     style={{ minWidth: 200 }}
                     onFinish={getInscriptionsWithFiltersForm}
                 >
@@ -290,8 +329,170 @@ export default function RegistrationsDashboard() {
                             mode="multiple"
                         >
                             {fullData
-                                .reduce(
-                                    (uniqueCampuses: any[], data) => {
+                                .reduce((uniqueCampuses: any[], data) => {
+                                    data.product.campuses.forEach((campus) => {
+                                        if (
+                                            !uniqueCampuses.some(
+                                                (c) => c.id === campus.id
+                                            )
+                                        ) {
+                                            uniqueCampuses.push(campus);
+                                        }
+                                    });
+                                    return uniqueCampuses;
+                                }, [])
+                                .map((campus: CampusType) => (
+                                    <Select.Option
+                                        key={campus.id}
+                                        value={campus.id}
+                                    >
+                                        {campus.name}
+                                    </Select.Option>
+                                ))}
+                        </Select>
+                    </Form.Item>
+                    {/* Botón de descarga */}
+                    <Form.Item>
+                        <Tooltip title="Aplicar filtros">
+                            <button type="submit" className="rounded-md p-1 ">
+                                {loadingFilters ? (
+                                    <Spin indicator={<LoadingOutlined />} />
+                                ) : (
+                                    <IoSend className="text-xl text-gray-700 hover:text-blue-500" />
+                                )}
+                            </button>
+                        </Tooltip>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Tooltip title="Exportar a Excel">
+                            <button
+                                className="rounded-md p-1"
+                                onClick={() => downloadData({})}
+                            >
+                                {loadingExcel ? (
+                                    <Spin indicator={<LoadingOutlined />} />
+                                ) : (
+                                    <IoDownload className="text-xl text-gray-700 hover:text-green-600" />
+                                )}
+                            </button>
+                        </Tooltip>
+                    </Form.Item>
+                </Form>
+
+                {/* Drawer */}
+                <Button
+                    onClick={showDrawer}
+                    className="flex items-center gap-x-1 px-6 max-sm:hidden xl:hidden"
+                >
+                    <BiSliderAlt />
+                    <h2 className="text-sm">Filtros</h2>
+                </Button>
+                <Drawer title="Filtros" onClose={onClose} open={open}>
+                    <Form
+                        layout="inline"
+                        className="flex flex-col gap-y-4"
+                        style={{ minWidth: 200 }}
+                        onFinish={getInscriptionsWithFiltersForm}
+                    >
+                        <Form.Item
+                            name="productIds"
+                            className="text-black w-full"
+                        >
+                            <Select
+                                className="text-black"
+                                placeholder="Filtrar por producto"
+                                allowClear
+                                showSearch
+                                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+                                mode="multiple"
+                            >
+                                {fullData
+                                    .reduce(
+                                        (
+                                            uniqueProducts: ProductType[],
+                                            data
+                                        ) => {
+                                            if (
+                                                !uniqueProducts.some(
+                                                    (product) =>
+                                                        product.id ===
+                                                        data.product.id
+                                                )
+                                            ) {
+                                                uniqueProducts.push(
+                                                    data.product
+                                                );
+                                            }
+                                            return uniqueProducts;
+                                        },
+                                        []
+                                    )
+                                    .map((product: ProductType) => (
+                                        <Select.Option
+                                            key={product.id}
+                                            value={product.id}
+                                        >
+                                            {product.name}
+                                        </Select.Option>
+                                    ))}
+                            </Select>
+                        </Form.Item>
+
+                        {/* Por categoria */}
+                        <Form.Item
+                            name="categoriesIds"
+                            className="text-black w-full"
+                        >
+                            <Select
+                                className="text-black"
+                                placeholder="Filtrar por categoría"
+                                allowClear
+                                showSearch
+                                style={{ minWidth: 200 }}
+                                mode="multiple"
+                            >
+                                {fullData
+                                    .reduce((uniqueCategories: any[], data) => {
+                                        if (
+                                            !uniqueCategories.some(
+                                                (category) =>
+                                                    category.id ===
+                                                    data.product.category.id
+                                            )
+                                        ) {
+                                            uniqueCategories.push(
+                                                data.product.category
+                                            );
+                                        }
+                                        return uniqueCategories;
+                                    }, [])
+                                    .map((category: CategoryType) => (
+                                        <Select.Option
+                                            key={category.id}
+                                            value={category.id}
+                                        >
+                                            {category.name}
+                                        </Select.Option>
+                                    ))}
+                            </Select>
+                        </Form.Item>
+
+                        {/* Por sede */}
+                        <Form.Item
+                            name="campusesIds"
+                            className="text-black w-full"
+                        >
+                            <Select
+                                className="text-black"
+                                placeholder="Filtrar por campus"
+                                allowClear
+                                showSearch
+                                style={{ minWidth: 200 }}
+                                mode="multiple"
+                            >
+                                {fullData
+                                    .reduce((uniqueCampuses: any[], data) => {
                                         data.product.campuses.forEach(
                                             (campus) => {
                                                 if (
@@ -305,35 +506,62 @@ export default function RegistrationsDashboard() {
                                             }
                                         );
                                         return uniqueCampuses;
-                                    },
-                                    []
-                                )
-                                .map((campus: CampusType) => (
-                                    <Select.Option
-                                        key={campus.id}
-                                        value={campus.id}
-                                    >
-                                        {campus.name}
-                                    </Select.Option>
-                                ))}
-                        </Select>
-                    </Form.Item>
-                    {/* Botón de descarga */}
-                    <Form.Item>
-                        <button type="submit" className="rounded-md p-1 ">
-                            {loadingFilters ? <Spin indicator={<LoadingOutlined />} /> : <IoSend className="text-xl text-gray-700 hover:text-blue-500" />}
-                        </button>
-                    </Form.Item>
+                                    }, [])
+                                    .map((campus: CampusType) => (
+                                        <Select.Option
+                                            key={campus.id}
+                                            value={campus.id}
+                                        >
+                                            {campus.name}
+                                        </Select.Option>
+                                    ))}
+                            </Select>
+                        </Form.Item>
+                        {/* Botón de descarga */}
+                        <div className="flex items-center justify-between max-sm:flex-col">
+                            <Form.Item className="max-sm:w-full">
+                                <button
+                                    type="submit"
+                                    className="rounded-md p-1 w-full"
+                                >
+                                    {loadingFilters ? (
+                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                            <Spin
+                                                indicator={<LoadingOutlined />}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                            <IoSend className="text-xl" />
+                                            <span>Aplicar filtros</span>
+                                        </div>
+                                    )}
+                                </button>
+                            </Form.Item>
 
-                    <Form.Item>
-                        <button
-                            className="rounded-md p-1"
-                            onClick={() => downloadData({})}
-                        >
-                            {loadingExcel ? <Spin indicator={<LoadingOutlined />} /> : <IoDownload className="text-xl text-gray-700 hover:text-green-500" />}
-                        </button>
-                    </Form.Item>
-                </Form>
+                            <Form.Item className="max-sm:w-full">
+                                <button
+                                    className="rounded-md p-1 w-full"
+                                    onClick={() => downloadData({})}
+                                >
+                                    {loadingExcel ? (
+                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                            <Spin
+                                                indicator={<LoadingOutlined />}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center gap-x-2 border hover:border-green-600 rounded-lg px-4 py-2 hover:text-green-600">
+                                            <IoDownload className="text-xl" />
+                                            <span>Exportar a Excel</span>
+                                        </div>
+                                    )}
+                                </button>
+                            </Form.Item>
+                        </div>
+                    </Form>
+                </Drawer>
+                {/* Drawer */}
             </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
