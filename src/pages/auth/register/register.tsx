@@ -129,7 +129,7 @@ export default function Register() {
                     />
                 </Link>
             </div>
-            <div className="w-full md:w-[750px] md:mx-auto px-6">
+            <div className="w-full h-screen md:w-[750px] md:mx-auto px-6 py-8 overflow-auto">
                 <Form
                     name="firstStep"
                     onFinish={(values) => {

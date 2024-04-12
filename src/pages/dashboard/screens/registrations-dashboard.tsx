@@ -65,7 +65,7 @@ export default function RegistrationsDashboard() {
     const [registrationData, setRegistrationData] = useState<
         RegistrationData[]
     >([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState<boolean>(false);
     const [loadingFilters, setLoadingFilters] = useState<boolean>(false);
     const [loadingExcel, setLoadingExcel] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
