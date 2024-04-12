@@ -1,3 +1,3 @@
 export const generalRoutes = {
-  BASE_URL: "http://localhost:80",
+  BASE_URL: "https://depoeventosbackend.onrender.com",
 };
