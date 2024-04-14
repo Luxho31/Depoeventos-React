@@ -1,7 +1,7 @@
 import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
 
 export default function PaymentButton({ preferenceId }: any | undefined) {
-  initMercadoPago("TEST-706cf6c0-223d-46dd-96b6-b5e41feb4362", {
+  initMercadoPago("TEST-5bbe59f5-ff49-49d3-a879-7529ea4813d0", {
     locale: "es-PE",
   });
   return (

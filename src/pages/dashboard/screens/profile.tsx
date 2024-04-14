@@ -67,7 +67,7 @@ export default function Profile() {
       setLoading(true);
       const foto = data.photo;
       console.log(foto);
-      updateUserInfo(data, data.id);
+      await updateUserInfo(data, data.id);
       if (profileImage) {
         await handleImageUpload(profileImage); // Cambiado a voucherImage.originFileObj
       }
@@ -85,7 +85,7 @@ export default function Profile() {
   const handleReload = async () => {
     const token = localStorage.getItem("token");
     if (token) {
-      getUserInfo(token).then((data: RegisterType) => {
+      await getUserInfo(token).then((data: RegisterType) => {
         // const { birthDate, ...userData } = data;
         const { ...userData } = data;
         form.setFieldsValue(userData);
