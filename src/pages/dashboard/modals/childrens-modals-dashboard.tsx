@@ -5,11 +5,12 @@ import {
     InputNumber,
     Modal,
     Select,
+    Spin,
     Switch,
 } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { FaAddressCard, FaArrowRight, FaChevronLeft } from "react-icons/fa";
+import { FaAddressCard, FaArrowRight, FaChevronLeft, FaSpinner } from "react-icons/fa";
 import {
     createChildren,
     getChildrenById,
@@ -867,9 +868,11 @@ export default function ChildrenModal({
                         <button
                             type="submit"
                             className="bg-blue-400 hover:bg-blue-500 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4 "
-                        // bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
+                            disabled={loading}
                         >
-                            {loading ? "Cargando..." : "Guardar"}
+                            {loading ? <Spin indicator={
+                                <FaSpinner className="text-white text-2xl" />
+                            } /> : "Guardar"}
                         </button>
                     </div>
                 )}

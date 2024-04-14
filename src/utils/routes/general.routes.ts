@@ -1,3 +1,3 @@
 export const generalRoutes = {
-  BASE_URL: "https://depoeventosbackend.onrender.com",
+  BASE_URL: "https://api.depoeventos.pe",
 };
