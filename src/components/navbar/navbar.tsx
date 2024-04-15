@@ -1,4 +1,4 @@
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import { DownOutlined, LoadingOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import {
   Avatar,
@@ -11,7 +11,7 @@ import {
   Spin,
 } from "antd";
 import { useEffect, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaSpinner } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
@@ -29,6 +29,29 @@ export default function Navbar() {
   const { products, clearCart } = useCart();
   const [open, setOpen] = useState(false);
 
+  const renderUserName = () => {
+    if (isAuthenticated && userInfo) {
+      return (
+        <Space>
+          <Avatar size={30} src={userInfo.photo} />
+          <p>
+            {userInfo.firstName} {userInfo.lastName}
+          </p>
+        </Space>
+      );
+    } else if (isAuthenticated && cargando) {
+      return (
+        <Spin
+          fullscreen
+          indicator={<LoadingOutlined className=" text-2xl" />}
+        />
+      );
+    } else {
+      return (
+        <Spin fullscreen indicator={<LoadingOutlined className="text-2xl" />} />
+      );
+    }
+  };
   const showDrawer = () => {
     setOpen(true);
   };
@@ -82,7 +105,10 @@ export default function Navbar() {
     onClick: handleMenuClick,
   };
 
-  if (cargando) return <Spin fullscreen />;
+  if (cargando)
+    return (
+      <Spin fullscreen indicator={<LoadingOutlined className="text-2xl" />} />
+    );
 
   return (
     <nav
@@ -174,11 +200,11 @@ export default function Navbar() {
                 className="border-none"
               >
                 <Button className="me-4">
-                  <Link to="/cart">
-                    <Badge count={isAuthenticated ? products.length : 0}>
+                  <Badge count={isAuthenticated ? products.length : 0}>
+                    <Link to="/cart">
                       <FaShoppingCart className="text-2xl" />
-                    </Badge>
-                  </Link>
+                    </Link>
+                  </Badge>
                 </Button>
               </Dropdown>
             </li>
@@ -191,8 +217,7 @@ export default function Navbar() {
                 <Dropdown menu={menuProps} className="border-none">
                   <Button className="p-0">
                     <Space>
-                      <Avatar size={30} src={userInfo?.photo} />
-                      {userInfo?.firstName + " " + userInfo?.lastName}
+                      {renderUserName()}
                       <DownOutlined />
                     </Space>
                   </Button>

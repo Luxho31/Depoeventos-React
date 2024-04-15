@@ -112,27 +112,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // const getUserId = async (token: string) => {
-  //   try {
-  //     const response = await fetch(`${BASE_URL}/api/userInfo/${token}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Error al obtener la información del usuario");
-  //     }
-  //     setCargando(false);
-  //     const userData = await response.json();
-  //     const userId = userData.id;
-  //     return userId;
-  //   } catch (error) {
-  //     console.error("Error al obtener la información del usuario:", error);
-  //   }
-  // };
-
   const login = async (username: string, password: string) => {
     try {
       const response = await fetch(`${BASE_URL}/login`, {
