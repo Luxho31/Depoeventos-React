@@ -20,6 +20,7 @@ interface AuthContextType {
   register: (user: User) => Promise<void>;
   logout: () => void;
   userInfo: User | null;
+  getUserInfo: (token: string) => Promise<User>;
   // getUserId: (token: string) => Promise<number>;
 }
 
@@ -248,6 +249,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         cargando,
         userRole,
         userInfo,
+        getUserInfo
         // getUserId,
       }}
     >

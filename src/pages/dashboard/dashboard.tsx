@@ -43,7 +43,8 @@ import { GrSchedule } from "react-icons/gr";
 const { Header, Sider, Content } = Layout;
 
 export default function Dashboard() {
-  const { isAuthenticated, logout, cargando, userRole, userInfo } = useAuth();
+  const { isAuthenticated, logout, cargando, userRole, userInfo } =
+    useAuth();
   const [redirectToHome, setRedirectToHome] = useState(false);
   const location = useLocation();
 

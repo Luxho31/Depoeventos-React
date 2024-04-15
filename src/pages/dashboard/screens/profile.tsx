@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   InputNumber,
+  // Modal,
   Select,
   Spin,
   Upload,
@@ -12,6 +13,8 @@ import {
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { COUNTRIES } from "../../../components/selectors/country-selector/countries";
+import Compressor from "compressorjs";
+// import Cropper from "react-easy-crop";
 
 // React Icons
 import {
@@ -22,14 +25,17 @@ import {
   FaSave,
   FaUser,
 } from "react-icons/fa";
-import { getUserInfo } from "../../../services/basic-service";
 import {
   updateUserInfo,
   uploadProfileImage,
 } from "../../../services/profile-service";
+import { useAuth } from "../../../context/AuthProvider";
 
 export default function Profile() {
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [loading, setLoading] = useState(false);
+  const { getUserInfo } = useAuth();
   const [form] = useForm();
   const [fieldsEnabled, setFieldsEnabled] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -58,9 +64,17 @@ export default function Profile() {
     handleReload();
   }, []);
 
-  // Funcionalidad de subida de imagen
-  // const [loading, setLoading] = useState(false);
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
   const updateUserInformation = async (data: RegisterType) => {
     console.log(data);
     try {
@@ -85,8 +99,7 @@ export default function Profile() {
   const handleReload = async () => {
     const token = localStorage.getItem("token");
     if (token) {
-      await getUserInfo(token).then((data: RegisterType) => {
-        // const { birthDate, ...userData } = data;
+      await getUserInfo(token).then((data: any) => {
         const { ...userData } = data;
         form.setFieldsValue(userData);
         setPhoto(data.photo);
@@ -105,10 +118,26 @@ export default function Profile() {
     setSelectedDocumentType(undefined);
   };
 
+  const compressFile = async (file: File) => {
+    return new Promise<File>((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.6,
+
+        success(result: any) {
+          resolve(result);
+        },
+        error(error) {
+          reject(error);
+        },
+      });
+    });
+  };
   const handleImageUpload = async (file: File) => {
     setLoading(true);
     try {
-      await uploadProfileImage(file);
+      const fileCompressed = await compressFile(file);
+      console.log(fileCompressed);
+      await uploadProfileImage(fileCompressed);
       message.success("Imagen de perfil subida exitosamente");
     } catch (error) {
       console.error("Error al subir la imagen del perfil:", error);
@@ -124,9 +153,57 @@ export default function Profile() {
       authorization: "authorization-text",
     },
   };
-
+  // const [crop, setCrop] = useState({ x: 0, y: 0 });
+  // const [zoom, setZoom] = useState(1);
+  // const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  //   console.log(croppedArea, croppedAreaPixels);
+  // };
   return (
     <div className="flex flex-col items-center justify-center mt-12">
+      {/* <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={1000}
+      >
+        <Cropper
+          image={photo}
+          crop={crop}
+          zoom={zoom}
+          aspect={1 / 1}
+          onCropChange={setCrop}
+          onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
+          cropShape="round"
+          showGrid={false}
+        />
+        <div>
+          <Upload
+            {...propsUpload}
+            disabled={!fieldsEnabled}
+            maxCount={1}
+            onChange={(info) => {
+              const { file } = info;
+              if (file.status === "done") {
+                message.success(`${file.name} se subió correctamente`);
+                if (file.originFileObj) {
+                  setProfileImage(file.originFileObj);
+                } else {
+                  console.error(
+                    "El archivo subido no tiene un objeto de archivo original."
+                  );
+                }
+              } else if (file.status === "error") {
+                message.error(`La subida de ${file.name} falló.`);
+              }
+            }}
+          >
+            <Button icon={<UploadOutlined />}>Subir foto</Button>
+          </Upload>
+        </div>
+      </Modal> */}
+
       {/* Formulario 1 */}
       <Form
         name="firstStep"
@@ -144,6 +221,7 @@ export default function Profile() {
             <div className="w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 rounded-full border-4 mb-8 overflow-hidden">
               <img src={photo} alt="" className="w-full h-full object-cover" />
             </div>
+            {/* <button onClick={showModal}>Open Modal</button> */}
             <Upload
               {...propsUpload}
               disabled={!fieldsEnabled}
@@ -155,7 +233,6 @@ export default function Profile() {
                   message.success(`${file.name} se subió correctamente`);
                   if (file.originFileObj) {
                     setProfileImage(file.originFileObj); // Actualiza el estado de la imagen de perfil
-                    // handleImageUpload(file.originFileObj);
                   } else {
                     // Manejar el caso en que originFileObj sea undefined
                     console.error(
