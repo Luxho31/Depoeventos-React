@@ -174,11 +174,11 @@ export default function Navbar() {
                 className="border-none"
               >
                 <Button className="me-4">
-                  <Badge count={isAuthenticated ? products.length : 0}>
-                    <Link to="/cart">
+                  <Link to="/cart">
+                    <Badge count={isAuthenticated ? products.length : 0}>
                       <FaShoppingCart className="text-2xl" />
-                    </Link>
-                  </Badge>
+                    </Badge>
+                  </Link>
                 </Button>
               </Dropdown>
             </li>
