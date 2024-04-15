@@ -114,7 +114,7 @@ export const deleteProduct = async (id: number) => {
 export const uploadProductImage = async (productId: number, file: File) => {
   try {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", file, file.name);
     const response = await fetch(
       `${BASE_URL}/api/products/uploadProductPicture/${productId}`,
       {

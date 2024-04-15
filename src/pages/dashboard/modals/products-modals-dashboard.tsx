@@ -11,10 +11,11 @@ import {
   Select,
   Spin,
   Upload,
-  message
+  message,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import Compressor from "compressorjs";
 import { useEffect, useState } from "react";
 import {
   createProduct,
@@ -195,7 +196,7 @@ export default function ProductModal({
             {
               days: values[`days_${discipline}`],
               startHour: values[`startHour_${discipline}`],
-              endHour: values[`endHour_${discipline}`]
+              endHour: values[`endHour_${discipline}`],
             },
           ],
         };
@@ -278,7 +279,9 @@ export default function ProductModal({
   const handleImageUpload = async (productId: number, file: File) => {
     setLoading(true);
     try {
-      await uploadProductImage(productId, file);
+      const fileCompressed = await compressFile(file);
+      console.log(fileCompressed);
+      await uploadProductImage(productId, fileCompressed);
       message.success("Imagen de Product subida exitosamente");
     } catch (error) {
       console.error("Error al subir la imagen del producto:", error);
@@ -288,6 +291,21 @@ export default function ProductModal({
     } finally {
       setLoading(false);
     }
+  };
+
+  const compressFile = async (file: File) => {
+    return new Promise<File>((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.6,
+
+        success(result: any) {
+          resolve(result);
+        },
+        error(error) {
+          reject(error);
+        },
+      });
+    });
   };
 
   const propsUpload = {
@@ -423,27 +441,27 @@ export default function ProductModal({
           </div>
 
           {selectedDisciplineIds.map((discipline) => (
-              <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
-                <Form.Item
-                  label={`Días para ${discipline}`}
-                  name={`days_${discipline}`}
-                  labelCol={{ span: 24 }}
-                  rules={[
-                    { required: true, message: "Seleccione al menos un día" },
-                  ]}
-                  className="md:w-full"
-                >
-                  <Select mode="multiple" style={{ width: "100%" }}>
-                    <Select.Option value="1">Lunes</Select.Option>
-                    <Select.Option value="2">Martes</Select.Option>
-                    <Select.Option value="3">Miércoles</Select.Option>
-                    <Select.Option value="4">Jueves</Select.Option>
-                    <Select.Option value="5">Viernes</Select.Option>
-                    <Select.Option value="6">Sábado</Select.Option>
-                    <Select.Option value="7">Domingo</Select.Option>
-                  </Select>
-                </Form.Item>
-                <div className="flex flex-col gap-x-4 lg:flex-row">
+            <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
+              <Form.Item
+                label={`Días para ${discipline}`}
+                name={`days_${discipline}`}
+                labelCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Seleccione al menos un día" },
+                ]}
+                className="md:w-full"
+              >
+                <Select mode="multiple" style={{ width: "100%" }}>
+                  <Select.Option value="1">Lunes</Select.Option>
+                  <Select.Option value="2">Martes</Select.Option>
+                  <Select.Option value="3">Miércoles</Select.Option>
+                  <Select.Option value="4">Jueves</Select.Option>
+                  <Select.Option value="5">Viernes</Select.Option>
+                  <Select.Option value="6">Sábado</Select.Option>
+                  <Select.Option value="7">Domingo</Select.Option>
+                </Select>
+              </Form.Item>
+              <div className="flex flex-col gap-x-4 lg:flex-row">
                 <Form.Item
                   name={`startHour_${discipline}`}
                   label="Hora de inicio"
@@ -476,9 +494,9 @@ export default function ProductModal({
                     {generateOptions()}
                   </Select>
                 </Form.Item>
-                </div>
               </div>
-            ))}
+            </div>
+          ))}
 
           {/* Input Sede del Producto */}
           <Form.Item
