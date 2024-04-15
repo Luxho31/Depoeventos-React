@@ -29,8 +29,8 @@ export default function Campuses({ slide }: { slide: SlideData }) {
   return (
     <div className="w-[80%] m-auto mb-10 mt-20">
       <div className="mb-12">
-        <h1 className="text-2xl lg:text-4xl font-bold mb-3">Sedes</h1>
-        <p>
+        <h1 className="text-2xl lg:text-3xl font-bold mb-3">Sedes</h1>
+        <p className="leading-6 text-justify">
           En nuestras sedes, colaboramos con colegios y clubes de alto prestigio
           para brindarte instalaciones de calidad y un ambiente propicio para el
           aprendizaje y la práctica deportiva. Con ubicaciones convenientes y

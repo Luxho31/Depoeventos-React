@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
 import { getChildrensByUserId } from "../../services/children-service";
+import { Toaster, toast } from "sonner";
 
 type Product = {
   grades: string[];
@@ -109,6 +110,21 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
 
     // Actualizar el estado de los hijos seleccionados
     setChildren(updatedChildren);
+
+    // Verificar si la cantidad de hijos seleccionados es mayor a la cantidad de cupos disponibles
+    const cuposDisponibles = product.maxStudents - product.currentStudents;
+
+    if (selectedValues.length > cuposDisponibles) {
+      toast.error(
+        `No hay cupos disponibles (${cuposDisponibles}) para todos los hijos seleccionados`
+      );
+
+      const updatedChildren: Children[] = children.map((child: Children) => ({
+        ...child,
+        selected: false,
+      }));
+      setChildren(updatedChildren);
+    }
   };
 
   const handleAddToCart = () => {
@@ -142,6 +158,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      <Toaster richColors />
       <div className="bg-white rounded-lg w-[60rem] h-[60%] relative">
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"

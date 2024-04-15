@@ -49,10 +49,10 @@ export default function Courses() {
   ];
 
   return (
-    <div className="w-[80%] m-auto">
+    <div className="w-[80%] m-auto ">
       <div className="mb-12">
-        <h1 className="text-2xl lg:text-4xl font-bold mb-3">Disciplinas</h1>
-        <p>
+        <h1 className="text-2xl lg:text-3xl font-bold mb-3">Disciplinas</h1>
+        <p className="leading-6">
           Explora una variedad de disciplinas deportivas para todas las edades y
           niveles de habilidad. Ofrecemos actividades emocionantes diseñadas
           para promover la diversión y el desarrollo físico y mental de nuestros
@@ -60,7 +60,6 @@ export default function Courses() {
           movimiento!
         </p>
       </div>
-      {/* <div className="place-items-center grid grid-rows-2 grid-flow-col gap-4 gap-y-12 max-sm:grid-rows-6 max-lg:grid-rows-4"> */}
       <div className="place-items-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {projects.map((project) => (
           <CustomCard data={project} key={project.title} />

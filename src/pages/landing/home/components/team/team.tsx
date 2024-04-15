@@ -86,14 +86,12 @@ export default function Team() {
   return (
     <div className="w-[80%] m-auto my-20">
       <div className="mb-12">
-        <h1 className="text-2xl lg:text-4xl font-bold mb-3">Equipo</h1>
-        <p>
+        <h1 className="text-2xl lg:text-3xl font-bold mb-3">Equipo</h1>
+        <p className="leading-6">
           En nuestro equipo, contamos con instructores especializados que están
           comprometidos con tu progreso y diversión. Con su experiencia y
           pasión, te guiarán en el aprendizaje y dominio de diversas disciplinas
-          deportivas. Nuestros profesores están aquí para apoyarte en cada paso
-          del camino, asegurando una experiencia enriquecedora y gratificante
-          para todos.
+          deportivas.
         </p>
       </div>
       <div className="w-full m-auto flex flex-col justify-around max-lg:flex-col max-lg:items-center max-lg:gap-10 max-xl:w-full">

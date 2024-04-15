@@ -190,25 +190,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(errorMessage);
       }
 
-      const userData = await response.json();
+      // const userData = await response.json();
 
-      if (userData.token) {
-        localStorage.setItem("token", userData.token);
+      // if (userData.token) {
+      //   localStorage.setItem("token", userData.token);
 
-        // get userdata
-        getUserInfo(userData.token);
-        setUserInfo(userData);
+      //   // get userdata
+      //   getUserInfo(userData.token);
+      //   setUserInfo(userData);
 
-        // Verificar Rol
-        const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
-        const userRoles = tokenPayload.roles;
-        setUserRole(userRoles);
+      //   // Verificar Rol
+      //   const tokenPayload = JSON.parse(atob(userData.token.split(".")[1]));
+      //   const userRoles = tokenPayload.roles;
+      //   setUserRole(userRoles);
 
-        setIsAuthenticated(true);
-      } else {
-        console.error("Token no encontrado en los datos de usuario");
-        setIsAuthenticated(false);
-      }
+      //   setIsAuthenticated(true);
+      // } else {
+      //   console.error("Token no encontrado en los datos de usuario");
+      //   setIsAuthenticated(false);
+      // }
     } catch (error) {
       console.error("Error al registrarse:", error);
       throw error;
