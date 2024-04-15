@@ -105,7 +105,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
     // Actualizar el estado de los hijos para marcar si están seleccionados o no
     const updatedChildren: Children[] = children.map((child: Children) => ({
       ...child,
-      selected: selectedValues.includes(child.name), // Marcar como seleccionado si el nombre está en los valores seleccionados
+      selected: selectedValues.includes(child.name),
     }));
 
     // Actualizar el estado de los hijos seleccionados
@@ -140,7 +140,6 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
         console.error("No se han seleccionado hijos");
         return;
       }
-
       addToCart(product, selectedChildrenIds);
       onClose();
     }

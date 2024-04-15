@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { generalRoutes } from "../utils/routes/general.routes.ts";
+import { toast } from "sonner";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
@@ -93,7 +94,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchData = async () => {
       try {
         if (!token) {
-          throw new Error;
+          throw new Error();
         }
         const response = await fetch(`${BASE_URL}/api/cart/${userId}`);
         if (!response.ok) {
@@ -136,7 +137,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           },
           body: JSON.stringify(body),
         });
-
+        if (response.status === 409) {
+          toast.error("El producto ya se encuentra en el carrito");
+          throw new Error("El producto ya se encuentra en el carrito");
+        }
         if (!response.ok) {
           throw new Error("Error al guardar el producto en el carrito");
         }
@@ -171,12 +175,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/cart/deleteAll/${userId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/cart/deleteAll/${userId}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error("Error al limpiar el carrito");
@@ -190,12 +191,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const removeProduct = async (cartItem: number) => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/cart/${cartItem}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/cart/${cartItem}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error("Error al eliminar el producto del carrito");
