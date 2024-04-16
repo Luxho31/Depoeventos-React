@@ -62,7 +62,7 @@ export default function ChildrenModal({
     motherLastName?: string;
     documentType?: string;
     documentNumber?: string;
-    birthdate?: string;
+    birthdate?: any;
     emergencyContactPhone?: string;
     gender?: string;
   };
@@ -165,8 +165,7 @@ export default function ChildrenModal({
   // ---------------- Funcionalidad de crear
   const onFinishStep1 = (values: FirstStepType) => {
     if (values.birthdate) {
-      const birthdateMoment = moment(values.birthdate);
-      values.birthdate = birthdateMoment.format("YYYY-MM-DD");
+      values.birthdate = values.birthdate?.format("YYYY-MM-DD");
     }
     setFormData({
       ...formData,
