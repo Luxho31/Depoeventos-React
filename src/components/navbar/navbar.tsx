@@ -11,16 +11,16 @@ import {
   Spin,
 } from "antd";
 import { useEffect, useState } from "react";
-import { FaShoppingCart, FaSpinner } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { IoIosLogOut } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
 import "./navbar.css";
-import { FiLogOut } from "react-icons/fi";
-import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

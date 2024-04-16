@@ -8,8 +8,8 @@ import {
   Spin,
   Switch,
 } from "antd";
+import dayjs from "dayjs";
 import moment from "moment";
-import dayjs, { Dayjs } from "dayjs";
 
 import { useEffect, useState } from "react";
 import {

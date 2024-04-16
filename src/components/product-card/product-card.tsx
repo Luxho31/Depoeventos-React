@@ -1,4 +1,4 @@
-import { FaCheck, FaTableTennis } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 type Product = {
   id: number;
