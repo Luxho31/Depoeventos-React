@@ -6,6 +6,7 @@ import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
 import CartTable from "./components/cart-table";
 import PaymentStep from "./components/payment-step";
+import { Toaster } from "sonner";
 
 export default function Cart() {
   const [progressPercent, setProgressPercent] = useState(0);
@@ -29,6 +30,7 @@ export default function Cart() {
 
   return (
     <div className="flex flex-col w-[80%] m-auto mt-24 min-h-screen">
+      <Toaster richColors />
       {/* Progress Bar */}
       <div className="w-full text-center">
         <div className={`${progressPercent === 0 ? "block" : "hidden"}`}>
@@ -63,8 +65,9 @@ export default function Cart() {
 
       {/* Table Cart */}
       <div
-        className={`${progressPercent === 0 ? "block" : "hidden"
-          } flex max-xl:flex-col items-start gap-x-12 `}
+        className={`${
+          progressPercent === 0 ? "block" : "hidden"
+        } flex max-xl:flex-col items-start gap-x-12 `}
       >
         {/* <div className="w-[60rem] mb-24"> */}
         <div className="w-full mb-12">
@@ -115,21 +118,23 @@ export default function Cart() {
                 </div>
               </div>
               <div className="w-full flex flex-col justify-center items-center gap-y-3">
-
-                <Checkbox className="text-md"
+                <Checkbox
+                  className="text-md"
                   onChange={() => setDisabledTerms(!disabledTerms)}
                   disabled={loading}
-                >Acepto {" "}
-                  <a
-                    className="text-blue-500"
-                    href=""
-                    target="_blank"
-                  >
-                    términos y condiciones</a>
+                >
+                  Acepto{" "}
+                  <a className="text-blue-500" href="" target="_blank">
+                    términos y condiciones
+                  </a>
                 </Checkbox>
 
                 <button
-                  className={disabledTerms ? "w-[90%] bg-neutral-400 text-white rounded-2xl py-4 hover:bg-neutral-600" : "w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"}
+                  className={
+                    disabledTerms
+                      ? "w-[90%] bg-neutral-400 text-white rounded-2xl py-4 hover:bg-neutral-600"
+                      : "w-[90%] bg-neutral-900 text-white rounded-2xl py-4 hover:bg-neutral-700"
+                  }
                   onClick={() => {
                     if (!disabledTerms) {
                       createOrderForm();

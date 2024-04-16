@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { generalRoutes } from "../../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
@@ -105,11 +106,13 @@ export const createOrder = async () => {
         "Content-Type": "application/json",
       },
     });
-    if (!orderResponse.ok) {
-      throw new Error("Error al crear una orden");
+    if (orderResponse.status === 409) {
+      toast.error("Tienes productos en el carrito que ya no tienen cupo");
+      return;
     }
+
     const orderData = await orderResponse.json();
-    console.log(orderData);
+
     return orderData;
   } catch (error) {
     console.error("Error al crear una orden:", error);
