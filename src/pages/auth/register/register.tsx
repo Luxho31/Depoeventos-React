@@ -25,7 +25,7 @@ import { useAuth } from "../../../context/AuthProvider";
 export default function Register() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [paso, setPaso] = useState(1);
   const [formData, setFormData] = useState<RegisterType>({});
   const [selectedDocumentType, setSelectedDocumentType] = useState<
@@ -81,7 +81,6 @@ export default function Register() {
       toast.success("Usuario registrado correctamente");
 
       navigate("/login");
-
     } catch (error) {
       if (typeof error === "object" && error !== null && "message" in error) {
         const errorMessage = (error as Error).message;
@@ -112,6 +111,8 @@ export default function Register() {
       setLoading(false);
     }
   };
+
+  const defaultPickerValue = dayjs().subtract(18, "years");
 
   return (
     <div className="flex flex-col justify-center md:flex-row items-center max-md:my-8">
@@ -557,6 +558,7 @@ export default function Register() {
                   size="large"
                   allowClear={false}
                   disabledDate={disabledDate}
+                  defaultPickerValue={defaultPickerValue}
                 />
               </Form.Item>
             </div>
