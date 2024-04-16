@@ -49,6 +49,7 @@ export default function Dashboard() {
   const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -64,6 +65,21 @@ export default function Dashboard() {
   if (redirectToHome) {
     return <Navigate to="/" />;
   }
+
+  // Función para manejar el cambio en el tamaño de la ventana
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+    if (window.innerWidth <= 768) {
+      setCollapsed(true);
+    }
+  };
+
+  useEffect(() => {
+      window.addEventListener("resize", handleResize);
+      return () => {
+          window.removeEventListener("resize", handleResize);
+      };
+  }, []);
 
   const handleItemClick = (path: string) => {
     navigate(path);
@@ -212,21 +228,27 @@ export default function Dashboard() {
   return (
     <>
       {isAuthenticated ? (
-        <Layout className="h-screen">
+        <Layout className="h-screen relative">
+                {(!collapsed) && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-40"
+          onClick={() => setCollapsed(true)}
+        ></div>
+      )}
           <Sider
             trigger={null}
             collapsible
             collapsed={collapsed}
             breakpoint="md" // Define el breakpoint en el que el sidebar se colapsará
             collapsedWidth={
-              collapsed && window.innerWidth < 768 ? 0 : undefined
+              collapsed && windowWidth <= 768 ? 0 : undefined
             } // Se establece en 0 cuando colapsado y la pantalla es menor que md, de lo contrario, se deja sin definir
             className={
-              window.innerWidth > 768
-                ? "fixed"
+              windowWidth >= 768
+                ? "fixed z-50"
                 : `!fixed ${
-                    collapsed ? "z-0" : "z-50"
-                  } top-0 left-0 h-screen relative`
+                    collapsed && "z-50"
+                  } top-0 left-0 h-screen relative z-50`
             }
             onBreakpoint={(broken) => {
               if (broken) {
@@ -266,7 +288,7 @@ export default function Dashboard() {
                         setCollapsed(true);
                       }}
                       className={`${
-                        window.innerWidth > 768
+                        windowWidth >= 768
                           ? "hidden"
                           : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
                       }`}
@@ -288,7 +310,7 @@ export default function Dashboard() {
               />
               <div
                 className={`${
-                  window.innerWidth > 640 ? "hidden" : "block"
+                  windowWidth >= 640 ? "hidden" : "block"
                 } flex justify-center gap-2 mt-auto mb-4`}
               >
                 <Button
