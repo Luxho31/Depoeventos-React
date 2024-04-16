@@ -214,7 +214,7 @@ export default function RegistrationsDashboard() {
         <div className="h-screen">
             <button
                 onClick={showDrawer}
-                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full"
+                className="sm:hidden bg-blue-400 hover:bg-blue-500 absolute bottom-10 right-12 p-3 border shadow-lg rounded-full z-50"
             >
                 <BiSliderAlt className="text-white text-2xl" />
             </button>

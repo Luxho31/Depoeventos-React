@@ -67,6 +67,7 @@ export default function Dashboard() {
 
   const handleItemClick = (path: string) => {
     navigate(path);
+    setCollapsed(true);
   };
 
   const menuItems = [
