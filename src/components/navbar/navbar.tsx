@@ -152,16 +152,16 @@ export default function Navbar() {
                     <table id="lista-carrito" className="u-full-width">
                       <thead>
                         <tr className="flex gap-12 leading-10 border-b-2">
-                          <th>Nombre</th>
-                          <th>Precio</th>
-                          <th>Cantidad</th>
-                          <th></th>
+                          <th className="w-1/2">Nombre</th>
+                          <th className="w-1/2">Precio</th>
+                          <th className="w-1/2">Cantidad</th>
+                          <th className="w-1/2"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {products.length === 0 ? (
                           <tr>
-                            <td colSpan={4}>No hay productos en el carrito</td>
+                            <td colSpan={4} className="py-3">No hay productos en el carrito</td>
                           </tr>
                         ) : (
                           products.map((product) => (
@@ -169,9 +169,13 @@ export default function Navbar() {
                               key={product.id}
                               className="flex gap-12 leading-10"
                             >
-                              <td>{product && product.name}</td>
-                              <td>${product && product.price}</td>
-                              <td>1</td>
+                              <td className="w-1/2">
+                                {product && product.name.length > 8
+                                  ? `${product.name.split(" ", 1).join(" ")}...`
+                                  : product.name}
+                              </td>
+                              <td className="w-1/2">${product && product.price}</td>
+                              <td className="w-1/2">1</td>
                               <td>
                                 <button className="text-red-500">
                                   <i className="fas fa-times"></i>
