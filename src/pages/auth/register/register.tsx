@@ -1,7 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
 
-import { DatePicker, Form, Input, InputNumber, Select, Spin } from "antd";
+import {
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Spin,
+  Tooltip,
+} from "antd";
 import { FaArrowRight, FaChevronLeft } from "react-icons/fa";
 
 import dayjs, { Dayjs } from "dayjs";
@@ -343,30 +351,35 @@ export default function Register() {
             </div>
 
             {/* ------------------Input Correo Electronico------------------ */}
-            <Form.Item<RegisterType>
-              name="username"
-              label="Correo Electrónico"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese su correo electrónico",
-                },
-                {
-                  type: "email",
-                  message: "Ingrese un correo electrónico válido",
-                },
-              ]}
-              className="col-span-2 cursor-text"
+            <Tooltip
+              title="A este correo se enviarán notificaciones y confirmaciones"
+              align={{ offset: [0, 25] }}
+              placement="topRight"
             >
-              <Input
-                className="w-full border rounded-xl p-4"
-                placeholder="Correo Electrónico"
-                size="large"
-                prefix={<FaEnvelope className="site-form-item-icon me-1" />}
-              />
-            </Form.Item>
-
+              <Form.Item<RegisterType>
+                name="username"
+                label="Correo Electrónico"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor ingrese su correo electrónico",
+                  },
+                  {
+                    type: "email",
+                    message: "Ingrese un correo electrónico válido",
+                  },
+                ]}
+                className="col-span-2 cursor-text"
+              >
+                <Input
+                  className="w-full border rounded-xl p-4"
+                  placeholder="Correo Electrónico"
+                  size="large"
+                  prefix={<FaEnvelope className="site-form-item-icon me-1" />}
+                />
+              </Form.Item>
+            </Tooltip>
             {/* ------------------Input Contraseña------------------ */}
             <Form.Item<RegisterType>
               name="password"
