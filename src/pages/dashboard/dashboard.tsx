@@ -231,7 +231,7 @@ export default function Dashboard() {
         <Layout className="h-screen relative">
                 {(!collapsed) && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-40"
+          className={`${windowWidth <= 768 ? "fixed inset-0 bg-black opacity-50 z-40" : "hidden"}`}
           onClick={() => setCollapsed(true)}
         ></div>
       )}
