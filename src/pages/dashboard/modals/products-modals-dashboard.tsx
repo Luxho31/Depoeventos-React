@@ -115,6 +115,7 @@ export default function ProductModal({
       const product = await getProductById(id);
       console.log("Producto obtenido:", product);
       setPhoto(product.photo);
+      console.log(product.location);
       form.setFieldsValue({
         name: product.name,
         description: product.description,
@@ -128,6 +129,7 @@ export default function ProductModal({
         endDateInscription: product.endDateInscription,
         campusesId: product.campus.map((camp: Campus) => camp.id),
         ages: product.ages,
+        location: product.location,
         grades: product.grades,
         gender: product.gender,
         photo: product.photo,
@@ -214,6 +216,7 @@ export default function ProductModal({
         grades: values.grades,
         ages: values.ages,
         photo: values.photo,
+        location: values.location,
         startDate: values.startDate,
         endDate: values.endDate,
         maxStudents: values.maxStudents,
@@ -703,6 +706,26 @@ export default function ProductModal({
               />
             </Form.Item>
           </div>
+
+          <Form.Item
+            name="location"
+            rules={[
+              {
+                required: true,
+                message: "Por favor ingrese la locación del Producto.",
+              },
+            ]}
+            label="Locación del Producto"
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+              <Input
+                className="w-full rounded-xl p-4"
+                placeholder="Locación del producto"
+                size="large"
+                disabled={type === "see"}
+              />            
+          </Form.Item>
 
           <Form.Item
             name="photo"

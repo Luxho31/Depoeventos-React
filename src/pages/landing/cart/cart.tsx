@@ -124,7 +124,11 @@ export default function Cart() {
                   disabled={loading}
                 >
                   Acepto{" "}
-                  <a className="text-blue-500" href="" target="_blank">
+                  <a
+                    className="text-blue-500 font-semibold hover:text-blue-700"
+                    href="https://drive.google.com/file/d/1zGv_C8JU9NW1gCAww319MkgIIrCe-YLZ/view?usp=sharing "
+                    target="_blank"
+                  >
                     términos y condiciones
                   </a>
                 </Checkbox>

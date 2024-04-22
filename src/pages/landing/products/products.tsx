@@ -237,7 +237,7 @@ export default function Products() {
         setSelectedCategories([]);
         setSelectedCampuses([]);
         setSelectedGrades([]);
-        setSelectedAges([1, 18]);
+        setSelectedAges([3, 18]);
         setEndTimeEnabled(false);
         setSelectedHours(["00:00", "23:59"]);
     };
