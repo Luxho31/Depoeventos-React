@@ -51,6 +51,7 @@ export default function ChildrenModal({
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
+  const [showCustomSchoolInput, setShowCustomSchoolInput] = useState(false);
 
   // const [form] = Form.useForm();
 
@@ -71,6 +72,7 @@ export default function ChildrenModal({
     school?: string;
     grade?: string;
     section?: string;
+    customSchool?: string;
   };
   type ThirdStepType = {
     isClubMember?: boolean;
@@ -96,6 +98,10 @@ export default function ChildrenModal({
 
       setIsStudent(children.isStudent || false);
       setIsClubMember(children.isClubMember || false);
+
+      if (children.school === "Otro") {
+        setShowCustomSchoolInput(true);
+      }
 
       form1.setFieldsValue({
         name: children.name,
@@ -131,8 +137,14 @@ export default function ChildrenModal({
   const updateChildrenForm = async (values: FormValues) => {
     try {
       setLoading(true);
+      if (values.school === "Otro") {
+        values.school = values.customSchool;
+      }
       await updateChildren(values, id);
       setOpen(false);
+      setShowCustomSchoolInput(false);
+      setIsStudent(false);
+      setIsClubMember(false);
       setPaso(1);
       handleReload();
     } catch (error) {
@@ -145,12 +157,16 @@ export default function ChildrenModal({
   const createChildrenForm = async (values: FormValues) => {
     try {
       setLoading(true);
+      if (values.school === "Otro") {
+        values.school = values.customSchool;
+      }
       await createChildren(values);
       setOpen(false);
       // form.resetFields();
       form1.resetFields();
       form2.resetFields();
       form3.resetFields();
+      setShowCustomSchoolInput(false);
       setIsStudent(false);
       setIsClubMember(false);
       setPaso(1);
@@ -251,17 +267,18 @@ export default function ChildrenModal({
 
   const handleSwitchChangeIsStudent = (checked: boolean) => {
     setIsStudent(checked);
-    form2.setFieldsValue({ isStudent: checked ? 1 : 0 }); // Establecer el valor en el formulario como 1 o 0
+    form2.setFieldsValue({ isStudent: checked ? 1 : 0 });
     if (!checked) {
-      form2.resetFields(); // Restablecer los campos del formulario si el interruptor se desactiva
+      form2.resetFields();
+      setShowCustomSchoolInput(false);
     }
   };
 
   const handleSwitchChangeIsClubMember = (checked: boolean) => {
     setIsClubMember(checked);
-    form3.setFieldsValue({ isClubMember: checked ? 1 : 0 }); // Establecer el valor en el formulario como 1 o 0
+    form3.setFieldsValue({ isClubMember: checked ? 1 : 0 });
     if (!checked) {
-      form3.resetFields(); // Restablecer los campos del formulario si el interruptor se desactiva
+      form3.resetFields();
     }
   };
   const defaultPickerValue = dayjs().subtract(2, "years");
@@ -601,13 +618,54 @@ export default function ChildrenModal({
             ]}
             className="col-span-2 cursor-text"
           >
-            <Input
-              className="w-full rounded-xl p-4"
-              placeholder="Ingresa nombre de la escuela del hijo"
-              size="large"
+            <Select
+              placeholder="Nombre de la Escuela"
+              className="w-full !h-16"
               disabled={!isStudent}
-            />
+              onChange={(value) => {
+                if (value === "Otro") {
+                  setShowCustomSchoolInput(true);
+                } else {
+                  setShowCustomSchoolInput(false);
+                  form2.setFieldsValue({ school: value });
+                }
+              }}
+            >
+              <Select.Option value="Colegio Villa Caritas">
+                Colegio Villa Caritas
+              </Select.Option>
+              <Select.Option value="Colegio San Pedro">
+                Colegio San Pedro
+              </Select.Option>
+              <Select.Option value="Otro">Otro</Select.Option>
+            </Select>
           </Form.Item>
+
+          {showCustomSchoolInput && (
+            <Form.Item<SecondStepType>
+              name="customSchool"
+              label="Nombre de la Escuela Personalizado"
+              labelCol={{ span: 24 }}
+              rules={[
+                {
+                  required: true,
+                  message:
+                    "Por favor, ingrese el nombre de la escuela personalizado.",
+                },
+                {
+                  max: 50,
+                  message:
+                    "El nombre de la escuela personalizado es muy largo.",
+                },
+              ]}
+              className="col-span-2 cursor-text"
+            >
+              <Input
+                placeholder="Nombre de la Escuela Personalizado"
+                size="large"
+              />
+            </Form.Item>
+          )}
 
           <div className="flex gap-x-4 max-sm:flex-col">
             {/* ------------------Input Grado del Hijo------------------ */}
