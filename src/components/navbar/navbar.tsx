@@ -62,9 +62,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-
+    setOpen(false);
     setIsLoggedIn(!!storedToken);
   }, []);
+
 
   const handleItemClick = (path: string) => {
     navigate(path);
