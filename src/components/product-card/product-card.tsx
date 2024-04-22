@@ -57,10 +57,12 @@ export default function ProductCard({ product, onClick }: CardProps) {
           .map((course: { name: string }) => course.name)
           .join(", ");
 
-  const agesNames =
-    product.ages.length > 3
-      ? product.ages.slice(0, 3).join(", ") + "..."
-      : product.ages.join(", ");
+  function formatAges(ages: string[]): string {
+    return ages
+      .map((age) => `${age} ${parseInt(age) === 1 ? "año" : "años"}`)
+      .join(", ");
+  }
+  const agesNames = formatAges(product.ages);
 
   return (
     <div className="relative overflow-hidden bg-white shadow-md rounded-xl h-full p-4 sm:p-9">
@@ -72,7 +74,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
           S/.{product.price}.00
         </h3>
       </div>
-      <hr className="mt-4"/>
+      <hr className="mt-4" />
       <p className="mt-6 text-base text-gray-600">{courseNames}</p>
       <ul className="px-4 py-2 sm:px-8 sm:py-4">
         <li className="flex items-center mb-2">
