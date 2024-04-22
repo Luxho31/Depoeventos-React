@@ -89,6 +89,8 @@ export default function RegistrationsDashboard() {
     const { userRole } = useAuth();
     const usersPerPage: number = 5;
     const navigate = useNavigate();
+    const [filterValues, setFilterValues] = useState<any>({});
+
 
     useEffect(() => {
         // const specificRole: string = "USER";
@@ -176,13 +178,12 @@ export default function RegistrationsDashboard() {
         categoriesIds: number[];
         [key: string]: number[];
     };
-    const getInscriptionsWithFiltersForm = async (
-        values: InscriptionFilters
-    ) => {
+    const getInscriptionsWithFiltersForm = async (values: InscriptionFilters) => {
         try {
             setLoadingFilters(true);
             const response = await getInscriptionsWithFilters(values);
             setRegistrationData(response);
+            setFilterValues(values); // Almacenar los valores de los filtros
         } catch (error) {
             console.error("Error al obtener matriculas con filtros:", error);
         } finally {
@@ -191,10 +192,11 @@ export default function RegistrationsDashboard() {
         onClose();
     };
 
-    const downloadData = async (values: any) => {
+    const downloadData = async () => {
         try {
             setLoadingExcel(true);
-            await generateExcel(values);
+            console.log(filterValues);
+            await generateExcel(filterValues);
         } catch (error) {
             console.error("Error al descargar matriculas:", error);
         } finally {
@@ -209,6 +211,10 @@ export default function RegistrationsDashboard() {
     const onClose = () => {
         setOpen(false);
     };
+
+    const inscriptionDateFormated = (inscriptionDate: string) => {
+        return new Date(inscriptionDate).toLocaleDateString();
+    }
 
     return (
         <div className="h-screen">
@@ -365,10 +371,10 @@ export default function RegistrationsDashboard() {
                     </Form.Item>
 
                     <Form.Item>
-                        <Tooltip title="Exportar a Excel">
+                        <Tooltip title="Primero debes filtrar.">
                             <button
                                 className="rounded-md p-1"
-                                onClick={() => downloadData({})}
+                                onClick={() => downloadData()}
                             >
                                 {loadingExcel ? (
                                     <Spin indicator={<LoadingOutlined />} />
@@ -378,6 +384,183 @@ export default function RegistrationsDashboard() {
                             </button>
                         </Tooltip>
                     </Form.Item>
+                    <Drawer title="Filtros" onClose={onClose} open={open}>
+                        <Form
+                            layout="inline"
+                            className="flex flex-col gap-y-4"
+                            style={{ minWidth: 200 }}
+                            onFinish={getInscriptionsWithFiltersForm}
+                        >
+                            <Form.Item
+                                name="productIds"
+                                className="text-black w-full"
+                            >
+                                <Select
+                                    className="text-black"
+                                    placeholder="Filtrar por producto"
+                                    allowClear
+                                    showSearch
+                                    style={{ minWidth: 200 }} // Ajustar el ancho mínimo
+                                    mode="multiple"
+                                >
+                                    {fullData
+                                        .reduce(
+                                            (
+                                                uniqueProducts: ProductType[],
+                                                data
+                                            ) => {
+                                                if (
+                                                    !uniqueProducts.some(
+                                                        (product) =>
+                                                            product.id ===
+                                                            data.product.id
+                                                    )
+                                                ) {
+                                                    uniqueProducts.push(
+                                                        data.product
+                                                    );
+                                                }
+                                                return uniqueProducts;
+                                            },
+                                            []
+                                        )
+                                        .map((product: ProductType) => (
+                                            <Select.Option
+                                                key={product.id}
+                                                value={product.id}
+                                            >
+                                                {product.name}
+                                            </Select.Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+
+                            {/* Por categoria */}
+                            <Form.Item
+                                name="categoriesIds"
+                                className="text-black w-full"
+                            >
+                                <Select
+                                    className="text-black"
+                                    placeholder="Filtrar por categoría"
+                                    allowClear
+                                    showSearch
+                                    style={{ minWidth: 200 }}
+                                    mode="multiple"
+                                >
+                                    {fullData
+                                        .reduce((uniqueCategories: any[], data) => {
+                                            if (
+                                                !uniqueCategories.some(
+                                                    (category) =>
+                                                        category.id ===
+                                                        data.product.category.id
+                                                )
+                                            ) {
+                                                uniqueCategories.push(
+                                                    data.product.category
+                                                );
+                                            }
+                                            return uniqueCategories;
+                                        }, [])
+                                        .map((category: CategoryType) => (
+                                            <Select.Option
+                                                key={category.id}
+                                                value={category.id}
+                                            >
+                                                {category.name}
+                                            </Select.Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+
+                            {/* Por sede */}
+                            <Form.Item
+                                name="campusesIds"
+                                className="text-black w-full"
+                            >
+                                <Select
+                                    className="text-black"
+                                    placeholder="Filtrar por campus"
+                                    allowClear
+                                    showSearch
+                                    style={{ minWidth: 200 }}
+                                    mode="multiple"
+                                >
+                                    {fullData
+                                        .reduce((uniqueCampuses: any[], data) => {
+                                            data.product.campuses.forEach(
+                                                (campus) => {
+                                                    if (
+                                                        !uniqueCampuses.some(
+                                                            (c) =>
+                                                                c.id === campus.id
+                                                        )
+                                                    ) {
+                                                        uniqueCampuses.push(campus);
+                                                    }
+                                                }
+                                            );
+                                            return uniqueCampuses;
+                                        }, [])
+                                        .map((campus: CampusType) => (
+                                            <Select.Option
+                                                key={campus.id}
+                                                value={campus.id}
+                                            >
+                                                {campus.name}
+                                            </Select.Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+                            {/* Botón de descarga */}
+                            <div className="flex items-center justify-between max-sm:flex-col">
+                                <Form.Item className="max-sm:w-full">
+                                    <button
+                                        type="submit"
+                                        className="rounded-md p-1 w-full"
+                                    >
+                                        {loadingFilters ? (
+                                            <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                                <Spin
+                                                    indicator={<LoadingOutlined />}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                                <IoSend className="text-xl" />
+                                                <span>Aplicar filtros</span>
+                                            </div>
+                                        )}
+                                    </button>
+                                </Form.Item>
+
+                                <Form.Item className="max-sm:w-full">
+                                    <Tooltip title="Primero debes filtrar."
+                                        placement="bottom"
+                                    >
+                                        <button
+                                            className="rounded-md p-1 w-full"
+                                            onClick={() => downloadData()}
+                                        >
+                                            {loadingExcel ? (
+                                                <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
+                                                    <Spin
+                                                        indicator={<LoadingOutlined />}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center justify-center gap-x-2 border hover:border-green-600 rounded-lg px-4 py-2 hover:text-green-600">
+                                                    <IoDownload className="text-xl" />
+                                                    <span>Exportar a Excel</span>
+                                                </div>
+                                            )}
+                                        </button>
+                                    </Tooltip>
+                                </Form.Item>
+                            </div>
+                        </Form>
+                    </Drawer>
                 </Form>
 
                 {/* Drawer */}
@@ -388,179 +571,7 @@ export default function RegistrationsDashboard() {
                     <BiSliderAlt />
                     <h2 className="text-sm">Filtros</h2>
                 </Button>
-                <Drawer title="Filtros" onClose={onClose} open={open}>
-                    <Form
-                        layout="inline"
-                        className="flex flex-col gap-y-4"
-                        style={{ minWidth: 200 }}
-                        onFinish={getInscriptionsWithFiltersForm}
-                    >
-                        <Form.Item
-                            name="productIds"
-                            className="text-black w-full"
-                        >
-                            <Select
-                                className="text-black"
-                                placeholder="Filtrar por producto"
-                                allowClear
-                                showSearch
-                                style={{ minWidth: 200 }} // Ajustar el ancho mínimo
-                                mode="multiple"
-                            >
-                                {fullData
-                                    .reduce(
-                                        (
-                                            uniqueProducts: ProductType[],
-                                            data
-                                        ) => {
-                                            if (
-                                                !uniqueProducts.some(
-                                                    (product) =>
-                                                        product.id ===
-                                                        data.product.id
-                                                )
-                                            ) {
-                                                uniqueProducts.push(
-                                                    data.product
-                                                );
-                                            }
-                                            return uniqueProducts;
-                                        },
-                                        []
-                                    )
-                                    .map((product: ProductType) => (
-                                        <Select.Option
-                                            key={product.id}
-                                            value={product.id}
-                                        >
-                                            {product.name}
-                                        </Select.Option>
-                                    ))}
-                            </Select>
-                        </Form.Item>
 
-                        {/* Por categoria */}
-                        <Form.Item
-                            name="categoriesIds"
-                            className="text-black w-full"
-                        >
-                            <Select
-                                className="text-black"
-                                placeholder="Filtrar por categoría"
-                                allowClear
-                                showSearch
-                                style={{ minWidth: 200 }}
-                                mode="multiple"
-                            >
-                                {fullData
-                                    .reduce((uniqueCategories: any[], data) => {
-                                        if (
-                                            !uniqueCategories.some(
-                                                (category) =>
-                                                    category.id ===
-                                                    data.product.category.id
-                                            )
-                                        ) {
-                                            uniqueCategories.push(
-                                                data.product.category
-                                            );
-                                        }
-                                        return uniqueCategories;
-                                    }, [])
-                                    .map((category: CategoryType) => (
-                                        <Select.Option
-                                            key={category.id}
-                                            value={category.id}
-                                        >
-                                            {category.name}
-                                        </Select.Option>
-                                    ))}
-                            </Select>
-                        </Form.Item>
-
-                        {/* Por sede */}
-                        <Form.Item
-                            name="campusesIds"
-                            className="text-black w-full"
-                        >
-                            <Select
-                                className="text-black"
-                                placeholder="Filtrar por campus"
-                                allowClear
-                                showSearch
-                                style={{ minWidth: 200 }}
-                                mode="multiple"
-                            >
-                                {fullData
-                                    .reduce((uniqueCampuses: any[], data) => {
-                                        data.product.campuses.forEach(
-                                            (campus) => {
-                                                if (
-                                                    !uniqueCampuses.some(
-                                                        (c) =>
-                                                            c.id === campus.id
-                                                    )
-                                                ) {
-                                                    uniqueCampuses.push(campus);
-                                                }
-                                            }
-                                        );
-                                        return uniqueCampuses;
-                                    }, [])
-                                    .map((campus: CampusType) => (
-                                        <Select.Option
-                                            key={campus.id}
-                                            value={campus.id}
-                                        >
-                                            {campus.name}
-                                        </Select.Option>
-                                    ))}
-                            </Select>
-                        </Form.Item>
-                        {/* Botón de descarga */}
-                        <div className="flex items-center justify-between max-sm:flex-col">
-                            <Form.Item className="max-sm:w-full">
-                                <button
-                                    type="submit"
-                                    className="rounded-md p-1 w-full"
-                                >
-                                    {loadingFilters ? (
-                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
-                                            <Spin
-                                                indicator={<LoadingOutlined />}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
-                                            <IoSend className="text-xl" />
-                                            <span>Aplicar filtros</span>
-                                        </div>
-                                    )}
-                                </button>
-                            </Form.Item>
-
-                            <Form.Item className="max-sm:w-full">
-                                <button
-                                    className="rounded-md p-1 w-full"
-                                    onClick={() => downloadData({})}
-                                >
-                                    {loadingExcel ? (
-                                        <div className="flex items-center justify-center gap-x-2 border hover:border-blue-500 rounded-lg px-4 py-2 hover:text-blue-500">
-                                            <Spin
-                                                indicator={<LoadingOutlined />}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center justify-center gap-x-2 border hover:border-green-600 rounded-lg px-4 py-2 hover:text-green-600">
-                                            <IoDownload className="text-xl" />
-                                            <span>Exportar a Excel</span>
-                                        </div>
-                                    )}
-                                </button>
-                            </Form.Item>
-                        </div>
-                    </Form>
-                </Drawer>
                 {/* Drawer */}
             </div>
 
@@ -609,17 +620,20 @@ export default function RegistrationsDashboard() {
                                 className="bg-white border-b hover:bg-gray-50"
                             >
                                 <td className="px-6 py-4">
-                                    {user.inscriptionDate}
+                                    {inscriptionDateFormated(user.inscriptionDate)}
                                 </td>
                                 <td className="px-6 py-4">
                                     {user.product.name}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {user.product.campuses.map(
-                                        (campus) => campus.name
-                                    )}{" "}
-                                    / {user.product.category.name}
-                                    <div className="font-normal text-gray-500"></div>
+                                    {user.product.campuses.map((campus, index) => (
+                                        <span key={campus.id}>
+                                            {campus.name}
+                                            {index !== user.product.campuses.length - 1 && ", "}
+                                        </span>
+                                    ))}
+                                    {" / "}
+                                    {user.product.category.name}
                                 </td>
                                 <td className="px-6 py-4">
                                     {user.children.name}{" "}
