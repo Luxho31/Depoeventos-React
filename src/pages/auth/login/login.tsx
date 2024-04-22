@@ -1,6 +1,7 @@
 import { Form, Input, Spin } from "antd";
 import { Link } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
+import loginIMG from "../../../assets/auth/loginIMG.jpg";
 import { useAuth } from "../../../context/AuthProvider";
 
 // React Icons
@@ -54,7 +55,7 @@ export default function Login() {
             <Toaster richColors />
             <img
                 className="w-1/4 h-screen object-cover max-md:hidden"
-                src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
+                src={loginIMG}
                 alt=""
             />
             <div className="md:absolute top-5 left-5">

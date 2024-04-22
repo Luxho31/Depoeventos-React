@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
+import registerIMG from "../../../assets/auth/registerIMG.jpg";
 
 import {
   DatePicker,
@@ -128,7 +129,7 @@ export default function Register() {
       {/* <div className="w-1/4 h-screen object-cover max-md:hidden"> */}
       <img
         className="w-1/4 h-screen object-cover max-md:hidden relative"
-        src="https://media.tenor.com/FWAw0kfPBZoAAAAM/regular-show-rigby.gif"
+        src={registerIMG}
         alt=""
       />
       <div className="md:absolute top-5 left-5">

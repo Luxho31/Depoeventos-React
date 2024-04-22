@@ -1,6 +1,7 @@
 import { Form, Input, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
+import changePasswordIMG from "../../../assets/auth/changePasswordIMG.jpg";
 
 // React Icons
 import { LoadingOutlined } from "@ant-design/icons";
@@ -63,7 +64,7 @@ export default function ChangePassword() {
             <Toaster duration={5000} richColors />
             <img
                 className="w-1/4 h-screen object-cover max-md:hidden"
-                src="https://media.tenor.com/AM6-qYuMWs8AAAAC/bully-maguire-emo-peter-parker.gif"
+                src={changePasswordIMG}
                 alt=""
             />
             <div className="md:absolute top-5 left-5">
