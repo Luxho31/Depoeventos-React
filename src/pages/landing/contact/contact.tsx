@@ -21,6 +21,8 @@ export default function Contact() {
 
   const [loading, setLoading] = useState(false);
 
+  const [disableButton, setDisableButton] = useState(true);
+
   const handleSendMessage = async (values: any) => {
     try {
       setLoading(true);
@@ -72,7 +74,7 @@ export default function Contact() {
         <Form
           name="contact-us"
           onFinish={handleSendMessage}
-          onFinishFailed={() => {}}
+          onFinishFailed={() => { }}
           className="max-w-lg mx-auto"
           ref={(ref) => (formRef.current = ref)}
         >
@@ -159,9 +161,16 @@ export default function Contact() {
                 message: "Debes aceptar las políticas de privacidad",
               },
             ]}
+
           >
-            <Checkbox>
-              He leído y acepto las políticas de privacidad{" "}
+            <Checkbox onChange={
+              (e) => {
+                setDisableButton(!e.target.checked)
+              }
+            }>
+              He leído y acepto las{" "}
+              <a href="" target="_blank" className="font-semibold text-blue-500 hover:text-blue-700">políticas de privacidad</a>
+              {" "}
               <span className="text-red-500">*</span>
             </Checkbox>
           </Form.Item>
@@ -171,7 +180,7 @@ export default function Contact() {
             <button
               type="submit"
               className="w-full md:w-72 h-14 bg-[#5aa8c4] text-white font-semibold rounded-md p-4"
-              disabled={loading}
+              disabled={loading || disableButton}
             >
               {loading ? (
                 <Spin
