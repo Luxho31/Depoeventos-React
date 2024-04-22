@@ -124,7 +124,7 @@ export default function Cart() {
                   onChange={() => setDisabledTerms(!disabledTerms)}
                   disabled={loading}
                 >
-                  Acepto{" "}
+                  He leído y aceptos los {" "}
                   <a
                     className="text-blue-500 font-semibold hover:text-blue-700"
                     href={Terminos}
