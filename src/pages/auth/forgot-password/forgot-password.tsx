@@ -1,6 +1,7 @@
 import { Form, Input, Spin } from "antd";
 import { Link } from "react-router-dom";
 import LogoIcon from "../../../assets/image/logo.png";
+import forgotPasswordIMG from "../../../assets/auth/forgotPasswordIMG.jpg";
 
 // React Icons
 import { LoadingOutlined } from "@ant-design/icons";
@@ -45,7 +46,7 @@ export default function ForgotPassword() {
             <Toaster richColors />
             <img
                 className="w-1/4 h-screen object-cover max-md:hidden"
-                src="https://i.makeagif.com/media/2-09-2019/vTwzr3.gif"
+                src={forgotPasswordIMG}
                 alt=""
             />
             <div className="md:absolute top-5 left-5">

@@ -3,6 +3,7 @@ import { Checkbox, Form, FormInstance, Input, Select, Spin } from "antd";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { sendMessage } from "../../../services/contact-us-service";
+import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
 
 // type ContactUsType = {
 //   fullName: string;
@@ -187,7 +188,7 @@ export default function Contact() {
       <div className="lg:w-1/2 max-xl:hidden flex justify-center h-[34rem] relative">
         <div className="bg-gray-200 rounded-lg h-[80%] lg:h-full w-[70%] absolute -z-50"></div>
         <img
-          src="https://www.gifcen.com/wp-content/uploads/2023/08/avengers-gif-6.gif"
+          src={contactUsIMG}
           alt="Mike Wazowski"
           className="rounded-tl-full rounded-br-full w-[70%] object-cover"
         />
