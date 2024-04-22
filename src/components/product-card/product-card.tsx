@@ -50,12 +50,12 @@ export default function ProductCard({ product, onClick }: CardProps) {
   const courseNames =
     product.courses.length > 3
       ? product.courses
-          .slice(0, 3)
-          .map((course: { name: string }) => course.name)
-          .join(", ") + "..."
-      : product.courses
-          .map((course: { name: string }) => course.name)
-          .join(", ");
+        .slice(0, 3)
+        .map((course) => course.name)
+        .join(", ") + "..."
+      : product.courses.length === 1
+        ? ""
+        : product.courses.map((course) => course.name).join(", ");
 
   function formatAges(ages: string[]): string {
     return ages
@@ -75,7 +75,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </h3>
       </div>
       <hr className="mt-4" />
-      <p className="mt-6 text-base text-gray-600">{courseNames}</p>
+      <p className="mt-6 text-xs text-center text-gray-600">{courseNames}</p>
       <ul className="px-4 py-2 sm:px-8 sm:py-4">
         <li className="flex items-center mb-2">
           <div>
@@ -102,19 +102,18 @@ export default function ProductCard({ product, onClick }: CardProps) {
       </ul>
       <div className="w-full flex justify-center">
         <button
-          className={`px-3 py-1 my-2 ${
-            isOutOfDateRange || isOutOfStock
+          className={`px-3 py-1 my-2 ${isOutOfDateRange || isOutOfStock
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
-          } text-sm sm:text-base text-white rounded`}
+            } text-sm sm:text-base text-white rounded`}
           onClick={onClick}
           disabled={isOutOfDateRange || isOutOfStock}
         >
           {isOutOfDateRange
             ? "Fuera de rango de inscripción"
             : isOutOfStock
-            ? "Sin stock"
-            : "Inscribirse"}
+              ? "Sin stock"
+              : "Inscribirse"}
         </button>
       </div>
     </div>

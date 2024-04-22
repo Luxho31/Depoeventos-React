@@ -178,9 +178,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               <div className="text-gray-900 font-bold text-3xl flex items-center gap-x-2 max-sm: ">
                 <div className="flex items-center justify-center max-sm:hidden">
                   <Tooltip
-                    title={`Cupos disponibles: ${
-                      product.maxStudents - product.currentStudents
-                    }`}
+                    title={`Cupos disponibles: ${product.maxStudents - product.currentStudents
+                      }`}
                     placement="top"
                   >
                     <InfoCircleOutlined className="text-base text-gray-500" />
@@ -193,6 +192,15 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 ${product.price}
               </p>
             </div>
+            <p className="text-gray-500 text-md max-sm:text-sm">
+              {product.description.length > 200 ? (
+                <Tooltip title={product.description} placement="top">
+                  {product.description.slice(0, 200) + "..."}
+                </Tooltip>
+              ) : (
+                product.description
+              )}
+            </p>
             <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1">
               {product.campus.length > 1 ? (
                 <li>
