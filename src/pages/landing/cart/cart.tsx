@@ -6,6 +6,7 @@ import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
 import CartTable from "./components/cart-table";
 import PaymentStep from "./components/payment-step";
+import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
 import { Toaster } from "sonner";
 
 export default function Cart() {
@@ -126,7 +127,7 @@ export default function Cart() {
                   Acepto{" "}
                   <a
                     className="text-blue-500 font-semibold hover:text-blue-700"
-                    href="https://drive.google.com/file/d/1zGv_C8JU9NW1gCAww319MkgIIrCe-YLZ/view?usp=sharing "
+                    href={Terminos}
                     target="_blank"
                   >
                     términos y condiciones
