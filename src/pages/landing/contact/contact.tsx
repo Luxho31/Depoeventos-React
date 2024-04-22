@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { sendMessage } from "../../../services/contact-us-service";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
+import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
 
 // type ContactUsType = {
 //   fullName: string;
@@ -169,7 +170,7 @@ export default function Contact() {
               }
             }>
               He leído y acepto las{" "}
-              <a href="" target="_blank" className="font-semibold text-blue-500 hover:text-blue-700">políticas de privacidad</a>
+              <a href={Terminos} target="_blank" className="font-semibold text-blue-500 hover:text-blue-700">políticas de privacidad</a>
               {" "}
               <span className="text-red-500">*</span>
             </Checkbox>
