@@ -172,13 +172,15 @@ export default function RegistrationsDashboard() {
         indexOfLastUser
     );
 
-    type InscriptionFilters = {
-        productIds: number[];
-        campusesIds: number[];
-        categoriesIds: number[];
-        [key: string]: number[];
-    };
-    const getInscriptionsWithFiltersForm = async (values: InscriptionFilters) => {
+    // type InscriptionFilters = {
+    //     productIds: number[];
+    //     campusesIds: number[];
+    //     categoriesIds: number[];
+    //     ages: string[];
+
+    //     [key: string]: number[];
+    // };
+    const getInscriptionsWithFiltersForm = async (values: any) => {
         try {
             setLoadingFilters(true);
             const response = await getInscriptionsWithFilters(values);
@@ -357,6 +359,52 @@ export default function RegistrationsDashboard() {
                                 ))}
                         </Select>
                     </Form.Item>
+
+                    {/* Por edades */}
+                    <Form.Item
+                        name="ages"
+                    >
+                        <Select
+                            mode="multiple"
+                            placeholder="Filtrar por edad"
+                            style={{ minWidth: 200 }}
+                            options={Array.from({ length: 17 }, (_, i) => ({
+                                label: `${i + 1} año(s)`,
+                                value: `${i + 1}`,
+                            }))}
+                        />
+                    </Form.Item>
+
+                    {/* Por grado */}
+                    <Form.Item
+                        name="grades"
+                    >
+                        <Select
+                            placeholder="Filtrar por grado"
+                            mode="multiple"
+                            style={{ minWidth: 200 }}
+                            options={[
+                                { value: "Nido", label: "Nido" },
+                                { value: "Pre-Kinder", label: "Pre-Kinder" },
+                                { value: "Kinder", label: "Kinder" },
+                                { value: "1er grado", label: "1er grado" },
+                                { value: "2do grado", label: "2do grado" },
+                                { value: "3er grado", label: "3er grado" },
+                                { value: "4to grado", label: "4to grado" },
+                                { value: "5to grado", label: "5to grado" },
+                                { value: "6to grado", label: "6to grado" },
+                                { value: "7mo grado", label: "7mo grado" },
+                                { value: "8vo grado", label: "8vo grado" },
+                                { value: "9no grado", label: "9no grado" },
+                                { value: "10mo grado", label: "10mo grado" },
+                                { value: "11vo grado", label: "11vo grado" },
+                                { value: "12vo grado", label: "12vo grado" },
+                            ]}
+                        />
+                    </Form.Item>
+
+
+
                     {/* Botón de descarga */}
                     <Form.Item>
                         <Tooltip title="Aplicar filtros">
@@ -512,6 +560,48 @@ export default function RegistrationsDashboard() {
                                             </Select.Option>
                                         ))}
                                 </Select>
+                            </Form.Item>
+                            {/* Por edades */}
+                            <Form.Item
+                                name="ages"
+                            >
+                                <Select
+                                    mode="multiple"
+                                    placeholder="Filtrar por edad"
+                                    style={{ minWidth: 200 }}
+                                    options={Array.from({ length: 17 }, (_, i) => ({
+                                        label: `${i + 1} año(s)`,
+                                        value: `${i + 1}`,
+                                    }))}
+                                />
+                            </Form.Item>
+
+                            {/* Por grado */}
+                            <Form.Item
+                                name="grades"
+                            >
+                                <Select
+                                    placeholder="Filtrar por grado"
+                                    mode="multiple"
+                                    style={{ minWidth: 200 }}
+                                    options={[
+                                        { value: "Nido", label: "Nido" },
+                                        { value: "Pre-Kinder", label: "Pre-Kinder" },
+                                        { value: "Kinder", label: "Kinder" },
+                                        { value: "1er grado", label: "1er grado" },
+                                        { value: "2do grado", label: "2do grado" },
+                                        { value: "3er grado", label: "3er grado" },
+                                        { value: "4to grado", label: "4to grado" },
+                                        { value: "5to grado", label: "5to grado" },
+                                        { value: "6to grado", label: "6to grado" },
+                                        { value: "7mo grado", label: "7mo grado" },
+                                        { value: "8vo grado", label: "8vo grado" },
+                                        { value: "9no grado", label: "9no grado" },
+                                        { value: "10mo grado", label: "10mo grado" },
+                                        { value: "11vo grado", label: "11vo grado" },
+                                        { value: "12vo grado", label: "12vo grado" },
+                                    ]}
+                                />
                             </Form.Item>
                             {/* Botón de descarga */}
                             <div className="flex items-center justify-between max-sm:flex-col">

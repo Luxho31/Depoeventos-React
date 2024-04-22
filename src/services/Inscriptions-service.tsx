@@ -44,15 +44,15 @@ export const getInscriptionById = async (id: number) => {
   }
 };
 
-type InscriptionFilters = {
-  productIds: number[];
-  campusesIds: number[];
-  categoriesIds: number[];
-  [key: string]: number[];
-};
+// type InscriptionFilters = {
+//   productIds: number[];
+//   campusesIds: number[];
+//   categoriesIds: number[];
+//   [key: string]: number[];
+// };
 
 export const getInscriptionsWithFilters = async (
-  values: InscriptionFilters
+  values: any
 ) => {
   try {
     const queryParams = new URLSearchParams();
