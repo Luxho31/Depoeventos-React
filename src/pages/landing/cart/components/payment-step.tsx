@@ -25,7 +25,7 @@ export default function PaymentStep({ preferenceId }: any) {
     };
   }, []);
 
-  initMercadoPago("TEST-5bbe59f5-ff49-49d3-a879-7529ea4813d0", {
+  initMercadoPago("APP_USR-3ff5b38d-9481-4d03-ad7e-beb179b2c5de", {
     locale: "es-PE",
   });
 

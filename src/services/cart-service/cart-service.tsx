@@ -173,7 +173,7 @@ export const getPaymentInfo = async (paymentId?: number) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer TEST-8021851533821614-032518-5e2291ab742081851d0e8355030bbab8-485417535`,
+          Authorization: `Bearer APP_USR-2950921415816545-041000-cdbbeac3aa53eccdfadbe2a50f88e8db-1195435341`,
         },
       }
     );
