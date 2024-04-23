@@ -514,7 +514,7 @@ export default function Products() {
                                         <Checkbox value="4">4to grado</Checkbox>
                                         <Checkbox value="5">5to grado</Checkbox>
                                         <Checkbox value="6">6to grado</Checkbox>
-                                        <Checkbox value="7">7to grado</Checkbox>
+                                        <Checkbox value="7">7mo grado</Checkbox>
                                         <Checkbox value="8">8vo grado</Checkbox>
                                         <Checkbox value="9">9no grado</Checkbox>
                                         <Checkbox value="10">10mo grado</Checkbox>
