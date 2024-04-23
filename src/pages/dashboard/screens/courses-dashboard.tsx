@@ -125,7 +125,16 @@ export default function CoursesDashboard() {
   }
 
   const inscriptionDateFormated = (inscriptionDate: string) => {
-    return new Date(inscriptionDate).toLocaleDateString();
+    const date = new Date(inscriptionDate.replace(/ PET/, ''));
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+    } else {
+      return "Fecha inválida";
+    }
   }
 
   return (
