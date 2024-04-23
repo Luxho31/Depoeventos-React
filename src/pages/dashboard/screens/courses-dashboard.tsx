@@ -187,7 +187,7 @@ export default function CoursesDashboard() {
                   <>{campusNames(user.product.campuses)}</>
                 </td>
 
-                <td className="px-6 py-4">{categoriesNames(user.product.category)}</td>
+                <td className="px-6 py-4">{categoriesNames(user.product.categories)}</td>
                 <td className="px-6 py-4">
                   {user.children.name} {user.children.lastName}{" "}
                   {user.children.motherLastName}
