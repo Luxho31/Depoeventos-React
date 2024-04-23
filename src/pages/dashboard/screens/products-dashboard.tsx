@@ -147,7 +147,51 @@ export default function DiciplinesDashboard() {
         indexOfFirstUser,
         indexOfLastUser
     );
+    const gradeText = [
+        "1er grado",
+        "2do grado",
+        "3er grado",
+        "4to grado",
+        "5to grado",
+        "6to grado",
+        "7mo grado",
+        "8vo grado",
+        "9no grado",
+        "10mo grado",
+        "11vo grado",
+        "12vo grado",
+        "13vo grado",
+    ];
 
+    const ageText = [
+        "1 año",
+        "2 años",
+        "3 años",
+        "4 años",
+        "5 años",
+        "6 años",
+        "7 años",
+        "8 años",
+        "9 años",
+        "10 años",
+        "11 años",
+        "12 años",
+        "13 años",
+        "14 años",
+        "15 años",
+        "16 años",
+    ];
+
+    const mapGradeToText = (grade: string) => {
+        if (grade === "Kinder" || grade === "Pre-Kinder" || grade === "Nido") return grade;
+        const gradeNumber = parseInt(grade);
+        return gradeText[gradeNumber - 1] || `${gradeNumber}° grado `;
+    };
+
+    const mapAgeToText = (age: string) => {
+        const ageNumber = parseInt(age);
+        return ageText[ageNumber - 1] || `${ageNumber} años`;
+    };
     return (
         <div className="h-screen">
             <button
@@ -248,8 +292,19 @@ export default function DiciplinesDashboard() {
                                 <td className="px-6 py-4">{user.name}</td>
                                 <td className="px-6 py-4">S/.{user.price}</td>
                                 <td className="px-6 py-4">
-                                    {user.grades.join(", ")} -{" "}
-                                    {user.ages.join(", ")}
+                                    {user.grades.map((grade: string, index: any) => (
+                                        <span key={index}>
+                                            {mapGradeToText(grade)}
+                                            {index !== user.grades.length - 1 && ", "}
+                                        </span>
+                                    ))}
+                                    {" - "}
+                                    {user.ages.map((age: string, index: any) => (
+                                        <span key={index}>
+                                            {mapAgeToText(age)}
+                                            {index !== user.ages.length - 1 && ", "}
+                                        </span>
+                                    ))}
                                 </td>
                                 <td className="px-6 py-4">
                                     {user.courses
