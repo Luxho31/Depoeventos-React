@@ -328,20 +328,21 @@ export default function Products() {
                                         }
                                     >
                                         <Checkbox value="Nido">Nido</Checkbox>
-                                        <Checkbox value="Pre-Kinder">
-                                            Pre-Kinder
-                                        </Checkbox>
-                                        <Checkbox value="Kinder">
-                                            Kinder
-                                        </Checkbox>
-                                        {[...Array(12).keys()].map((index) => (
-                                            <Checkbox
-                                                key={`grade-${index + 1}`}
-                                                value={`${index + 1}ro grado`}
-                                            >
-                                                {`${index + 1}ro grado`}
-                                            </Checkbox>
-                                        ))}
+                                        <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
+                                        <Checkbox value="Kinder">Kinder</Checkbox>
+                                        <Checkbox value="1">1er grado</Checkbox>
+                                        <Checkbox value="2">2do grado</Checkbox>
+                                        <Checkbox value="3">3er grado</Checkbox>
+                                        <Checkbox value="4">4to grado</Checkbox>
+                                        <Checkbox value="5">5to grado</Checkbox>
+                                        <Checkbox value="6">6to grado</Checkbox>
+                                        <Checkbox value="7">7to grado</Checkbox>
+                                        <Checkbox value="8">8vo grado</Checkbox>
+                                        <Checkbox value="9">9no grado</Checkbox>
+                                        <Checkbox value="10">10mo grado</Checkbox>
+                                        <Checkbox value="11">11vo grado</Checkbox>
+                                        <Checkbox value="12">12vo grado</Checkbox>
+                                        
                                     </Checkbox.Group>
                                 </div>
                             </Panel>
@@ -507,20 +508,20 @@ export default function Products() {
                                         }
                                     >
                                         <Checkbox value="Nido">Nido</Checkbox>
-                                        <Checkbox value="Pre-Kinder">
-                                            Pre-Kinder
-                                        </Checkbox>
-                                        <Checkbox value="Kinder">
-                                            Kinder
-                                        </Checkbox>
-                                        {[...Array(12).keys()].map((index) => (
-                                            <Checkbox
-                                                key={`grade-${index + 1}`}
-                                                value={`${index + 1}ro grado`}
-                                            >
-                                                {`${index + 1}ro grado`}
-                                            </Checkbox>
-                                        ))}
+                                        <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
+                                        <Checkbox value="Kinder">Kinder</Checkbox>
+                                        <Checkbox value="1">1er grado</Checkbox>
+                                        <Checkbox value="2">2do grado</Checkbox>
+                                        <Checkbox value="3">3er grado</Checkbox>
+                                        <Checkbox value="4">4to grado</Checkbox>
+                                        <Checkbox value="5">5to grado</Checkbox>
+                                        <Checkbox value="6">6to grado</Checkbox>
+                                        <Checkbox value="7">7mo grado</Checkbox>
+                                        <Checkbox value="8">8vo grado</Checkbox>
+                                        <Checkbox value="9">9no grado</Checkbox>
+                                        <Checkbox value="10">10mo grado</Checkbox>
+                                        <Checkbox value="11">11vo grado</Checkbox>
+                                        <Checkbox value="12">12vo grado</Checkbox>
                                     </Checkbox.Group>
                                 </div>
                             </Panel>
