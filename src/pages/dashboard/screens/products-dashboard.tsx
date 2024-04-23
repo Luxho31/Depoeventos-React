@@ -109,6 +109,7 @@ export default function DiciplinesDashboard() {
         }
     };
 
+
     const openCreateProductModal = () => {
         setOpenCreateModal(true);
     };
@@ -239,7 +240,7 @@ export default function DiciplinesDashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers.map((user:any, index) => (
+                        {currentUsers.map((user: any, index) => (
                             <tr
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"

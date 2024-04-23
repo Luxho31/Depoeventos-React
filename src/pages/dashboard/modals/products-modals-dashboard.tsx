@@ -14,8 +14,8 @@ import {
   message,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import moment from "moment";
 import Compressor from "compressorjs";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import {
   createProduct,
