@@ -2,32 +2,32 @@ import { generalRoutes } from "../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-type CampusType = {
-  id: number;
-};
+// type CampusType = {
+//   id: number;
+// };
 
-type CategoryType = {
-  id: number;
-};
+// type CategoryType = {
+//   id: number;
+// };
 
-type CourseType = {
-  id: number;
-};
+// type CourseType = {
+//   id: number;
+// };
 
-type productType = {
-  name: string;
-  description: string;
-  price: number;
-  startDate: string;
-  endDate: string;
-  maxStudents: number;
-  campus: CampusType[];
-  category: CategoryType[];
-  products: CourseType[];
-  gender: string;
-  ages: string[];
-  grades: string[];
-};
+// type productType = {
+//   name: string;
+//   description: string;
+//   price: number;
+//   startDate: string;
+//   endDate: string;
+//   maxStudents: number;
+//   campus: CampusType[];
+//   category: CategoryType[];
+//   products: CourseType[];
+//   gender: string;
+//   ages: string[];
+//   grades: string[];
+// };
 
 export const createProduct = async (form: any) => {
   try {
