@@ -91,7 +91,6 @@ export default function ProductModal({
     undefined
   );
   const [selectedDisciplineIds, setSelectedDisciplineIds] = useState<Product[]>([]);
-  // const [selectedDisciplineNames, setSelectedDisciplineNames] = useState<Product[]>([]);
 
   const [form] = Form.useForm();
 
