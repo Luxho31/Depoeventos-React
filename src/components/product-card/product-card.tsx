@@ -25,6 +25,7 @@ type Product = {
   courses: Course[];
   ages: string[];
   grades: string[];
+  gender: string;
 };
 
 type Course = {
@@ -127,7 +128,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </li>
         <li className="flex items-center">
           <FaCheck className="text-green-700 text-xs" />
-          <p className="ml-2 text-sm sm:ml-4">{gradesNames}</p>
+          <p className="ml-2 text-sm sm:ml-4">{gradesNames}{" "}({product.gender})</p>
         </li>
       </ul>
       <div className="w-full flex justify-center">
