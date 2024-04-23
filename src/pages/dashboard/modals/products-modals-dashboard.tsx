@@ -90,14 +90,14 @@ export default function ProductModal({
   const [photoPreview, setPhotoPreview] = useState<string | undefined>(
     undefined
   );
-  const [selectedDisciplineIds, setSelectedDisciplineIds] = useState<Product[]>(
-    []
-  );
+  const [selectedDisciplineIds, setSelectedDisciplineIds] = useState<Product[]>([]);
+  // const [selectedDisciplineNames, setSelectedDisciplineNames] = useState<Product[]>([]);
 
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (id) getProductByIdForm(id);
+    if (id) { getProductByIdForm(id); };
+
     setPhoto(photo);
     handleReload();
   }, [id]);
@@ -116,6 +116,16 @@ export default function ProductModal({
       console.log("Producto obtenido:", product);
       setPhoto(product.photo);
       console.log(product.location);
+      setSelectedDisciplineIds(product.coursesWithSchedules.map((course: any) => course.courseId));
+      for (let discipline of product.coursesWithSchedules) {
+        console.log(discipline);
+        form.setFieldsValue({
+          [`days_${discipline.courseId}`]: discipline.schedules[0].days,
+          [`startHour_${discipline.courseId}`]: discipline.schedules[0].startHour,
+          [`endHour_${discipline.courseId}`]: discipline.schedules[0].endHour,
+        });
+      }
+
       form.setFieldsValue({
         name: product.name,
         description: product.description,
@@ -456,8 +466,9 @@ export default function ProductModal({
                   { required: true, message: "Seleccione al menos un día" },
                 ]}
                 className="md:w-full"
+
               >
-                <Select mode="multiple" style={{ width: "100%" }}>
+                <Select mode="multiple" style={{ width: "100%" }} disabled={type === "see"}>
                   <Select.Option value="1">Lunes</Select.Option>
                   <Select.Option value="2">Martes</Select.Option>
                   <Select.Option value="3">Miércoles</Select.Option>
@@ -480,7 +491,7 @@ export default function ProductModal({
                   ]}
                   className="w-full"
                 >
-                  <Select placeholder="Selecciona la hora de inicio" allowClear>
+                  <Select placeholder="Selecciona la hora de inicio" allowClear disabled={type === "see"}>
                     {generateOptions()}
                   </Select>
                 </Form.Item>
@@ -496,7 +507,7 @@ export default function ProductModal({
                   ]}
                   className="w-full"
                 >
-                  <Select placeholder="Selecciona la hora de inicio" allowClear>
+                  <Select placeholder="Selecciona la hora de inicio" allowClear disabled={type === "see"}>
                     {generateOptions()}
                   </Select>
                 </Form.Item>
