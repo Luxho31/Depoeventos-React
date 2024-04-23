@@ -105,7 +105,7 @@ export default function Products() {
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const productsPerPage: number = 5;
+    const productsPerPage: number = 6;
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
