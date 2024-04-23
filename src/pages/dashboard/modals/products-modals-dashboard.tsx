@@ -203,6 +203,12 @@ export default function ProductModal({
         price: values.price,
         coursesWithSchedules,
       };
+
+      if (productImage) {
+        await handleImageUpload(id!, productImage);
+        setPhoto(values.photo);
+      }
+
       await updateProduct(formData, id);
       setOpen(false);
       handleReload()
