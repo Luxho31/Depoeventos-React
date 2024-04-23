@@ -62,7 +62,35 @@ export default function ProductCard({ product, onClick }: CardProps) {
       .map((age) => `${age} ${parseInt(age) === 1 ? "año" : "años"}`)
       .join(", ");
   }
+
+  function formatGrades(grades: string[]): string {
+    const gradeNames: any = {
+      "1": "1er grado",
+      "2": "2do grado",
+      "3": "3er grado",
+      "4": "4to grado",
+      "5": "5to grado",
+      "6": "6to grado",
+      "7": "7mo grado",
+      "8": "8vo grado",
+      "9": "9no grado",
+      "10": "10mo grado",
+      "11": "11vo grado",
+      "12": "12vo grado",
+      "13": "13vo grado",
+      "14": "14vo grado",
+      "15": "15vo grado",
+
+      "Nido": "Nido",
+      "Pre-kinder": "Pre-kinder",
+      "Kinder": "Kinder",
+    };
+
+    return grades.map((grade: any) => gradeNames[grade] || grade).join(", ");
+  }
+
   const agesNames = formatAges(product.ages);
+  const gradesNames = formatGrades(product.grades);
 
   return (
     <div className="relative overflow-hidden bg-white shadow-md rounded-xl h-full p-4 sm:p-9">
@@ -90,8 +118,8 @@ export default function ProductCard({ product, onClick }: CardProps) {
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
           <p className="ml-2 text-sm sm:ml-4">{product.categories
-              .map((category: { name: string }) => category.name)
-              .join(", ")}</p>
+            .map((category: { name: string }) => category.name)
+            .join(", ")}</p>
         </li>
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
@@ -99,14 +127,14 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </li>
         <li className="flex items-center">
           <FaCheck className="text-green-700 text-xs" />
-          <p className="ml-2 text-sm sm:ml-4">{product.grades.join(", ")}</p>
+          <p className="ml-2 text-sm sm:ml-4">{gradesNames}</p>
         </li>
       </ul>
       <div className="w-full flex justify-center">
         <button
           className={`px-3 py-1 my-2 ${isOutOfDateRange || isOutOfStock
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-600"
             } text-sm sm:text-base text-white rounded`}
           onClick={onClick}
           disabled={isOutOfDateRange || isOutOfStock}
