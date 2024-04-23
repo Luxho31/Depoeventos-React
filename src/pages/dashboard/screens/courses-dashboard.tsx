@@ -125,7 +125,16 @@ export default function CoursesDashboard() {
   }
 
   const inscriptionDateFormated = (inscriptionDate: string) => {
-    return new Date(inscriptionDate).toLocaleDateString();
+    const date = new Date(inscriptionDate.replace(/ PET/, ''));
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+    } else {
+      return "Fecha inválida";
+    }
   }
 
   return (
@@ -187,7 +196,7 @@ export default function CoursesDashboard() {
                   <>{campusNames(user.product.campuses)}</>
                 </td>
 
-                <td className="px-6 py-4">{categoriesNames(user.product.category)}</td>
+                <td className="px-6 py-4">{categoriesNames(user.product.categories)}</td>
                 <td className="px-6 py-4">
                   {user.children.name} {user.children.lastName}{" "}
                   {user.children.motherLastName}
