@@ -32,10 +32,10 @@ type ProductType = {
             name?: string;
         }
     ];
-    category: {
+    categories: [{
         id?: number;
         name?: string;
-    };
+    }];
 };
 
 type ChildrenType = {
@@ -294,7 +294,7 @@ export default function RegistrationsDashboard() {
                     <Form.Item name="categoriesIds" className="text-black">
                         <Select
                             className="text-black"
-                            placeholder="Filtrar por categoría"
+                            placeholder="Filtrar por categoria"
                             allowClear
                             showSearch
                             style={{ minWidth: 200 }}
@@ -302,17 +302,15 @@ export default function RegistrationsDashboard() {
                         >
                             {fullData
                                 .reduce((uniqueCategories: any[], data) => {
-                                    if (
-                                        !uniqueCategories.some(
-                                            (category) =>
-                                                category.id ===
-                                                data.product.category.id
-                                        )
-                                    ) {
-                                        uniqueCategories.push(
-                                            data.product.category
-                                        );
-                                    }
+                                    data.product.categories.forEach((category) => {
+                                        if (
+                                            !uniqueCategories.some(
+                                                (c) => c.id === category.id
+                                            )
+                                        ) {
+                                            uniqueCategories.push(category);
+                                        }
+                                    });
                                     return uniqueCategories;
                                 }, [])
                                 .map((category: CategoryType) => (
@@ -484,13 +482,10 @@ export default function RegistrationsDashboard() {
                             </Form.Item>
 
                             {/* Por categoria */}
-                            <Form.Item
-                                name="categoriesIds"
-                                className="text-black w-full"
-                            >
+                            <Form.Item name="categoriesIds" className="text-black">
                                 <Select
                                     className="text-black"
-                                    placeholder="Filtrar por categoría"
+                                    placeholder="Filtrar por categoria"
                                     allowClear
                                     showSearch
                                     style={{ minWidth: 200 }}
@@ -498,17 +493,15 @@ export default function RegistrationsDashboard() {
                                 >
                                     {fullData
                                         .reduce((uniqueCategories: any[], data) => {
-                                            if (
-                                                !uniqueCategories.some(
-                                                    (category) =>
-                                                        category.id ===
-                                                        data.product.category.id
-                                                )
-                                            ) {
-                                                uniqueCategories.push(
-                                                    data.product.category
-                                                );
-                                            }
+                                            data.product.categories.forEach((category) => {
+                                                if (
+                                                    !uniqueCategories.some(
+                                                        (c) => c.id === category.id
+                                                    )
+                                                ) {
+                                                    uniqueCategories.push(category);
+                                                }
+                                            });
                                             return uniqueCategories;
                                         }, [])
                                         .map((category: CategoryType) => (
@@ -723,7 +716,13 @@ export default function RegistrationsDashboard() {
                                         </span>
                                     ))}
                                     {" / "}
-                                    {user.product.category.name}
+                                    {user.product.categories.map((category: any, index: any) => (
+                                        <span key={category.id}>
+                                            {category.name}
+                                            {index !== user.product.categories.length - 1 && ", "}
+                                        </span>
+                                    ))}
+
                                 </td>
                                 <td className="px-6 py-4">
                                     {user.children.name}{" "}

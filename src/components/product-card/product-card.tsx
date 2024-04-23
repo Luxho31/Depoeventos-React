@@ -15,11 +15,11 @@ type Product = {
     name: string;
     description: string;
   }[];
-  category: {
+  categories: {
     id: number;
     name: string;
     description: string;
-  };
+  }[];
   startDateInscription: string;
   endDateInscription: string;
   courses: Course[];
@@ -89,7 +89,9 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </li>
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
-          <p className="ml-2 text-sm sm:ml-4">{product.category.name}</p>
+          <p className="ml-2 text-sm sm:ml-4">{product.categories
+              .map((category: { name: string }) => category.name)
+              .join(", ")}</p>
         </li>
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />

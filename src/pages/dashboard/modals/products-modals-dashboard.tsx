@@ -121,7 +121,7 @@ export default function ProductModal({
         description: product.description,
         maxStudents: product.maxStudents,
         price: product.price,
-        categoryId: product.category.id,
+        categoryId: product.categories.map((category: Category) => category.id),
         startDate: moment(product.startDate),
         endDate: moment(product.endDate),
         coursesId: product.courses.map((course: Course) => course.id),
@@ -210,7 +210,7 @@ export default function ProductModal({
       const formData = {
         name: values.name,
         description: values.description,
-        categoryId: values.categoryId,
+        categoriesId: values.categoryId,
         campusesId: values.campusesId,
         gender: values.gender,
         grades: values.grades,
@@ -224,6 +224,7 @@ export default function ProductModal({
         coursesWithSchedules,
       };
 
+      console.log(formData);
       const productId = await createProduct(formData);
       if (productImage) {
         await handleImageUpload(productId.id, productImage);
@@ -336,7 +337,7 @@ export default function ProductModal({
       <Form
         name="productForm"
         onFinish={(values) => chooseMethod(type)(values)}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
@@ -430,12 +431,14 @@ export default function ProductModal({
               className="w-full cursor-text"
             >
               <Select
-                placeholder="Seleccionar Categoria"
+                mode="multiple"
+                allowClear
+                placeholder="Por favor, selecciona las sedes"
                 className="w-full h-14"
-                options={categories.map((category: Category) => {
+                options={categories.map((cat: Category) => {
                   return {
-                    value: category.id,
-                    label: category.name,
+                    value: cat.id,
+                    label: cat.name,
                   };
                 })}
                 disabled={type === "see"}
@@ -719,12 +722,12 @@ export default function ProductModal({
             labelCol={{ span: 24 }}
             className="w-full"
           >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Locación del producto"
-                size="large"
-                disabled={type === "see"}
-              />            
+            <Input
+              className="w-full rounded-xl p-4"
+              placeholder="Locación del producto"
+              size="large"
+              disabled={type === "see"}
+            />
           </Form.Item>
 
           <Form.Item

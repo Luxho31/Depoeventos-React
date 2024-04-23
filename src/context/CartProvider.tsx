@@ -69,7 +69,7 @@ type CartData = {
 
 type CartContextType = {
   products: Product[];
-  addToCart: (product: Product, children: number[]) => Promise<void>;
+  addToCart: (product: any, children: number[]) => Promise<void>;
   getTotalPrice: () => number;
   clearCart: () => void;
   removeProduct: (cartItem: number) => void;

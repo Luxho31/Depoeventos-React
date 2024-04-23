@@ -164,8 +164,10 @@ export default function Products() {
         let filtered = [...productData];
 
         if (selectedCategories.length > 0) {
-            filtered = filtered.filter((product) =>
-                selectedCategories.includes(product.category.id)
+            filtered = filtered.filter((product: any) =>
+                product.categories.some((category: any) =>
+                    selectedCategories.includes(category.id)
+                )
             );
         }
 

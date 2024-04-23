@@ -22,7 +22,7 @@ type productType = {
   endDate: string;
   maxStudents: number;
   campus: CampusType[];
-  category: CategoryType;
+  category: CategoryType[];
   products: CourseType[];
   gender: string;
   ages: string[];
@@ -64,7 +64,7 @@ export const getAllProducts = async () => {
   }
 };
 
-export const updateProduct = async (form: productType, id?: number) => {
+export const updateProduct = async (form: any, id?: number) => {
   try {
     await fetch(`${BASE_URL}/api/products/${id}`, {
       method: "PUT",

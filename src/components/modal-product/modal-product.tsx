@@ -28,9 +28,10 @@ type Product = {
     name: string;
     description: string;
   };
-  category: {
+  categories: {
     id: number;
     name: string;
+    map(arg0: (category: Category) => Category[] | Category): unknown;
     description: string;
   };
   startDateInscription: string;
@@ -40,6 +41,12 @@ type Product = {
 };
 
 type Campus = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+type Category = {
   id: number;
   name: string;
   description: string;
@@ -150,6 +157,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
     product.campus as unknown as { name: string }[]
   ).map((campus) => campus.name);
 
+  const categoriesNames: string[] = (product.categories as unknown as { name: string }[]).map((category) => category.name);
+
   return (
     <motion.div
       className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50 z-50"
@@ -216,7 +225,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
                   : "El curso es impartido en: "}
-                {campusNames.join(", ")} ({product.category.name}) y comprende
+                {campusNames.join(", ")} ({categoriesNames.join(", ")}) y comprende
                 los siguientes grados {product.grades.join(", ")} (
                 {product.ages
                   .sort((a: number, b: number) => a - b)

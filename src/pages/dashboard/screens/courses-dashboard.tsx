@@ -120,6 +120,10 @@ export default function CoursesDashboard() {
     return campuses.map((campus) => campus.name).join(", ");
   };
 
+  const categoriesNames = (categories: any[]) => {
+    return categories.map((category) => category.name).join(", ");
+  }
+
   const inscriptionDateFormated = (inscriptionDate: string) => {
     return new Date(inscriptionDate).toLocaleDateString();
   }
@@ -183,7 +187,7 @@ export default function CoursesDashboard() {
                   <>{campusNames(user.product.campuses)}</>
                 </td>
 
-                <td className="px-6 py-4">{user.product.category.name}</td>
+                <td className="px-6 py-4">{categoriesNames(user.product.category)}</td>
                 <td className="px-6 py-4">
                   {user.children.name} {user.children.lastName}{" "}
                   {user.children.motherLastName}

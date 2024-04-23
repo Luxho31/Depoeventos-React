@@ -239,7 +239,7 @@ export default function DiciplinesDashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers.map((user, index) => (
+                        {currentUsers.map((user:any, index) => (
                             <tr
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
@@ -258,7 +258,9 @@ export default function DiciplinesDashboard() {
                                         .slice(0, 3)}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {user.category.name}{" "}
+                                    {user.categories.map((c: Category) => {
+                                        return <p className="">{c.name}</p>;
+                                    })}
                                     {user.campus.map((c: Category) => {
                                         return <p>{c.name}</p>;
                                     })}
