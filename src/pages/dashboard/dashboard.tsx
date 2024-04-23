@@ -107,7 +107,7 @@ export default function Dashboard() {
       key: "3",
       path: "/dashboard/products",
       icon: <CiBadgeDollar />,
-      label: "Productos FALTA",
+      label: "Productos",
       onClick: () => handleItemClick("/dashboard/products"),
       role: ["ADMIN"],
     },
