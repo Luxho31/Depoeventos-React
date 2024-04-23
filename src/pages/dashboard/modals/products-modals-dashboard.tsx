@@ -153,20 +153,19 @@ export default function ProductModal({
 
   const generateOptions = () => {
     const options = [];
-    for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${String(hour).padStart(2, "0")}:${String(
-          minute
-        ).padStart(2, "0")}`;
-        options.push(
-          <Select.Option key={time} value={time}>
-            {time}
-          </Select.Option>
-        );
-      }
+    for (let hour = 6; hour <= 19; hour++) {
+        const maxMinute = (hour === 19) ? 30 : 60;
+        for (let minute = 0; minute < maxMinute; minute += 30) {
+            const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+            options.push(
+                <Select.Option key={time} value={time}>
+                    {time}
+                </Select.Option>
+            );
+        }
     }
     return options;
-  };
+};
   const updateProductForm = async (values: any) => {
     try {
       setLoading(true);
