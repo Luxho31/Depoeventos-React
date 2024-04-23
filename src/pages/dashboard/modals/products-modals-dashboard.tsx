@@ -205,7 +205,8 @@ export default function ProductModal({
       };
       await updateProduct(formData, id);
       setOpen(false);
-      handleReload();
+      // handleReload()
+      window.location.reload(); //! Arreglar esta parte
     } catch (error) {
       console.error("Error al actualizar un producto:", error);
     } finally {
@@ -827,10 +828,12 @@ export default function ProductModal({
         </div>
 
         {type === "see" && (
-          <div className="w-full flex flex-row justify-between">
+          <div className="w-full flex flex-row gap-x-4 justify-between max-sm:flex-col">
             <Form.Item
               name="startDateInscription"
               label="Inicio de inscripción"
+              labelCol={{ span: 24 }}
+              className="w-full"
             >
               <Input
                 className="w-full rounded-xl p-4"
@@ -839,7 +842,7 @@ export default function ProductModal({
                 disabled={type === "see"}
               />
             </Form.Item>
-            <Form.Item name="endDateInscription" label="Fin de inscripción">
+            <Form.Item name="endDateInscription" label="Fin de inscripción" labelCol={{ span: 24 }} className="w-full">
               <Input
                 className="w-full rounded-xl p-4"
                 placeholder="Nombre del producto"
