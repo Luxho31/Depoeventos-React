@@ -168,23 +168,43 @@ export default function ProductModal({
     }
     return options;
   };
-  const updateProductForm = async (values: Product) => {
+  const updateProductForm = async (values: any) => {
     try {
       setLoading(true);
-      values.startDate = moment(values.startDate).format("YYYY-MM-DD");
-      values.endDate = moment(values.endDate).format("YYYY-MM-DD");
-      // values.photo = "-"
+      values.startDate = new Date(values.startDate).toISOString().split("T")[0];
+      values.endDate = new Date(values.endDate).toISOString().split("T")[0];
+      const coursesWithSchedules = selectedDisciplineIds.map((discipline) => {
+        return {
+          courseId: discipline,
+          schedules: [
+            {
+              days: values[`days_${discipline}`],
+              startHour: values[`startHour_${discipline}`],
+              endHour: values[`endHour_${discipline}`],
+            },
+          ],
+        };
+      });
+      values.startDate = new Date(values.startDate).toISOString().split("T")[0];
+      values.endDate = new Date(values.endDate).toISOString().split("T")[0];
 
-      // let foto = values.photo
-      // console.log(foto);
-
-      await updateProduct(values, id);
-      if (productImage && id !== undefined) {
-        await handleImageUpload(id, productImage);
-        setPhoto(values.photo);
-        getProductByIdForm(id);
-        // handleReload();
-      }
+      const formData = {
+        name: values.name,
+        description: values.description,
+        categoriesId: values.categoryId,
+        campusesId: values.campusesId,
+        gender: values.gender,
+        grades: values.grades,
+        ages: values.ages,
+        photo: values.photo,
+        location: values.location,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        maxStudents: values.maxStudents,
+        price: values.price,
+        coursesWithSchedules,
+      };
+      await updateProduct(formData, id);
       setOpen(false);
       handleReload();
     } catch (error) {
