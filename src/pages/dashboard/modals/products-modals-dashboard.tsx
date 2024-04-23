@@ -205,8 +205,7 @@ export default function ProductModal({
       };
       await updateProduct(formData, id);
       setOpen(false);
-      // handleReload()
-      window.location.reload(); //! Arreglar esta parte
+      handleReload()
     } catch (error) {
       console.error("Error al actualizar un producto:", error);
     } finally {
