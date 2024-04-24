@@ -38,6 +38,7 @@ type Product = {
   endDateInscription: string;
   courses: Course[];
   children: Children;
+  coursesWithSchedules: any[];
 };
 
 type Campus = {
@@ -85,6 +86,19 @@ type ModalProps = {
   product: Product;
   onClose: () => void;
 };
+
+const daysOfWeek: { [key: string]: string } = {
+  '1': 'Lunes',
+  '2': 'Martes',
+  '3': 'Miércoles',
+  '4': 'Jueves',
+  '5': 'Viernes',
+  '6': 'Sábado',
+  '7': 'Domingo'
+};
+
+// Función para traducir los números de los días a nombres
+const getDayName = (dayNumber: any) => daysOfWeek[dayNumber] || 'Día inválido';
 
 export default function ModalProduct({ product, onClose }: ModalProps) {
   const { isAuthenticated, cargando } = useAuth();
@@ -224,7 +238,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               <li>
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
-                  : "El curso es impartido en: "}
+                  : "El curso se dará en: "}
                 {campusNames.join(", ")} ({categoriesNames.join(", ")}) y comprende
                 los siguientes grados {product.grades.join(", ")} (
                 {product.ages
@@ -240,6 +254,29 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 ).
               </li>
             </ul>
+            {
+              product.coursesWithSchedules.map((courseSchedule: any) => {
+                const course = product.courses.find(c => c.id === courseSchedule.courseId);
+
+                return (
+                  <div key={courseSchedule.courseId} className="flex gap-y-2 gap-x-4">
+                    <p className="text-gray-400  max-sm:text-xs">
+                      {course ? `${course.name} -> ` : 'Curso no encontrado'}
+                    </p>
+
+                    <ul className="flex flex-col gap-y-2 text-gray-400  max-sm:text-xs">
+                      {
+                        courseSchedule.schedules.map((schedule: any, index: any) => (
+                          <li key={index}>
+                            {schedule.days.map((day: any) => getDayName(day)).join(', ')} de {schedule.startHour} a {schedule.endHour}
+                          </li>
+                        ))
+                      }
+                    </ul>
+                  </div>
+                );
+              })
+            }
             <div className="mb-4 flex justify-around gap-y-2 max-sm: mt-3">
               <div className="flex gap-x-2 text-gray-600 text-sm max-sm:text-xs max-sm:flex-col">
                 <p className="font-semibold">Inicio de clases:</p>
