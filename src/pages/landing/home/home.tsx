@@ -15,7 +15,7 @@ export default function Home() {
       description:
         "Somos una comunidad educativa católica que forma parte de la Familia Sodálite. Ofrecemos una sólida formación personalizada e integral. Trabajamos en conjunto con la familia, ofreciendo a nuestros alumnos una experiencia educativa diferenciada con espacios de coeducación y altos estándares académicos en un ambiente bilingüe. ",
       logo: "https://educacionalfuturo.com/wp-content/uploads/2018/08/Logo-SP.png",
-      image: "https://www.colsanpedro.com/imagenes/DSC_0014.jpg",
+      image: "https://sanpedro.vc-sp.edu.pe/wp-content/uploads/2023/11/SP-INICIO-CABECERA-02-scaled.jpg",
     },
     {
       id: 2,
