@@ -198,7 +198,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               </div>
 
               <p className="text-green-700 font-bold text-xl">
-                ${product.price}
+                S/.{product.price}
               </p>
             </div>
             <p className="text-gray-500 text-md max-sm:text-sm">
