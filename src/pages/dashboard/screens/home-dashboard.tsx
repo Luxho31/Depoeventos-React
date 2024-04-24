@@ -9,7 +9,7 @@ export default function HomeDashboard() {
         <>
             <div className="flex items-center h-full">
                 <div className="w-[70%] font-mono text-5xl max-md:w-full max-lg:text-4xl">
-                    <p className="">Bienvenido a tu Area Personal</p>
+                    <p className="">Bienvenido a tu área personal</p>
                     {userInfo && (
                         <TypingEffect
                             text={`${userInfo.firstName} ${userInfo.lastName}`}
