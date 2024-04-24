@@ -13,7 +13,7 @@ export default function Home() {
       direction: "La Molina, Lima, Perú",
       title: "Colegio San Pedro",
       description:
-        "Ubicado en una comunidad vibrante, el Colegio San Pedro se destaca por ofrecer una educación integral que nutre el intelecto y el espíritu. Con instalaciones modernas y un compromiso con la excelencia académica, nuestro colegio es un lugar donde los estudiantes florecen y se preparan para enfrentar los desafíos del mundo con confianza y ética.",
+        "Somos una comunidad educativa católica que forma parte de la Familia Sodálite. Ofrecemos una sólida formación personalizada e integral. Trabajamos en conjunto con la familia, ofreciendo a nuestros alumnos una experiencia educativa diferenciada con espacios de coeducación y altos estándares académicos en un ambiente bilingüe. ",
       logo: "https://educacionalfuturo.com/wp-content/uploads/2018/08/Logo-SP.png",
       image: "https://www.colsanpedro.com/imagenes/DSC_0014.jpg",
     },
@@ -22,7 +22,7 @@ export default function Home() {
       direction: "La Molina, Lima, Perú",
       title: "Colegio Villa Caritas",
       description:
-        "En el corazón de la encantadora Villa Caritas, nuestro colegio es un faro de aprendizaje y desarrollo personal. Con un enfoque centrado en los valores y una comunidad educativa acogedora, el Colegio Villa Caritas se esfuerza por inspirar la curiosidad intelectual y fomentar habilidades para la vida en un ambiente enriquecedor y estimulante",
+        "Somos una comunidad educativa católica que forma parte de la Familia Sodálite. Ofrecemos una sólida formación personalizada e integral. Trabajamos en conjunto con la familia, ofreciendo a nuestras alumnas una experiencia educativa diferenciada con espacios de coeducación y altos estándares académicos en un ambiente bilingüe.",
       logo: VillaCaritasIMG,
       image:
         "https://villacaritas.vc-sp.edu.pe/wp-content/uploads/2023/11/IMG_0942.jpg",
