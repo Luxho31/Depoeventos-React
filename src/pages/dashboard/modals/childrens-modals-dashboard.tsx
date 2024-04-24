@@ -52,7 +52,8 @@ export default function ChildrenModal({
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
   const [showCustomSchoolInput, setShowCustomSchoolInput] = useState(false);
-
+  const [showCustomGradeInput, setShowCustomGradeInput] = useState(false);
+  const [showCustomSectionInput, setShowCustomSectionInput] = useState(false);
   // const [form] = Form.useForm();
 
   const [, setUserData] = useState([]);
@@ -73,6 +74,8 @@ export default function ChildrenModal({
     grade?: string;
     section?: string;
     customSchool?: string;
+    customGrade?: string;
+    customSection?: string;
   };
   type ThirdStepType = {
     isClubMember?: boolean;
@@ -101,6 +104,14 @@ export default function ChildrenModal({
 
       if (children.school === "Otro") {
         setShowCustomSchoolInput(true);
+      }
+
+      if (children.grade === "Otro") {
+        setShowCustomGradeInput(true);
+      }
+
+      if (children.section === "Otro") {
+        setShowCustomSectionInput(true);
       }
 
       form1.setFieldsValue({
@@ -140,9 +151,18 @@ export default function ChildrenModal({
       if (values.school === "Otro") {
         values.school = values.customSchool;
       }
+      if (values.grade === "Otro") {
+        values.grade = values.customGrade;
+      }
+      if (values.section === "Otro") {
+        values.section = values.customSection;
+      }
+
       await updateChildren(values, id);
       setOpen(false);
       setShowCustomSchoolInput(false);
+      setShowCustomGradeInput(false);
+      setShowCustomSectionInput(false);
       setIsStudent(false);
       setIsClubMember(false);
       setPaso(1);
@@ -160,6 +180,12 @@ export default function ChildrenModal({
       if (values.school === "Otro") {
         values.school = values.customSchool;
       }
+      if (values.grade === "Otro") {
+        values.grade = values.customGrade;
+      }
+      if (values.section === "Otro") {
+        values.section = values.customSection;
+      }
       await createChildren(values);
       setOpen(false);
       // form.resetFields();
@@ -167,6 +193,8 @@ export default function ChildrenModal({
       form2.resetFields();
       form3.resetFields();
       setShowCustomSchoolInput(false);
+      setShowCustomGradeInput(false);
+      setShowCustomSectionInput(false);
       setIsStudent(false);
       setIsClubMember(false);
       setPaso(1);
@@ -271,6 +299,8 @@ export default function ChildrenModal({
     if (!checked) {
       form2.resetFields();
       setShowCustomSchoolInput(false);
+      setShowCustomGradeInput(false);
+      setShowCustomSectionInput(false);
     }
   };
 
@@ -300,16 +330,15 @@ export default function ChildrenModal({
           // chooseMethod(type)(values);
           onFinishStep1(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         autoComplete="off"
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form1}
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${
-            paso === 1 ? "block" : "hidden"
-          }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${paso === 1 ? "block" : "hidden"
+            }`}
         >
           {/* ------------------Input Nombre Hijo------------------ */}
           <Form.Item<FirstStepType>
@@ -470,10 +499,10 @@ export default function ChildrenModal({
                   selectedDocumentType === "DNI"
                     ? 8
                     : selectedDocumentType === "PASSPORT"
-                    ? 10
-                    : selectedDocumentType === "CARNET DE EXTRANJERIA"
-                    ? 9
-                    : undefined
+                      ? 10
+                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
+                        ? 9
+                        : undefined
                 }
               />
             </Form.Item>
@@ -562,7 +591,7 @@ export default function ChildrenModal({
             <button
               type="submit"
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4"
-              // bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4
+            // bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4
             >
               Siguiente
               <FaArrowRight className="ms-1" />
@@ -583,9 +612,8 @@ export default function ChildrenModal({
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${
-            paso === 2 ? "block" : "hidden"
-          }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${paso === 2 ? "block" : "hidden"
+            }`}
         >
           {/* ------------------Switch ¿Es estudiante?------------------ */}
           <Form.Item<SecondStepType> name="isStudent">
@@ -667,56 +695,151 @@ export default function ChildrenModal({
             </Form.Item>
           )}
 
+
+          {/* -------------------- Nuevo input de grado -------------------- */}
           <div className="flex gap-x-4 max-sm:flex-col">
-            {/* ------------------Input Grado del Hijo------------------ */}
-            <Form.Item<SecondStepType>
-              name="grade"
-              label="Grado"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: isStudent,
-                  message: "Por favor, ingresa el grado del hijo.",
-                },
-                {
-                  max: 50,
-                  message: "El grado es muy largo.",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa el grado del hijo"
-                size="large"
-                disabled={!isStudent}
-              />
-            </Form.Item>
+            <div className="flex flex-col">
+
+
+              <Form.Item<SecondStepType>
+                name="grade"
+                label="Grado del hijo"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: isStudent,
+                    message: isStudent
+                      ? "Por favor, ingresa grado del hijo."
+                      : undefined,
+                  }
+                ]}
+                className="col-span-2 cursor-text"
+              >
+                <Select
+                  placeholder="Grado del Hijo"
+                  className="w-full !h-16"
+                  disabled={!isStudent}
+                  onChange={(value) => {
+                    if (value === "Otro") {
+                      setShowCustomGradeInput(true);
+                    } else {
+                      setShowCustomGradeInput(false);
+                      form2.setFieldsValue({ grade: value });
+                    }
+                  }}
+                >
+                  <Select.Option value="1">1er grado</Select.Option>
+                  <Select.Option value="2">2do grado</Select.Option>
+                  <Select.Option value="3">3er grado</Select.Option>
+                  <Select.Option value="4">4to grado</Select.Option>
+                  <Select.Option value="5">5to grado</Select.Option>
+                  <Select.Option value="6">6to grado</Select.Option>
+                  <Select.Option value="7">7mo grado</Select.Option>
+                  <Select.Option value="8">8vo grado</Select.Option>
+                  <Select.Option value="9">9no grado</Select.Option>
+                  <Select.Option value="10">10mo grado</Select.Option>
+                  <Select.Option value="11">11vo grado</Select.Option>
+                  <Select.Option value="12">12vo grado</Select.Option>
+                  <Select.Option value="Otro">Otro</Select.Option>
+                </Select>
+              </Form.Item>
+
+              {showCustomGradeInput && (
+                <Form.Item<SecondStepType>
+                  name="customGrade"
+                  label="Grado del hijo personalizado"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Por favor, ingrese el grado de la escuela personalizado.",
+                    },
+                    {
+                      max: 50,
+                      message:
+                        "El grado de la escuela personalizado es muy largo.",
+                    },
+                  ]}
+                  className="col-span-2 cursor-text"
+                >
+                  <Input
+                    placeholder="Grado de la Escuela Personalizado"
+                    size="large"
+                  />
+                </Form.Item>
+              )}
+            </div>
+            {/* Fin de input de grado */}
+
+
+            
 
             {/* ------------------Input Sección del Hijo------------------ */}
-            <Form.Item<SecondStepType>
-              name="section"
-              label="Sección"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: isStudent,
-                  message: "Por favor, ingresa la sección del hijo.",
-                },
-                {
-                  max: 50,
-                  message: "La sección es muy larga.",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Ingresa la sección del hijo"
-                size="large"
-                disabled={!isStudent}
-              />
-            </Form.Item>
+            <div className="flex flex-col">
+
+
+              <Form.Item<SecondStepType>
+                name="section"
+                label="Sección del hijo"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: isStudent,
+                    message: isStudent
+                      ? "Por favor, ingresa la sección del hijo."
+                      : undefined,
+                  }
+                ]}
+                className="col-span-2 cursor-text"
+              >
+                <Select
+                  placeholder="Sección del Hijo"
+                  className="w-full !h-16"
+                  disabled={!isStudent}
+                  onChange={(value) => {
+                    if (value === "Otro") {
+                      setShowCustomSectionInput(true);
+                    } else {
+                      setShowCustomSectionInput(false);
+                      form2.setFieldsValue({ section: value });
+                    }
+                  }}
+                >
+                  <Select.Option value="A">A</Select.Option>
+                  <Select.Option value="B">B</Select.Option>
+                  <Select.Option value="C">C</Select.Option>
+                  <Select.Option value="D">D</Select.Option>
+                  <Select.Option value="Otro">Otro</Select.Option>
+                </Select>
+              </Form.Item>
+
+              {showCustomSectionInput && (
+                <Form.Item<SecondStepType>
+                  name="customSection"
+                  label="Sección del hijo personalizado"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Por favor, ingrese la sección de la escuela personalizado.",
+                    },
+                    {
+                      max: 50,
+                      message:
+                        "La sección de la escuela personalizado es muy largo.",
+                    },
+                  ]}
+                  className="col-span-2 cursor-text"
+                >
+                  <Input
+                    placeholder="Sección de la Escuela Personalizado"
+                    size="large"
+                  />
+                </Form.Item>
+              )}
+            </div>
           </div>
         </div>
         {/* ------------------Botón de Siguiente------------------ */}
@@ -726,7 +849,7 @@ export default function ChildrenModal({
               type="button"
               onClick={() => setPaso(paso - 1)}
               className="flex justify-center items-center gap-x-1 font-semibold rounded-xl bg-indigo-300 max-sm:w-full sm:px-14 py-4 duration-300 hover:bg-gray-200 hover:duration-300 hover:animate-pulse"
-              // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
+            // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
             >
               <FaChevronLeft className="text-lg" />
               Regresar
@@ -734,7 +857,7 @@ export default function ChildrenModal({
             <button
               type="submit"
               className="bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4"
-              // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
+            // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
             >
               Siguiente
               <FaArrowRight className="ms-1" />
@@ -755,9 +878,8 @@ export default function ChildrenModal({
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${
-            paso === 3 ? "block" : "hidden"
-          }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${paso === 3 ? "block" : "hidden"
+            }`}
         >
           <div className="flex gap-x-4 max-sm:flex-col">
             {/* ------------------Switch ¿Es miembro de un club?------------------ */}
