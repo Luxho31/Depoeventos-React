@@ -154,18 +154,18 @@ export default function ProductModal({
   const generateOptions = () => {
     const options = [];
     for (let hour = 6; hour <= 19; hour++) {
-        const maxMinute = (hour === 19) ? 30 : 60;
-        for (let minute = 0; minute < maxMinute; minute += 30) {
-            const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-            options.push(
-                <Select.Option key={time} value={time}>
-                    {time}
-                </Select.Option>
-            );
-        }
+      const maxMinute = (hour === 19) ? 30 : 60;
+      for (let minute = 0; minute < maxMinute; minute += 30) {
+        const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+        options.push(
+          <Select.Option key={time} value={time}>
+            {time}
+          </Select.Option>
+        );
+      }
     }
     return options;
-};
+  };
   const updateProductForm = async (values: any) => {
     try {
       setLoading(true);
@@ -383,17 +383,16 @@ export default function ProductModal({
             labelCol={{ span: 24 }}
             rules={[
               {
-                required: selectedCoursesCount > 2,
+                required: true,
                 message: "El nombre es requerido",
               },
             ]}
-            initialValue={selectedCoursesCount <= 2 ? "-" : undefined}
           >
             <Input
               className="w-full rounded-xl p-4"
               placeholder="Nombre del producto"
               size="large"
-              disabled={type === "see" || selectedCoursesCount <= 2}
+              disabled={type === "see"}
             />
             {/* </div> */}
           </Form.Item>
