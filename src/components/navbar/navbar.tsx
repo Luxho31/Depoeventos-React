@@ -175,7 +175,7 @@ export default function Navbar() {
                                   ? `${product.name.split(" ", 1).join(" ")}...`
                                   : product.name}
                               </td>
-                              <td className="w-1/2">${product && product.price}</td>
+                              <td className="w-1/2">S/.{product && product.price}</td>
                               <td className="w-1/2">1</td>
                               <td>
                                 <button className="text-red-500">
