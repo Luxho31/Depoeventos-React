@@ -65,6 +65,8 @@ type CartData = {
     name: string;
     price: number;
     description: string;
+    grades: string[];
+    ages: string[];
   };
   children: ChildrenData;
 };
@@ -168,6 +170,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         name: item.product.name,
         price: item.product.price,
         photo: item.product.photo,
+        grades: item.product.grades,
+        ages: item.product.ages,
         description: item.product.description,
         children: item.children,
       }));
