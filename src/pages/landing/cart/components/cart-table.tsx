@@ -8,6 +8,38 @@ export default function CartTable() {
 
   console.log(products);
 
+  function formatAges(ages: string[]): string {
+    return ages
+      .map((age) => `${age} ${parseInt(age) === 1 ? "año" : "años"}`)
+      .join(", ");
+  }
+
+  function formatGrades(grades: string[]): string {
+    const gradeNames: any = {
+      "1": "1er grado",
+      "2": "2do grado",
+      "3": "3er grado",
+      "4": "4to grado",
+      "5": "5to grado",
+      "6": "6to grado",
+      "7": "7mo grado",
+      "8": "8vo grado",
+      "9": "9no grado",
+      "10": "10mo grado",
+      "11": "11vo grado",
+      "12": "12vo grado",
+      "13": "13vo grado",
+      "14": "14vo grado",
+      "15": "15vo grado",
+
+      "Nido": "Nido",
+      "Pre-kinder": "Pre-kinder",
+      "Kinder": "Kinder",
+    };
+
+    return grades.map((grade: any) => gradeNames[grade] || grade).join(", ");
+  }
+
   return (
     <div className="border rounded-3xl shadow-md p-8 ">
       <div className="flex justify-between items-center mb-4">
@@ -39,6 +71,10 @@ export default function CartTable() {
                 Alumno
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Grado / Edad
+              </th>
+
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Precio
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
@@ -61,6 +97,13 @@ export default function CartTable() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {product.children.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                    <div>
+                      <p>{formatGrades(product.grades)}
+                      </p>
+                      <p>{formatAges(product.ages)}</p>
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     S/. {product.price}

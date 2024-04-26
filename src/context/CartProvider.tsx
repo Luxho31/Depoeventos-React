@@ -26,6 +26,8 @@ type Product = {
   startDateInscription: string;
   endDateInscription: string;
   courses: Course[];
+  grades: string[];
+  ages: string[];
 };
 
 type ChildrenData = {
@@ -101,12 +103,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           throw new Error("Error al obtener los productos del carrito");
         }
         const data = await response.json();
-        const mappedProducts: Product[] = data.map((item: CartData) => ({
+        const mappedProducts: Product[] = data.map((item: any) => ({
           id: item.id,
           name: item.product.name,
           price: item.product.price,
           photo: item.product.photo,
           description: item.product.description,
+          grades: item.product.grades,
+          ages: item.product.ages,
           children: item.children,
         }));
         setProducts(mappedProducts);
