@@ -763,7 +763,31 @@ export default function ProductModal({
               disabled={type === "see"}
             />
           </Form.Item>
-
+          {type === "see" && (
+            <div className="w-full flex flex-row gap-x-4 justify-between max-sm:flex-col">
+              <Form.Item
+                name="startDateInscription"
+                label="Inicio de inscripción"
+                labelCol={{ span: 24 }}
+                className="w-full"
+              >
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Nombre del producto"
+                  size="large"
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+              <Form.Item name="endDateInscription" label="Fin de inscripción" labelCol={{ span: 24 }} className="w-full">
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Nombre del producto"
+                  size="large"
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+            </div>
+          )}
           <Form.Item
             name="photo"
             rules={[
@@ -779,7 +803,7 @@ export default function ProductModal({
                 <span className="text-red-500">*</span> Foto:
               </label>
               <div className="flex flex-col gap-x-8">
-                <Upload
+                {type !== "see" && (<Upload
                   {...propsUpload}
                   maxCount={1}
                   onChange={(info) => {
@@ -810,7 +834,8 @@ export default function ProductModal({
                   <Button icon={<UploadOutlined />} disabled={type === "see"}>
                     Subir foto
                   </Button>
-                </Upload>
+                </Upload>)}
+
                 {type == "create" ? (
                   <img
                     src={photoPreview}
@@ -830,31 +855,7 @@ export default function ProductModal({
           {/* )} */}
         </div>
 
-        {type === "see" && (
-          <div className="w-full flex flex-row gap-x-4 justify-between max-sm:flex-col">
-            <Form.Item
-              name="startDateInscription"
-              label="Inicio de inscripción"
-              labelCol={{ span: 24 }}
-              className="w-full"
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-            <Form.Item name="endDateInscription" label="Fin de inscripción" labelCol={{ span: 24 }} className="w-full">
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-          </div>
-        )}
+
         <Form.Item className="w-full flex justify-end">
           <button
             type="submit"
