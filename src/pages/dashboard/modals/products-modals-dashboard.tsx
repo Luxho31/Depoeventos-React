@@ -84,7 +84,7 @@ export default function ProductModal({
 }: ProductModalProps) {
   const [loading, setLoading] = useState(false);
   const [productImage, setProductImage] = useState<File | null>(null);
-  const [selectedCoursesCount, setSelectedCoursesCount] = useState(0);
+  const [, setSelectedCoursesCount] = useState(0);
   const [value, setValue] = useState(0);
   const [photo, setPhoto] = useState("");
   const [photoPreview, setPhotoPreview] = useState<string | undefined>(
