@@ -187,9 +187,15 @@ export default function Products() {
     }
 
     if (selectedGender.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedGender.includes(product.gender)
-      );
+      filtered = filtered.filter((product) => {
+        if (selectedGender.includes("Masculino")) {
+          return product.gender === "Masculino" || product.gender === "Mixto";
+        }
+        if (selectedGender.includes("Femenino")) {
+          return product.gender === "Femenino" || product.gender === "Mixto";
+        }
+        return true;
+      });
     }
 
     filtered = filtered.filter((product) =>
@@ -359,7 +365,6 @@ export default function Products() {
                 >
                   <Checkbox value="Masculino">Masculino</Checkbox>
                   <Checkbox value="Femenino">Femenino</Checkbox>
-                  <Checkbox value="Mixto">Mixto</Checkbox>
                 </Checkbox.Group>
               </Panel>
               <Panel header="Horarios" key="5">
@@ -517,7 +522,6 @@ export default function Products() {
                 >
                   <Checkbox value="Masculino">Masculino</Checkbox>
                   <Checkbox value="Femenino">Femenino</Checkbox>
-                  <Checkbox value="Mixto">Mixto</Checkbox>
                 </Checkbox.Group>
               </Panel>
               <Panel header="Horarios" key="5">
