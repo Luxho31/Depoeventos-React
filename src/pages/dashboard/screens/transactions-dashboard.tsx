@@ -36,6 +36,7 @@ type OrderData = {
         ): ReactNode;
         products: Product[];
     };
+    discount: string;
 };
 
 type Children = {
@@ -201,6 +202,9 @@ export default function TransactionsDashboard() {
                                 Precio total pagado
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Cupón
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Estado
                             </th>
                             <th scope="col" className="px-6 py-3">
@@ -240,6 +244,7 @@ export default function TransactionsDashboard() {
                                     ))}
                                 </td>
                                 <td className="px-6 py-4">{user.totalPrice}</td>
+                                <td className="px-6 py-4">{user.discount}</td>
                                 <td className="px-6 py-4 flex items-center gap-x-2">
                                     <span
                                         className={validateStatus(user.status)}
