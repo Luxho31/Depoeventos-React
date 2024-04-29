@@ -67,9 +67,10 @@ type Children = {
   memberMotherLastName: string;
 };
 
-export const createOrder = async () => {
+export const createOrder = async (value:any) => {
   try {
     const userId = localStorage.getItem("userId");
+    console.log(value);
 
     // let products = [];
 
@@ -96,6 +97,7 @@ export const createOrder = async () => {
         id: userId,
       },
       items: items,
+      discount: value,
     };
 
     // Enviar la solicitud de creación de la orden

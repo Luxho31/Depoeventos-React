@@ -6,8 +6,6 @@ import { useCart } from "../../../../context/CartProvider";
 export default function CartTable() {
   const { products, getTotalPrice, clearCart, removeProduct } = useCart();
 
-  console.log(products);
-
   function formatAges(ages: string[]): string {
     return ages
       .map((age) => `${age} ${parseInt(age) === 1 ? "año" : "años"}`)
