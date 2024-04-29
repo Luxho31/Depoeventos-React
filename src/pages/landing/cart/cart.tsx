@@ -6,6 +6,7 @@ import {
 import "animate.css";
 import { Checkbox, Form, Progress, Spin, Tag } from "antd";
 import { useState } from "react";
+import { FaChevronLeft } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
 import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
 import { useCart } from "../../../context/CartProvider";
@@ -23,7 +24,7 @@ export default function Cart() {
 
     const [couponCode, setCouponCode] = useState("");
     const [discountApplied, setDiscountApplied] = useState(false);
-    const [appliedCoupons, setAppliedCoupons] = useState([]);
+    const [appliedCoupons, setAppliedCoupons] = useState<any[]>([]);
 
     const [completedOrder, setCompletedOrder] = useState(false);
 
@@ -43,6 +44,7 @@ export default function Cart() {
 
             // Marcar la orden como completada
             setCompletedOrder(true);
+            window.scrollTo(0, 0);
         } catch (error) {
             console.error("Error al crear la orden:", error);
         } finally {
@@ -77,6 +79,12 @@ export default function Cart() {
         }
 
         return discount;
+    };
+
+    const handleBackButton = () => {
+        setProgressPercent(0); // Retroceder al resumen de compra
+        setCompletedOrder(false); // Desmarcar la orden como completada
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -290,8 +298,20 @@ export default function Cart() {
                     progressPercent === 50 ? "block" : "hidden"
                 } mb-24`}
             >
-                <div>Atras</div>
-                {completedOrder && <PaymentStep preferenceId={preferenceId} discount={discountApplied} />}
+                {completedOrder && (
+                    <PaymentStep
+                        preferenceId={preferenceId}
+                        discount={discountApplied}
+                    />
+                )}
+                <button
+                    type="button"
+                    onClick={handleBackButton}
+                    className="flex justify-center items-center gap-x-1 font-semibold max-sm:w-full mt-8 duration-300 hover:duration-300 hover:animate-pulse"
+                >
+                    <FaChevronLeft className="text-lg" />
+                    Regresar
+                </button>
             </div>
         </div>
     );

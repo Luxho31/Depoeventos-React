@@ -698,7 +698,7 @@ export default function ChildrenModal({
 
           {/* -------------------- Nuevo input de grado -------------------- */}
           <div className="flex gap-x-4 max-sm:flex-col">
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
 
 
               <Form.Item<SecondStepType>
@@ -776,7 +776,7 @@ export default function ChildrenModal({
             
 
             {/* ------------------Input Sección del Hijo------------------ */}
-            <div className="flex flex-col">
+            <div className="flex w-full flex-col">
 
 
               <Form.Item<SecondStepType>
@@ -848,7 +848,7 @@ export default function ChildrenModal({
             <button
               type="button"
               onClick={() => setPaso(paso - 1)}
-              className="flex justify-center items-center gap-x-1 font-semibold rounded-xl bg-indigo-300 max-sm:w-full sm:px-14 py-4 duration-300 hover:bg-gray-200 hover:duration-300 hover:animate-pulse"
+              className="flex justify-center items-center gap-x-1 font-semibold rounded-xl max-sm:w-full sm:px-14 py-4 duration-300 hover:duration-300 hover:animate-pulse"
             // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
             >
               <FaChevronLeft className="text-lg" />
@@ -1031,7 +1031,7 @@ export default function ChildrenModal({
             <button
               type="button"
               onClick={() => setPaso(paso - 1)}
-              className="flex justify-center items-center gap-x-1 font-semibold rounded-xl bg-indigo-300 max-sm:w-full sm:px-14 py-4 duration-300 hover:bg-gray-200 hover:duration-300 hover:animate-pulse"
+              className="flex justify-center items-center gap-x-1 font-semibold rounded-xl max-sm:w-full sm:px-14 py-4 duration-300 hover:duration-300 hover:animate-pulse"
             >
               <FaChevronLeft className="text-lg" />
               Regresar

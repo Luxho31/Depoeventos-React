@@ -310,6 +310,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                       label: child.name,
                     }))}
                     rootClassName="max-sm:text-xs"
+                    showSearch={false}
                   />
                 )}
               </div>
