@@ -1,25 +1,25 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import {
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Radio,
-  RadioChangeEvent,
-  Select,
-  Spin,
-  message,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Radio,
+    RadioChangeEvent,
+    Select,
+    Spin,
+    message,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Compressor from "compressorjs";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
-  createProduct,
-  getProductById,
-  updateProduct,
-  uploadProductImage,
+    createProduct,
+    getProductById,
+    updateProduct,
+    uploadProductImage,
 } from "../../../services/products-service";
 
 type Product = {
@@ -382,7 +382,6 @@ export default function ProductModal({
     const onChangeRadioButton = (e: RadioChangeEvent) => {
         setValue(e.target.value);
     };
-
     return (
         <Modal
             title={getTitle(type)}
@@ -396,7 +395,7 @@ export default function ProductModal({
             <Form
                 name="productForm"
                 onFinish={(values) => chooseMethod(type)(values)}
-                onFinishFailed={() => {}}
+                onFinishFailed={() => { }}
                 className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
                 form={form}
             >
@@ -506,94 +505,82 @@ export default function ProductModal({
                         </Form.Item>
                     </div>
 
-                    {selectedDisciplineIds.map((discipline) => (
-                        <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
-                            <Form.Item
-                                label={`Días para ${discipline}`}
-                                name={`days_${discipline}`}
-                                labelCol={{ span: 24 }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Seleccione al menos un día",
-                                    },
-                                ]}
-                                className="md:w-full"
-                            >
-                                <Select
-                                    mode="multiple"
-                                    style={{ width: "100%" }}
-                                    disabled={type === "see"}
-                                >
-                                    <Select.Option value="1">
-                                        Lunes
-                                    </Select.Option>
-                                    <Select.Option value="2">
-                                        Martes
-                                    </Select.Option>
-                                    <Select.Option value="3">
-                                        Miércoles
-                                    </Select.Option>
-                                    <Select.Option value="4">
-                                        Jueves
-                                    </Select.Option>
-                                    <Select.Option value="5">
-                                        Viernes
-                                    </Select.Option>
-                                    <Select.Option value="6">
-                                        Sábado
-                                    </Select.Option>
-                                    <Select.Option value="7">
-                                        Domingo
-                                    </Select.Option>
-                                </Select>
-                            </Form.Item>
-                            <div className="flex flex-col gap-x-4 lg:flex-row">
+                    {selectedDisciplineIds.map((discipline) => {
+                        const disciplineData = disciplines.find((item: any) => item.id === discipline);
+
+                        return (
+                            <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
                                 <Form.Item
-                                    name={`startHour_${discipline}`}
-                                    label="Hora de inicio"
+                                    label={`Días para ${disciplineData ? disciplineData.name : ''}`}
+                                    name={`days_${discipline}`}
                                     labelCol={{ span: 24 }}
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                "Hora de inicio es requerido.",
+                                            message: "Seleccione al menos un día",
                                         },
                                     ]}
-                                    className="w-full"
+                                    className="md:w-full"
                                 >
                                     <Select
-                                        placeholder="Selecciona la hora de inicio"
-                                        allowClear
+                                        mode="multiple"
+                                        style={{ width: "100%" }}
                                         disabled={type === "see"}
                                     >
-                                        {generateOptions()}
+                                        <Select.Option value="1">Lunes</Select.Option>
+                                        <Select.Option value="2">Martes</Select.Option>
+                                        <Select.Option value="3">Miércoles</Select.Option>
+                                        <Select.Option value="4">Jueves</Select.Option>
+                                        <Select.Option value="5">Viernes</Select.Option>
+                                        <Select.Option value="6">Sábado</Select.Option>
+                                        <Select.Option value="7">Domingo</Select.Option>
                                     </Select>
                                 </Form.Item>
-                                <Form.Item
-                                    name={`endHour_${discipline}`}
-                                    label="Hora de Fin"
-                                    labelCol={{ span: 24 }}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                                "Hora de inicio es requerido.",
-                                        },
-                                    ]}
-                                    className="w-full"
-                                >
-                                    <Select
-                                        placeholder="Selecciona la hora de inicio"
-                                        allowClear
-                                        disabled={type === "see"}
+                                <div className="flex flex-col gap-x-4 lg:flex-row">
+                                    <Form.Item
+                                        name={`startHour_${discipline}`}
+                                        label="Hora de inicio"
+                                        labelCol={{ span: 24 }}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Hora de inicio es requerido.",
+                                            },
+                                        ]}
+                                        className="w-full"
                                     >
-                                        {generateOptions()}
-                                    </Select>
-                                </Form.Item>
+                                        <Select
+                                            placeholder="Selecciona la hora de inicio"
+                                            allowClear
+                                            disabled={type === "see"}
+                                        >
+                                            {generateOptions()}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={`endHour_${discipline}`}
+                                        label="Hora de Fin"
+                                        labelCol={{ span: 24 }}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Hora de inicio es requerido.",
+                                            },
+                                        ]}
+                                        className="w-full"
+                                    >
+                                        <Select
+                                            placeholder="Selecciona la hora de inicio"
+                                            allowClear
+                                            disabled={type === "see"}
+                                        >
+                                            {generateOptions()}
+                                        </Select>
+                                    </Form.Item>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     {/* Input Sede del Producto */}
                     <Form.Item
