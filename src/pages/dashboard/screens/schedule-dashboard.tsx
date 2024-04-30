@@ -49,17 +49,8 @@ export default function ScheduleDashboard() {
       endTime: string;
     }[];
   };
-  function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-  
-    const hexR = r.toString(16).padStart(2, '0');
-    const hexG = g.toString(16).padStart(2, '0');
-    const hexB = b.toString(16).padStart(2, '0');
-  
-    return `#${hexR}${hexG}${hexB}`;
-  }
+
+
   const events = scheduleData.flatMap((item: any) => {
     return item.product.coursesWithSchedules.flatMap((courseSchedule: any) => {
       return courseSchedule.schedules.map((schedule: any) => {
@@ -69,7 +60,7 @@ export default function ScheduleDashboard() {
           daysOfWeek: schedule.days.map((day: any) => parseInt(day, 10)),
           startTime: schedule.startHour,
           endTime: schedule.endHour,
-          color: getRandomColor(),
+          color: "#ADA8D2",
         };
       });
     });
