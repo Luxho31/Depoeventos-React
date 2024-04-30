@@ -25,6 +25,18 @@ export default function RegistrationsModal({
         if (id) { getCoursesById(id); }
     }, [id]);
 
+    const daysOfWeek: { [key: string]: string } = {
+        '1': 'Lunes',
+        '2': 'Martes',
+        '3': 'Miércoles',
+        '4': 'Jueves',
+        '5': 'Viernes',
+        '6': 'Sábado',
+        '7': 'Domingo'
+    };
+
+    // Función para traducir los números de los días a nombres
+    const getDayName = (dayNumbers: string[]) => dayNumbers.map(dayNumber => daysOfWeek[dayNumber] || 'Día inválido').join(", ");
     const getCoursesById = async (id: number) => {
         try {
             setLoading(true);
@@ -45,7 +57,11 @@ export default function RegistrationsModal({
                 endDate: discipline.product.endDate,
                 age: discipline.product.ages,
                 grade: discipline.product.grades,
-                childrenName: discipline.children.name
+                childrenName: discipline.children.name,
+                coursesWithSchedules: discipline.product.coursesWithSchedules.map((course: any) => ({
+                    name: discipline.product.courses.find((c: any) => c.id === course.courseId)?.name || "Nombre no encontrado",
+                    schedules: course.schedules.map((schedule: any) => `${getDayName(schedule.days)} - ${schedule.startHour} a ${schedule.endHour}`)
+                }))
             });
 
 
@@ -179,7 +195,19 @@ export default function RegistrationsModal({
                                 disabled
                             />
                         </Form.Item>
-
+                        <Form.Item
+                            name="coursesWithSchedules"
+                            labelCol={{ span: 24 }}
+                            className="cursor-text"
+                        >
+                            <ul className="list-disc pl-4">
+                                {form.getFieldValue("coursesWithSchedules")?.map((course: any, index: number) => (
+                                    <li key={index}>
+                                        <strong>{course.name}</strong>: {course.schedules.join(", ")}
+                                    </li>
+                                ))}
+                            </ul>
+                        </Form.Item>
 
                     </div>
                 </Form> :
