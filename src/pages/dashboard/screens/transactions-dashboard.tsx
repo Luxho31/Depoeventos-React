@@ -8,267 +8,284 @@ import { getAllOrders } from "../../../services/cart-service/cart-service";
 import TransactionModal from "../modals/transactions-modals-dashboard";
 
 type OrderData = {
+  id: number;
+  paymentMethod: string;
+  bankName: string;
+  operationNumber: string;
+  date: string;
+  totalPrice: number;
+  status: string;
+  user: {
     id: number;
-    paymentMethod: string;
-    bankName: string;
-    operationNumber: string;
-    date: string;
-    totalPrice: number;
-    status: string;
-    user: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        username: string;
-    };
-    items: {
-        length: number;
-        map(
-            arg0: (
-                item: {
-                    children: Children;
-                    product: {
-                        name: string;
-                    };
-                },
-                itemIndex: Key | null | undefined
-            ) => import("react/jsx-runtime").JSX.Element
-        ): ReactNode;
-        products: Product[];
-    };
-    discount: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+  };
+  items: {
+    length: number;
+    map(
+      arg0: (
+        item: {
+          children: Children;
+          product: {
+            name: string;
+          };
+        },
+        itemIndex: Key | null | undefined
+      ) => import("react/jsx-runtime").JSX.Element
+    ): ReactNode;
+    products: Product[];
+  };
+  discount: string;
 };
 
 type Children = {
-    id: number;
-    name: string;
-    lastName: string;
-    motherLastName: string;
-    birthdate: string;
-    documentType: string;
-    documentNumber: string;
-    emergencyContactPhone: string;
+  id: number;
+  name: string;
+  lastName: string;
+  motherLastName: string;
+  birthdate: string;
+  documentType: string;
+  documentNumber: string;
+  emergencyContactPhone: string;
 };
 
 type Product = {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
 };
 
 export default function TransactionsDashboard() {
-    const [orderData, setOrderData] = useState<OrderData[]>([]);
-    const [, setLoading] = useState<boolean>(false);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const [openEditModal, setOpenEditModal] = useState(false);
-    const [editId] = useState<number | undefined>(undefined);
-    const [seeId, setSeeId] = useState<number | undefined>(undefined);
-    const [openSeeModal, setOpenSeeModal] = useState(false);
-    const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
-    const { userRole } = useAuth();
-    const ordersPerPage: number = 5;
+  const [orderData, setOrderData] = useState<OrderData[]>([]);
+  const [, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editId] = useState<number | undefined>(undefined);
+  const [seeId, setSeeId] = useState<number | undefined>(undefined);
+  const [openSeeModal, setOpenSeeModal] = useState(false);
+  const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
+  const [totalPriceSum, setTotalPriceSum] = useState<number>(0);
 
-    const navigate = useNavigate();
+  const { userRole } = useAuth();
+  const ordersPerPage: number = 10;
 
-    const specificRole: string = "ADMIN";
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (userRole && userRole.some((role) => role === specificRole)) {
-            setLoading(true);
-            getAllOrders()
-                .then((data: OrderData[]) => {
-                    const successfulOrders = data.filter(
-                        (order) => order.status === "SUCCESS"
-                    );
-                    setOrderData(successfulOrders);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error fetching orders:", error);
-                    setLoading(false);
-                });
-        } else {
-            navigate("/dashboard");
-        }
-    }, [userRole]);
+  const specificRole: string = "ADMIN";
 
-    useEffect(() => {
-        handleSearch();
-    }, [searchTerm, orderData]);
+  useEffect(() => {
+    if (userRole && userRole.some((role) => role === specificRole)) {
+      setLoading(true);
+      getAllOrders()
+        .then((data: OrderData[]) => {
+          const successfulOrders = data.filter(
+            (order) => order.status === "SUCCESS"
+          );
+          setOrderData(successfulOrders);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+          setLoading(false);
+        });
+    } else {
+      navigate("/dashboard");
+    }
+  }, [userRole]);
 
-    const handleReload = () => {
-        setLoading(true);
-        getAllOrders()
-            .then((data: OrderData[]) => {
-                const successfulOrders = data.filter(
-                    (order) => order.status === "SUCCESS"
-                );
-                setOrderData(successfulOrders);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error reloading orders:", error);
-                setLoading(false);
-            });
-    };
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, orderData]);
 
-    const openSeeTransactionModal = (id: number) => {
-        setSeeId(id);
-        setOpenSeeModal(true);
-    };
+  useEffect(() => {
+    const total = orderData.reduce((sum, order) => sum + order.totalPrice, 0);
+    setTotalPriceSum(total);
+  }, [orderData]);
 
-    const handleSearch = () => {
-        setCurrentPage(1);
-        const searchTerms = searchTerm.toLowerCase().split(" ");
-        const filteredOrders = orderData.filter((order) =>
-            searchTerms.some((term) =>
-                `${order.status.toLowerCase()}`.includes(term)
-            )
+  const handleReload = () => {
+    setLoading(true);
+    getAllOrders()
+      .then((data: OrderData[]) => {
+        const successfulOrders = data.filter(
+          (order) => order.status === "SUCCESS"
         );
-        setFilteredOrders(filteredOrders);
-    };
+        setOrderData(successfulOrders);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error reloading orders:", error);
+        setLoading(false);
+      });
+  };
 
-    const onPageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+  const openSeeTransactionModal = (id: number) => {
+    setSeeId(id);
+    setOpenSeeModal(true);
+  };
+  const removeDiacritics = (str: string) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
-    const validateStatus = (status: string) => {
-        const basicStyle = "w-3 h-3 rounded-full";
-        if (status === "PENDING") return basicStyle + " bg-gray-500";
-        if (status === "SUCCESS") return basicStyle + " bg-green-500";
-        if (status === "DENIED") return basicStyle + " bg-red-500";
-    };
+  const normalizeSearchTerm = (searchTerm: string): string[] => {
+    return searchTerm
+      .toLowerCase()
+      .split(" ")
+      .map((term) => removeDiacritics(term));
+  };
 
-    const indexOfLastOrder: number = currentPage * ordersPerPage;
-    const indexOfFirstOrder: number = indexOfLastOrder - ordersPerPage;
-    const currentUsers: OrderData[] = filteredOrders.slice(
-        indexOfFirstOrder,
-        indexOfLastOrder
-    );
+  const handleSearch = () => {
+    setCurrentPage(1);
+    const searchTerms = normalizeSearchTerm(searchTerm);
 
-    return (
-        <div className="h-screen">
-            <TransactionModal
-                type="edit"
-                id={editId}
-                open={openEditModal}
-                setOpen={setOpenEditModal}
-                handleReload={handleReload}
-            />
-            <TransactionModal
-                type="see"
-                id={seeId}
-                open={openSeeModal}
-                setOpen={setOpenSeeModal}
-                handleReload={handleReload}
-            />
+    const filteredOrders = orderData.filter((order) => {
+      const firstName = removeDiacritics(order.user.firstName.toLowerCase());
+      const lastName = removeDiacritics(order.user.lastName.toLowerCase());
+      const username = order.user.username.toLowerCase();
 
-            <div className="flex justify-between">
-                <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
-                    <div className="relative">
-                        <Input
-                            id="table-search-users"
-                            placeholder="Buscar por nombre, número de documento..."
-                            className="w-full rounded-xl p-1"
-                            size="small"
-                            prefix={
-                                <CiSearch className="site-form-item-icon me-1 ml-2" />
-                            }
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                </div>
-                
-            </div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-3">
-                                Usuario
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Productos adquiridos
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Precio total pagado
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Cupón
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Estado
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Operaciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentUsers.map((user, index) => (
-                            <tr
-                                key={index}
-                                className="bg-white border-b hover:bg-gray-50"
-                            >
-                                <th
-                                    scope="row"
-                                    className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
-                                >
-                                    <div className="ps-3">
-                                        <div className="text-base font-semibold">
-                                            {user.user.firstName}{" "}
-                                            {user.user.lastName}
-                                        </div>
-                                        <div className="font-normal text-gray-500">
-                                            {user.user.username}
-                                        </div>
-                                    </div>
-                                </th>
+      // Comprueba que todos los términos de búsqueda estén presentes
+      return searchTerms.every(
+        (term) =>
+          firstName.includes(term) ||
+          lastName.includes(term) ||
+          username.includes(term)
+      );
+    });
 
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {user.items.map((item, itemIndex) => (
-                                        <span key={itemIndex}>
-                                            {item.product.name} (
-                                            {item.children.name})
-                                            {itemIndex !==
-                                                user.items.length - 1 && ", "}
-                                        </span>
-                                    ))}
-                                </td>
-                                <td className="px-6 py-4">{user.totalPrice}</td>
-                                <td className="px-6 py-4">{user.discount}</td>
-                                <td className="px-6 py-4 flex items-center gap-x-2">
-                                    <span
-                                        className={validateStatus(user.status)}
-                                    />
-                                    {user.status}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <button
-                                        className="bg-slate-300 rounded-md p-1 me-2"
-                                        onClick={() =>
-                                            openSeeTransactionModal(user.id)
-                                        }
-                                    >
-                                        <FaEye className="text-xl text-gray-700" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <Pagination
-                className="mt-4"
-                current={currentPage}
-                total={filteredOrders.length}
-                pageSize={ordersPerPage}
-                onChange={onPageChange}
-                showSizeChanger={false}
-            />
+    setFilteredOrders(filteredOrders);
+  };
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const validateStatus = (status: string) => {
+    const basicStyle = "w-3 h-3 rounded-full";
+    if (status === "PENDING") return basicStyle + " bg-gray-500";
+    if (status === "SUCCESS") return basicStyle + " bg-green-500";
+    if (status === "DENIED") return basicStyle + " bg-red-500";
+  };
+
+  const indexOfLastOrder: number = currentPage * ordersPerPage;
+  const indexOfFirstOrder: number = indexOfLastOrder - ordersPerPage;
+  const currentUsers: OrderData[] = filteredOrders.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
+
+  return (
+    <div className="h-screen">
+      <TransactionModal
+        type="edit"
+        id={editId}
+        open={openEditModal}
+        setOpen={setOpenEditModal}
+        handleReload={handleReload}
+      />
+      <TransactionModal
+        type="see"
+        id={seeId}
+        open={openSeeModal}
+        setOpen={setOpenSeeModal}
+        handleReload={handleReload}
+      />
+
+      <div className="flex justify-between">
+        <div className="flex flex-row items-center">
+          <Input
+            id="table-search-users"
+            placeholder="Buscar por nombre, número de documento..."
+            className="w-full rounded-xl p-1"
+            size="small"
+            prefix={<CiSearch className="site-form-item-icon me-1 ml-2" />}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <div className="flex absolute right-20 max-sm:right-10">
+            <h2>
+              <b>Total:</b> S/.{totalPriceSum}
+            </h2>
+          </div>
         </div>
-    );
+      </div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Usuario
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Productos adquiridos
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Precio total pagado
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Cupón
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Estado
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Operaciones
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((user, index) => (
+              <tr key={index} className="bg-white border-b hover:bg-gray-50">
+                <th
+                  scope="row"
+                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                >
+                  <div className="ps-3">
+                    <div className="text-base font-semibold">
+                      {user.user.firstName} {user.user.lastName}
+                    </div>
+                    <div className="font-normal text-gray-500">
+                      {user.user.username}
+                    </div>
+                  </div>
+                </th>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.items.map((item, itemIndex) => (
+                    <span key={itemIndex}>
+                      {item.product.name} ({item.children.name})
+                      {itemIndex !== user.items.length - 1 && ", "}
+                    </span>
+                  ))}
+                </td>
+                <td className="px-6 py-4">{user.totalPrice}</td>
+                <td className="px-6 py-4">{user.discount}</td>
+                <td className="px-6 py-4 flex items-center gap-x-2">
+                  <span className={validateStatus(user.status)} />
+                  {user.status}
+                </td>
+                <td className="px-6 py-4">
+                  <button
+                    className="bg-slate-300 rounded-md p-1 me-2"
+                    onClick={() => openSeeTransactionModal(user.id)}
+                  >
+                    <FaEye className="text-xl text-gray-700" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Pagination
+        className="mt-4"
+        current={currentPage}
+        total={filteredOrders.length}
+        pageSize={ordersPerPage}
+        onChange={onPageChange}
+        showSizeChanger={false}
+      />
+    </div>
+  );
 }
