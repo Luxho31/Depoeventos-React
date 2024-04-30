@@ -206,11 +206,24 @@ export default function ChildrenModal({
     }
   };
 
+  const capitalizeFirstLetter = (str: string) => {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   // ---------------- Funcionalidad de crear
-  const onFinishStep1 = (values: FirstStepType) => {
+  const onFinishStep1 = (values: any) => {
     if (values.birthdate) {
       values.birthdate = values.birthdate?.format("YYYY-MM-DD");
     }
+    // Capitalize first letter of each word
+    values.name = capitalizeFirstLetter(values.name);
+    values.lastName = capitalizeFirstLetter(values.lastName);
+    values.motherLastName = capitalizeFirstLetter(values.motherLastName);
+    console.log("values: ----", values);
     setFormData({
       ...formData,
       ...values,
@@ -330,15 +343,16 @@ export default function ChildrenModal({
           // chooseMethod(type)(values);
           onFinishStep1(values);
         }}
-        onFinishFailed={() => { }}
+        onFinishFailed={() => {}}
         autoComplete="off"
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form1}
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${paso === 1 ? "block" : "hidden"
-            }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${
+            paso === 1 ? "block" : "hidden"
+          }`}
         >
           {/* ------------------Input Nombre Hijo------------------ */}
           <Form.Item<FirstStepType>
@@ -499,10 +513,10 @@ export default function ChildrenModal({
                   selectedDocumentType === "DNI"
                     ? 8
                     : selectedDocumentType === "PASSPORT"
-                      ? 10
-                      : selectedDocumentType === "CARNET DE EXTRANJERIA"
-                        ? 9
-                        : undefined
+                    ? 10
+                    : selectedDocumentType === "CARNET DE EXTRANJERIA"
+                    ? 9
+                    : undefined
                 }
               />
             </Form.Item>
@@ -591,7 +605,7 @@ export default function ChildrenModal({
             <button
               type="submit"
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4"
-            // bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4
+              // bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl max-sm:w-full sm:px-24 py-4
             >
               Siguiente
               <FaArrowRight className="ms-1" />
@@ -612,8 +626,9 @@ export default function ChildrenModal({
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${paso === 2 ? "block" : "hidden"
-            }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${
+            paso === 2 ? "block" : "hidden"
+          }`}
         >
           {/* ------------------Switch ¿Es estudiante?------------------ */}
           <Form.Item<SecondStepType> name="isStudent">
@@ -695,12 +710,9 @@ export default function ChildrenModal({
             </Form.Item>
           )}
 
-
           {/* -------------------- Nuevo input de grado -------------------- */}
           <div className="flex gap-x-4 max-sm:flex-col">
             <div className="flex flex-col w-full">
-
-
               <Form.Item<SecondStepType>
                 name="grade"
                 label="Grado del hijo"
@@ -711,7 +723,7 @@ export default function ChildrenModal({
                     message: isStudent
                       ? "Por favor, ingresa grado del hijo."
                       : undefined,
-                  }
+                  },
                 ]}
                 className="col-span-2 cursor-text"
               >
@@ -772,13 +784,8 @@ export default function ChildrenModal({
             </div>
             {/* Fin de input de grado */}
 
-
-            
-
             {/* ------------------Input Sección del Hijo------------------ */}
             <div className="flex w-full flex-col">
-
-
               <Form.Item<SecondStepType>
                 name="section"
                 label="Sección del hijo"
@@ -789,7 +796,7 @@ export default function ChildrenModal({
                     message: isStudent
                       ? "Por favor, ingresa la sección del hijo."
                       : undefined,
-                  }
+                  },
                 ]}
                 className="col-span-2 cursor-text"
               >
@@ -849,7 +856,7 @@ export default function ChildrenModal({
               type="button"
               onClick={() => setPaso(paso - 1)}
               className="flex justify-center items-center gap-x-1 font-semibold rounded-xl max-sm:w-full sm:px-14 py-4 duration-300 hover:duration-300 hover:animate-pulse"
-            // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
+              // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
             >
               <FaChevronLeft className="text-lg" />
               Regresar
@@ -857,7 +864,7 @@ export default function ChildrenModal({
             <button
               type="submit"
               className="bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4"
-            // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
+              // bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex justify-center items-center max-sm:w-full sm:px-24 py-4
             >
               Siguiente
               <FaArrowRight className="ms-1" />
@@ -878,8 +885,9 @@ export default function ChildrenModal({
       >
         <div
           // className={`grid grid-cols-2 gap-x-4 gap-y-2 mb-8 ${
-          className={`flex flex-col  gap-y-2 mb-8 ${paso === 3 ? "block" : "hidden"
-            }`}
+          className={`flex flex-col  gap-y-2 mb-8 ${
+            paso === 3 ? "block" : "hidden"
+          }`}
         >
           <div className="flex gap-x-4 max-sm:flex-col">
             {/* ------------------Switch ¿Es miembro de un club?------------------ */}
