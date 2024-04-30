@@ -171,10 +171,10 @@ export default function Dashboard() {
       key: "11",
       path: "/dashboard/schedule",
       icon: <GrSchedule />,
-      label: "Horario (Próximamente)",
+      label: "Horario",
       onClick: () => handleItemClick("/dashboard/schedule"),
       role: ["ADMIN", "USER"],
-      disabled: true,
+      // disabled: true,
     },
   ];
 

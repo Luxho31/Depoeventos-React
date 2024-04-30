@@ -14,7 +14,7 @@ export default function ScheduleDashboard() {
   const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
-    const specificRoles = [""];
+    const specificRoles = ["USER", "ADMIN"];
     if (userRole && userRole.some((role) => specificRoles.includes(role))) {
       setLoading(true);
       getAllCourseRegistration()
@@ -49,15 +49,31 @@ export default function ScheduleDashboard() {
       endTime: string;
     }[];
   };
-
-  const events = scheduleData.map((item: ScheduleType) => ({
-    title: item.product.name,
-    daysOfWeek: [1],
-    startTime: "10:00",
-    endTime: "11:30",
-    color: "#252850",
-  }));
-
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+  
+    const hexR = r.toString(16).padStart(2, '0');
+    const hexG = g.toString(16).padStart(2, '0');
+    const hexB = b.toString(16).padStart(2, '0');
+  
+    return `#${hexR}${hexG}${hexB}`;
+  }
+  const events = scheduleData.flatMap((item: any) => {
+    return item.product.coursesWithSchedules.flatMap((courseSchedule: any) => {
+      return courseSchedule.schedules.map((schedule: any) => {
+        const course = item.product.courses.find((course: any) => course.id === courseSchedule.courseId);
+        return {
+          title: `${course.name} - ${item.children.name}`,
+          daysOfWeek: schedule.days.map((day: any) => parseInt(day, 10)),
+          startTime: schedule.startHour,
+          endTime: schedule.endHour,
+          color: getRandomColor(),
+        };
+      });
+    });
+  });
   return (
     <>
       <div className="hidden mx-8 lg:block">
@@ -89,9 +105,8 @@ export default function ScheduleDashboard() {
             return dayName.charAt(0).toUpperCase() + dayName.slice(1);
           }}
           nowIndicator={true}
-          /* Agregar clases de Tailwind CSS */
-          eventClassNames="bg-green-500 text-white rounded-md p-2"
-          hiddenDays={[0]} // Oculta el domingo (0 es domingo, 1 es lunes, etc.)
+          eventClassNames="bg-green-500 text-white rounded-md p-1"
+          hiddenDays={[0]}
         />
       </div>
       <div className="w-full h-full flex flex-col justify-center items-center lg:hidden">

@@ -137,25 +137,6 @@ export const getAllOrders = async () => {
   }
 };
 
-// export const uploadVoucherImage = async (orderId: number, file: File) => {
-//   try {
-//     const formData = new FormData();
-//     formData.append("file", file);
-//     const response = await fetch(
-//       `${BASE_URL}/api/orders/uploadVoucherPicture/${orderId}`,
-//       {
-//         method: "POST",
-//         body: formData,
-//       }
-//     );
-//     const data = await response.json();
-//     if (response.ok) {
-//       return data;
-//     }
-//   } catch (error) {
-//     console.error("Error al subir la imagen del voucher:", error);
-//   }
-// };
 
 export const getOrderById = async (orderId: number) => {
   try {
@@ -185,17 +166,17 @@ export const getPaymentInfo = async (paymentId?: number) => {
   }
 };
 
-export const updateOrder = async (form: orderType, orderId?: number) => {
-  try {
-    await fetch(`${BASE_URL}/api/orders/${orderId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
-    getAllOrders();
-  } catch (error) {
-    console.error(error);
-  }
-};
+// export const updateOrder = async (form: orderType, orderId?: number) => {
+//   try {
+//     await fetch(`${BASE_URL}/api/orders/${orderId}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(form),
+//     });
+//     getAllOrders();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };

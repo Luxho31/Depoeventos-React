@@ -181,12 +181,7 @@ export default function TransactionsDashboard() {
                         />
                     </div>
                 </div>
-                {/* <button
-                    onClick={handleReload}
-                    className="pb-8 mb-5 flex h-2 px-4 py-2 text-gray-700 "
-                >
-                    {loading ? <Spin /> : <IoReload className="text-lg" />}
-                </button> */}
+                
             </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">

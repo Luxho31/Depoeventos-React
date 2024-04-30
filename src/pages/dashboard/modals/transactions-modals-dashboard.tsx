@@ -3,8 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import {
   getOrderById,
-  getPaymentInfo,
-  updateOrder,
+  getPaymentInfo
 } from "../../../services/cart-service/cart-service";
 
 type TransactionData = {
@@ -78,16 +77,17 @@ export default function TransactionModal({
   };
 
   const updateOrderForm = async (values: TransactionData) => {
-    try {
-      setLoading(true);
-      await updateOrder(values, id);
-      setOpen(false);
-      handleReload();
-    } catch (error) {
-      console.error("Error al actualizar una orden:", error);
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   setLoading(true);
+    console.log(values)
+    //   await updateOrder(values, id);
+    //   setOpen(false);
+    //   handleReload();
+    // } catch (error) {
+    //   console.error("Error al actualizar una orden:", error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const seeOrderForm = async (id: number) => {
@@ -138,7 +138,7 @@ export default function TransactionModal({
         onFinish={(values) => {
           chooseMethod(type)(values);
         }}
-        onFinishFailed={() => {}}
+        onFinishFailed={() => { }}
         className="my-10 max-md:mx-20 md:mx-32"
         form={form}
       >
