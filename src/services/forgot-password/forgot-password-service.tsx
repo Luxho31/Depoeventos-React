@@ -8,6 +8,8 @@ type ForgotPassword = {
 
 export const sendMessage = async (emailData: ForgotPassword) => {
   try {
+    const user = emailData.email.toLowerCase();
+    user.trim();
     const response = await fetch(`${BASE_URL}/api/forgot-password`, {
       method: "POST",
       headers: {

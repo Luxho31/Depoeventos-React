@@ -21,8 +21,6 @@ export default function ForgotPassword() {
     const handleForgotPassword = async (values: ForgotPasswordType) => {
         try {
             setLoading(true);
-            values.email = values.email.trim();
-            values.email = values.email.toLowerCase();
             await sendMessage(values);
             form.resetFields();
             toast.success("Correo enviado con éxito");
