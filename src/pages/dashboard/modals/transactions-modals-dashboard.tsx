@@ -29,7 +29,6 @@ export default function TransactionModal({
   id,
   open,
   setOpen,
-  handleReload,
 }: TransactionModalProps) {
   const [, setLoading] = useState(false);
   const [form] = Form.useForm();

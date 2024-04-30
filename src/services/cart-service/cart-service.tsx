@@ -3,12 +3,12 @@ import { generalRoutes } from "../../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-type orderType = {
-  id: number;
-  date: string;
-  totalPrice: number;
-  status: string;
-};
+// type orderType = {
+//   id: number;
+//   date: string;
+//   totalPrice: number;
+//   status: string;
+// };
 
 type Product = {
   id: number;
