@@ -68,7 +68,21 @@ export default function Register() {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
+  const capitalizeFirstLetter = (str: string) => {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const onFinishStep1 = (values: RegisterType) => {
+    values.username = capitalizeFirstLetter(values.username ?? "");
+    values.firstName = capitalizeFirstLetter(values.firstName ?? "");
+    values.lastName = capitalizeFirstLetter(values.lastName ?? "");
+    values.motherLastName = capitalizeFirstLetter(values.motherLastName ?? "");
+    values.username = values.username?.toLowerCase();
+    console.log("Primer paso", values);
     setFormData({
       ...formData,
       ...values,
