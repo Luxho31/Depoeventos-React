@@ -90,6 +90,7 @@ export default function RegistrationsDashboard() {
     const usersPerPage: number = 5;
     const navigate = useNavigate();
     const [filterValues, setFilterValues] = useState<any>({});
+    const [form] = Form.useForm();
 
 
     useEffect(() => {
@@ -171,21 +172,20 @@ export default function RegistrationsDashboard() {
         indexOfFirstUser,
         indexOfLastUser
     );
-
-    // type InscriptionFilters = {
-    //     productIds: number[];
-    //     campusesIds: number[];
-    //     categoriesIds: number[];
-    //     ages: string[];
-
-    //     [key: string]: number[];
-    // };
     const getInscriptionsWithFiltersForm = async (values: any) => {
         try {
             setLoadingFilters(true);
-            const response = await getInscriptionsWithFilters(values);
+            const selectedProductIds = [];
+            for (const name of values.productIds) {
+                const ids = fullData
+                    .filter(data => data.product.name === name)
+                    .map(data => data.product.id);
+                selectedProductIds.push(...ids);
+            }
+            const updatedValues = { ...values, productIds: selectedProductIds };
+            const response = await getInscriptionsWithFilters(updatedValues);
             setRegistrationData(response);
-            setFilterValues(values); // Almacenar los valores de los filtros
+            setFilterValues(updatedValues);
         } catch (error) {
             console.error("Error al obtener matriculas con filtros:", error);
         } finally {
@@ -217,15 +217,15 @@ export default function RegistrationsDashboard() {
     const inscriptionDateFormated = (inscriptionDate: string) => {
         const date = new Date(inscriptionDate.replace(/ PET/, ''));
         if (!isNaN(date.getTime())) {
-          return date.toLocaleDateString('es-PE', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          });
+            return date.toLocaleDateString('es-PE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            });
         } else {
-          return "Fecha inválida";
+            return "Fecha inválida";
         }
-      }
+    }
 
     return (
         <div className="h-screen">
@@ -262,6 +262,7 @@ export default function RegistrationsDashboard() {
                     className="flex gap-x-1"
                     style={{ minWidth: 200 }}
                     onFinish={getInscriptionsWithFiltersForm}
+                    form={form}
                 >
                     <Drawer title="Filtros" onClose={onClose} open={open}>
                         <Form
@@ -281,6 +282,16 @@ export default function RegistrationsDashboard() {
                                     showSearch
                                     style={{ minWidth: 200 }} // Ajustar el ancho mínimo
                                     mode="multiple"
+                                    onChange={async (selectedNames) => {
+                                        const selectedIds = [];
+                                        for (const name of selectedNames) {
+                                            const ids = fullData
+                                                .filter(data => data.product.name === name)
+                                                .map(data => data.product.id);
+                                            selectedIds.push(...ids);
+                                        }
+                                        await form.setFieldsValue({ productIds: selectedIds });
+                                    }}
                                 >
                                     {fullData
                                         .reduce(
@@ -291,8 +302,8 @@ export default function RegistrationsDashboard() {
                                                 if (
                                                     !uniqueProducts.some(
                                                         (product) =>
-                                                            product.id ===
-                                                            data.product.id
+                                                            product.name ===
+                                                            data.product.name
                                                     )
                                                 ) {
                                                     uniqueProducts.push(
@@ -306,7 +317,7 @@ export default function RegistrationsDashboard() {
                                         .map((product: ProductType) => (
                                             <Select.Option
                                                 key={product.id}
-                                                value={product.id}
+                                                value={product.name} // Ahora usamos el nombre como valor
                                             >
                                                 {product.name}
                                             </Select.Option>
@@ -414,18 +425,18 @@ export default function RegistrationsDashboard() {
                                         { value: "Nido", label: "Nido" },
                                         { value: "Pre-Kinder", label: "Pre-Kinder" },
                                         { value: "Kinder", label: "Kinder" },
-                                        { value: "1er grado", label: "1er grado" },
-                                        { value: "2do grado", label: "2do grado" },
-                                        { value: "3er grado", label: "3er grado" },
-                                        { value: "4to grado", label: "4to grado" },
-                                        { value: "5to grado", label: "5to grado" },
-                                        { value: "6to grado", label: "6to grado" },
-                                        { value: "7mo grado", label: "7mo grado" },
-                                        { value: "8vo grado", label: "8vo grado" },
-                                        { value: "9no grado", label: "9no grado" },
-                                        { value: "10mo grado", label: "10mo grado" },
-                                        { value: "11vo grado", label: "11vo grado" },
-                                        { value: "12vo grado", label: "12vo grado" },
+                                        { value: "1", label: "1er grado" },
+                                        { value: "2", label: "2do grado" },
+                                        { value: "3", label: "3er grado" },
+                                        { value: "4", label: "4to grado" },
+                                        { value: "5", label: "5to grado" },
+                                        { value: "6", label: "6to grado" },
+                                        { value: "7", label: "7mo grado" },
+                                        { value: "8", label: "8vo grado" },
+                                        { value: "9", label: "9no grado" },
+                                        { value: "10", label: "10mo grado" },
+                                        { value: "11", label: "11vo grado" },
+                                        { value: "12", label: "12vo grado" },
                                     ]}
                                 />
                             </Form.Item>
