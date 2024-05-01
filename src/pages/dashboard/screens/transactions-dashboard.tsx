@@ -101,9 +101,23 @@ export default function TransactionsDashboard() {
   }, [searchTerm, orderData]);
 
   useEffect(() => {
-    const total = orderData.reduce((sum, order) => sum + order.totalPrice, 0);
+    const total = orderData.reduce((sum, order) => {
+      if (order.id !== 1) {
+        let totalPrice = order.totalPrice;
+        if (order.discount === "PROFESORES2024") {
+          totalPrice /= 2;
+        }
+        totalPrice *= 0.96; // Restar el 4%
+        totalPrice -= 1.5; // Restar 1 después de quitar el 4%
+        return sum + totalPrice;
+      } else {
+        return sum; 
+      }
+    }, 0);
     setTotalPriceSum(total);
   }, [orderData]);
+
+
 
   const handleReload = () => {
     setLoading(true);
