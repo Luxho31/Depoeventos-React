@@ -27,70 +27,44 @@ function UsersDashboard() {
     const [, setLoading] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
+    const [totalElements, setTotalElements] = useState<number>(0);
     const { userRole } = useAuth();
-    const usersPerPage: number = 10;
 
     const navigate = useNavigate();
 
+    const specificRole: string = "ADMIN";
     useEffect(() => {
-        const specificRole: string = "ADMIN";
         if (userRole && userRole.some((role) => role === specificRole)) {
-            setLoading(true);
-            getAllUsers()
-                .then((data: UserData[]) => {
-                    setUserData(data);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error fetching users:", error);
-                    setLoading(false);
-                });
+            handleReload(0);
         } else {
             navigate("/dashboard");
         }
     }, [userRole]);
 
     useEffect(() => {
-        handleSearch();
-    }, [searchTerm, userData]);
+        const timeoutId = setTimeout(() => handleReload(currentPage), 400); 
+        return () => clearTimeout(timeoutId);
+    }, [searchTerm, currentPage]);
 
-    // const handleReload = () => {
-    //     setLoading(true);
-    //     getAllUsers()
-    //         .then((data: UserData[]) => {
-    //             setUserData(data);
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error reloading users:", error);
-    //             setLoading(false);
-    //         });
-    // };
-
-    const handleSearch = () => {
-        setCurrentPage(1);
-        const searchTerms = searchTerm.toLowerCase().split(" ");
-        const filteredUsers = userData.filter((user) =>
-            searchTerms.some((term) =>
-                `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()} ${
-                    user.documentNumber
-                }`.includes(term)
-            )
-        );
-        setFilteredUsers(filteredUsers);
+    const handleReload = (page: number) => {
+        setLoading(true);
+        getAllUsers(page, searchTerm)
+            .then((data: any) => {
+                setUserData(data.content);
+                setCurrentPage(page);
+                setTotalElements(data.totalElements);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error reloading users:", error);
+                setLoading(false);
+            });
     };
-
     const onPageChange = (page: number) => {
-        setCurrentPage(page);
+        setCurrentPage(page - 1);
     };
 
-    const indexOfLastUser: number = currentPage * usersPerPage;
-    const indexOfFirstUser: number = indexOfLastUser - usersPerPage;
-    const currentUsers: UserData[] = filteredUsers.slice(
-        indexOfFirstUser,
-        indexOfLastUser
-    );
+
 
     return (
         <div className="h-screen">
@@ -102,20 +76,12 @@ function UsersDashboard() {
                             placeholder="Buscar por nombre, número de documento..."
                             className="w-full rounded-xl p-1"
                             size="small"
-                            prefix={
-                                <CiSearch className="site-form-item-icon me-1 ml-2" />
-                            }
+                            prefix={<CiSearch className="site-form-item-icon me-1 ml-2" />}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
-                {/* <button
-                    onClick={handleReload}
-                    className="pb-8 mb-5 flex h-2 px-4 py-2 text-gray-700"
-                >
-                    {loading ? <Spin /> : <IoReload className="text-lg" />}
-                </button> */}
             </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -139,7 +105,7 @@ function UsersDashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers.map((user, index) => (
+                        {userData.map((user, index) => (
                             <tr
                                 key={index}
                                 className="bg-white border-b hover:bg-gray-50"
@@ -182,9 +148,9 @@ function UsersDashboard() {
             </div>
             <Pagination
                 className="mt-4"
-                current={currentPage}
-                total={filteredUsers.length}
-                pageSize={usersPerPage}
+                current={currentPage + 1}
+                total={totalElements}
+                pageSize={10}
                 onChange={onPageChange}
                 showSizeChanger={false}
             />

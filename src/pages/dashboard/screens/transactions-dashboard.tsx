@@ -35,7 +35,8 @@ export default function TransactionsDashboard() {
   }, [userRole]);
 
   useEffect(() => {
-    handleReload(currentPage);
+    const timeoutId = setTimeout(() => handleReload(currentPage), 400);
+    return () => clearTimeout(timeoutId);
   }, [searchTerm, currentPage]);
 
   const handleReload = (page: number) => {
@@ -53,6 +54,9 @@ export default function TransactionsDashboard() {
       });
   };
 
+  const onPageChange = (page: number) => {
+    setCurrentPage(page - 1);
+  };
 
   const openSeeTransactionModal = (id: number) => {
     setSeeId(id);
@@ -60,9 +64,6 @@ export default function TransactionsDashboard() {
   };
 
 
-  const onPageChange = (page: number) => {
-    setCurrentPage(page - 1);
-  };
 
   const validateStatus = (status: string) => {
     const basicStyle = "w-3 h-3 rounded-full";
