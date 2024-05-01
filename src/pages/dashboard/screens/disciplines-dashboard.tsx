@@ -28,7 +28,7 @@ export default function DiciplinesDashboard() {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editId, setEditId] = useState<number | undefined>(undefined);
     const { userRole } = useAuth();
-    const usersPerPage: number = 5;
+    const usersPerPage: number = 10;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -179,10 +179,10 @@ export default function DiciplinesDashboard() {
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Nombre
+                            </th><th scope="col" className="px-6 py-3">
+                                
                             </th>
-                            <th scope="col" className="px-6 py-3">
-                                Descripción
-                            </th>
+                            
                             <th scope="col" className="px-6 py-3">
                                 Operaciones
                             </th>
@@ -196,9 +196,7 @@ export default function DiciplinesDashboard() {
                             >
                                 <td className="px-6 py-4">{user.id}</td>
                                 <td className="px-6 py-4">{user.name}</td>
-                                <td className="px-6 py-4">
-                                    {user.description}
-                                </td>
+                                <td className="px-6 py-4"></td>
                                 <td className="flex px-6 py-4 gap-x-2">
                                     <button
                                         className="bg-slate-300 rounded-md p-1"

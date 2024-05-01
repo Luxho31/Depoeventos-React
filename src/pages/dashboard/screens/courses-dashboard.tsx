@@ -61,7 +61,7 @@ export default function CoursesDashboard() {
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
   const { userRole } = useAuth();
-  const usersPerPage: number = 5;
+  const usersPerPage: number = 10;
   const navigate = useNavigate();
   const specificRoles: string[] = ["USER", "ADMIN"];
 

@@ -87,7 +87,7 @@ export default function RegistrationsDashboard() {
     const [open, setOpen] = useState(false);
     const [fullData, setFullData] = useState<RegistrationData[]>([]);
     const { userRole } = useAuth();
-    const usersPerPage: number = 5;
+    const usersPerPage: number = 10;
     const navigate = useNavigate();
     const [filterValues, setFilterValues] = useState<any>({});
     const [form] = Form.useForm();

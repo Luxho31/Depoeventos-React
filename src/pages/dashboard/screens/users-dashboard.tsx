@@ -29,7 +29,7 @@ function UsersDashboard() {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
     const { userRole } = useAuth();
-    const usersPerPage: number = 5;
+    const usersPerPage: number = 10;
 
     const navigate = useNavigate();
 
