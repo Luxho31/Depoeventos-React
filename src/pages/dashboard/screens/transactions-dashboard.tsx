@@ -1,5 +1,5 @@
 import { Input, Pagination } from "antd";
-import { Key, ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -7,70 +7,20 @@ import { useAuth } from "../../../context/AuthProvider";
 import { getAllOrders } from "../../../services/cart-service/cart-service";
 import TransactionModal from "../modals/transactions-modals-dashboard";
 
-type OrderData = {
-  id: number;
-  paymentMethod: string;
-  bankName: string;
-  operationNumber: string;
-  date: string;
-  totalPrice: number;
-  status: string;
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    username: string;
-  };
-  items: {
-    length: number;
-    map(
-      arg0: (
-        item: {
-          children: Children;
-          product: {
-            name: string;
-          };
-        },
-        itemIndex: Key | null | undefined
-      ) => import("react/jsx-runtime").JSX.Element
-    ): ReactNode;
-    products: Product[];
-  };
-  discount: string;
-};
-
-type Children = {
-  id: number;
-  name: string;
-  lastName: string;
-  motherLastName: string;
-  birthdate: string;
-  documentType: string;
-  documentNumber: string;
-  emergencyContactPhone: string;
-};
-
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-};
+type OrderData = any;
 
 export default function TransactionsDashboard() {
   const [orderData, setOrderData] = useState<OrderData[]>([]);
   const [, setLoading] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editId] = useState<number | undefined>(undefined);
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
-  const [filteredOrders, setFilteredOrders] = useState<OrderData[]>([]);
-  const [totalPriceSum, setTotalPriceSum] = useState<number>(0);
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const { userRole } = useAuth();
-  const ordersPerPage: number = 10;
 
   const navigate = useNavigate();
 
@@ -78,55 +28,23 @@ export default function TransactionsDashboard() {
 
   useEffect(() => {
     if (userRole && userRole.some((role) => role === specificRole)) {
-      setLoading(true);
-      getAllOrders()
-        .then((data: OrderData[]) => {
-          const successfulOrders = data.filter(
-            (order) => order.status === "SUCCESS"
-          );
-          setOrderData(successfulOrders);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching orders:", error);
-          setLoading(false);
-        });
+      handleReload(0);
     } else {
       navigate("/dashboard");
     }
   }, [userRole]);
 
   useEffect(() => {
-    handleSearch();
-  }, [searchTerm, orderData]);
+    handleReload(currentPage);
+  }, [searchTerm, currentPage]);
 
-  useEffect(() => {
-    const total = orderData.reduce((sum, order) => {
-      if (order.id !== 1) {
-        let totalPrice = order.totalPrice;
-        if (order.discount === "PROFESORES2024") {
-          totalPrice /= 2;
-        }
-        totalPrice *= 0.96; // Restar el 4%
-        totalPrice -= 1.5; // Restar 1 después de quitar el 4%
-        return sum + totalPrice;
-      } else {
-        return sum;
-      }
-    }, 0);
-    setTotalPriceSum(total);
-  }, [orderData]);
-
-
-
-  const handleReload = () => {
+  const handleReload = (page: number) => {
     setLoading(true);
-    getAllOrders()
-      .then((data: OrderData[]) => {
-        const successfulOrders = data.filter(
-          (order) => order.status === "SUCCESS"
-        );
-        setOrderData(successfulOrders);
+    getAllOrders(page, searchTerm)
+      .then((data: any) => {
+        setOrderData(data.content);
+        setCurrentPage(page);
+        setTotalElements(data.totalElements);
         setLoading(false);
       })
       .catch((error) => {
@@ -135,44 +53,15 @@ export default function TransactionsDashboard() {
       });
   };
 
+
   const openSeeTransactionModal = (id: number) => {
     setSeeId(id);
     setOpenSeeModal(true);
   };
-  const removeDiacritics = (str: string) => {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  };
 
-  const normalizeSearchTerm = (searchTerm: string): string[] => {
-    return searchTerm
-      .toLowerCase()
-      .split(" ")
-      .map((term) => removeDiacritics(term));
-  };
-
-  const handleSearch = () => {
-    setCurrentPage(1);
-    const searchTerms = normalizeSearchTerm(searchTerm);
-
-    const filteredOrders = orderData.filter((order) => {
-      const firstName = removeDiacritics(order.user.firstName.toLowerCase());
-      const lastName = removeDiacritics(order.user.lastName.toLowerCase());
-      const username = order.user.username.toLowerCase();
-
-      // Comprueba que todos los términos de búsqueda estén presentes
-      return searchTerms.every(
-        (term) =>
-          firstName.includes(term) ||
-          lastName.includes(term) ||
-          username.includes(term)
-      );
-    });
-
-    setFilteredOrders(filteredOrders);
-  };
 
   const onPageChange = (page: number) => {
-    setCurrentPage(page);
+    setCurrentPage(page - 1);
   };
 
   const validateStatus = (status: string) => {
@@ -182,12 +71,7 @@ export default function TransactionsDashboard() {
     if (status === "DENIED") return basicStyle + " bg-red-500";
   };
 
-  const indexOfLastOrder: number = currentPage * ordersPerPage;
-  const indexOfFirstOrder: number = indexOfLastOrder - ordersPerPage;
-  const currentUsers: OrderData[] = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
+
 
   return (
     <div className="h-screen">
@@ -196,18 +80,18 @@ export default function TransactionsDashboard() {
         id={editId}
         open={openEditModal}
         setOpen={setOpenEditModal}
-        handleReload={handleReload}
+        handleReload={() => handleReload(currentPage)}
       />
       <TransactionModal
         type="see"
         id={seeId}
         open={openSeeModal}
         setOpen={setOpenSeeModal}
-        handleReload={handleReload}
+        handleReload={() => handleReload(currentPage)}
       />
 
       <div className="flex justify-between">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center gap-x-2">
           <Input
             id="table-search-users"
             placeholder="Buscar por nombre, número de documento..."
@@ -219,7 +103,7 @@ export default function TransactionsDashboard() {
           />
           <div className="flex absolute right-20 max-sm:right-10">
             <h2>
-              <b>Total:</b> S/.{totalPriceSum}
+              {/* <b>Total:</b> S/.{totalPriceSum} */}
             </h2>
           </div>
         </div>
@@ -252,7 +136,7 @@ export default function TransactionsDashboard() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map((user, index) => (
+            {orderData.map((user, index) => (
               <tr key={index} className="bg-white border-b hover:bg-gray-50">
                 <th
                   scope="row"
@@ -269,7 +153,7 @@ export default function TransactionsDashboard() {
                 </th>
 
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {user.items.map((item, itemIndex) => (
+                  {user.items.map((item: any, itemIndex: any) => (
                     <span key={itemIndex}>
                       {item.product.name} ({item.children.name})
                       {itemIndex !== user.items.length - 1 && ", "}
@@ -300,9 +184,9 @@ export default function TransactionsDashboard() {
       </div>
       <Pagination
         className="mt-4"
-        current={currentPage}
-        total={filteredOrders.length}
-        pageSize={ordersPerPage}
+        current={currentPage + 1}
+        total={totalElements}
+        pageSize={10}
         onChange={onPageChange}
         showSizeChanger={false}
       />

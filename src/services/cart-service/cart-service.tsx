@@ -67,7 +67,7 @@ type Children = {
   memberMotherLastName: string;
 };
 
-export const createOrder = async (value:any) => {
+export const createOrder = async (value: any) => {
   try {
     const userId = localStorage.getItem("userId");
     console.log(value);
@@ -122,9 +122,10 @@ export const createOrder = async (value:any) => {
   }
 };
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (page: number, searchTerm?: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/orders`, {
+    searchTerm?.toLocaleLowerCase();
+    const response = await fetch(`${BASE_URL}/api/orders?page=${page}&size=10&sort=id&desc${searchTerm ? `&searchTerm=${searchTerm}` : ''}`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
