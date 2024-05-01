@@ -111,7 +111,7 @@ export default function TransactionsDashboard() {
         totalPrice -= 1.5; // Restar 1 después de quitar el 4%
         return sum + totalPrice;
       } else {
-        return sum; 
+        return sum;
       }
     }, 0);
     setTotalPriceSum(total);
@@ -235,7 +235,10 @@ export default function TransactionsDashboard() {
                 Productos adquiridos
               </th>
               <th scope="col" className="px-6 py-3">
-                Precio total pagado
+                Precio total
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Precio pagado
               </th>
               <th scope="col" className="px-6 py-3">
                 Cupón
@@ -273,11 +276,14 @@ export default function TransactionsDashboard() {
                     </span>
                   ))}
                 </td>
-                <td className="px-6 py-4">{user.totalPrice}</td>
-                <td className="px-6 py-4">{user.discount}</td>
-                <td className="px-6 py-4 flex items-center gap-x-2">
-                  <span className={validateStatus(user.status)} />
-                  {user.status}
+                <td className="px-6 py-4">S/.{user.totalPrice}</td>
+                <td className="px-6 py-4 font-bold">S/.{user.discount == "PROFESORES2024" ? user.totalPrice / 2 : user.totalPrice}</td>
+                <td className="px-6 py-4">{user.discount == "PROFESORES2024" ? "PROFESORES2024 (-50%)" : "No aplica"}</td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-x-1">
+                    <span className={validateStatus(user.status)} />
+                    <p>{user.status === "SUCCESS" ? "Pagado" : "Pendiente"} </p>
+                  </div>
                 </td>
                 <td className="px-6 py-4">
                   <button
