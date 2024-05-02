@@ -397,7 +397,7 @@ export default function RegistrationsDashboard() {
                     ))}
                 </Select>
               </Form.Item>
-              
+
               {/* Por edades */}
               <Form.Item name="ages">
                 <Select
@@ -565,8 +565,11 @@ export default function RegistrationsDashboard() {
                   ))}
                 </td>
                 <td className="px-6 py-4">
-                  {user.children.name} {user.children.lastName}{" "}
-                  {user.children.motherLastName}
+                  <div className="flex gap-x-1">
+                    <span>{user.children.name}</span>
+                    <span>{user.children.lastName}</span>
+                    <span>{user.children.motherLastName}</span>
+                  </div>
                 </td>
                 <td className="flex px-6 py-4 gap-x-2">
                   <Tooltip title="Datos de matricula">
