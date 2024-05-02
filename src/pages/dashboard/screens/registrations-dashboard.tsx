@@ -397,6 +397,7 @@ export default function RegistrationsDashboard() {
                     ))}
                 </Select>
               </Form.Item>
+              
               {/* Por edades */}
               <Form.Item name="ages">
                 <Select
@@ -435,6 +436,21 @@ export default function RegistrationsDashboard() {
                   ]}
                 />
               </Form.Item>
+
+              {/* Por sexo */}
+              <Form.Item name="gender" className="text-black">
+                <Select
+                  placeholder="Filtrar por sexo"
+                  mode="multiple"
+                  style={{ minWidth: 200 }}
+                  options={[
+                    { value: "Masculino", label: "Masculino" },
+                    { value: "Femenino", label: "Femenino" },
+                    { value: "Mixto", label: "Mixto" },
+                  ]}
+                />
+              </Form.Item>
+
               {/* Botón de descarga */}
               <div className="flex items-center justify-between max-sm:flex-col">
                 <Form.Item className="max-sm:w-full">
