@@ -740,6 +740,9 @@ export default function ChildrenModal({
                     }
                   }}
                 >
+                  <Select.Option value="Nido">Nido</Select.Option>
+                  <Select.Option value="Pre-Kinder">Pre-Kinder</Select.Option>
+                  <Select.Option value="Kinder">Kinder</Select.Option>
                   <Select.Option value="1">1er grado</Select.Option>
                   <Select.Option value="2">2do grado</Select.Option>
                   <Select.Option value="3">3er grado</Select.Option>
