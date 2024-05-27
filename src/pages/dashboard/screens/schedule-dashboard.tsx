@@ -20,10 +20,11 @@ export default function ScheduleDashboard() {
       getAllCourseRegistration()
         .then((data) => {
           const currentDate = new Date();
-          const filteredData = data.filter((item: ScheduleType) => {
+          const filteredData = data.filter((item: any) => {
             const startDate = new Date(item.product.startDateInscription);
             const endDate = new Date(item.product.endDate);
-            return currentDate >= startDate && currentDate <= endDate;
+            const active = item.product.active === true;
+            return active && startDate <= currentDate && endDate >= currentDate;
           });
           setScheduleData(filteredData);
           setLoading(false);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ModalProduct from "../../../components/modal-product/modal-product";
 import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
-import { getAllProducts } from "../../../services/products-service";
+import { getAllActiveProducts } from "../../../services/products-service";
 
 import { LoadingOutlined } from "@ant-design/icons";
 import {
@@ -118,7 +118,7 @@ export default function Products() {
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([getAllProducts(), getAllCategories(), getAllCampuses()])
+    Promise.all([getAllActiveProducts(), getAllCategories(), getAllCampuses()])
       .then(([products, categories, campuses]) => {
         setProductData(products);
         setFilteredData(products);

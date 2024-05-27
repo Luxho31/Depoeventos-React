@@ -137,6 +137,12 @@ export default function CoursesDashboard() {
     }
   }
 
+  const validateStatus = (status: boolean) => {
+    const basicStyle = "w-3 h-3 rounded-full";
+    if (status === true) return basicStyle + " bg-green-500";
+    if (status === false) return basicStyle + " bg-red-500";
+  };
+
   return (
     <div className="h-screen">
       <div className="flex justify-between">
@@ -182,6 +188,9 @@ export default function CoursesDashboard() {
                 Hijo
               </th>
               <th scope="col" className="px-6 py-3">
+                Estado
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Operaciones
               </th>
             </tr>
@@ -200,6 +209,12 @@ export default function CoursesDashboard() {
                 <td className="px-6 py-4">
                   {user.children.name} {user.children.lastName}{" "}
                   {user.children.motherLastName}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-x-1">
+                    <span className={validateStatus(user.product.active)} />
+                    {user.product.active === false ? "Inactivo" : "Activo"}
+                  </div>
                 </td>
                 <td className="flex px-6 py-4 gap-x-2">
                   <button

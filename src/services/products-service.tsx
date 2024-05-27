@@ -2,32 +2,6 @@ import { generalRoutes } from "../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-// type CampusType = {
-//   id: number;
-// };
-
-// type CategoryType = {
-//   id: number;
-// };
-
-// type CourseType = {
-//   id: number;
-// };
-
-// type productType = {
-//   name: string;
-//   description: string;
-//   price: number;
-//   startDate: string;
-//   endDate: string;
-//   maxStudents: number;
-//   campus: CampusType[];
-//   category: CategoryType[];
-//   products: CourseType[];
-//   gender: string;
-//   ages: string[];
-//   grades: string[];
-// };
 
 export const createProduct = async (form: any) => {
   try {
@@ -63,6 +37,18 @@ export const getAllProducts = async () => {
     throw error;
   }
 };
+
+export const getAllActiveProducts = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/active`);
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de productos activos:", error);
+    throw error;
+  }
+}
 
 export const updateProduct = async (form: any, id?: number) => {
   try {
