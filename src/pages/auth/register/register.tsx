@@ -410,7 +410,7 @@ export default function Register() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,;^_(){}[\]:;<>'"\\/~`+\-=|]).{8,}$/
                   ),
                   message:
-                    "La contraseña debe tener al menos 8 caracteres, una letra mayuscula y minuscula y un caracter especial",
+                    "La contraseña debe tener al menos 8 caracteres, un número, una letra mayuscula y minuscula y un caracter especial",
                 },
                 {
                   max: 30,
