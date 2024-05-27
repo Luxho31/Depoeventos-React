@@ -151,6 +151,7 @@ export default function ProductModal({
                 ages: product.ages,
                 location: product.location,
                 grades: product.grades,
+                active: product.active,
                 gender: product.gender,
                 photo: product.photo,
             });
@@ -223,6 +224,7 @@ export default function ProductModal({
                 endDate: values.endDate,
                 maxStudents: values.maxStudents,
                 price: values.price,
+                active: values.active,
                 coursesWithSchedules,
             };
 
@@ -287,6 +289,7 @@ export default function ProductModal({
                 startDate: values.startDate,
                 endDate: values.endDate,
                 maxStudents: values.maxStudents,
+                active: values.active,
                 price: values.price,
                 coursesWithSchedules,
             };
@@ -401,25 +404,47 @@ export default function ProductModal({
             >
                 <div className="flex flex-col gap-y-2 mb-8">
                     {/* Input Nombre del Producto */}
-                    <Form.Item
-                        name="name"
-                        label="Nombre del Producto"
-                        labelCol={{ span: 24 }}
-                        rules={[
-                            {
-                                required: true,
-                                message: "El nombre es requerido",
-                            },
-                        ]}
-                    >
-                        <Input
-                            className="w-full rounded-xl p-4"
-                            placeholder="Nombre del producto"
-                            size="large"
-                            disabled={type === "see"}
-                        />
-                        {/* </div> */}
-                    </Form.Item>
+                    <div>
+                        <Form.Item
+                            name="name"
+                            label="Nombre del Producto"
+                            labelCol={{ span: 24 }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "El nombre es requerido",
+                                },
+                            ]}
+                        >
+                            <Input
+                                className="w-full rounded-xl p-4"
+                                placeholder="Nombre del producto"
+                                size="large"
+                                disabled={type === "see"}
+                            />
+                            {/* </div> */}
+                        </Form.Item>
+                        <Form.Item
+                            name="active"
+                            label="Activo"
+                            labelCol={{ span: 24 }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "El estado es requerido",
+                                },
+                            ]}
+                        >
+                            <Radio.Group
+                                onChange={onChangeRadioButton}
+                                value={value}
+                                disabled={type === "see"}
+                            >
+                                <Radio value={true}>Activo</Radio>
+                                <Radio value={false}>Inactivo</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </div>
 
                     {/* Input Descripcion del Producto */}
                     <Form.Item

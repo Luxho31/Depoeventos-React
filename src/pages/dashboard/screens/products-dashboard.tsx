@@ -1,4 +1,4 @@
-import { Button, Input, Pagination } from "antd";
+import { Button, Form, Input, Pagination, Select } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaEye } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { useAuth } from "../../../context/AuthProvider";
 import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllDisciplines } from "../../../services/disciplines-service";
-import { getAllProducts } from "../../../services/products-service";
+import { getAllActiveProducts, getAllProducts } from "../../../services/products-service";
 import ProductModal from "../modals/products-modals-dashboard";
 
 type ProductData = {
@@ -47,6 +47,7 @@ export default function DiciplinesDashboard() {
     const [editId, setEditId] = useState<number | undefined>(undefined);
     const [seeId, setSeeId] = useState<number | undefined>(undefined);
     const [openSeeModal, setOpenSeeModal] = useState(false);
+    const [productType, setProductType] = useState<string>("all");
 
     const [campuses, setCampuses] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -63,15 +64,27 @@ export default function DiciplinesDashboard() {
         if (userRole && userRole.some((role) => role === specificRole)) {
             setLoading(true);
             getAllData();
-            getAllProducts()
-                .then((data: ProductData[]) => {
-                    setProductData(data);
-                    setLoading(false);
-                })
-                .catch((error: Error) => {
-                    console.error("Error al obtener disciplinas:", error);
-                    setLoading(false);
-                });
+            if (productType === "all") {
+                getAllActiveProducts()
+                    .then((data: ProductData[]) => {
+                        setProductData(data);
+                        setLoading(false);
+                    })
+                    .catch((error: Error) => {
+                        console.error("Error al obtener disciplinas:", error);
+                        setLoading(false);
+                    });
+            } else {
+                getAllProducts()
+                    .then((data: ProductData[]) => {
+                        setProductData(data);
+                        setLoading(false);
+                    })
+                    .catch((error: Error) => {
+                        console.error("Error al obtener disciplinas:", error);
+                        setLoading(false);
+                    });
+            }
         } else {
             navigate("/dashboard");
         }
@@ -96,12 +109,19 @@ export default function DiciplinesDashboard() {
         }
     };
 
-    const handleReload = () => {
+    const handleReload = async () => {
         try {
             setLoading(true);
-            getAllProducts().then((data: ProductData[]) => {
-                setProductData(data);
-            });
+            if (productType === "all") {
+                currentPage == 1
+                await getAllActiveProducts().then((data: ProductData[]) => {
+                    setProductData(data);
+                });
+            } else {
+                await getAllProducts().then((data: ProductData[]) => {
+                    setProductData(data);
+                });
+            }
         } catch (error) {
             console.error("Error al recargar usuarios:", error);
         } finally {
@@ -220,13 +240,22 @@ export default function DiciplinesDashboard() {
                     </div>
                 </div>
                 <div className="flex justify-between items-center mb-5">
-                    <Button
-                        onClick={openCreateProductModal}
-                        className="max-sm:hidden flex items-center gap-x-2"
-                    >
-                        <HiMiniPlus className="text-lg" />
-                        Crear Productos
-                    </Button>
+                    <div className="flex gap-x-4">
+                        <Select className="w-48" placeholder="Productos"
+                            onChange={(value) => { setProductType(value as string); handleReload(); }}
+                            defaultValue={productType}
+                        >
+                            <Select.Option value="all" key={1}>Todos los productos</Select.Option>
+                            <Select.Option value="active" key={2}>Productos activos</Select.Option>
+                        </Select>
+                        <Button
+                            onClick={openCreateProductModal}
+                            className="max-sm:hidden flex items-center gap-x-2"
+                        >
+                            <HiMiniPlus className="text-lg" />
+                            Crear Productos
+                        </Button>
+                    </div>
                     <ProductModal
                         type="create"
                         id={undefined}
