@@ -1,4 +1,4 @@
-import { Button, Input, Pagination, Select } from "antd";
+import { Button, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaEye } from "react-icons/fa";
@@ -50,7 +50,7 @@ export default function DiciplinesDashboard() {
   const [editId, setEditId] = useState<number | undefined>(undefined);
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
-  const [productType, setProductType] = useState<string>("all");
+  // const [productType, setProductType] = useState<string>("all");
 
   const [campuses, setCampuses] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -239,7 +239,7 @@ export default function DiciplinesDashboard() {
         </div>
         <div className="flex justify-between items-center mb-5">
           <div className="flex gap-x-4">
-            <Select
+            {/* <Select
               className="w-48"
               placeholder="Productos"
               onChange={(value) => {
@@ -254,7 +254,7 @@ export default function DiciplinesDashboard() {
               <Select.Option value="active" key={2}>
                 Productos activos
               </Select.Option>
-            </Select>
+            </Select> */}
             <Button
               onClick={openCreateProductModal}
               className="max-sm:hidden flex items-center gap-x-2"
