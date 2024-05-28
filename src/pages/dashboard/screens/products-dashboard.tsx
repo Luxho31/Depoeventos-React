@@ -114,16 +114,9 @@ export default function DiciplinesDashboard() {
   const handleReload = async () => {
     try {
       setLoading(true);
-      if (productType === "all") {
-        currentPage == 1;
-        await getAllActiveProducts().then((data: ProductData[]) => {
-          setProductData(data);
-        });
-      } else {
-        await getAllProducts().then((data: ProductData[]) => {
-          setProductData(data);
-        });
-      }
+      await getAllProducts().then((data: ProductData[]) => {
+        setProductData(data);
+      });
     } catch (error) {
       console.error("Error al recargar usuarios:", error);
     } finally {
