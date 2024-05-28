@@ -38,24 +38,12 @@ export default function ScheduleDashboard() {
     }
   }, [userRole, navigate]);
 
-  type ScheduleType = {
-    product: {
-      endDate: string | number | Date;
-      startDateInscription: string | number | Date;
-      name: string;
-    };
-    coursesWithSchedule: {
-      dayOfWeek: number;
-      startTime: string;
-      endTime: string;
-    }[];
-  };
-
-
   const events = scheduleData.flatMap((item: any) => {
     return item.product.coursesWithSchedules.flatMap((courseSchedule: any) => {
       return courseSchedule.schedules.map((schedule: any) => {
-        const course = item.product.courses.find((course: any) => course.id === courseSchedule.courseId);
+        const course = item.product.courses.find(
+          (course: any) => course.id === courseSchedule.courseId
+        );
         return {
           title: `${course.name} - ${item.children.name}`,
           daysOfWeek: schedule.days.map((day: any) => parseInt(day, 10)),
