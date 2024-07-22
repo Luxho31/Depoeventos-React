@@ -1,7 +1,7 @@
 import { Button, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaClone, FaEdit, FaEye } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -9,6 +9,7 @@ import { getAllCampuses } from "../../../services/campuses-service";
 import { getAllCategories } from "../../../services/categories-service";
 import { getAllDisciplines } from "../../../services/disciplines-service";
 import {
+  cloneProduct,
   getAllActiveProducts,
   getAllProducts,
 } from "../../../services/products-service";
@@ -42,7 +43,7 @@ type Campus = {
 
 export default function DiciplinesDashboard() {
   const [productData, setProductData] = useState<ProductData[]>([]);
-  const [, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -212,6 +213,18 @@ export default function DiciplinesDashboard() {
     if (status === true) return basicStyle + " bg-green-500";
     if (status === false) return basicStyle + " bg-red-500";
   };
+
+  const cloneHandle = async (id: number) => {
+    try {
+      setLoading(true);
+      await cloneProduct(id);
+      handleReload();
+    } catch (error) {
+      console.error("Error al clonar producto:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="h-screen">
       <button
@@ -375,6 +388,13 @@ export default function DiciplinesDashboard() {
                     onClick={() => openEditProductModal(user.id)}
                   >
                     <FaEdit className="text-xl text-gray-700" />
+                  </button>
+                  <button
+                    disabled={loading}
+                    className="bg-slate-300 rounded-md p-1"
+                    onClick={() => cloneHandle(user.id)}
+                  >
+                    <FaClone className="text-xl text-gray-700" />
                   </button>
                 </td>
               </tr>

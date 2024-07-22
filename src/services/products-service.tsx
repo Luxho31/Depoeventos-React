@@ -2,7 +2,6 @@ import { generalRoutes } from "../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
 
-
 export const createProduct = async (form: any) => {
   try {
     console.log("Form Service -> ", form);
@@ -48,7 +47,7 @@ export const getAllActiveProducts = async () => {
     console.error("Error al obtener datos de productos activos:", error);
     throw error;
   }
-}
+};
 
 export const updateProduct = async (form: any, id?: number) => {
   try {
@@ -114,5 +113,18 @@ export const uploadProductImage = async (productId: number, file: File) => {
     }
   } catch (error) {
     console.error("Error al subir la imagen del producto:", error);
+  }
+};
+
+export const cloneProduct = async (id: number) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/clone/${id}`, {
+      method: "POST",
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al clonar un producto:", error);
+    throw error;
   }
 };
