@@ -128,3 +128,21 @@ export const cloneProduct = async (id: number) => {
     throw error;
   }
 };
+
+export const updateProductsDateRange = async (form: any) => {
+  try {
+    await fetch(`${BASE_URL}/api/products/updateTime`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  } catch (error) {
+    console.error(
+      "Error al actualizar un rango de fechas de productos:",
+      error
+    );
+    throw error;
+  }
+};

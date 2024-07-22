@@ -1,6 +1,6 @@
 import { Button, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import { CiClock1, CiSearch } from "react-icons/ci";
 import { FaClone, FaEdit, FaEye } from "react-icons/fa";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -51,6 +51,7 @@ export default function DiciplinesDashboard() {
   const [editId, setEditId] = useState<number | undefined>(undefined);
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
+  const [openTimeModal, setOpenTimeModal] = useState(false);
   // const [productType, setProductType] = useState<string>("all");
 
   const [campuses, setCampuses] = useState([]);
@@ -137,6 +138,10 @@ export default function DiciplinesDashboard() {
   const openSeeProductModal = (id: number) => {
     setSeeId(id);
     setOpenSeeModal(true);
+  };
+
+  const openTimeProductModal = () => {
+    setOpenTimeModal(true);
   };
 
   const handleSearch = () => {
@@ -252,22 +257,6 @@ export default function DiciplinesDashboard() {
         </div>
         <div className="flex justify-between items-center mb-5">
           <div className="flex gap-x-4">
-            {/* <Select
-              className="w-48"
-              placeholder="Productos"
-              onChange={(value) => {
-                setProductType(value as string);
-                handleReload();
-              }}
-              defaultValue={productType}
-            >
-              <Select.Option value="all" key={1}>
-                Todos los productos
-              </Select.Option>
-              <Select.Option value="active" key={2}>
-                Productos activos
-              </Select.Option>
-            </Select> */}
             <Button
               onClick={openCreateProductModal}
               className="max-sm:hidden flex items-center gap-x-2"
@@ -275,7 +264,23 @@ export default function DiciplinesDashboard() {
               <HiMiniPlus className="text-lg" />
               Crear Productos
             </Button>
+            <button
+              onClick={openTimeProductModal}
+              className="bg-gray-200 rounded-full p-2 shadow-lg hover:bg-gray-300 relative"
+            >
+              <CiClock1 className="text-xl text-gray-700" />
+            </button>
           </div>
+          <ProductModal
+            type="time"
+            id={undefined}
+            open={openTimeModal}
+            setOpen={setOpenTimeModal}
+            handleReload={handleReload}
+            campuses={campuses}
+            categories={categories}
+            disciplines={disciplines}
+          />
           <ProductModal
             type="create"
             id={undefined}

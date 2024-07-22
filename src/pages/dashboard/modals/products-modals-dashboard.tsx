@@ -19,6 +19,7 @@ import {
   createProduct,
   getProductById,
   updateProduct,
+  updateProductsDateRange,
   uploadProductImage,
 } from "../../../services/products-service";
 
@@ -298,6 +299,33 @@ export default function ProductModal({
     }
   };
 
+  const updateTimeProductForm = async (values: any) => {
+    values.startDateUpdate = new Date(values.startDateUpdate)
+      .toISOString()
+      .split("T")[0];
+    values.endDateUpdate = new Date(values.endDateUpdate)
+      .toISOString()
+      .split("T")[0];
+
+    try {
+      setLoading(true);
+
+      const formData = {
+        startDate: values.startDateUpdate,
+        endDate: values.endDateUpdate,
+      };
+
+      await updateProductsDateRange(formData);
+      form.resetFields();
+      setOpen(false);
+      handleReload();
+    } catch (error) {
+      console.error("Error al actualizar horario de un producto:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getTitle = (type: string) => {
     switch (type) {
       case "create":
@@ -306,6 +334,8 @@ export default function ProductModal({
         return "Editar Producto";
       case "see":
         return "Ver Producto";
+      case "time":
+        return "Horario";
       default:
         return "Producto";
     }
@@ -319,6 +349,8 @@ export default function ProductModal({
         return updateProductForm;
       case "see":
         return seeProductForm;
+      case "time":
+        return updateTimeProductForm;
       default:
         return createProductForm;
     }
@@ -376,542 +408,615 @@ export default function ProductModal({
         className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
         form={form}
       >
-        <div className="flex flex-col gap-y-2 mb-8">
-          {/* Input Nombre del Producto */}
-          <div className="flex gap-x-2 items-center justify-between">
-            <Form.Item
-              name="name"
-              label="Nombre del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "El nombre es requerido",
-                },
-              ]}
-            >
-              <Input
-                className="w-full rounded-xl p-4"
-                placeholder="Nombre del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-              {/* </div> */}
-            </Form.Item>
-            <Form.Item
-              name="active"
-              label="Estado"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "El estado es requerido",
-                },
-              ]}
-            >
-              <Radio.Group
-                onChange={onChangeRadioButton}
-                value={value}
-                disabled={type === "see"}
+        {type === "time" && (
+          <>
+            <p className="text-center text-gray-400 my-7">
+              Se actualizaran los horarios de los productos activos
+            </p>
+            <div className="flex gap-x-4 max-sm:flex-col">
+              {/* Input Fecha Inicial del Producto */}
+              <Form.Item
+                name="startDateUpdate"
+                label="Fecha Inicial del Producto"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "La fecha inicial es requerida",
+                  },
+                ]}
+                className="w-full cursor-text"
               >
-                <Radio value={true}>Activo</Radio>
-                <Radio value={false}>Inactivo</Radio>
-              </Radio.Group>
+                <DatePicker
+                  className="w-full rounded-xl p-4"
+                  placeholder="Fecha inicial del producto"
+                  size="large"
+                />
+                {/* </div> */}
+              </Form.Item>
+
+              {/* Input Fecha Final del Producto */}
+              <Form.Item
+                name="endDateUpdate"
+                label="Fecha Final del Producto"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "La fecha final es requerida",
+                  },
+                ]}
+                className="w-full cursor-text"
+              >
+                <DatePicker
+                  className="w-full rounded-xl p-4"
+                  placeholder="Fecha final del producto"
+                  size="large"
+                />
+              </Form.Item>
+            </div>
+            <Form.Item className="w-full flex justify-center">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spin
+                    indicator={
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    }
+                  />
+                ) : (
+                  "Actualizar horario"
+                )}
+              </button>
             </Form.Item>
-          </div>
-
-          {/* Input Descripcion del Producto */}
-          <Form.Item
-            name="description"
-            label="Descripción del Producto"
-            labelCol={{ span: 24 }}
-            rules={[
-              {
-                required: true,
-                message: "La descripción es requerida",
-              },
-            ]}
-          >
-            <TextArea
-              className="w-full rounded-xl p-4"
-              placeholder="Descripción del producto"
-              size="large"
-              disabled={type === "see"}
-              autoSize={{ minRows: 1, maxRows: 1 }}
-            />
-          </Form.Item>
-
-          <div className="flex gap-x-4 max-sm:flex-col">
-            {/* Input Disciplinas del Producto */}
-            <Form.Item
-              name="coursesId"
-              label="Disciplinas del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "Las disciplinas son requeridas",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Por favor, selecciona las disciplinas"
-                className="w-full h-14"
-                options={disciplines.map((discipline: Course) => {
-                  return {
-                    value: discipline.id,
-                    label: discipline.name,
-                  };
-                })}
-                onChange={handleCoursesChange}
-                disabled={type === "see"}
-              />
-              {/* </div> */}
-            </Form.Item>
-
-            {/* Input Categoria del Producto */}
-            <Form.Item
-              name="categoryId"
-              label="Categoria del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "La categoria es requerida",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Por favor, selecciona las sedes"
-                className="w-full h-14"
-                options={categories.map((cat: Category) => {
-                  return {
-                    value: cat.id,
-                    label: cat.name,
-                  };
-                })}
-                disabled={type === "see"}
-              />
-            </Form.Item>
-          </div>
-
-          {selectedDisciplineIds.map((discipline) => {
-            const disciplineData = disciplines.find(
-              (item: any) => item.id === discipline
-            );
-
-            return (
-              <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
+          </>
+        )}
+        {type !== "time" && (
+          <>
+            <div className="flex flex-col gap-y-2 mb-8">
+              {/* Input Nombre del Producto */}
+              <div className="flex gap-x-2 items-center justify-between">
                 <Form.Item
-                  label={`Días para ${
-                    disciplineData ? disciplineData.name : ""
-                  }`}
-                  name={`days_${discipline}`}
+                  name="name"
+                  label="Nombre del Producto"
                   labelCol={{ span: 24 }}
                   rules={[
                     {
                       required: true,
-                      message: "Seleccione al menos un día",
+                      message: "El nombre es requerido",
                     },
                   ]}
-                  className="md:w-full"
+                >
+                  <Input
+                    className="w-full rounded-xl p-4"
+                    placeholder="Nombre del producto"
+                    size="large"
+                    disabled={type === "see"}
+                  />
+                  {/* </div> */}
+                </Form.Item>
+                <Form.Item
+                  name="active"
+                  label="Estado"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "El estado es requerido",
+                    },
+                  ]}
+                >
+                  <Radio.Group
+                    onChange={onChangeRadioButton}
+                    value={value}
+                    disabled={type === "see"}
+                  >
+                    <Radio value={true}>Activo</Radio>
+                    <Radio value={false}>Inactivo</Radio>
+                  </Radio.Group>
+                </Form.Item>
+              </div>
+
+              {/* Input Descripcion del Producto */}
+              <Form.Item
+                name="description"
+                label="Descripción del Producto"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "La descripción es requerida",
+                  },
+                ]}
+              >
+                <TextArea
+                  className="w-full rounded-xl p-4"
+                  placeholder="Descripción del producto"
+                  size="large"
+                  disabled={type === "see"}
+                  autoSize={{ minRows: 1, maxRows: 1 }}
+                />
+              </Form.Item>
+
+              <div className="flex gap-x-4 max-sm:flex-col">
+                {/* Input Disciplinas del Producto */}
+                <Form.Item
+                  name="coursesId"
+                  label="Disciplinas del Producto"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Las disciplinas son requeridas",
+                    },
+                  ]}
+                  className="w-full cursor-text"
                 >
                   <Select
                     mode="multiple"
+                    allowClear
                     style={{ width: "100%" }}
+                    placeholder="Por favor, selecciona las disciplinas"
+                    className="w-full h-14"
+                    options={disciplines.map((discipline: Course) => {
+                      return {
+                        value: discipline.id,
+                        label: discipline.name,
+                      };
+                    })}
+                    onChange={handleCoursesChange}
+                    disabled={type === "see"}
+                  />
+                  {/* </div> */}
+                </Form.Item>
+
+                {/* Input Categoria del Producto */}
+                <Form.Item
+                  name="categoryId"
+                  label="Categoria del Producto"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "La categoria es requerida",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    placeholder="Por favor, selecciona las sedes"
+                    className="w-full h-14"
+                    options={categories.map((cat: Category) => {
+                      return {
+                        value: cat.id,
+                        label: cat.name,
+                      };
+                    })}
+                    disabled={type === "see"}
+                  />
+                </Form.Item>
+              </div>
+
+              {selectedDisciplineIds.map((discipline) => {
+                const disciplineData = disciplines.find(
+                  (item: any) => item.id === discipline
+                );
+
+                return (
+                  <div className="flex flex-col md:flex-row gap-x-4 border rounded-lg shadow-md p-4">
+                    <Form.Item
+                      label={`Días para ${
+                        disciplineData ? disciplineData.name : ""
+                      }`}
+                      name={`days_${discipline}`}
+                      labelCol={{ span: 24 }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Seleccione al menos un día",
+                        },
+                      ]}
+                      className="md:w-full"
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        disabled={type === "see"}
+                      >
+                        <Select.Option value="1">Lunes</Select.Option>
+                        <Select.Option value="2">Martes</Select.Option>
+                        <Select.Option value="3">Miércoles</Select.Option>
+                        <Select.Option value="4">Jueves</Select.Option>
+                        <Select.Option value="5">Viernes</Select.Option>
+                        <Select.Option value="6">Sábado</Select.Option>
+                        <Select.Option value="7">Domingo</Select.Option>
+                      </Select>
+                    </Form.Item>
+                    <div className="flex flex-col gap-x-4 lg:flex-row">
+                      <Form.Item
+                        name={`startHour_${discipline}`}
+                        label="Hora de inicio"
+                        labelCol={{ span: 24 }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Hora de inicio es requerido.",
+                          },
+                        ]}
+                        className="w-full"
+                      >
+                        <Select
+                          placeholder="Selecciona la hora de inicio"
+                          allowClear
+                          disabled={type === "see"}
+                        >
+                          {generateOptions()}
+                        </Select>
+                      </Form.Item>
+                      <Form.Item
+                        name={`endHour_${discipline}`}
+                        label="Hora de Fin"
+                        labelCol={{ span: 24 }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Hora de inicio es requerido.",
+                          },
+                        ]}
+                        className="w-full"
+                      >
+                        <Select
+                          placeholder="Selecciona la hora de inicio"
+                          allowClear
+                          disabled={type === "see"}
+                        >
+                          {generateOptions()}
+                        </Select>
+                      </Form.Item>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Input Sede del Producto */}
+              <Form.Item
+                name="campusesId"
+                label="Sede(s) del Producto"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Las sede son requeridas",
+                  },
+                ]}
+                className="w-full cursor-text"
+              >
+                <Select
+                  mode="multiple"
+                  allowClear
+                  placeholder="Por favor, selecciona las sedes"
+                  className="w-full h-14"
+                  options={campuses.map((camp: Campus) => {
+                    return {
+                      value: camp.id,
+                      label: camp.name,
+                    };
+                  })}
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+
+              <div className="flex gap-x-4 max-sm:flex-col">
+                {/* Input Edad del Producto */}
+                <Form.Item
+                  name="ages"
+                  label="Edad(es)"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "La edad es requerida",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <Select
+                    mode="multiple"
+                    placeholder="Seleccionar Edad"
+                    className="w-full h-14"
+                    options={Array.from({ length: 17 }, (_, i) => ({
+                      label: `${i + 1} año(s)`,
+                      value: `${i + 1}`,
+                    }))}
+                    disabled={type === "see"}
+                  />
+                </Form.Item>
+
+                {/* Input Género del Producto */}
+                <Form.Item
+                  name="gender"
+                  label="Género"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "El genero es requerido",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <Radio.Group
+                    onChange={onChangeRadioButton}
+                    value={value}
                     disabled={type === "see"}
                   >
-                    <Select.Option value="1">Lunes</Select.Option>
-                    <Select.Option value="2">Martes</Select.Option>
-                    <Select.Option value="3">Miércoles</Select.Option>
-                    <Select.Option value="4">Jueves</Select.Option>
-                    <Select.Option value="5">Viernes</Select.Option>
-                    <Select.Option value="6">Sábado</Select.Option>
-                    <Select.Option value="7">Domingo</Select.Option>
-                  </Select>
+                    <Radio value={"Masculino"}>Masculino</Radio>
+                    <Radio value={"Femenino"}>Femenino</Radio>
+                    <Radio value={"Mixto"}>Mixto</Radio>
+                  </Radio.Group>
                 </Form.Item>
-                <div className="flex flex-col gap-x-4 lg:flex-row">
+              </div>
+
+              {/* Input Grado del Producto */}
+              <Form.Item
+                name="grades"
+                label="Grado(s)"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "El grado es requerido",
+                  },
+                ]}
+                className="w-full cursor-text"
+              >
+                <Select
+                  placeholder="Seleccionar grado"
+                  className="w-full h-14"
+                  mode="multiple"
+                  options={[
+                    { value: "Nido", label: "Nido" },
+                    { value: "Pre-Kinder", label: "Pre-Kinder" },
+                    { value: "Kinder", label: "Kinder" },
+                    { value: "1", label: "1er grado" },
+                    { value: "2", label: "2do grado" },
+                    { value: "3", label: "3er grado" },
+                    { value: "4", label: "4to grado" },
+                    { value: "5", label: "5to grado" },
+                    { value: "6", label: "6to grado" },
+                    { value: "7", label: "7mo grado" },
+                    { value: "8", label: "8vo grado" },
+                    { value: "9", label: "9no grado" },
+                    { value: "10", label: "10mo grado" },
+                    { value: "11", label: "11vo grado" },
+                    { value: "12", label: "12vo grado" },
+                  ]}
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+
+              <div className="flex gap-x-4 max-sm:flex-col">
+                {/* Input Cantidad de Estudiantes */}
+                <Form.Item
+                  name="maxStudents"
+                  label="Cantidad de Estudiantes"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "La cantidad de estudiantes es requerida",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <InputNumber
+                    className="w-full rounded-xl p-2"
+                    placeholder="Cantidad de estudiantes"
+                    size="large"
+                    disabled={type === "see"}
+                  />
+                </Form.Item>
+
+                {/* Input Precio del Producto */}
+                <Form.Item
+                  name="price"
+                  label="Precio del Producto"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "El precio es requerido",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <InputNumber
+                    className="w-full rounded-xl p-2"
+                    placeholder="Precio del producto"
+                    size="large"
+                    disabled={type === "see"}
+                  />
+                  {/* </div> */}
+                </Form.Item>
+              </div>
+
+              <div className="flex gap-x-4 max-sm:flex-col">
+                {/* Input Fecha Inicial del Producto */}
+                <Form.Item
+                  name="startDate"
+                  label="Fecha Inicial del Producto"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "La fecha inicial es requerida",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <DatePicker
+                    className="w-full rounded-xl p-4"
+                    placeholder="Fecha inicial del producto"
+                    size="large"
+                    disabled={type === "see"}
+                  />
+                  {/* </div> */}
+                </Form.Item>
+
+                {/* Input Fecha Final del Producto */}
+                <Form.Item
+                  name="endDate"
+                  label="Fecha Final del Producto"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "La fecha final es requerida",
+                    },
+                  ]}
+                  className="w-full cursor-text"
+                >
+                  <DatePicker
+                    className="w-full rounded-xl p-4"
+                    placeholder="Fecha final del producto"
+                    size="large"
+                    disabled={type === "see"}
+                  />
+                </Form.Item>
+              </div>
+
+              <Form.Item
+                name="location"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor ingrese la locación del Producto.",
+                  },
+                ]}
+                label="Locación del Producto"
+                labelCol={{ span: 24 }}
+                className="w-full"
+              >
+                <Input
+                  className="w-full rounded-xl p-4"
+                  placeholder="Locación del producto"
+                  size="large"
+                  disabled={type === "see"}
+                />
+              </Form.Item>
+              {type === "see" && (
+                <div className="w-full flex flex-row gap-x-4 justify-between max-sm:flex-col">
                   <Form.Item
-                    name={`startHour_${discipline}`}
-                    label="Hora de inicio"
+                    name="startDateInscription"
+                    label="Inicio de inscripción"
                     labelCol={{ span: 24 }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Hora de inicio es requerido.",
-                      },
-                    ]}
                     className="w-full"
                   >
-                    <Select
-                      placeholder="Selecciona la hora de inicio"
-                      allowClear
+                    <Input
+                      className="w-full rounded-xl p-4"
+                      placeholder="Nombre del producto"
+                      size="large"
                       disabled={type === "see"}
-                    >
-                      {generateOptions()}
-                    </Select>
+                    />
                   </Form.Item>
                   <Form.Item
-                    name={`endHour_${discipline}`}
-                    label="Hora de Fin"
+                    name="endDateInscription"
+                    label="Fin de inscripción"
                     labelCol={{ span: 24 }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Hora de inicio es requerido.",
-                      },
-                    ]}
                     className="w-full"
                   >
-                    <Select
-                      placeholder="Selecciona la hora de inicio"
-                      allowClear
+                    <Input
+                      className="w-full rounded-xl p-4"
+                      placeholder="Nombre del producto"
+                      size="large"
                       disabled={type === "see"}
-                    >
-                      {generateOptions()}
-                    </Select>
+                    />
                   </Form.Item>
                 </div>
-              </div>
-            );
-          })}
-
-          {/* Input Sede del Producto */}
-          <Form.Item
-            name="campusesId"
-            label="Sede(s) del Producto"
-            labelCol={{ span: 24 }}
-            rules={[
-              {
-                required: true,
-                message: "Las sede son requeridas",
-              },
-            ]}
-            className="w-full cursor-text"
-          >
-            <Select
-              mode="multiple"
-              allowClear
-              placeholder="Por favor, selecciona las sedes"
-              className="w-full h-14"
-              options={campuses.map((camp: Campus) => {
-                return {
-                  value: camp.id,
-                  label: camp.name,
-                };
-              })}
-              disabled={type === "see"}
-            />
-          </Form.Item>
-
-          <div className="flex gap-x-4 max-sm:flex-col">
-            {/* Input Edad del Producto */}
-            <Form.Item
-              name="ages"
-              label="Edad(es)"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "La edad es requerida",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Select
-                mode="multiple"
-                placeholder="Seleccionar Edad"
-                className="w-full h-14"
-                options={Array.from({ length: 17 }, (_, i) => ({
-                  label: `${i + 1} año(s)`,
-                  value: `${i + 1}`,
-                }))}
-                disabled={type === "see"}
-              />
-            </Form.Item>
-
-            {/* Input Género del Producto */}
-            <Form.Item
-              name="gender"
-              label="Género"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "El genero es requerido",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <Radio.Group
-                onChange={onChangeRadioButton}
-                value={value}
-                disabled={type === "see"}
-              >
-                <Radio value={"Masculino"}>Masculino</Radio>
-                <Radio value={"Femenino"}>Femenino</Radio>
-                <Radio value={"Mixto"}>Mixto</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </div>
-
-          {/* Input Grado del Producto */}
-          <Form.Item
-            name="grades"
-            label="Grado(s)"
-            labelCol={{ span: 24 }}
-            rules={[
-              {
-                required: true,
-                message: "El grado es requerido",
-              },
-            ]}
-            className="w-full cursor-text"
-          >
-            <Select
-              placeholder="Seleccionar grado"
-              className="w-full h-14"
-              mode="multiple"
-              options={[
-                { value: "Nido", label: "Nido" },
-                { value: "Pre-Kinder", label: "Pre-Kinder" },
-                { value: "Kinder", label: "Kinder" },
-                { value: "1", label: "1er grado" },
-                { value: "2", label: "2do grado" },
-                { value: "3", label: "3er grado" },
-                { value: "4", label: "4to grado" },
-                { value: "5", label: "5to grado" },
-                { value: "6", label: "6to grado" },
-                { value: "7", label: "7mo grado" },
-                { value: "8", label: "8vo grado" },
-                { value: "9", label: "9no grado" },
-                { value: "10", label: "10mo grado" },
-                { value: "11", label: "11vo grado" },
-                { value: "12", label: "12vo grado" },
-              ]}
-              disabled={type === "see"}
-            />
-          </Form.Item>
-
-          <div className="flex gap-x-4 max-sm:flex-col">
-            {/* Input Cantidad de Estudiantes */}
-            <Form.Item
-              name="maxStudents"
-              label="Cantidad de Estudiantes"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "La cantidad de estudiantes es requerida",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <InputNumber
-                className="w-full rounded-xl p-2"
-                placeholder="Cantidad de estudiantes"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-
-            {/* Input Precio del Producto */}
-            <Form.Item
-              name="price"
-              label="Precio del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "El precio es requerido",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <InputNumber
-                className="w-full rounded-xl p-2"
-                placeholder="Precio del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-              {/* </div> */}
-            </Form.Item>
-          </div>
-
-          <div className="flex gap-x-4 max-sm:flex-col">
-            {/* Input Fecha Inicial del Producto */}
-            <Form.Item
-              name="startDate"
-              label="Fecha Inicial del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "La fecha inicial es requerida",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <DatePicker
-                className="w-full rounded-xl p-4"
-                placeholder="Fecha inicial del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-              {/* </div> */}
-            </Form.Item>
-
-            {/* Input Fecha Final del Producto */}
-            <Form.Item
-              name="endDate"
-              label="Fecha Final del Producto"
-              labelCol={{ span: 24 }}
-              rules={[
-                {
-                  required: true,
-                  message: "La fecha final es requerida",
-                },
-              ]}
-              className="w-full cursor-text"
-            >
-              <DatePicker
-                className="w-full rounded-xl p-4"
-                placeholder="Fecha final del producto"
-                size="large"
-                disabled={type === "see"}
-              />
-            </Form.Item>
-          </div>
-
-          <Form.Item
-            name="location"
-            rules={[
-              {
-                required: true,
-                message: "Por favor ingrese la locación del Producto.",
-              },
-            ]}
-            label="Locación del Producto"
-            labelCol={{ span: 24 }}
-            className="w-full"
-          >
-            <Input
-              className="w-full rounded-xl p-4"
-              placeholder="Locación del producto"
-              size="large"
-              disabled={type === "see"}
-            />
-          </Form.Item>
-          {type === "see" && (
-            <div className="w-full flex flex-row gap-x-4 justify-between max-sm:flex-col">
+              )}
               <Form.Item
-                name="startDateInscription"
-                label="Inicio de inscripción"
-                labelCol={{ span: 24 }}
+                name="photo"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor ingrese foto del Producto.",
+                  },
+                ]}
                 className="w-full"
               >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Nombre del producto"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </Form.Item>
-              <Form.Item
-                name="endDateInscription"
-                label="Fin de inscripción"
-                labelCol={{ span: 24 }}
-                className="w-full"
-              >
-                <Input
-                  className="w-full rounded-xl p-4"
-                  placeholder="Nombre del producto"
-                  size="large"
-                  disabled={type === "see"}
-                />
-              </Form.Item>
-            </div>
-          )}
-          <Form.Item
-            name="photo"
-            rules={[
-              {
-                required: true,
-                message: "Por favor ingrese foto del Producto.",
-              },
-            ]}
-            className="w-full"
-          >
-            <div className="flex flex-col gap-y-2">
-              <div className="flex flex-col gap-x-8">
-                {type !== "see" && (
-                  <div>
-                    <label className="block mb-2 text-sm text-gray-900">
-                      <span className="text-red-500">*</span> Imagen de producto
-                    </label>
-                    <input
-                      type="file"
-                      name="photo"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files.length > 0) {
-                          const file = e.target.files[0];
-                          setProductImage(file);
-                          setPhotoPreview(URL.createObjectURL(file));
-                        }
-                      }}
-                      accept="image/*"
-                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-3 mb-8"
-                      id="file_input"
-                    />
+                <div className="flex flex-col gap-y-2">
+                  <div className="flex flex-col gap-x-8">
+                    {type !== "see" && (
+                      <div>
+                        <label className="block mb-2 text-sm text-gray-900">
+                          <span className="text-red-500">*</span> Imagen de
+                          producto
+                        </label>
+                        <input
+                          type="file"
+                          name="photo"
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files.length > 0) {
+                              const file = e.target.files[0];
+                              setProductImage(file);
+                              setPhotoPreview(URL.createObjectURL(file));
+                            }
+                          }}
+                          accept="image/*"
+                          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-3 mb-8"
+                          id="file_input"
+                        />
+                      </div>
+                    )}
+
+                    {type == "create" ? (
+                      <img
+                        src={photoPreview}
+                        alt=""
+                        className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={photo}
+                        alt=""
+                        className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
+                      />
+                    )}
                   </div>
-                )}
-
-                {type == "create" ? (
-                  <img
-                    src={photoPreview}
-                    alt=""
-                    className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
-                  />
-                ) : (
-                  <img
-                    src={photo}
-                    alt=""
-                    className="border-solid border-2 border-neutral-300 w-full min-[460]:w-60 h-60 sm:w-80 md:w-96 sm:h-80 md:h-96 object-cover"
-                  />
-                )}
-              </div>
+                </div>
+              </Form.Item>
+              {/* )} */}
             </div>
-          </Form.Item>
-          {/* )} */}
-        </div>
 
-        <Form.Item className="w-full flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
-            disabled={loading}
-            onClick={() => {
-              if (type === "see") setOpen(false);
-            }}
-          >
-            {loading ? (
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-              />
-            ) : type === "see" ? (
-              "Cerrar"
-            ) : (
-              getTitle(type)
-            )}
-          </button>
-        </Form.Item>
+            <Form.Item className="w-full flex justify-end">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white font-semibold rounded-xl px-12 !h-12 hover:bg-blue-600"
+                disabled={loading}
+                onClick={() => {
+                  if (type === "see") setOpen(false);
+                }}
+              >
+                {loading ? (
+                  <Spin
+                    indicator={
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    }
+                  />
+                ) : type === "see" ? (
+                  "Cerrar"
+                ) : (
+                  getTitle(type)
+                )}
+              </button>
+            </Form.Item>
+          </>
+        )}
       </Form>
     </Modal>
   );
