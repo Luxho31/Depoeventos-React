@@ -88,17 +88,17 @@ type ModalProps = {
 };
 
 const daysOfWeek: { [key: string]: string } = {
-  '1': 'Lunes',
-  '2': 'Martes',
-  '3': 'Miércoles',
-  '4': 'Jueves',
-  '5': 'Viernes',
-  '6': 'Sábado',
-  '7': 'Domingo'
+  "1": "Lunes",
+  "2": "Martes",
+  "3": "Miércoles",
+  "4": "Jueves",
+  "5": "Viernes",
+  "6": "Sábado",
+  "7": "Domingo",
 };
 
 // Función para traducir los números de los días a nombres
-const getDayName = (dayNumber: any) => daysOfWeek[dayNumber] || 'Día inválido';
+const getDayName = (dayNumber: any) => daysOfWeek[dayNumber] || "Día inválido";
 
 export default function ModalProduct({ product, onClose }: ModalProps) {
   const { isAuthenticated, cargando } = useAuth();
@@ -171,7 +171,9 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
     product.campus as unknown as { name: string }[]
   ).map((campus) => campus.name);
 
-  const categoriesNames: string[] = (product.categories as unknown as { name: string }[]).map((category) => category.name);
+  const categoriesNames: string[] = (
+    product.categories as unknown as { name: string }[]
+  ).map((category) => category.name);
 
   return (
     <motion.div
@@ -196,13 +198,14 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               alt={product.name}
             />
           </div>
-          <div className="flex flex-col justify-between w-[60%] max-sm:w-full px-10 py-10">
-            <div className="flex justify-between items-center p-4 mb-4">
-              <div className="text-gray-900 font-bold text-3xl flex items-center gap-x-2 max-sm: ">
+          <div className="flex flex-col justify-between w-[60%] max-sm:w-full px-10 py-5">
+            <div className="flex justify-between items-center p-4">
+              <div className="text-gray-900 font-bold text-3xl flex items-center gap-x-2">
                 <div className="flex items-center justify-center max-sm:hidden">
                   <Tooltip
-                    title={`Cupos disponibles: ${product.maxStudents - product.currentStudents
-                      }`}
+                    title={`Cupos disponibles: ${
+                      product.maxStudents - product.currentStudents
+                    }`}
                     placement="top"
                   >
                     <InfoCircleOutlined className="text-base text-gray-500" />
@@ -224,7 +227,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 product.description
               )}
             </p>
-            <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1">
+            <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1 mb-2">
               {product.campus.length > 1 ? (
                 <li>
                   {product.courses.length > 1
@@ -239,8 +242,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
                   : "El curso se dará en: "}
-                {campusNames.join(", ")} ({categoriesNames.join(", ")}) y comprende
-                los siguientes grados {product.grades.join(", ")} (
+                {campusNames.join(", ")} ({categoriesNames.join(", ")}) y
+                comprende los siguientes grados {product.grades.join(", ")} (
                 {product.ages
                   .sort((a: number, b: number) => a - b)
                   .map((age: number, index: number, array: number[]) => {
@@ -254,29 +257,34 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 ).
               </li>
             </ul>
-            {
-              product.coursesWithSchedules.map((courseSchedule: any) => {
-                const course = product.courses.find(c => c.id === courseSchedule.courseId);
+            {product.coursesWithSchedules.map((courseSchedule: any) => {
+              const course = product.courses.find(
+                (c) => c.id === courseSchedule.courseId
+              );
+              return (
+                <div
+                  key={courseSchedule.courseId}
+                  className="flex gap-y-2 gap-x-4"
+                >
+                  <p className="text-gray-800  max-sm:text-xs">
+                    {course ? `${course.name} -> ` : "Curso no encontrado"}
+                  </p>
 
-                return (
-                  <div key={courseSchedule.courseId} className="flex gap-y-2 gap-x-4">
-                    <p className="text-gray-400  max-sm:text-xs">
-                      {course ? `${course.name} -> ` : 'Curso no encontrado'}
-                    </p>
-
-                    <ul className="flex flex-col gap-y-2 text-gray-400  max-sm:text-xs">
-                      {
-                        courseSchedule.schedules.map((schedule: any, index: any) => (
-                          <li key={index}>
-                            {schedule.days.map((day: any) => getDayName(day)).join(', ')} de {schedule.startHour} a {schedule.endHour}
-                          </li>
-                        ))
-                      }
-                    </ul>
-                  </div>
-                );
-              })
-            }
+                  <ul className="flex flex-col gap-y-2 text-gray-500  max-sm:text-xs">
+                    {courseSchedule.schedules.map(
+                      (schedule: any, index: any) => (
+                        <li key={index}>
+                          {schedule.days
+                            .map((day: any) => getDayName(day))
+                            .join(", ")}{" "}
+                          de {schedule.startHour} a {schedule.endHour}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              );
+            })}
             <div className="mb-4 flex justify-around gap-y-2 max-sm: mt-3">
               <div className="flex gap-x-2 text-gray-600 text-sm max-sm:text-xs max-sm:flex-col">
                 <p className="font-semibold">Inicio de clases:</p>
