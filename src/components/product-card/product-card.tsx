@@ -47,6 +47,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
   };
 
   const getDayByIndex = (index: number[]) => {
+    const realIndex = index.map((i) => i - 1);
     const days = [
       "Lunes",
       "Martes",
@@ -58,11 +59,11 @@ export default function ProductCard({ product, onClick }: CardProps) {
     ];
 
     if (index.length === 1) {
-      return days[index[0]];
+      return days[realIndex[0]];
     }
-    return index.map((i) => days[i - 1]).join(", ");
-  };
 
+    return realIndex.map((i) => days[i]).join(", ");
+  };
   const currentDate = new Date();
   const startDateInscription = new Date(product.startDateInscription);
   const endDateInscription = new Date(product.endDateInscription);
