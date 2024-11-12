@@ -26,6 +26,7 @@ type Product = {
   ages: string[];
   grades: string[];
   gender: string;
+  coursesWithSchedules: any[];
 };
 
 type Course = {
@@ -40,23 +41,47 @@ type CardProps = {
 };
 
 export default function ProductCard({ product, onClick }: CardProps) {
+  const getCourseName = (courseId: number) => {
+    const course = product.courses.find((c) => c.id === courseId);
+    return course ? course.name : "Curso desconocido";
+  };
+
+  const getDayByIndex = (index: number[]) => {
+    const days = [
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábado",
+      "Domingo",
+    ];
+
+    if (index.length === 1) {
+      return days[index[0]];
+    }
+    return index.map((i) => days[i - 1]).join(", ");
+  };
+
   const currentDate = new Date();
   const startDateInscription = new Date(product.startDateInscription);
   const endDateInscription = new Date(product.endDateInscription);
   const isOutOfDateRange =
     currentDate < startDateInscription || currentDate > endDateInscription;
 
+  console.log(product);
+
   const isOutOfStock = product.currentStudents === product.maxStudents;
 
   const courseNames =
     product.courses.length > 3
       ? product.courses
-        .slice(0, 3)
-        .map((course) => course.name)
-        .join(", ") + "..."
+          .slice(0, 3)
+          .map((course) => course.name)
+          .join(", ") + "..."
       : product.courses.length === 1
-        ? ""
-        : product.courses.map((course) => course.name).join(", ");
+      ? ""
+      : product.courses.map((course) => course.name).join(", ");
 
   function formatAges(ages: string[]): string {
     return ages
@@ -82,9 +107,9 @@ export default function ProductCard({ product, onClick }: CardProps) {
       "14": "14vo grado",
       "15": "15vo grado",
 
-      "Nido": "Nido",
+      Nido: "Nido",
       "Pre-kinder": "Pre-kinder",
-      "Kinder": "Kinder",
+      Kinder: "Kinder",
     };
 
     return grades.map((grade: any) => gradeNames[grade] || grade).join(", ");
@@ -118,9 +143,11 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </li>
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
-          <p className="ml-2 text-sm sm:ml-4">{product.categories
-            .map((category: { name: string }) => category.name)
-            .join(", ")}</p>
+          <p className="ml-2 text-sm sm:ml-4">
+            {product.categories
+              .map((category: { name: string }) => category.name)
+              .join(", ")}
+          </p>
         </li>
         <li className="flex items-center mb-2">
           <FaCheck className="text-green-700 text-xs" />
@@ -128,23 +155,46 @@ export default function ProductCard({ product, onClick }: CardProps) {
         </li>
         <li className="flex items-center">
           <FaCheck className="text-green-700 text-xs" />
-          <p className="ml-2 text-sm sm:ml-4">{gradesNames}{" "}({product.gender})</p>
+          <p className="ml-2 text-sm sm:ml-4">
+            {gradesNames} ({product.gender})
+          </p>
         </li>
       </ul>
+
+      {/* Información de horarios */}
+      <ul className="px-4 py-2 sm:px-8 sm:py-4 ">
+        {product.coursesWithSchedules.map((courseWithSchedule: any) => (
+          <li key={courseWithSchedule.courseId} className="mb-2">
+            <p className="ml-2 text-sm sm:ml-4">
+              <strong>{getCourseName(courseWithSchedule.courseId)}</strong>
+            </p>
+            <ul className="ml-6">
+              {courseWithSchedule.schedules.map((schedule: any, index: any) => (
+                <li key={index} className="text-sm text-gray-600">
+                  {getDayByIndex(schedule.days)}: {schedule.startHour} -{" "}
+                  {schedule.endHour}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+
       <div className="w-full flex justify-center">
         <button
-          className={`px-3 py-1 my-2 ${isOutOfDateRange || isOutOfStock
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-500 hover:bg-blue-600"
-            } text-sm sm:text-base text-white rounded`}
+          className={`px-3 py-1 my-2 ${
+            isOutOfDateRange || isOutOfStock
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          } text-sm sm:text-base text-white rounded`}
           onClick={onClick}
           disabled={isOutOfDateRange || isOutOfStock}
         >
           {isOutOfDateRange
             ? "Fuera de rango de inscripción"
             : isOutOfStock
-              ? "Sin stock"
-              : "Inscribirse"}
+            ? "Sin stock"
+            : "Inscribirse"}
         </button>
       </div>
     </div>
