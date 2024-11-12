@@ -20,6 +20,7 @@ export default function Cart() {
   const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabledTerms, setDisabledTerms] = useState(true);
+
   const [form] = Form.useForm();
 
   const [couponCode, setCouponCode] = useState("");
@@ -28,12 +29,25 @@ export default function Cart() {
 
   const [completedOrder, setCompletedOrder] = useState(false);
 
+  const [termsChecked, setTermsChecked] = useState(false);
+  const [dataUsageChecked, setDataUsageChecked] = useState(false);
+
+  const handleCheckboxChange = (checkboxType: any) => {
+    if (checkboxType === "terms") {
+      const newTermsChecked = !termsChecked;
+      setTermsChecked(newTermsChecked);
+      setDisabledTerms(!(newTermsChecked && dataUsageChecked));
+    } else if (checkboxType === "dataUsage") {
+      const newDataUsageChecked = !dataUsageChecked;
+      setDataUsageChecked(newDataUsageChecked);
+      setDisabledTerms(!(termsChecked && newDataUsageChecked));
+    }
+  };
+
   const createOrderForm = async (values: any) => {
     try {
       console.log("Valores Create Order Form: ", values);
       setLoading(true);
-      // const totalWithDiscount = getTotalPrice() - calculateDiscount();
-      // const orderData = { couponCode, total: totalWithDiscount };
       if (values.discount === undefined) {
         values.discount = "-";
       }
@@ -82,8 +96,8 @@ export default function Cart() {
   };
 
   const handleBackButton = () => {
-    setProgressPercent(0); // Retroceder al resumen de compra
-    setCompletedOrder(false); // Desmarcar la orden como completada
+    setProgressPercent(0);
+    setCompletedOrder(false);
     window.scrollTo(0, 0);
   };
 
@@ -226,20 +240,29 @@ export default function Cart() {
                 </div>
               </div>
               <div className="w-full flex flex-col justify-center items-center gap-y-3">
-                <Checkbox
-                  className="text-md"
-                  onChange={() => setDisabledTerms(!disabledTerms)}
-                  disabled={loading}
-                >
-                  He leído y aceptos los{" "}
-                  <a
-                    className="text-blue-500 font-semibold hover:text-blue-700"
-                    href={Terminos}
-                    target="_blank"
+                <div className="flex flex-col items-center justify-center">
+                  <Checkbox
+                    className="text-md"
+                    onChange={() => handleCheckboxChange("terms")}
+                    disabled={loading}
                   >
-                    términos y condiciones
-                  </a>
-                </Checkbox>
+                    He leído y acepto los{" "}
+                    <a
+                      className="text-blue-500 font-semibold hover:text-blue-700"
+                      href={Terminos}
+                      target="_blank"
+                    >
+                      términos y condiciones
+                    </a>
+                  </Checkbox>
+                  <Checkbox
+                    className="text-md"
+                    onChange={() => handleCheckboxChange("dataUsage")}
+                    disabled={loading}
+                  >
+                    Acepto el uso de mis datos para fines comerciales
+                  </Checkbox>
+                </div>
 
                 <button
                   className={
