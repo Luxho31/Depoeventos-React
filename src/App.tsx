@@ -28,6 +28,7 @@ import NotFound from "./pages/not-found/not-found";
 import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
 import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
+import { FaqSection } from "./pages/landing/faq/faq";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
                 element={<PurchaseCompleted />}
               />
               <Route path="/complaints-book" element={<ComplaintsBook />} />
+              <Route path="/faq" element={<FaqSection />} />
             </Route>
 
             {/* Rutas Protegidas */}
