@@ -27,6 +27,7 @@ import Products from "./pages/landing/products/products";
 import NotFound from "./pages/not-found/not-found";
 import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
 import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
+import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
 
 function App() {
   return (
@@ -55,7 +56,11 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/purchase-completed" element={<PurchaseCompleted />} />
+              <Route
+                path="/purchase-completed"
+                element={<PurchaseCompleted />}
+              />
+              <Route path="/complaints-book" element={<ComplaintsBook />} />
             </Route>
 
             {/* Rutas Protegidas */}
