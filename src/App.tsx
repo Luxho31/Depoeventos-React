@@ -29,6 +29,7 @@ import PurchaseCompleted from "./pages/landing/cart/components/purchase-complete
 import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
 import { FaqSection } from "./pages/landing/faq/faq";
+import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 
 function App() {
   return (
@@ -55,6 +56,9 @@ function App() {
             <Route path="/" element={<RutaGeneral />}>
               <Route index element={<Home />} />
               <Route path="/products" element={<Products />} />
+              {/* Nueva ruta de productos */}
+              <Route path="/products/:id" element={<ProductsByLocation />} />
+              {/* ----------------------- */}
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
               <Route
