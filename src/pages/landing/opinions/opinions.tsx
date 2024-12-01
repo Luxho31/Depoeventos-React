@@ -1,25 +1,18 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Checkbox, Form, FormInstance, Input, Select, Spin } from "antd";
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
+import { Checkbox, Form, FormInstance, Input, Spin } from "antd";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
-import { sendMessage } from "../../../services/contact-us-service";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
 import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
-
-// type ContactUsType = {
-//   fullName: string;
-//   email: string;
-//   phone: string;
-//   message: string;
-//   privacyPolice: boolean;
-// };
+import { sendMessage } from "../../../services/contact-us-service";
 
 export default function Opinions() {
-  const { Option } = Select;
   const { TextArea } = Input;
 
   const formRef = useRef<FormInstance | null>(null);
-
+  const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [disableButton, setDisableButton] = useState(true);
@@ -39,29 +32,10 @@ export default function Opinions() {
     }
   };
 
-  const prefixSelector = (
-    <Form.Item
-      name="prefix"
-      noStyle
-      rules={[
-        {
-          required: true,
-          message: "Por favor, ingresa el prefijo de tu país",
-        },
-      ]}
-    >
-      <Select style={{ width: 70 }}>
-        <Option value="51">+51</Option>
-        <Option value="58">+58</Option>
-      </Select>
-    </Form.Item>
-  );
-
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row justify-center items-center">
+    <div className="min-h-screen flex flex-col lg:flex-row-reverse justify-center items-center lg:pt-10">
       <Toaster richColors />
-      <div className="lg:w-1/2 px-4 lg:px-0 pt-12 lg:pt-0">
-        {/* Texto introducción */}
+      <div className="lg:w-1/2 px-4 lg:px-0 pt-12 lg:pt-0 max-sm:pt-0">
         <div className="max-w-lg mx-auto mb-7">
           <h1 className="text-xl lg:text-2xl font-semibold text-center lg:text-left">
             Evalúa nuestro servicio
@@ -74,7 +48,7 @@ export default function Opinions() {
         <Form
           name="contact-us"
           onFinish={handleSendMessage}
-          onFinishFailed={() => { }}
+          onFinishFailed={() => {}}
           className="max-w-lg mx-auto"
           ref={(ref) => (formRef.current = ref)}
         >
@@ -86,62 +60,57 @@ export default function Opinions() {
                 message: "Por favor, ingrese tu nombre completo",
               },
             ]}
+            label="Nombre completo"
+            labelCol={{ span: 24 }}
           >
             <Input
-              className="w-full border rounded-xl p-2"
+              className="w-full border rounded-xl p-2 pl-4"
               placeholder="Nombre completo"
               size="large"
             />
           </Form.Item>
 
-          {/* Input Email */}
           <Form.Item
-            name="email"
+            name="rating"
             rules={[
               {
                 required: true,
-                message: "Por favor, ingresa tu correo electrónico.",
-              },
-              {
-                type: "email",
-                message: "Ingresa un correo electrónico válido.",
-              },
-            ]}
-          >
-            <Input
-              className="w-full rounded-xl p-2"
-              placeholder="Ingresa tu correo electrónico"
-              size="large"
-            />
-          </Form.Item>
-
-          {/* Input Phone */}
-          <Form.Item
-            name="phone"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, ingresa tu número de teléfono",
+                validator: () => {
+                  if (rating === 0) {
+                    return Promise.reject(
+                      "Por favor, ingrese una calificación"
+                    );
+                  }
+                  return Promise.resolve();
+                },
               },
             ]}
           >
-            <Input
-              addonBefore={prefixSelector}
-              className="w-full rounded-xl"
-              placeholder="Ingresa tu número de celular"
-              size="large"
-            />
+            <>
+              <div className="flex items-center h-full gap-x-1">
+                <span className="text-red-500 text-lg mt-1">*</span>
+                <label>Calificación</label>
+              </div>
+              <Rating
+                className="ml-4 mt-3"
+                style={{ maxWidth: 150 }}
+                value={rating}
+                onChange={setRating}
+              />
+            </>
           </Form.Item>
 
           {/* Input Message */}
           <Form.Item
-            name="message"
+            name="testimonio"
             rules={[
               {
                 required: true,
-                message: "Por favor, ingresa tu mensaje",
+                message: "Por favor, ingrese un mensaje",
               },
             ]}
+            label="Testimonio"
+            labelCol={{ span: 24 }}
           >
             <TextArea
               rows={4}
@@ -161,16 +130,20 @@ export default function Opinions() {
                 message: "Debes aceptar las políticas de privacidad",
               },
             ]}
-
           >
-            <Checkbox onChange={
-              (e) => {
-                setDisableButton(!e.target.checked)
-              }
-            }>
+            <Checkbox
+              onChange={(e) => {
+                setDisableButton(!e.target.checked);
+              }}
+            >
               He leído y acepto las{" "}
-              <a href={Terminos} target="_blank" className="font-semibold text-blue-500 hover:text-blue-700">políticas de privacidad</a>
-              {" "}
+              <a
+                href={Terminos}
+                target="_blank"
+                className="font-semibold text-blue-500 hover:text-blue-700"
+              >
+                políticas de privacidad
+              </a>{" "}
               <span className="text-red-500">*</span>
             </Checkbox>
           </Form.Item>
@@ -187,7 +160,7 @@ export default function Opinions() {
                   indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
                 />
               ) : (
-                "Enviar mensaje"
+                "Enviar testimonio"
               )}
             </button>
           </Form.Item>
@@ -199,7 +172,7 @@ export default function Opinions() {
         <img
           src={contactUsIMG}
           alt="Mike Wazowski"
-          className="rounded-tl-full rounded-br-full w-[70%] object-cover"
+          className="rounded-tl-[70%] rounded-br-[70%] w-[70%] object-cover"
         />
       </div>
     </div>

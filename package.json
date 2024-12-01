@@ -17,6 +17,7 @@
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
     "@mercadopago/sdk-react": "^0.0.19",
+    "@smastrom/react-rating": "^1.5.0",
     "animate.css": "^4.1.1",
     "antd": "^5.14.2",
     "autoprefixer": "^10.4.17",
