@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
 import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
-import { sendMessage } from "../../../services/contact-us-service";
+import { createTestimonial } from "../../../services/opinions-service";
 
 export default function Opinions() {
   const { TextArea } = Input;
@@ -20,13 +20,19 @@ export default function Opinions() {
   const handleSendMessage = async (values: any) => {
     try {
       setLoading(true);
-      await sendMessage(values);
-      toast.success("Mensaje enviado correctamente");
+      const body = {
+        name: values.fullName,
+        rating: rating,
+        testimonial: values.testimonial,
+      };
+      await createTestimonial(body);
+      toast.success("Testimonio enviado correctamente");
+      setRating(0);
       if (formRef.current) {
         formRef.current.resetFields();
       }
     } catch (error) {
-      toast.error("Error al enviar mensaje");
+      toast.error("Error al enviar testimonio");
     } finally {
       setLoading(false);
     }
@@ -102,7 +108,7 @@ export default function Opinions() {
 
           {/* Input Message */}
           <Form.Item
-            name="testimonio"
+            name="testimonial"
             rules={[
               {
                 required: true,
