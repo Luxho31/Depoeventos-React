@@ -30,6 +30,7 @@ import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
 import { FaqSection } from "./pages/landing/faq/faq";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
+import Opinions from "./pages/landing/opinions/opinions";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
               <Route path="/products/:id" element={<ProductsByLocation />} />
               {/* ----------------------- */}
               <Route path="/contact" element={<Contact />} />
+              <Route path="/opinions" element={<Opinions />} />
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/purchase-completed"
