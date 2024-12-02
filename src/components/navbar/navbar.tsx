@@ -10,21 +10,25 @@ import {
   Space,
   Spin,
 } from "antd";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { IoIosLogOut } from "react-icons/io";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { RxDashboard, RxHamburgerMenu } from "react-icons/rx";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
+import { navbarItems } from "../../utils/routes/items-navbar";
 import "./navbar.css";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [hoveredItem, setHoveredItem] = useState("");
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
   const { logout, isAuthenticated, userInfo, cargando } = useAuth();
   const { products, clearCart } = useCart();
   const [open, setOpen] = useState(false);
@@ -66,7 +70,6 @@ export default function Navbar() {
     setIsLoggedIn(!!storedToken);
   }, []);
 
-
   const handleItemClick = (path: string) => {
     navigate(path);
   };
@@ -83,6 +86,16 @@ export default function Navbar() {
     console.log("click", e);
   };
 
+  const handleHover = (url = "") => {
+    if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+    if (url) {
+      setHoveredItem(url);
+    } else {
+      timeoutIdRef.current = setTimeout(() => setHoveredItem(""), 300);
+    }
+  };
+
+  const currentItem = navbarItems.find((item) => item.url === hoveredItem);
   const items: MenuProps["items"] = [
     {
       label: "Perfil",
@@ -91,8 +104,15 @@ export default function Navbar() {
       onClick: () => handleItemClick("/dashboard/profile"),
     },
     {
-      label: "Cerrar Sesión",
+      label: "Dashboard",
       key: "2",
+      onClick: () => handleItemClick("/dashboard"),
+      icon: <RxDashboard />,
+      danger: false,
+    },
+    {
+      label: "Cerrar Sesión",
+      key: "3",
       icon: <IoIosLogOut />,
       danger: true,
       onClick: () => {
@@ -125,23 +145,64 @@ export default function Navbar() {
           </h2>
         </Link>
 
-        <ul className="flex gap-2 max-lg:hidden">
-          <li className="">
-            <NavLink to="/">Inicio</NavLink>
-          </li>
+        <div className="lg:w-[600px] w-full hidden lg:flex justify-center items-center h-full">
+          <div className="relative">
+            <ul className="flex space-x-6">
+              {navbarItems.map((item) => (
+                <li
+                  key={item.url}
+                  className={`relative px-3 py-1 rounded-lg transition-colors ${
+                    hoveredItem === item.url
+                      ? " text-black"
+                      : "hover:text-red-400"
+                  }`}
+                  onMouseEnter={() => handleHover(item.url)}
+                  onMouseLeave={() => handleHover()}
+                >
+                  <NavLink to={item.url}>{item.name}</NavLink>
+                </li>
+              ))}
+            </ul>
 
-          <li className="">
-            <NavLink to="/products">Productos</NavLink>
-          </li>
-
-          <li className="">
-            <NavLink to="/contact">Contacto</NavLink>
-          </li>
-
-          <li className={`${isAuthenticated ? "block" : "hidden"}`}>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-        </ul>
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {hoveredItem &&
+                currentItem?.subCategories &&
+                currentItem?.subCategories.length > 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-full w-full mt-1 bg-white shadow-lg rounded-xl p-8 grid grid-cols-2 md:grid-cols-2 gap-4"
+                    onMouseEnter={() => handleHover(hoveredItem)}
+                    onMouseLeave={() => handleHover()}
+                  >
+                    {currentItem.subCategories.map((subCategory, index) => (
+                      <div key={index} className="flex flex-col">
+                        <h3 className="text-orange-600 mb-2 select-none text-sm">
+                          {subCategory.header}
+                        </h3>
+                        <hr className="border-t border-gray-500 mb-3 w-9 border-2" />
+                        <ul className="space-y-2 ">
+                          {subCategory.items.map((item, idx) => (
+                            <li key={idx} className="">
+                              <Link
+                                to={item.url}
+                                className="text-gray-700 hover:text-orange-900 text-sm"
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+            </AnimatePresence>
+          </div>
+        </div>
 
         <div className="flex items-center">
           <ul className="">
@@ -162,7 +223,9 @@ export default function Navbar() {
                       <tbody>
                         {products.length === 0 ? (
                           <tr>
-                            <td colSpan={4} className="py-3">No hay productos en el carrito</td>
+                            <td colSpan={4} className="py-3">
+                              No hay productos en el carrito
+                            </td>
                           </tr>
                         ) : (
                           products.map((product) => (
@@ -175,7 +238,9 @@ export default function Navbar() {
                                   ? `${product.name.split(" ", 1).join(" ")}...`
                                   : product.name}
                               </td>
-                              <td className="w-1/2">S/.{product && product.price}</td>
+                              <td className="w-1/2">
+                                S/.{product && product.price}
+                              </td>
                               <td className="w-1/2">1</td>
                               <td>
                                 <button className="text-red-500">

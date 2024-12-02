@@ -62,7 +62,7 @@ function App() {
               <Route path="/products/:id" element={<ProductsByLocation />} />
               {/* ----------------------- */}
               <Route path="/contact" element={<Contact />} />
-              <Route path="/opinions" element={<Opinions />} />
+              <Route path="/testimonials" element={<Opinions />} />
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/purchase-completed"
