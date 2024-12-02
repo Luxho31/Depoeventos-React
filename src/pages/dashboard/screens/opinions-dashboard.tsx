@@ -98,7 +98,7 @@ function TestimonialDashboard() {
             <tbody>
               {testimonialData.map((testimonial, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4">{testimonial.fullName}</td>
+                  <td className="px-6 py-4 w-1/8">{testimonial.fullName}</td>
                   <td className="px-2 py-4 w-1/2">{testimonial.testimonial}</td>
                   <td className="px-6 py-4">
                     <Rating
