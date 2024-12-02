@@ -1,12 +1,16 @@
 import { Rating } from "@smastrom/react-rating";
 import "./testimonials.css";
 
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { A11y, Autoplay, Navigation, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  getAllTestimonialsApproved
+} from "../../../../../services/opinions-service";
 
 const TestimonialsData = [
   {
@@ -40,7 +44,7 @@ const TestimonialsData = [
     id: 4,
     fullName: "Enrique Gonzales",
     testimonial:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis, consectetur adipisicing elit.",
     createdAt: "2024-09-01",
     approved: true,
     rating: 1,
@@ -49,7 +53,7 @@ const TestimonialsData = [
 
 const Slide = ({ item }: { item: any }) => {
   return (
-    <div className="w-full select-none h-[250px] bg-white rounded-lg p-6 flex flex-col items-center border border-gray-300 shadow shadow-orange-300 hover:shadow-md hover:shadow-orange-500 transition-shadow duration-300 ease-in-out">
+    <div className="w-full select-none h-[300px] bg-white rounded-lg p-6 flex flex-col items-center border border-gray-300 shadow shadow-orange-300 hover:shadow-md hover:shadow-orange-500 transition-shadow duration-300 ease-in-out">
       {/* Rating */}
       <div className="mb-4">
         <Rating value={item.rating} readOnly style={{ maxWidth: 120 }} />
@@ -69,6 +73,17 @@ const Slide = ({ item }: { item: any }) => {
 };
 
 export default function Testimonials() {
+  // const [testimonials, setTestimonials] = useState(TestimonialsData);
+  const [, setTestimonials] = useState(TestimonialsData);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      const response = await getAllTestimonialsApproved();
+      const data = await response.json();
+      setTestimonials(data);
+    };
+    fetchTestimonials();
+  }, []);
   return (
     <div className="w-full">
       <div className="w-[80%] m-auto mb-10 mt-20">

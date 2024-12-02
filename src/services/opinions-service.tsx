@@ -4,7 +4,7 @@ const BASE_URL = generalRoutes.BASE_URL;
 
 export const createTestimonial = async (body: any) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/testimonials`, {
+    const response = await fetch(`${BASE_URL}/api/opinions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const createTestimonial = async (body: any) => {
 };
 
 export const getAllTestimonials = () => {
-  return fetch(`${BASE_URL}/api/testimonials`, {
+  return fetch(`${BASE_URL}/api/opinions`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const getAllTestimonials = () => {
 };
 
 export const getTestimonialById = (id: number) => {
-  return fetch(`${BASE_URL}/api/testimonials/${id}`, {
+  return fetch(`${BASE_URL}/api/opinions/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -42,10 +42,19 @@ export const getTestimonialById = (id: number) => {
 };
 
 export const updateTestimonialApproval = (id: number) => {
-  return fetch(`${BASE_URL}/api/testimonials/${id}`, {
+  return fetch(`${BASE_URL}/api/opinions/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
   });
 };
+
+export const getAllTestimonialsApproved = async () => {
+  return await fetch(`${BASE_URL}/api/opinions/approved`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
