@@ -5,6 +5,7 @@ import Campuses from "./components/campuses/campuses";
 import Courses from "./components/courses/courses";
 import Intro from "./components/intro/intro";
 import Team from "./components/team/team";
+import Testimonials from "./components/testimonials/testimonials";
 
 export default function Home() {
   const data = [
@@ -15,7 +16,8 @@ export default function Home() {
       description:
         "Somos una comunidad educativa católica que forma parte de la Familia Sodálite. Ofrecemos una sólida formación personalizada e integral. Trabajamos en conjunto con la familia, ofreciendo a nuestros alumnos una experiencia educativa diferenciada con espacios de coeducación y altos estándares académicos en un ambiente bilingüe. ",
       logo: "https://educacionalfuturo.com/wp-content/uploads/2018/08/Logo-SP.png",
-      image: "https://sanpedro.vc-sp.edu.pe/wp-content/uploads/2023/11/SP-INICIO-CABECERA-02-scaled.jpg",
+      image:
+        "https://sanpedro.vc-sp.edu.pe/wp-content/uploads/2023/11/SP-INICIO-CABECERA-02-scaled.jpg",
     },
     {
       id: 2,
@@ -44,6 +46,7 @@ export default function Home() {
         <Intro />
         <Courses />
         <Campuses slide={data} />
+        <Testimonials />
         <Team />
         <FloatButton.BackTop />
       </div>

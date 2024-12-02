@@ -1,0 +1,31 @@
+.Wrapper {
+  width: 100%;
+  height: 510px;
+  @media (max-width: 860px) {
+    height: auto;
+  }
+}
+.ClubBoxRow {
+  @media (max-width: 860px) {
+    flex-direction: column;
+  }
+}
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 20px; /* Ajusta el tamaño de la fuente */
+  width: 30px; /* Ancho del botón */
+  height: 30px; /* Altura del botón */
+  padding: 5px; /* Ajusta el espacio interno */
+  border-radius: 50%; /* Para hacer los botones redondeados */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 20px; /* Ajusta el tamaño del icono (flecha) */
+}
