@@ -1,3 +1,4 @@
+import { Rating } from "@smastrom/react-rating";
 import "./testimonials.css";
 
 import "swiper/css";
@@ -15,7 +16,7 @@ const TestimonialsData = [
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
     createdAt: "2024-09-01",
     approved: true,
-    rating: 1,
+    rating: 2,
   },
   {
     id: 2,
@@ -24,7 +25,7 @@ const TestimonialsData = [
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
     createdAt: "2024-09-01",
     approved: true,
-    rating: 1,
+    rating: 3,
   },
   {
     id: 3,
@@ -33,7 +34,7 @@ const TestimonialsData = [
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
     createdAt: "2024-09-01",
     approved: true,
-    rating: 1,
+    rating: 4,
   },
   {
     id: 4,
@@ -48,10 +49,21 @@ const TestimonialsData = [
 
 const Slide = ({ item }: { item: any }) => {
   return (
-    <div className="w-full h-[400px] bg-gray-200 rounded-lg p-5">
-      <p>
-        {item.fullName} - {item.createdAt}
+    <div className="w-full select-none h-[250px] bg-white rounded-lg p-6 flex flex-col items-center border border-gray-300 shadow shadow-orange-300 hover:shadow-md hover:shadow-orange-500 transition-shadow duration-300 ease-in-out">
+      {/* Rating */}
+      <div className="mb-4">
+        <Rating value={item.rating} readOnly style={{ maxWidth: 120 }} />
+      </div>
+
+      {/* Name and Date */}
+      <p className="text-xl font-semibold text-gray-800 mb-2">
+        {item.fullName}
       </p>
+      <p className="text-sm text-gray-500 mb-4">{item.createdAt}</p>
+
+      {/* Testimonial */}
+      <p className="text-sm text-gray-600 text-center">"{item.testimonial}"</p>
+      <p className="text-xs text-gray-400 text-center mt-4">Depoeventos</p>
     </div>
   );
 };
@@ -63,7 +75,10 @@ export default function Testimonials() {
         <div className="mb-12">
           <h1 className="text-2xl lg:text-3xl font-bold mb-3">Testimonios</h1>
           <p className="leading-6 text-justify">
-            Nuestros alumnos y padres de familia nos recomiendan.
+            Contamos con instructores especializados que, con su experiencia y
+            pasión, te guiarán en el aprendizaje y dominio de diversas
+            disciplinas deportivas. Descubre lo que nuestros estudiantes y
+            padres tienen para decir sobre su experiencia con nosotros.
           </p>
         </div>
         <Swiper
@@ -82,7 +97,7 @@ export default function Testimonials() {
               autoplay: {
                 delay: 6500,
                 disableOnInteraction: false,
-              }
+              },
             },
             640: {
               slidesPerView: 2,
@@ -95,7 +110,7 @@ export default function Testimonials() {
           }}
         >
           {TestimonialsData.map((item) => (
-            <SwiperSlide key={item.id}>
+            <SwiperSlide key={item.id} className="p-4">
               <Slide key={item.id} item={item} />
             </SwiperSlide>
           ))}

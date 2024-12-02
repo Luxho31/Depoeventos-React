@@ -15,11 +15,11 @@
   position: absolute;
   background-color: transparent;
   color: black;
-  font-size: 20px; /* Ajusta el tamaño de la fuente */
-  width: 30px; /* Ancho del botón */
-  height: 30px; /* Altura del botón */
-  padding: 5px; /* Ajusta el espacio interno */
-  border-radius: 50%; /* Para hacer los botones redondeados */
+  font-size: 10px;
+  width: 20px;
+  height: 20px;
+  padding: 20px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,5 +27,5 @@
 
 .swiper-button-prev:after,
 .swiper-button-next:after {
-  font-size: 20px; /* Ajusta el tamaño del icono (flecha) */
+  font-size: 20px;
 }
