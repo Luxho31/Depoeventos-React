@@ -31,6 +31,7 @@ import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book"
 import { FaqSection } from "./pages/landing/faq/faq";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 import Opinions from "./pages/landing/opinions/opinions";
+import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
 
 function App() {
   return (
@@ -108,6 +109,10 @@ function App() {
               <Route
                 path="/dashboard/schedule"
                 element={<ScheduleDashboard />}
+              />
+              <Route
+                path="/dashboard/testimonials"
+                element={<TestimonialDashboard />}
               />
             </Route>
 

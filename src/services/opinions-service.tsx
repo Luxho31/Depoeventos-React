@@ -23,7 +23,7 @@ export const createTestimonial = async (body: any) => {
   }
 };
 
-export const getTestimonials = () => {
+export const getAllTestimonials = () => {
   return fetch(`${BASE_URL}/api/testimonials`, {
     method: "GET",
     headers: {

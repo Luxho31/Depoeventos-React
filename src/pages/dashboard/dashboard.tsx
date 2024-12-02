@@ -25,7 +25,7 @@ import {
 } from "react-router-dom";
 
 import type { MenuProps } from "antd";
-import { CiBadgeDollar } from "react-icons/ci";
+import { CiBadgeDollar, CiStar } from "react-icons/ci";
 import { FaChevronLeft, FaSchool, FaUser } from "react-icons/fa";
 import { FaCartShopping, FaChildren } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
@@ -176,6 +176,14 @@ export default function Dashboard() {
       role: ["ADMIN", "USER"],
       // disabled: true,
     },
+    {
+      key: "12",
+      path: "/dashboard/testimonials",
+      icon: <CiStar />,
+      label: "Testimonios",
+      onClick: () => handleItemClick("/dashboard/testimonials"),
+      role: ["ADMIN"],
+    }
   ];
 
   const selectedItem = menuItems.find(
