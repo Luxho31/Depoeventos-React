@@ -1,7 +1,8 @@
 import { FloatButton } from "antd";
+import { FaWhatsapp } from "react-icons/fa";
 import PalestinoArabeIMG from "../../../assets/campuses/club-palestino-arabe.png";
-import VillaCaritasIMG from "../../../assets/campuses/villa-caritas.jpg";
 import SanJoseMaristasIMG from "../../../assets/campuses/san-jose-maristas.jpeg";
+import VillaCaritasIMG from "../../../assets/campuses/villa-caritas.jpg";
 import Campuses from "./components/campuses/campuses";
 import Courses from "./components/courses/courses";
 import Intro from "./components/intro/intro";
@@ -30,7 +31,7 @@ export default function Home() {
       image:
         "https://villacaritas.vc-sp.edu.pe/wp-content/uploads/2023/11/IMG_0942.jpg",
     },
-    
+
     {
       id: 3,
       direction: "Callao, Perú",
@@ -39,7 +40,8 @@ export default function Home() {
         "El Colegio San José Hermanos Maristas del Callao es una comunidad educativa católica que forma integralmente a niños y jóvenes, guiados por los valores evangélicos. Siguiendo el carisma de San Marcelino Champagnat, armonizamos fe, cultura y vida, con una metodología innovadora y la pedagogía de la presencia, buscando siempre educar con amor y dedicación.",
 
       logo: SanJoseMaristasIMG,
-      image: "https://www.sanjosemaristas.edu.pe/assets/AP-eucaristia2-DTDCSVvr.webp",
+      image:
+        "https://www.sanjosemaristas.edu.pe/assets/AP-eucaristia2-DTDCSVvr.webp",
     },
     {
       id: 4,
@@ -50,7 +52,7 @@ export default function Home() {
       logo: PalestinoArabeIMG,
       image:
         "https://lh3.googleusercontent.com/p/AF1QipO_OSnM0VTjKCto34IOUe2B6e-KBSbJELJs_v6X=s680-w680-h510",
-    }
+    },
   ];
   return (
     <>
@@ -60,7 +62,16 @@ export default function Home() {
         <Campuses slide={data} />
         <Testimonials />
         <Team />
-        <FloatButton.BackTop />
+        <FloatButton.Group shape="circle" className="space-y-2">
+          <a
+            href="https://wa.me/+51989687478"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FloatButton icon={<FaWhatsapp />} />
+          </a>
+          <FloatButton.BackTop />
+        </FloatButton.Group>
       </div>
     </>
   );
