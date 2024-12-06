@@ -1,12 +1,12 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import {
-    Checkbox,
-    Collapse,
-    Drawer,
-    Input,
-    Pagination,
-    Slider,
-    Spin,
+  Checkbox,
+  Collapse,
+  Drawer,
+  Input,
+  Pagination,
+  Slider,
+  Spin,
 } from "antd";
 import { useEffect, useState } from "react";
 import { BiSliderAlt } from "react-icons/bi";
@@ -16,11 +16,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import ModalProduct from "../../../../components/modal-product/modal-product";
 import ProductCard from "../../../../components/product-card/product-card";
 import {
-    getAllCampuses,
-    getCampusById,
+  getAllCampuses,
+  getCampusById,
 } from "../../../../services/campuses-service";
 import { getAllCategories } from "../../../../services/categories-service";
-import { getAllActiveProducts } from "../../../../services/products-service";
+import { getAllActiveProductsByCampus } from "../../../../services/products-service";
 const { Panel } = Collapse;
 
 export default function ProductsByLocation() {
@@ -69,7 +69,7 @@ export default function ProductsByLocation() {
           return;
         }
         Promise.all([
-          getAllActiveProducts(),
+          getAllActiveProductsByCampus(id as string),
           getAllCategories(),
           getCampusById(Number(id)),
         ])
@@ -211,7 +211,7 @@ export default function ProductsByLocation() {
   return (
     <div className="mt-20 mb-24 lg:mt-20 lg:w-[90%] w-full px-8 min-h-[84vh] m-auto">
       {loading ? (
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }}/>} />
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} />} />
       ) : (
         <>
           <h1 className="text-2xl font-semibold mb-8 text-center lg:text-left">

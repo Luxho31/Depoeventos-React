@@ -49,6 +49,18 @@ export const getAllActiveProducts = async () => {
   }
 };
 
+export const getAllActiveProductsByCampus = async (campusId: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/active/${campusId}`);
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de productos activos:", error);
+    throw error;
+  }
+};
+
 export const updateProduct = async (form: any, id?: number) => {
   try {
     await fetch(`${BASE_URL}/api/products/${id}`, {
