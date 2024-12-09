@@ -183,7 +183,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       exit={{ opacity: 0 }}
     >
       <Toaster richColors />
-      <div className="bg-white rounded-lg w-[80rem] h-[70%] relative">
+      <div className="bg-white rounded-lg w-[80rem] h-[80%] relative">
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
           onClick={onClose}
