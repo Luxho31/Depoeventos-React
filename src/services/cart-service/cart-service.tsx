@@ -1,14 +1,9 @@
 import { toast } from "sonner";
-import { generalRoutes } from "../../utils/routes/general.routes";
+import { generalRoutes, mercadoPago } from "../../utils/routes/general.routes";
 
 const BASE_URL = generalRoutes.BASE_URL;
+const ACCESS_TOKEN = mercadoPago.ACCESS_TOKEN;
 
-// type orderType = {
-//   id: number;
-//   date: string;
-//   totalPrice: number;
-//   status: string;
-// };
 
 type Product = {
   id: number;
@@ -157,7 +152,7 @@ export const getPaymentInfo = async (paymentId?: number) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer APP_USR-2950921415816545-041000-cdbbeac3aa53eccdfadbe2a50f88e8db-1195435341`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       }
     );

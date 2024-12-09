@@ -680,6 +680,9 @@ export default function ChildrenModal({
               <Select.Option value="Colegio San Pedro">
                 Colegio San Pedro
               </Select.Option>
+              <Select.Option value="Colegio San José Hermanos Maristas">
+                Colegio San José Hermanos Maristas
+              </Select.Option>
               <Select.Option value="Otro">Otro</Select.Option>
             </Select>
           </Form.Item>
@@ -749,12 +752,12 @@ export default function ChildrenModal({
                   <Select.Option value="4">4to grado</Select.Option>
                   <Select.Option value="5">5to grado</Select.Option>
                   <Select.Option value="6">6to grado</Select.Option>
-                  <Select.Option value="7">7mo grado</Select.Option>
-                  <Select.Option value="8">8vo grado</Select.Option>
-                  <Select.Option value="9">9no grado</Select.Option>
-                  <Select.Option value="10">10mo grado</Select.Option>
-                  <Select.Option value="11">11vo grado</Select.Option>
-                  <Select.Option value="12">12vo grado</Select.Option>
+                  <Select.Option value="7">7mo grado / 1ero secundaria</Select.Option>
+                  <Select.Option value="8">8vo grado / 2do secundaria</Select.Option>
+                  <Select.Option value="9">9no grado / 3ero secundaria</Select.Option>
+                  <Select.Option value="10">10mo grado / 4to secundaria</Select.Option>
+                  <Select.Option value="11">11vo grado / 4to secundaria</Select.Option>
+                  <Select.Option value="12">12vo grado / 5to secundaria</Select.Option>
                   <Select.Option value="Otro">Otro</Select.Option>
                 </Select>
               </Form.Item>

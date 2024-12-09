@@ -427,12 +427,11 @@ export default function RegistrationsDashboard() {
                     { value: "4", label: "4to grado" },
                     { value: "5", label: "5to grado" },
                     { value: "6", label: "6to grado" },
-                    { value: "7", label: "7mo grado" },
-                    { value: "8", label: "8vo grado" },
-                    { value: "9", label: "9no grado" },
-                    { value: "10", label: "10mo grado" },
-                    { value: "11", label: "11vo grado" },
-                    { value: "12", label: "12vo grado" },
+                    { value: "7", label: "7mo grado / 1ero secundaria" },
+                    { value: "8", label: "8vo grado / 2do secundaria" },
+                    { value: "9", label: "9no grado / 3ero secundaria" },
+                    { value: "10", label: "10mo grado / 4to secundaria" },
+                    { value: "11", label: "11vo grado / 5to secundaria" }
                   ]}
                 />
               </Form.Item>

@@ -1,7 +1,10 @@
 import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
+import { mercadoPago } from "../../../../utils/routes/general.routes";
+
+const PUBLIC_KEY = mercadoPago.PUBLIC_KEY;
 
 export default function PaymentButton({ preferenceId }: any | undefined) {
-  initMercadoPago("APP_USR-3ff5b38d-9481-4d03-ad7e-beb179b2c5de", {
+  initMercadoPago(PUBLIC_KEY, {
     locale: "es-PE",
   });
   return (

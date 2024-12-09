@@ -336,12 +336,11 @@ export default function Products() {
                     <Checkbox value="4">4to grado</Checkbox>
                     <Checkbox value="5">5to grado</Checkbox>
                     <Checkbox value="6">6to grado</Checkbox>
-                    <Checkbox value="7">7to grado</Checkbox>
-                    <Checkbox value="8">8vo grado</Checkbox>
-                    <Checkbox value="9">9no grado</Checkbox>
-                    <Checkbox value="10">10mo grado</Checkbox>
-                    <Checkbox value="11">11vo grado</Checkbox>
-                    <Checkbox value="12">12vo grado</Checkbox>
+                    <Checkbox value="7">7to grado / 1ero secundaria</Checkbox>
+                    <Checkbox value="8">8vo grado / 2do secundaria</Checkbox>
+                    <Checkbox value="9">9no grado / 3ero secundaria</Checkbox>
+                    <Checkbox value="10">10mo grado / 4to secundaria</Checkbox>
+                    <Checkbox value="11">11vo grado / 5to secundaria</Checkbox>
                   </Checkbox.Group>
                 </div>
               </Panel>
@@ -493,12 +492,11 @@ export default function Products() {
                     <Checkbox value="4">4to grado</Checkbox>
                     <Checkbox value="5">5to grado</Checkbox>
                     <Checkbox value="6">6to grado</Checkbox>
-                    <Checkbox value="7">7mo grado</Checkbox>
-                    <Checkbox value="8">8vo grado</Checkbox>
-                    <Checkbox value="9">9no grado</Checkbox>
-                    <Checkbox value="10">10mo grado</Checkbox>
-                    <Checkbox value="11">11vo grado</Checkbox>
-                    <Checkbox value="12">12vo grado</Checkbox>
+                    <Checkbox value="7">7mo grado / 1ero secundaria</Checkbox>
+                    <Checkbox value="8">8vo grado / 2do secundaria</Checkbox>
+                    <Checkbox value="9">9no grado / 3ero secundaria</Checkbox>
+                    <Checkbox value="10">10mo grado / 4to secundaria</Checkbox>
+                    <Checkbox value="11">11vo grado / 5to secundaria</Checkbox>
                   </Checkbox.Group>
                 </div>
               </Panel>

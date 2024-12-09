@@ -174,13 +174,11 @@ export default function DiciplinesDashboard() {
     "4to grado",
     "5to grado",
     "6to grado",
-    "7mo grado",
-    "8vo grado",
-    "9no grado",
-    "10mo grado",
-    "11vo grado",
-    "12vo grado",
-    "13vo grado",
+    "7mo grado / 1ero secundaria",
+    "8vo grado / 2do secundaria",
+    "9no grado / 3ero secundaria",
+    "10mo grado / 4to secundaria",
+    "11vo grado / 5to secundaria",
   ];
 
   const ageText = [

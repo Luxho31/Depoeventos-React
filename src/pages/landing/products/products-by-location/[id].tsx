@@ -1,13 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import {
-  Checkbox,
-  Collapse,
-  Drawer,
-  Input,
-  Pagination,
-  Slider,
-  Spin,
-} from "antd";
+import { Checkbox, Collapse, Drawer, Pagination, Slider, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { BiSliderAlt } from "react-icons/bi";
 import { IoIosClose } from "react-icons/io";
@@ -29,26 +21,14 @@ export default function ProductsByLocation() {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [productData, setProductData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [categoryData, setCategoryData] = useState([]);
-  const [campusData, setCampusData] = useState([]);
-  const [selectedHours, setSelectedHours] = useState<[string, string]>([
-    "00:00",
-    "23:59",
-  ]);
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const [selectedCampuses, setSelectedCampuses] = useState<number[]>([]);
-  const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
   const [selectedAges, setSelectedAges] = useState<number[]>([1, 18]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(false);
-  const [endTimeEnabled, setEndTimeEnabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedGender, setSelectedGender] = useState<string[]>([]);
   const [selectedCampus, setSelectedCampus] = useState<any | null>(null);
-
   const productsPerPage: number = 6;
-
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
@@ -73,11 +53,10 @@ export default function ProductsByLocation() {
           getAllCategories(),
           getCampusById(Number(id)),
         ])
-          .then(([products, categories]) => {
+          .then(([products]) => {
             setProductData(products);
             setFilteredData(products);
-            setCategoryData(categories);
-            setCampusData(campuses);
+
             setSelectedCampus(
               campuses.find((campus: any) => campus.id === Number(id))
             );
@@ -124,28 +103,6 @@ export default function ProductsByLocation() {
   const applyFilters = () => {
     let filtered = [...productData];
 
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((product: any) =>
-        product.categories.some((category: any) =>
-          selectedCategories.includes(category.id)
-        )
-      );
-    }
-
-    if (selectedCampuses.length > 0) {
-      filtered = filtered.filter((product) =>
-        product.campus.some((campus: any) =>
-          selectedCampuses.includes(campus.id)
-        )
-      );
-    }
-
-    if (selectedGrades.length > 0) {
-      filtered = filtered.filter((product) =>
-        product.grades.some((grade: any) => selectedGrades.includes(grade))
-      );
-    }
-
     if (selectedGender.length > 0) {
       filtered = filtered.filter((product) => {
         if (selectedGender.includes("Masculino")) {
@@ -165,26 +122,6 @@ export default function ProductsByLocation() {
       })
     );
 
-    filtered = filtered.filter((product) =>
-      product.coursesWithSchedules.some((course: any) =>
-        course.schedules.some((schedule: any) => {
-          const startHour = schedule.startHour;
-          const selectedStartHour = selectedHours[0];
-          const selectedEndHour = selectedHours[1] || "23:59";
-
-          console.log("Horario de inicio", startHour);
-          console.log("Horario seleccionado", selectedStartHour);
-          console.log("Horario seleccionado fin", selectedEndHour);
-
-          return (
-            startHour >= selectedStartHour &&
-            schedule.endHour <= selectedEndHour
-          );
-        })
-      )
-    );
-    console.log("Filtrado por horario", filtered);
-
     setFilteredData(filtered);
     onClose();
   };
@@ -199,13 +136,7 @@ export default function ProductsByLocation() {
 
   const resetFilter = () => {
     setFilteredData(productData);
-
-    setSelectedCategories([]);
-    setSelectedCampuses([]);
-    setSelectedGrades([]);
     setSelectedAges([3, 18]);
-    setEndTimeEnabled(false);
-    setSelectedHours(["00:00", "23:59"]);
   };
 
   return (
@@ -239,68 +170,7 @@ export default function ProductsByLocation() {
 
               <div className="hidden lg:block">
                 <Collapse defaultActiveKey={[]}>
-                  <Panel header="Categorías" key="1">
-                    <Checkbox.Group
-                      value={selectedCategories}
-                      className="flex flex-col gap-y-2 sm:gap-y-4"
-                      onChange={(values) => setSelectedCategories(values)}
-                    >
-                      {categoryData.map((category: any) => (
-                        <Checkbox key={category.id} value={category.id}>
-                          {category.name}
-                        </Checkbox>
-                      ))}
-                    </Checkbox.Group>
-                  </Panel>
-
-                  {/* <Panel header="Sedes" key="2">
-                <Checkbox.Group
-                  value={selectedCampuses}
-                  className="flex flex-col gap-y-2 sm:gap-y-4"
-                  onChange={(values) => {
-                    setSelectedCampuses(values);
-                    console.log(values);
-                  }}
-                >
-                  {campusData.map((campus: any) => (
-                    <Checkbox key={campus.id} value={campus.id}>
-                      {campus.name}
-                    </Checkbox>
-                  ))}
-                </Checkbox.Group>
-              </Panel> */}
-
-                  <Panel header="Grados" key="3">
-                    <div
-                      style={{
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                      }}
-                    >
-                      <Checkbox.Group
-                        value={selectedGrades}
-                        className="flex flex-col gap-y-2 sm:gap-y-4"
-                        onChange={(values) => setSelectedGrades(values)}
-                      >
-                        <Checkbox value="Nido">Nido</Checkbox>
-                        <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
-                        <Checkbox value="Kinder">Kinder</Checkbox>
-                        <Checkbox value="1">1er grado</Checkbox>
-                        <Checkbox value="2">2do grado</Checkbox>
-                        <Checkbox value="3">3er grado</Checkbox>
-                        <Checkbox value="4">4to grado</Checkbox>
-                        <Checkbox value="5">5to grado</Checkbox>
-                        <Checkbox value="6">6to grado</Checkbox>
-                        <Checkbox value="7">7to grado</Checkbox>
-                        <Checkbox value="8">8vo grado</Checkbox>
-                        <Checkbox value="9">9no grado</Checkbox>
-                        <Checkbox value="10">10mo grado</Checkbox>
-                        <Checkbox value="11">11vo grado</Checkbox>
-                        <Checkbox value="12">12vo grado</Checkbox>
-                      </Checkbox.Group>
-                    </div>
-                  </Panel>
-                  <Panel header="Edades" key="4">
+                  <Panel header="Edades" key="1">
                     <Slider
                       range
                       min={1}
@@ -312,7 +182,7 @@ export default function ProductsByLocation() {
                       Edad: {selectedAges[0]}-{selectedAges[1]}
                     </p>
                   </Panel>
-                  <Panel header="Género" key="6">
+                  <Panel header="Género" key="2">
                     <Checkbox.Group
                       value={selectedGender}
                       className="flex flex-col gap-y-2 sm:gap-y-4"
@@ -321,49 +191,6 @@ export default function ProductsByLocation() {
                       <Checkbox value="Masculino">Masculino</Checkbox>
                       <Checkbox value="Femenino">Femenino</Checkbox>
                     </Checkbox.Group>
-                  </Panel>
-                  <Panel header="Horarios" key="5">
-                    <div className="flex flex-col gap-y-2 sm:gap-y-4">
-                      <div className="flex items-center justify-between">
-                        <label htmlFor="startHour">Hora de inicio:</label>
-                        <button
-                          onClick={() => {
-                            setEndTimeEnabled(false);
-                            setSelectedHours(["00:00", "23:59"]);
-                          }}
-                        >
-                          <IoReload />
-                        </button>
-                      </div>
-                      <Input
-                        type="time"
-                        id="startHour"
-                        value={selectedHours[0]}
-                        onChange={(e) =>
-                          setSelectedHours([e.target.value, selectedHours[1]])
-                        }
-                      />
-                      <div className="flex items-center gap-x-2">
-                        <label htmlFor="endHour">Hora de fin:</label>
-                        <Checkbox
-                          checked={endTimeEnabled}
-                          onChange={() => setEndTimeEnabled(!endTimeEnabled)}
-                        />
-                      </div>
-                      <Input
-                        type="time"
-                        id="endHour"
-                        value={selectedHours[1]}
-                        onChange={(e) =>
-                          setSelectedHours([selectedHours[0], e.target.value])
-                        }
-                        disabled={!endTimeEnabled}
-                      />
-                    </div>
-                    <p>
-                      Horario seleccionado: {selectedHours[0]} -{" "}
-                      {selectedHours[1] || "Desde la hora de inicio"}
-                    </p>
                   </Panel>
                 </Collapse>
 
@@ -401,63 +228,7 @@ export default function ProductsByLocation() {
                 </div>
 
                 <Collapse defaultActiveKey={["1"]}>
-                  <Panel header="Categorías" key="1">
-                    <Checkbox.Group
-                      value={selectedCategories}
-                      className="flex flex-col gap-y-2 sm:gap-y-4"
-                      onChange={(values) => setSelectedCategories(values)}
-                    >
-                      {categoryData.map((category: any) => (
-                        <Checkbox key={category.id} value={category.id}>
-                          {category.name}
-                        </Checkbox>
-                      ))}
-                    </Checkbox.Group>
-                  </Panel>
-                  <Panel header="Sedes" key="2">
-                    <Checkbox.Group
-                      value={selectedCampuses}
-                      className="flex flex-col gap-y-2 sm:gap-y-4"
-                      onChange={(values) => setSelectedCampuses(values)}
-                    >
-                      {campusData.map((campus: any) => (
-                        <Checkbox key={campus.id} value={campus.id}>
-                          {campus.name}
-                        </Checkbox>
-                      ))}
-                    </Checkbox.Group>
-                  </Panel>
-                  <Panel header="Grados" key="3">
-                    <div
-                      style={{
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                      }}
-                    >
-                      <Checkbox.Group
-                        value={selectedGrades}
-                        className="flex flex-col gap-y-2 sm:gap-y-4"
-                        onChange={(values) => setSelectedGrades(values)}
-                      >
-                        <Checkbox value="Nido">Nido</Checkbox>
-                        <Checkbox value="Pre-Kinder">Pre-Kinder</Checkbox>
-                        <Checkbox value="Kinder">Kinder</Checkbox>
-                        <Checkbox value="1">1er grado</Checkbox>
-                        <Checkbox value="2">2do grado</Checkbox>
-                        <Checkbox value="3">3er grado</Checkbox>
-                        <Checkbox value="4">4to grado</Checkbox>
-                        <Checkbox value="5">5to grado</Checkbox>
-                        <Checkbox value="6">6to grado</Checkbox>
-                        <Checkbox value="7">7mo grado</Checkbox>
-                        <Checkbox value="8">8vo grado</Checkbox>
-                        <Checkbox value="9">9no grado</Checkbox>
-                        <Checkbox value="10">10mo grado</Checkbox>
-                        <Checkbox value="11">11vo grado</Checkbox>
-                        <Checkbox value="12">12vo grado</Checkbox>
-                      </Checkbox.Group>
-                    </div>
-                  </Panel>
-                  <Panel header="Edades" key="4">
+                  <Panel header="Edades" key="1">
                     <Slider
                       range
                       min={1}
@@ -469,7 +240,7 @@ export default function ProductsByLocation() {
                       Edad: {selectedAges[0]}-{selectedAges[1]}
                     </p>
                   </Panel>
-                  <Panel header="Género" key="6">
+                  <Panel header="Género" key="2">
                     <Checkbox.Group
                       value={selectedGender}
                       className="flex flex-col gap-y-2 sm:gap-y-4"
@@ -478,49 +249,6 @@ export default function ProductsByLocation() {
                       <Checkbox value="Masculino">Masculino</Checkbox>
                       <Checkbox value="Femenino">Femenino</Checkbox>
                     </Checkbox.Group>
-                  </Panel>
-                  <Panel header="Horarios" key="5">
-                    <div className="flex flex-col gap-y-2 sm:gap-y-4">
-                      <div className="flex items-center justify-between">
-                        <label htmlFor="startHour">Hora de inicio:</label>
-                        <button
-                          onClick={() => {
-                            setEndTimeEnabled(false);
-                            setSelectedHours(["00:00", "23:59"]);
-                          }}
-                        >
-                          <IoReload />
-                        </button>
-                      </div>
-                      <Input
-                        type="time"
-                        id="startHour"
-                        value={selectedHours[0]}
-                        onChange={(e) =>
-                          setSelectedHours([e.target.value, selectedHours[1]])
-                        }
-                      />
-                      <div className="flex items-center gap-x-2">
-                        <label htmlFor="endHour">Hora de fin:</label>
-                        <Checkbox
-                          checked={endTimeEnabled}
-                          onChange={() => setEndTimeEnabled(!endTimeEnabled)}
-                        />
-                      </div>
-                      <Input
-                        type="time"
-                        id="endHour"
-                        value={selectedHours[1]}
-                        onChange={(e) =>
-                          setSelectedHours([selectedHours[0], e.target.value])
-                        }
-                        disabled={!endTimeEnabled}
-                      />
-                    </div>
-                    <p>
-                      Horario seleccionado: {selectedHours[0]} -{" "}
-                      {selectedHours[1] || "Desde la hora de inicio"}
-                    </p>
                   </Panel>
                 </Collapse>
 
