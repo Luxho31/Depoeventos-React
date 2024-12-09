@@ -218,7 +218,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 S/.{product.price}
               </p>
             </div>
-            <p className="text-gray-500 text-md max-sm:text-sm">
+            <p className="text-gray-400 text-sm max-sm:text-sm">
               {product.description.length > 200 ? (
                 <Tooltip title={product.description} placement="top">
                   {product.description.slice(0, 200) + "..."}
@@ -227,8 +227,8 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                 product.description
               )}
             </p>
-            <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1 mb-2">
-              <li>
+            <ul className=" text-gray-400 flex flex-col gap-y-1 text-sm list-disc max-sm:text-xs max-sm:gap-y-1">
+              <li className="flex">
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
                   : "El curso se dará en: "}
