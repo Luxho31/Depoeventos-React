@@ -520,7 +520,7 @@ export default function ProductsByLocation() {
                       Se encontraron {filteredData.length} productos
                     </h2>
                   ) : null}
-                  <div className="grid mt-8 text-center gap-y-4 sm:gap-x-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 [2200px]:grid-cols-4 sm:mt-12 lg:mt-20 sm:text-left">
+                  <div className="grid mt-8 text-center gap-y-4 sm:gap-x-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 [2200px]:grid-cols-3 sm:mt-12 lg:mt-20 sm:text-left">
                     {currentProducts.map((product: any) => (
                       <ProductCard
                         key={product.id}

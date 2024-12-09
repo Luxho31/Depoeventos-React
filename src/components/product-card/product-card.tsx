@@ -163,7 +163,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
       </ul>
 
       {/* Información de horarios */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 px-4 py-2 ">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-2 px-4 py-2 ">
         {product.coursesWithSchedules.map((courseWithSchedule: any) => (
           <div
             key={courseWithSchedule.courseId}
