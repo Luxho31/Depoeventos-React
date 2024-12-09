@@ -1,8 +1,8 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
-import { Checkbox, Form, FormInstance, Input, Spin } from "antd";
-import { useRef, useState } from "react";
+import { Checkbox, Form, Input, Spin } from "antd";
+import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
 import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
@@ -11,7 +11,6 @@ import { createTestimonial } from "../../../services/opinions-service";
 export default function Opinions() {
   const { TextArea } = Input;
 
-  const formRef = useRef<FormInstance | null>(null);
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -21,16 +20,13 @@ export default function Opinions() {
     try {
       setLoading(true);
       const body = {
-        name: values.fullName,
+        fullName: values.fullName,
         rating: rating,
         testimonial: values.testimonial,
       };
       await createTestimonial(body);
       toast.success("Testimonio enviado correctamente");
       setRating(0);
-      if (formRef.current) {
-        formRef.current.resetFields();
-      }
     } catch (error) {
       toast.error("Error al enviar testimonio");
     } finally {
@@ -56,7 +52,6 @@ export default function Opinions() {
           onFinish={handleSendMessage}
           onFinishFailed={() => {}}
           className="max-w-lg mx-auto"
-          ref={(ref) => (formRef.current = ref)}
         >
           <Form.Item
             name="fullName"

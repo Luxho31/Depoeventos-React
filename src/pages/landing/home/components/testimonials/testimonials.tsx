@@ -8,50 +8,22 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { A11y, Autoplay, Navigation, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  getAllTestimonialsApproved
-} from "../../../../../services/opinions-service";
-
-const TestimonialsData = [
-  {
-    id: 1,
-    fullName: "Diego Cedrón",
-    testimonial:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
-    createdAt: "2024-09-01",
-    approved: true,
-    rating: 2,
-  },
-  {
-    id: 2,
-    fullName: "Juan Perez",
-    testimonial:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
-    createdAt: "2024-09-01",
-    approved: true,
-    rating: 3,
-  },
-  {
-    id: 3,
-    fullName: "Roberto Rodriguez",
-    testimonial:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis",
-    createdAt: "2024-09-01",
-    approved: true,
-    rating: 4,
-  },
-  {
-    id: 4,
-    fullName: "Enrique Gonzales",
-    testimonial:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda fuga veritatis, consectetur adipisicing elit.",
-    createdAt: "2024-09-01",
-    approved: true,
-    rating: 1,
-  },
-];
+import { getAllTestimonialsApproved } from "../../../../../services/opinions-service";
 
 const Slide = ({ item }: { item: any }) => {
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(date);
+    } catch (error) {
+      return "Fecha inválida";
+    }
+  };
+
   return (
     <div className="w-full select-none h-[300px] bg-white rounded-lg p-6 flex flex-col items-center border border-gray-300 shadow shadow-orange-300 hover:shadow-md hover:shadow-orange-500 transition-shadow duration-300 ease-in-out">
       {/* Rating */}
@@ -61,9 +33,11 @@ const Slide = ({ item }: { item: any }) => {
 
       {/* Name and Date */}
       <p className="text-xl font-semibold text-gray-800 mb-2">
-        {item.fullName}
+        {item.fullName || "Anónimo"}
       </p>
-      <p className="text-sm text-gray-500 mb-4">{item.createdAt}</p>
+      <p className="text-sm text-gray-500 mb-4">
+        {item.createdAt ? formatDate(item.createdAt) : "-"}
+      </p>
 
       {/* Testimonial */}
       <p className="text-sm text-gray-600 text-center">"{item.testimonial}"</p>
@@ -73,17 +47,36 @@ const Slide = ({ item }: { item: any }) => {
 };
 
 export default function Testimonials() {
-  // const [testimonials, setTestimonials] = useState(TestimonialsData);
-  const [, setTestimonials] = useState(TestimonialsData);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
-      const response = await getAllTestimonialsApproved();
-      const data = await response.json();
-      setTestimonials(data);
+      try {
+        const response = await getAllTestimonialsApproved();
+        if (!response.ok) {
+          throw new Error("Error al cargar los testimonios");
+        }
+        const data = await response.json();
+        setTestimonials(data);
+      } catch (err: any) {
+        setError(err.message || "Ocurrió un error");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchTestimonials();
   }, []);
+
+  if (loading) {
+    return <div className="text-center mt-10">Cargando testimonios...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-10 text-red-500">Error: {error}</div>;
+  }
+
   return (
     <div className="w-full">
       <div className="w-[80%] m-auto mb-10 mt-20">
@@ -124,7 +117,7 @@ export default function Testimonials() {
             },
           }}
         >
-          {TestimonialsData.map((item) => (
+          {testimonials.map((item) => (
             <SwiperSlide key={item.id} className="p-4">
               <Slide key={item.id} item={item} />
             </SwiperSlide>

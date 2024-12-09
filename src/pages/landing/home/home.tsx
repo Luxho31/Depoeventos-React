@@ -64,7 +64,7 @@ export default function Home() {
         <Team />
         <FloatButton.Group shape="circle" className="space-y-2">
           <a
-            href="https://wa.me/+51989687478"
+            href="https://wa.me/+51929952527"
             target="_blank"
             rel="noopener noreferrer"
           >

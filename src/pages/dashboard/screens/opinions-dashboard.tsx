@@ -8,29 +8,11 @@ import { useAuth } from "../../../context/AuthProvider";
 import {
   getAllTestimonials,
   updateTestimonialApproval,
+  updateTestimonialDisapproval,
 } from "../../../services/opinions-service";
 
 function TestimonialDashboard() {
-  const [testimonialData, setTestimonialData] = useState<any[]>([
-    {
-      id: 1,
-      fullName: "Erika Julissa Serrano Rengifo",
-      testimonial:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nunc nec ultricies. kajsldkajsldkjsaldkjasldkjsaldkjsaldkjsadkjaslkdjlsakjdlsakj",
-      rating: 5,
-      createdAt: "2021-09-01",
-      approved: true,
-    },
-    {
-      id: 2,
-      fullName: "Diego Alonso Cedrón Serrano",
-      testimonial:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nunc nec ultricies. kajsldkajsldkjsaldkjasldkjsaldkjsaldkjsadkjaslkdjlsakjdlsakj",
-      rating: 1,
-      createdAt: "2021-09-01",
-      approved: false,
-    },
-  ]);
+  const [testimonialData, setTestimonialData] = useState<any[]>([]);
   const [, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -64,6 +46,25 @@ function TestimonialDashboard() {
       setLoading(false);
     }
   };
+
+  const handleApproval = async (id: number) => {
+    try {
+      await updateTestimonialApproval(id);
+      handleReload();
+    } catch (error) {
+      console.error("Error al aprobar el testimonio:", error);
+    }
+  };
+
+  const handleDisapproval = async (id: number) => {
+    try {
+      await updateTestimonialDisapproval(id);
+      handleReload();
+    } catch (error) {
+      console.error("Error al desaprobar el testimonio:", error);
+    }
+  };
+
   const onPageChange = (page: number) => {
     setCurrentPage(page - 1);
   };
@@ -118,19 +119,13 @@ function TestimonialDashboard() {
                   <td className="h-full flex mt-6 items-center justify-center gap-x-3">
                     <button
                       className="bg-green-500 text-white rounded-md px-2 py-1"
-                      onClick={() => {
-                        updateTestimonialApproval(testimonial.id);
-                        handleReload();
-                      }}
+                      onClick={() => handleApproval(testimonial.id)}
                     >
                       <FaCheck />
                     </button>
                     <button
                       className="bg-red-500 text-white rounded-md px-2 py-1"
-                      onClick={() => {
-                        updateTestimonialApproval(testimonial.id);
-                        handleReload();
-                      }}
+                      onClick={() => handleDisapproval(testimonial.id)}
                     >
                       <IoMdClose />
                     </button>
