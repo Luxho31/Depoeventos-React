@@ -78,7 +78,7 @@ export default function Cart() {
       toast.error(
         "Ya hay un cupón aplicado. No se pueden agregar más cupones."
       );
-      form.setFieldsValue({ discount: "" });
+
       return discount;
     }
 
@@ -87,22 +87,17 @@ export default function Cart() {
       discount = getTotalPrice() * (1 - 0.0909);
       setDiscount(discount);
       setAppliedCoupons([couponCode]);
-      setCouponCode(""); // Limpia el input
-      form.setFieldsValue({ discount: "" });
       toast.success("Cupón aplicado con éxito.");
     } else if (couponCode === "MEDIOSUMMERSPVC") {
       setDiscountApplied(true);
       discount = getTotalPrice() * (1 - 0.0769);
       setDiscount(discount);
       setAppliedCoupons([couponCode]);
-      setCouponCode("");
-      form.setFieldsValue({ discount: "" });
       toast.success("Cupón aplicado con éxito.");
     } else {
       setCouponCode("");
       toast.error("Cupón inválido.");
     }
-    form.setFieldsValue({ discount: "" });
 
     setCouponCode("");
     return discount;
@@ -308,7 +303,11 @@ export default function Cart() {
       {/* Pasarela de Pago */}
       <div className={`${progressPercent === 50 ? "block" : "hidden"} mb-24`}>
         {completedOrder && (
-          <PaymentStep preferenceId={preferenceId} discount={discount} couponCode={appliedCoupons} />
+          <PaymentStep
+            preferenceId={preferenceId}
+            discount={discount}
+            couponCode={appliedCoupons}
+          />
         )}
         <button
           type="button"

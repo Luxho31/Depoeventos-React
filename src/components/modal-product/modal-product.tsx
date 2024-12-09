@@ -245,7 +245,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                   .join(" ")} */}
               </li>
             </ul>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-4 px-4 py-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-4 px-4 py-2 max-sm:overflow-y-auto">
               {product.coursesWithSchedules.map((courseSchedule: any) => {
                 const course = product.courses.find(
                   (c) => c.id === courseSchedule.courseId
