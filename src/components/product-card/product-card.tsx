@@ -122,7 +122,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
   return (
     <div className="relative overflow-hidden bg-white shadow-md rounded-xl h-full p-4 sm:p-9">
       <div className="flex justify-between">
-        <div className="text-xl text-center font-semibold text-gray-900 ">
+        <div className="text-base text-center font-semibold text-gray-900 ">
           {product.name}
         </div>
         <h3 className="text-md sm:text-lg text-green-400">
@@ -163,23 +163,26 @@ export default function ProductCard({ product, onClick }: CardProps) {
       </ul>
 
       {/* Información de horarios */}
-      <ul className="px-4 py-2 sm:px-8 sm:py-4 ">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 px-4 py-2 ">
         {product.coursesWithSchedules.map((courseWithSchedule: any) => (
-          <li key={courseWithSchedule.courseId} className="mb-2">
-            <p className="ml-2 text-sm sm:ml-4">
-              <strong>{getCourseName(courseWithSchedule.courseId)}</strong>
+          <div
+            key={courseWithSchedule.courseId}
+            className="p-1 bg-white"
+          >
+            <p className="text-xs font-bold text-gray-800">
+              {getCourseName(courseWithSchedule.courseId)}
             </p>
-            <ul className="ml-6">
+            <ul className="mt-2 space-y-1">
               {courseWithSchedule.schedules.map((schedule: any, index: any) => (
-                <li key={index} className="text-sm text-gray-600">
+                <li key={index} className="text-xs text-gray-600">
                   {getDayByIndex(schedule.days)}: {schedule.startHour} -{" "}
                   {schedule.endHour}
                 </li>
               ))}
             </ul>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <div className="w-full flex justify-center">
         <button

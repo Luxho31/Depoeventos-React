@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaCartPlus, FaUserLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 import { useAuth } from "../../context/AuthProvider";
 import { useCart } from "../../context/CartProvider";
 import { getChildrensByUserId } from "../../services/children-service";
-import { Toaster, toast } from "sonner";
 
 type Product = {
   grades: string[];
@@ -166,7 +166,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
     }
   };
 
-  const courseNames = product.courses.map((course) => course.name);
+  // const courseNames = product.courses.map((course) => course.name);
   const campusNames: string[] = (
     product.campus as unknown as { name: string }[]
   ).map((campus) => campus.name);
@@ -183,7 +183,7 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
       exit={{ opacity: 0 }}
     >
       <Toaster richColors />
-      <div className="bg-white rounded-lg w-[60rem] h-[60%] relative">
+      <div className="bg-white rounded-lg w-[80rem] h-[70%] relative">
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
           onClick={onClose}
@@ -228,23 +228,12 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
               )}
             </p>
             <ul className=" text-gray-400 flex flex-col gap-y-2 text-md list-disc max-sm:text-xs max-sm:gap-y-1 mb-2">
-              {product.campus.length > 1 ? (
-                <li>
-                  {product.courses.length > 1
-                    ? "Los cursos son: "
-                    : "El curso es: "}
-                  {courseNames.join(", ")}.
-                </li>
-              ) : (
-                <></>
-              )}
               <li>
                 {product.courses.length > 1
                   ? "Los cursos son impartidos en: "
                   : "El curso se dará en: "}
-                {campusNames.join(", ")} ({categoriesNames.join(", ")}) y
-                comprende los siguientes grados {product.grades.join(", ")} (
-                {product.ages
+                {campusNames.join(", ")} ({categoriesNames.join(", ")})
+                {/* {product.ages
                   .sort((a: number, b: number) => a - b)
                   .map((age: number, index: number, array: number[]) => {
                     if (index === array.length - 1) {
@@ -253,38 +242,36 @@ export default function ModalProduct({ product, onClose }: ModalProps) {
                       return age + " años, ";
                     }
                   })
-                  .join(" ")}
-                ).
+                  .join(" ")} */}
               </li>
             </ul>
-            {product.coursesWithSchedules.map((courseSchedule: any) => {
-              const course = product.courses.find(
-                (c) => c.id === courseSchedule.courseId
-              );
-              return (
-                <div
-                  key={courseSchedule.courseId}
-                  className="flex gap-y-2 gap-x-4"
-                >
-                  <p className="text-gray-800  max-sm:text-xs">
-                    {course ? `${course.name} -> ` : "Curso no encontrado"}
-                  </p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-4 px-4 py-2">
+              {product.coursesWithSchedules.map((courseSchedule: any) => {
+                const course = product.courses.find(
+                  (c) => c.id === courseSchedule.courseId
+                );
+                return (
+                  <div key={courseSchedule.courseId} className="p-1">
+                    <p className="text-xs font-bold text-gray-800">
+                      {course ? course.name : "Curso no encontrado"}
+                    </p>
+                    <ul className="mt-2 space-y-1 text-xs text-gray-600">
+                      {courseSchedule.schedules.map(
+                        (schedule: any, index: any) => (
+                          <li key={index}>
+                            {schedule.days
+                              .map((day: any) => getDayName(day))
+                              .join(", ")}{" "}
+                            de {schedule.startHour} a {schedule.endHour}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
 
-                  <ul className="flex flex-col gap-y-2 text-gray-500  max-sm:text-xs">
-                    {courseSchedule.schedules.map(
-                      (schedule: any, index: any) => (
-                        <li key={index}>
-                          {schedule.days
-                            .map((day: any) => getDayName(day))
-                            .join(", ")}{" "}
-                          de {schedule.startHour} a {schedule.endHour}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              );
-            })}
             <div className="mb-4 flex justify-around gap-y-2 max-sm: mt-3">
               <div className="flex gap-x-2 text-gray-600 text-sm max-sm:text-xs max-sm:flex-col">
                 <p className="font-semibold">Inicio de clases:</p>
