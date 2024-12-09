@@ -22,7 +22,7 @@ export default function CartTable() {
       "6": "6to grado",
       "7": "7mo grado / 1ero secundaria",
       "8": "8vo grado / 2do secundaria",
-      "9": "9no grado / 3er secundaria",
+      "9": "9no grado / 3ero secundaria",
       "10": "10mo grado / 4to secundaria",
       "11": "11vo grado / 5to secundaria",
       
@@ -57,7 +57,7 @@ export default function CartTable() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-sm:hidden"></th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-sm:hidden"></th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Producto
               </th>
@@ -78,13 +78,13 @@ export default function CartTable() {
             {products.length > 0 ? (
               products.map((product) => (
                 <tr key={product.id}>
-                  <td className="px-6 py-4 whitespace-nowrap max-sm:hidden">
+                  {/* <td className="px-6 py-4 whitespace-nowrap max-sm:hidden">
                     <img
                       src={product.photo}
                       alt={product.name}
                       className="!h-14 !w-10 bg-gray-300 rounded-xl"
                     />
-                  </td>
+                  </td> */}
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     {product.name}

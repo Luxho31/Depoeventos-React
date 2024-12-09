@@ -100,7 +100,7 @@ export default function ProductCard({ product, onClick }: CardProps) {
       "6": "6to grado",
       "7": "7mo grado / 1ero secundaria",
       "8": "8vo grado / 2do secundaria",
-      "9": "9no grado / 3er secundaria",
+      "9": "9no grado / 3ero secundaria",
       "10": "10mo grado / 4to secundaria",
       "11": "11vo grado / 5to secundaria",
       "12": "12vo grado",
