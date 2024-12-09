@@ -6,13 +6,16 @@ import { useCart } from "../../../../context/CartProvider";
 import { mercadoPago } from "../../../../utils/routes/general.routes";
 
 const PUBLIC_KEY = mercadoPago.PUBLIC_KEY;
-export default function PaymentStep({ preferenceId, discount }: any) {
-  // const [walletLoading, setWalletLoading] = useState(true);
-  // const [pageLoading, setPageLoading] = useState(true);
 
+export default function PaymentStep({
+  preferenceId,
+  discount,
+  couponCode,
+}: any) {
   useEffect(() => {
     console.log("Descuento: ", discount);
-  }, []);
+    console.log("Código de cupón: ", couponCode);
+  }, [discount]);
 
   initMercadoPago(PUBLIC_KEY, {
     locale: "es-PE",
@@ -32,21 +35,11 @@ export default function PaymentStep({ preferenceId, discount }: any) {
     name: string;
   };
 
-  // if (walletLoading || pageLoading) {
-  //     return (
-  //         <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center text-white">
-  //             <Spin
-  //                 indicator={
-  //                     <LoadingOutlined style={{ fontSize: 24 }} spin />
-  //                 }
-  //             />
-  //         </div>
-  //     );
-  // }
-
   const asignarNombre = () => {
-    if (discount === true) {
-      return "Descuento: PROFESORES2024";
+    if (couponCode.includes("COMPLETOSUMMERSPVC")) {
+      return "Descuento: COMPLETOSUMMERSPVC (-9.09%)";
+    } else if (couponCode.includes("MEDIOSUMMERSPVC")) {
+      return "Descuento: MEDIOSUMMERSPVC (-7.69%)";
     }
     return "Sin descuento";
   };
@@ -54,16 +47,17 @@ export default function PaymentStep({ preferenceId, discount }: any) {
   return (
     <div className="flex flex-col justify-between gap-4 xl:flex-row">
       <div className="w-full flex flex-col gap-4 md:flex-row xl:flex-col xl:w-2/5">
-        {/* Cart Summary */}
+        {/* Resumen del carrito */}
         <div className="border rounded-md shadow-md p-8 w-full">
-          <h2 className="text-xl mb-4">Cart Summary</h2>
+          <h2 className="text-xl mb-4">Resumen del carrito</h2>
 
-          {discount ? (
-            <h2 className="text-lg">Total S/. {getTotalPrice() / 2}</h2>
+          {/* Mostrar el precio total con o sin descuento */}
+          <h2 className="text-lg">Total S/. {getTotalPrice()}</h2>
+          {discount > 0 ? (
+            <h2 className="text-lg">Descuento: S/. {(getTotalPrice() - discount).toFixed(2)}</h2>
           ) : (
-            <h2 className="text-lg">Total S/. {getTotalPrice()}</h2>
+            <h2 className="text-lg">Descuento: S/. 0.00</h2>
           )}
-          <h2 className="text-lg">{asignarNombre()}</h2>
         </div>
 
         {/* Información del pagador */}
@@ -85,6 +79,7 @@ export default function PaymentStep({ preferenceId, discount }: any) {
           </div>
         </div>
       </div>
+
       {/* Información de pago */}
       <div className="w-full xl:w-3/5">
         <div className="h-full border rounded-md shadow-md p-8">
@@ -97,10 +92,7 @@ export default function PaymentStep({ preferenceId, discount }: any) {
               <ul className="list-disc">
                 {products.map(
                   (
-                    product: {
-                      children: Children;
-                      name: string;
-                    },
+                    product: { children: Children; name: string },
                     index: number
                   ) => (
                     <li key={index} className="flex items-center gap-x-2">
@@ -118,7 +110,7 @@ export default function PaymentStep({ preferenceId, discount }: any) {
                 <p className="text-sm font-semibold text-gray-600">
                   Cupón aplicado:
                 </p>
-                <p className="text-sm"> - </p>
+                <p className="text-sm"> {asignarNombre()}</p>
               </div>
               <div className="mb-2">
                 <p className="text-sm font-semibold text-gray-600">
@@ -128,7 +120,8 @@ export default function PaymentStep({ preferenceId, discount }: any) {
               </div>
             </div>
           </div>
-          {/* Renderizar el Wallet una vez que ha cargado */}
+
+          {/* Renderizar el Wallet de MercadoPago */}
           <div className="flex items-center justify-center">
             <Wallet
               initialization={{ preferenceId: preferenceId }}

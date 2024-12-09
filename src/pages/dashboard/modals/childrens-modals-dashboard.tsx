@@ -683,6 +683,10 @@ export default function ChildrenModal({
               <Select.Option value="Colegio San José Hermanos Maristas">
                 Colegio San José Hermanos Maristas
               </Select.Option>
+              <Select.Option value="Early Years SPVC">
+                Early Years SPVC
+              </Select.Option>
+
               <Select.Option value="Otro">Otro</Select.Option>
             </Select>
           </Form.Item>

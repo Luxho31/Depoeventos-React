@@ -20,7 +20,7 @@ export default function Cart() {
   const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabledTerms, setDisabledTerms] = useState(true);
-
+  const [discount, setDiscount] = useState(0);
   const [form] = Form.useForm();
 
   const [couponCode, setCouponCode] = useState("");
@@ -51,12 +51,13 @@ export default function Cart() {
       if (values.discount === undefined) {
         values.discount = "-";
       }
+
+      console.log(values.discount);
       const response = await createOrder(values.discount);
       const preferenceId = response.preferenceId;
       setPreferenceId(preferenceId);
       setProgressPercent(50);
 
-      // Marcar la orden como completada
       setCompletedOrder(true);
       window.scrollTo(0, 0);
     } catch (error) {
@@ -68,7 +69,6 @@ export default function Cart() {
 
   const calculateDiscount = () => {
     let discount = 0;
-
     if (couponCode.trim() === "") {
       toast.error("No se ha ingresado un cupón.");
       return discount;
@@ -78,20 +78,33 @@ export default function Cart() {
       toast.error(
         "Ya hay un cupón aplicado. No se pueden agregar más cupones."
       );
+      form.setFieldsValue({ discount: "" });
       return discount;
     }
 
-    if (couponCode === "PROFESORES2024") {
+    if (couponCode === "COMPLETOSUMMERSPVC") {
       setDiscountApplied(true);
-      discount = getTotalPrice() / 2;
+      discount = getTotalPrice() * (1 - 0.0909);
+      setDiscount(discount);
+      setAppliedCoupons([couponCode]);
+      setCouponCode(""); // Limpia el input
+      form.setFieldsValue({ discount: "" });
+      toast.success("Cupón aplicado con éxito.");
+    } else if (couponCode === "MEDIOSUMMERSPVC") {
+      setDiscountApplied(true);
+      discount = getTotalPrice() * (1 - 0.0769);
+      setDiscount(discount);
       setAppliedCoupons([couponCode]);
       setCouponCode("");
+      form.setFieldsValue({ discount: "" });
       toast.success("Cupón aplicado con éxito.");
     } else {
       setCouponCode("");
-      toast.error("Cupón inválido");
+      toast.error("Cupón inválido.");
     }
+    form.setFieldsValue({ discount: "" });
 
+    setCouponCode("");
     return discount;
   };
 
@@ -171,6 +184,7 @@ export default function Cart() {
                         placeholder="Ingresa tu cupón"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
+                        id="couponCode"
                       />
                     </Form.Item>
                     <button
@@ -192,11 +206,12 @@ export default function Cart() {
                     key={index}
                     closeIcon={<CloseCircleOutlined />}
                     onClose={() => {
-                      if (coupon === "PROFESORES2024") {
-                        // Si el cupón que se está cerrando es el cupón que aplica el descuento
-                        setDiscountApplied(false); // Resetear el descuento aplicado
+                      if (
+                        coupon === "COMPLETOSUMMERSPVC" ||
+                        coupon === "MEDIOSUMMERSPVC"
+                      ) {
+                        setDiscountApplied(false);
                       }
-                      // Resetear el arreglo de cupones aplicados eliminando el cupón que se está cerrando
                       const updatedCoupons = appliedCoupons.filter(
                         (c) => c !== coupon
                       );
@@ -220,7 +235,7 @@ export default function Cart() {
                   <h2 className="text-lg text-slate-400">Descuento</h2>
                   {discountApplied ? (
                     <h2 className="text-lg text-slate-400">
-                      - S/. {getTotalPrice() / 2}
+                      S/. {(getTotalPrice() - discount).toFixed(2)}
                     </h2>
                   ) : (
                     <h2 className="text-lg text-slate-400">- S/. 0.00</h2>
@@ -230,11 +245,11 @@ export default function Cart() {
                   <h2 className="text-lg font-semibold">Total</h2>
                   {discountApplied ? (
                     <h2 className="text-xl font-semibold">
-                      S/. {getTotalPrice() / 2}
+                      S/. {discount.toFixed(2)}
                     </h2>
                   ) : (
                     <h2 className="text-xl font-semibold">
-                      S/. {getTotalPrice()}.00
+                      S/. {getTotalPrice().toFixed(2)}
                     </h2>
                   )}
                 </div>
@@ -293,7 +308,7 @@ export default function Cart() {
       {/* Pasarela de Pago */}
       <div className={`${progressPercent === 50 ? "block" : "hidden"} mb-24`}>
         {completedOrder && (
-          <PaymentStep preferenceId={preferenceId} discount={discountApplied} />
+          <PaymentStep preferenceId={preferenceId} discount={discount} couponCode={appliedCoupons} />
         )}
         <button
           type="button"

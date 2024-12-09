@@ -63,8 +63,6 @@ export default function TransactionsDashboard() {
     setOpenSeeModal(true);
   };
 
-
-
   const validateStatus = (status: string) => {
     const basicStyle = "w-3 h-3 rounded-full";
     if (status === "PENDING") return basicStyle + " bg-gray-500";
@@ -72,7 +70,16 @@ export default function TransactionsDashboard() {
     if (status === "DENIED") return basicStyle + " bg-red-500";
   };
 
-
+  const getDiscount = (discount: string, totalPrice: number) => {
+    switch (discount) {
+      case "COMPLETOSUMMERSPVC":
+        return totalPrice * (1 - 0.0909);
+      case "MEDIOSUMMERSPVC":
+        return totalPrice * (1 - 0.0769);
+      default:
+        return totalPrice;
+    }
+  };
 
   return (
     <div className="h-screen">
@@ -103,9 +110,7 @@ export default function TransactionsDashboard() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="flex absolute right-20 max-sm:right-10">
-            <h2>
-              {/* <b>Total:</b> S/.{totalPriceSum} */}
-            </h2>
+            <h2>{/* <b>Total:</b> S/.{totalPriceSum} */}</h2>
           </div>
         </div>
       </div>
@@ -162,8 +167,16 @@ export default function TransactionsDashboard() {
                   ))}
                 </td>
                 <td className="px-6 py-4">S/.{user.totalPrice}</td>
-                <td className="px-6 py-4 font-bold">S/.{user.discount == "PROFESORES2024" ? user.totalPrice / 2 : user.totalPrice}</td>
-                <td className="px-6 py-4">{user.discount == "PROFESORES2024" ? "PROFESORES2024 (-50%)" : "No aplica"}</td>
+                <td className="px-6 py-4 font-bold">
+                  S/.{getDiscount(user.discount, user.totalPrice)}
+                </td>
+                <td className="px-6 py-4">
+                  {user.discount === "COMPLETOSUMMERSPVC"
+                    ? "COMPLETOSUMMERSPVC (-9.09%)"
+                    : user.discount === "MEDIOSUMMERSPVC"
+                    ? "MEDIOSUMMERSPVC (-7.69%)"
+                    : "No aplica"}
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-x-1">
                     <span className={validateStatus(user.status)} />
