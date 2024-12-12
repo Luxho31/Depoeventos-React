@@ -8,6 +8,7 @@ import Courses from "./components/courses/courses";
 import Intro from "./components/intro/intro";
 import Team from "./components/team/team";
 import Testimonials from "./components/testimonials/testimonials";
+import DepoVideos from "./components/videos/depovideos";
 
 export default function Home() {
   const data = [
@@ -62,6 +63,7 @@ export default function Home() {
         <Campuses slide={data} />
         <Testimonials />
         <Team />
+        <DepoVideos />
         <FloatButton.Group shape="circle" className="space-y-2">
           <a
             href="https://wa.me/+51929952527"
