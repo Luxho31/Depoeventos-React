@@ -219,7 +219,7 @@ export const ComplaintsBook = () => {
 
           {/* Detalle del Reclamo */}
           <div className="rounded-xl border border-gray-300 p-5 my-4 mb-10">
-            <h2 className="text-sm text-gray-400 mb-3">Datos del consumidor</h2>
+            <h2 className="text-sm text-gray-400 mb-3">Datos del reclamo</h2>
             <div className="flex items-center gap-x-4 max-sm:flex-col">
               <Form.Item
                 name="requestType"
