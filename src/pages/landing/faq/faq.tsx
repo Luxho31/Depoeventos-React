@@ -73,7 +73,7 @@ export const FaqSection = () => {
     <div className="min-h-screen flex flex-col lg:flex-row items-center lg:space-x-8 max-sm:mt-8 mt-8">
       {/* Sección de FAQ */}
       <div className="w-full lg:w-2/3 px-4 sm:px-8 lg:px-12 py-8 lg:py-16 flex flex-col justify-center gap-y-4 h-screen">
-        <div className="mb-8 lg:mb-12">
+        <div className="mb-8 lg:mb-12 ">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center lg:text-left">
             Preguntas frecuentes
           </h1>

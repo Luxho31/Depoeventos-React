@@ -1,5 +1,10 @@
 import { BiBook } from "react-icons/bi";
-import { FaFacebook, FaInstagramSquare, FaPinterest } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagramSquare,
+  FaPinterest,
+  FaQuestion,
+} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
@@ -20,6 +25,13 @@ export default function Footer() {
           >
             <p>Libro de reclamaciones</p>
             <BiBook />
+          </Link>
+          <Link
+            to="/faq"
+            className="flex items-center justify-center gap-x-1 text-slate-400 text-sm ml-4 hover:text-orange-600 transition-colors"
+          >
+            Preguntas frecuentes
+            <FaQuestion />
           </Link>
         </div>
         <div className="flex flex-row gap-2 text-2xl ">
