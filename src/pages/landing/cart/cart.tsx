@@ -8,7 +8,7 @@ import { Checkbox, Form, Progress, Spin, Tag } from "antd";
 import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
-import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
+import Terminos from "../../../assets/pdf/tyc.pdf";
 import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
 import CartTable from "./components/cart-table";

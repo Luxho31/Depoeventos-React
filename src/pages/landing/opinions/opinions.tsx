@@ -5,7 +5,9 @@ import { Checkbox, Form, Input, Spin } from "antd";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
-import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
+import Terminos from "../../../assets/pdf/tyc.pdf";
+import Politicas from "../../../assets/pdf/politica_de_privacidad.pdf";
+
 import { createTestimonial } from "../../../services/opinions-service";
 
 export default function Opinions() {
@@ -139,7 +141,7 @@ export default function Opinions() {
             >
               He leído y acepto las{" "}
               <a
-                href={Terminos}
+                href={Politicas}
                 target="_blank"
                 className="font-semibold text-blue-500 hover:text-blue-700"
               >

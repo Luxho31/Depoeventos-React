@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { sendMessage } from "../../../services/contact-us-service";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
-import Terminos from "../../../assets/pdf/Terminos_y_Condiciones_Depoeventos_2024.pdf";
+import Terminos from "../../../assets/pdf/tyc.pdf";
 
 // type ContactUsType = {
 //   fullName: string;
