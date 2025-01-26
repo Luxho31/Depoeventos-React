@@ -12,6 +12,7 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
+import { createComplaintsBook } from "../../../services/complaints-book-service";
 
 export const ComplaintsBook = () => {
   const formRef = useRef<FormInstance | null>(null);
@@ -20,11 +21,18 @@ export const ComplaintsBook = () => {
   const handleSendMessage = async (values: any) => {
     try {
       setLoading(true);
-      console.log(values);
+      const incidentDate = values.incidentDate.$d.toISOString().split("T")[0];
+      const fullName = `${values.firstName} ${values.lastName}`;
+      const data = {
+        ...values,
+        fullName,
+        incidentDate,
+      };
+      console.log(data);
+      await createComplaintsBook(data);
       toast.success("Mensaje enviado correctamente");
-      if (formRef.current) {
-        formRef.current.resetFields();
-      }
+
+      formRef.current?.resetFields();
     } catch (error) {
       toast.error("Error al enviar mensaje");
     } finally {
@@ -59,6 +67,7 @@ export const ComplaintsBook = () => {
             );
           }}
           className="max-w-3xl mx-auto"
+          ref={formRef}
         >
           <div className="rounded-xl border border-gray-300 p-5">
             <h2 className="text-sm text-gray-400 mb-3">Datos del consumidor</h2>
@@ -184,7 +193,7 @@ export const ComplaintsBook = () => {
 
             <div className="flex gap-x-4 max-sm:flex-col">
               <Form.Item
-                name="cellphone"
+                name="phone"
                 label="Celular"
                 rules={[
                   {
