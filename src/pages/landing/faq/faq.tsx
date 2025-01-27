@@ -12,8 +12,6 @@ import {
   registroCuenta,
 } from "../../../assets/faq/questions_answers";
 
-import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
-
 const sections = [
   { key: "1", label: "Inicio", data: generalidades },
   { key: "2", label: "Registro y cuenta", data: registroCuenta },
@@ -46,7 +44,7 @@ const generateTabsItems = (): TabsProps["items"] => {
     key: section.key,
     label: section.label,
     children: (
-      <div>
+      <div className="p-6 mx-4 sm:mx-6 lg:mx-16">
         {section.data.length > 0 ? (
           <Collapse
             accordion
@@ -59,7 +57,7 @@ const generateTabsItems = (): TabsProps["items"] => {
             )}
           />
         ) : (
-          <p className="text-gray-500">
+          <p className="text-gray-500 text-center">
             No hay contenido disponible para esta sección.
           </p>
         )}
@@ -70,35 +68,23 @@ const generateTabsItems = (): TabsProps["items"] => {
 
 export const FaqSection = () => {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row items-center lg:space-x-8 max-sm:mt-8 mt-8">
-      {/* Sección de FAQ */}
-      <div className="w-full lg:w-2/3 px-4 sm:px-8 lg:px-12 py-8 lg:py-16 flex flex-col justify-center gap-y-4 h-screen">
-        <div className="mb-8 lg:mb-12 ">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center lg:text-left">
-            Preguntas frecuentes
-          </h1>
-          <p className="text-center lg:text-left mt-4 text-gray-600">
-            Encuentra respuestas a las preguntas más frecuentes de nuestros
-            usuarios. Si no encuentras lo que buscas, no dudes en contactarnos.
-          </p>
-        </div>
+    <div className="h-screen mt-8 w-full flex flex-col items-center py-8 px-4 sm:px-6 lg:px-16">
+      <div className="text-center mt-10">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800">
+          Preguntas frecuentes
+        </h1>
+        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          Encuentra respuestas a las preguntas más frecuentes de nuestros
+          usuarios. Si no encuentras lo que buscas, no dudes en contactarnos.
+        </p>
+      </div>
+      <div className="w-full">
         <Tabs
           defaultActiveKey="1"
           items={generateTabsItems()}
-          className="rounded-lg bg-white shadow-md"
+          className="rounded-lg shadow-lg p-4 sm:p-8 lg:p-10"
+          animated
         />
-      </div>
-
-      {/* Imagen */}
-      <div className="w-full lg:w-1/4  lg:flex justify-center mt-8 lg:mt-0 hidden ">
-        <div className="relative">
-          <div className="absolute inset-0 bg-blue-200 rounded-xl transform -translate-x-4 translate-y-4 lg:translate-x-0 lg:-translate-y-8 w-full h-full -z-10 shadow-xl"></div>
-          <img
-            src={contactUsIMG}
-            alt="Contacto y soporte"
-            className="rounded-xl w-4/5 sm:w-3/4 lg:w-full object-cover shadow-lg transition-transform hover:scale-105 duration-300"
-          />
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import YouTube from "react-youtube";
+import { getAllApprovedVideos } from "../../../../../services/video-service";
+import { Empty } from "antd";
 
 const YouTubeVideo = ({ url }: any) => {
   const videoId = getYouTubeVideoId(url);
@@ -37,11 +40,17 @@ const getYouTubeVideoId = (url: any) => {
 };
 
 export default function DepoVideos() {
-  const data = [
-    "https://www.youtube.com/watch?v=1LyQMg0OeY0&list=RD1LyQMg0OeY0&start_radio=1",
-    "https://www.youtube.com/watch?v=1LyQMg0OeY0&list=RD1LyQMg0OeY0&start_radio=1",
-    "https://www.youtube.com/watch?v=1LyQMg0OeY0&list=RD1LyQMg0OeY0&start_radio=1",
-  ];
+  const [data, setData] = useState<any[]>([]);
+
+  const handleLoadIsShowed = async () => {
+    const response = await getAllApprovedVideos();
+    setData(response);
+  };
+
+  useEffect(() => {
+    handleLoadIsShowed();
+  }, []);
+
   return (
     <div className="w-full">
       <div className="w-[80%] m-auto mb-10 mt-20">
@@ -56,9 +65,14 @@ export default function DepoVideos() {
             padres tienen para decir sobre su experiencia con nosotros.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-4 place-items-center">
-          {data.map((url: any) => (
-            <YouTubeVideo url={url} />
+        <div className="grid grid-cols-3 gap-4 place-items-center ">
+          {data.length === 0 && (
+            <div className="flex w-full justify-center items-center ">
+              <Empty description="No hay videos disponibles" />
+            </div>
+          )}
+          {data.map((data: any) => (
+            <YouTubeVideo url={data.url} />
           ))}
         </div>
       </div>

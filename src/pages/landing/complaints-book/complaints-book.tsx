@@ -249,7 +249,7 @@ export const ComplaintsBook = () => {
               </Form.Item>
 
               <Form.Item
-                name="productDetail"
+                name="productOrServiceDetail"
                 label="Detalle del Producto o Servicio"
                 rules={[
                   {

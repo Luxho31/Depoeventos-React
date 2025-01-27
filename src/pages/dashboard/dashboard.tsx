@@ -26,7 +26,13 @@ import {
 
 import type { MenuProps } from "antd";
 import { CiBadgeDollar, CiStar } from "react-icons/ci";
-import { FaChevronLeft, FaSchool, FaUser } from "react-icons/fa";
+import {
+  FaBookOpen,
+  FaChevronLeft,
+  FaPhotoVideo,
+  FaSchool,
+  FaUser,
+} from "react-icons/fa";
 import { FaCartShopping, FaChildren } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
 import {
@@ -43,8 +49,7 @@ import { GrSchedule } from "react-icons/gr";
 const { Header, Sider, Content } = Layout;
 
 export default function Dashboard() {
-  const { isAuthenticated, logout, cargando, userRole, userInfo } =
-    useAuth();
+  const { isAuthenticated, logout, cargando, userRole, userInfo } = useAuth();
   const [redirectToHome, setRedirectToHome] = useState(false);
   const location = useLocation();
 
@@ -75,10 +80,10 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-      window.addEventListener("resize", handleResize);
-      return () => {
-          window.removeEventListener("resize", handleResize);
-      };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleItemClick = (path: string) => {
@@ -183,7 +188,23 @@ export default function Dashboard() {
       label: "Testimonios",
       onClick: () => handleItemClick("/dashboard/testimonials"),
       role: ["ADMIN"],
-    }
+    },
+    {
+      key: "13",
+      path: "/dashboard/complaints-book",
+      icon: <FaBookOpen />,
+      label: "Reclamaciones",
+      onClick: () => handleItemClick("/dashboard/complaints-book"),
+      role: ["ADMIN"],
+    },
+    {
+      key: "14",
+      path: "/dashboard/videos",
+      icon: <FaPhotoVideo />,
+      label: "Videos",
+      onClick: () => handleItemClick("/dashboard/videos"),
+      role: ["ADMIN"],
+    },
   ];
 
   const selectedItem = menuItems.find(
@@ -237,20 +258,22 @@ export default function Dashboard() {
     <>
       {isAuthenticated ? (
         <Layout className="h-screen relative">
-                {(!collapsed) && (
-        <div
-          className={`${windowWidth <= 768 ? "fixed inset-0 bg-black opacity-50 z-40" : "hidden"}`}
-          onClick={() => setCollapsed(true)}
-        ></div>
-      )}
+          {!collapsed && (
+            <div
+              className={`${
+                windowWidth <= 768
+                  ? "fixed inset-0 bg-black opacity-50 z-40"
+                  : "hidden"
+              }`}
+              onClick={() => setCollapsed(true)}
+            ></div>
+          )}
           <Sider
             trigger={null}
             collapsible
             collapsed={collapsed}
             breakpoint="md" // Define el breakpoint en el que el sidebar se colapsará
-            collapsedWidth={
-              collapsed && windowWidth <= 768 ? 0 : undefined
-            } // Se establece en 0 cuando colapsado y la pantalla es menor que md, de lo contrario, se deja sin definir
+            collapsedWidth={collapsed && windowWidth <= 768 ? 0 : undefined} // Se establece en 0 cuando colapsado y la pantalla es menor que md, de lo contrario, se deja sin definir
             className={
               windowWidth >= 768
                 ? "fixed z-50"

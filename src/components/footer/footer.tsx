@@ -17,7 +17,7 @@ export default function Footer() {
         </Link>
         <div className="flex w-full flex-col justify-center items-center gap-y-2">
           <Link to="/" className="m-auto text-slate-400">
-            © 2024 Depoeventos, Perú
+            © 2025 Depoeventos, Perú
           </Link>
           <Link
             to="/complaints-book"

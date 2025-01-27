@@ -32,6 +32,8 @@ import { FaqSection } from "./pages/landing/faq/faq";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 import Opinions from "./pages/landing/opinions/opinions";
 import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
+import VideosDashboard from "./pages/dashboard/screens/videos-dashboard";
+import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
 
 function App() {
   return (
@@ -113,6 +115,11 @@ function App() {
               <Route
                 path="/dashboard/testimonials"
                 element={<TestimonialDashboard />}
+              />
+              <Route path="/dashboard/videos" element={<VideosDashboard />} />
+              <Route
+                path="/dashboard/complaints-book"
+                element={<ComplaintsBookDashboard />}
               />
             </Route>
 
