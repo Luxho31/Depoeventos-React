@@ -1,6 +1,6 @@
 import "animate.css";
 import "./intro.css";
-import FotoPrincipal from "../../../../../assets/image/imagen_principal.png";
+import FotoPrincipal from "../../../../../assets/image/Foto2025OPT.webp";
 export default function Intro() {
     return (
         <div className="w-full">
