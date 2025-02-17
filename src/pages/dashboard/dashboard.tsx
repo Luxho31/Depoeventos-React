@@ -25,7 +25,7 @@ import {
 } from "react-router-dom";
 
 import type { MenuProps } from "antd";
-import { CiBadgeDollar, CiStar } from "react-icons/ci";
+import { CiBadgeDollar, CiStar, CiWarning } from "react-icons/ci";
 import {
   FaBookOpen,
   FaChevronLeft,
@@ -40,11 +40,13 @@ import {
   IoHome,
   IoSchoolOutline,
 } from "react-icons/io5";
-import { MdOutlineSportsFootball } from "react-icons/md";
+import { MdChecklistRtl, MdOutlineSportsFootball } from "react-icons/md";
 import { toast } from "sonner";
 import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import { GrSchedule } from "react-icons/gr";
+import { RiAlarmWarningLine } from "react-icons/ri";
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -205,6 +207,30 @@ export default function Dashboard() {
       onClick: () => handleItemClick("/dashboard/videos"),
       role: ["ADMIN"],
     },
+    {
+      key: "15",
+      path: "/dashboard/assists",
+      icon: <MdChecklistRtl />,
+      label: "Asistencias",
+      onClick: () => handleItemClick("/dashboard/assists"),
+      role: ["ADMIN"],
+    },
+    {
+      key: "16",
+      path: "/dashboard/incidents",
+      icon: <CiWarning />,
+      label: "Incidentes generales",
+      onClick: () => handleItemClick("/dashboard/incidents"),
+      role: ["ADMIN"],
+    },
+    {
+      key: "17",
+      path: "/dashboard/incidents-teachers",
+      icon: <RiAlarmWarningLine />,
+      label: "Incidentes profesores",
+      onClick: () => handleItemClick("/dashboard/incidents-teachers"),
+      role: ["ADMIN"],
+    }
   ];
 
   const selectedItem = menuItems.find(
@@ -260,11 +286,10 @@ export default function Dashboard() {
         <Layout className="h-screen relative">
           {!collapsed && (
             <div
-              className={`${
-                windowWidth <= 768
-                  ? "fixed inset-0 bg-black opacity-50 z-40"
-                  : "hidden"
-              }`}
+              className={`${windowWidth <= 768
+                ? "fixed inset-0 bg-black opacity-50 z-40"
+                : "hidden"
+                }`}
               onClick={() => setCollapsed(true)}
             ></div>
           )}
@@ -277,9 +302,8 @@ export default function Dashboard() {
             className={
               windowWidth >= 768
                 ? "fixed z-50"
-                : `!fixed ${
-                    collapsed && "z-50"
-                  } top-0 left-0 h-screen relative z-50`
+                : `!fixed ${collapsed && "z-50"
+                } top-0 left-0 h-screen relative z-50`
             }
             onBreakpoint={(broken) => {
               if (broken) {
@@ -293,6 +317,7 @@ export default function Dashboard() {
                 flexDirection: "column",
                 height: "100%",
               }}
+              className="overflow-y-auto"
             >
               <div>
                 {collapsed ? (
@@ -318,11 +343,10 @@ export default function Dashboard() {
                       onClick={() => {
                         setCollapsed(true);
                       }}
-                      className={`${
-                        windowWidth >= 768
-                          ? "hidden"
-                          : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
-                      }`}
+                      className={`${windowWidth >= 768
+                        ? "hidden"
+                        : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
+                        }`}
                     >
                       <FaChevronLeft className="text-lg" />
                     </button>
@@ -340,9 +364,8 @@ export default function Dashboard() {
                 }))}
               />
               <div
-                className={`${
-                  windowWidth >= 640 ? "hidden" : "block"
-                } flex justify-center gap-2 mt-auto mb-4`}
+                className={`${windowWidth >= 640 ? "hidden" : "block"
+                  } flex justify-center gap-2 mt-auto mb-4`}
               >
                 <Button
                   className="border-none h-12 p-2 bg-white rounded-lg"

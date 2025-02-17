@@ -34,6 +34,9 @@ import Opinions from "./pages/landing/opinions/opinions";
 import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
 import VideosDashboard from "./pages/dashboard/screens/videos-dashboard";
 import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
+import AssistsDashboard from "./pages/dashboard/screens/assists-dashboard";
+import IncidentsDashboard from "./pages/dashboard/screens/incidents-dashboard";
+import IncidentsTeachersDashboard from "./pages/dashboard/screens/incidents-teachers-dashboard";
 
 function App() {
   return (
@@ -120,6 +123,18 @@ function App() {
               <Route
                 path="/dashboard/complaints-book"
                 element={<ComplaintsBookDashboard />}
+              />
+              <Route
+                path="/dashboard/assists"
+                element={<AssistsDashboard />}
+              />
+              <Route
+                path="/dashboard/incidents"
+                element={<IncidentsDashboard />}
+              />
+              <Route
+                path="/dashboard/incidents-teachers"
+                element={<IncidentsTeachersDashboard />}
               />
             </Route>
 
