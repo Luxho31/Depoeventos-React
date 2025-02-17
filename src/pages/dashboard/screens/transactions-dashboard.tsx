@@ -72,10 +72,12 @@ export default function TransactionsDashboard() {
 
   const getDiscount = (discount: string, totalPrice: number) => {
     switch (discount) {
-      case "COMPLETOSUMMERSPVC":
-        return totalPrice * (1 - 0.0909);
-      case "MEDIOSUMMERSPVC":
-        return totalPrice * (1 - 0.0769);
+      case "PROFESORES2025":
+        return totalPrice * (1 - 0.5);
+      // case "COMPLETOSUMMERSPVC":
+      //   return totalPrice * (1 - 0.0909);
+      // case "MEDIOSUMMERSPVC":
+      //   return totalPrice * (1 - 0.0769);
       default:
         return totalPrice;
     }
@@ -171,11 +173,14 @@ export default function TransactionsDashboard() {
                   S/.{getDiscount(user.discount, user.totalPrice)}
                 </td>
                 <td className="px-6 py-4">
-                  {user.discount === "COMPLETOSUMMERSPVC"
-                    ? "COMPLETOSUMMERSPVC (-9.09%)"
-                    : user.discount === "MEDIOSUMMERSPVC"
-                    ? "MEDIOSUMMERSPVC (-7.69%)"
-                    : "No aplica"}
+                  {
+                  // user.discount === "COMPLETOSUMMERSPVC"
+                  //   ? "COMPLETOSUMMERSPVC (-9.09%)"
+                  //   : user.discount === "MEDIOSUMMERSPVC"
+                  //     ? "MEDIOSUMMERSPVC (-7.69%)":
+                      user.discount === "PROFESORES2025"
+                        ? "PROFESORES2025 (-50%)"
+                      : "No aplica"}
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-x-1">

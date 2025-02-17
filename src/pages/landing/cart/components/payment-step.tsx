@@ -36,11 +36,14 @@ export default function PaymentStep({
   };
 
   const asignarNombre = () => {
-    if (couponCode.includes("COMPLETOSUMMERSPVC")) {
-      return "Descuento: COMPLETOSUMMERSPVC (-9.09%)";
-    } else if (couponCode.includes("MEDIOSUMMERSPVC")) {
-      return "Descuento: MEDIOSUMMERSPVC (-7.69%)";
+    if (couponCode.includes("PROFESORES2025")) {
+      return "Descuento: PROFESORES2025 (-50%)";
     }
+    // if (couponCode.includes("COMPLETOSUMMERSPVC")) {
+    //   return "Descuento: COMPLETOSUMMERSPVC (-9.09%)";
+    // } else if (couponCode.includes("MEDIOSUMMERSPVC")) {
+    //   return "Descuento: MEDIOSUMMERSPVC (-7.69%)";
+    // }
     return "Sin descuento";
   };
 

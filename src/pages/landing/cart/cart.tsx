@@ -82,18 +82,25 @@ export default function Cart() {
       return discount;
     }
 
-    if (couponCode === "COMPLETOSUMMERSPVC") {
+    if (couponCode === "PROFESORES2025") {
       setDiscountApplied(true);
-      discount = getTotalPrice() * (1 - 0.0909);
+      discount = getTotalPrice() * (1 - 0.5);
       setDiscount(discount);
       setAppliedCoupons([couponCode]);
       toast.success("Cupón aplicado con éxito.");
-    } else if (couponCode === "MEDIOSUMMERSPVC") {
-      setDiscountApplied(true);
-      discount = getTotalPrice() * (1 - 0.0769);
-      setDiscount(discount);
-      setAppliedCoupons([couponCode]);
-      toast.success("Cupón aplicado con éxito.");
+      // } else
+      // if (couponCode === "COMPLETOSUMMERSPVC") {
+      //   setDiscountApplied(true);
+      //   discount = getTotalPrice() * (1 - 0.0909);
+      //   setDiscount(discount);
+      //   setAppliedCoupons([couponCode]);
+      //   toast.success("Cupón aplicado con éxito.");
+      // } else if (couponCode === "MEDIOSUMMERSPVC") {
+      //   setDiscountApplied(true);
+      //   discount = getTotalPrice() * (1 - 0.0769);
+      //   setDiscount(discount);
+      //   setAppliedCoupons([couponCode]);
+      //   toast.success("Cupón aplicado con éxito.");
     } else {
       setCouponCode("");
       toast.error("Cupón inválido.");
@@ -146,9 +153,8 @@ export default function Cart() {
 
       {/* Table Cart */}
       <div
-        className={`${
-          progressPercent === 0 ? "block" : "hidden"
-        } flex max-xl:flex-col items-start gap-x-12 `}
+        className={`${progressPercent === 0 ? "block" : "hidden"
+          } flex max-xl:flex-col items-start gap-x-12 `}
       >
         {/* <div className="w-[60rem] mb-24"> */}
         <div className="w-full mb-12">
@@ -165,7 +171,7 @@ export default function Cart() {
                   createOrderForm(values);
                 }
               }}
-              onFinishFailed={() => {}}
+              onFinishFailed={() => { }}
               className="bg-[#f3f3f9] h-fit w-full flex flex-col justify-between rounded-3xl shadow-md p-8"
             >
               <div className="mb-8">
@@ -202,8 +208,9 @@ export default function Cart() {
                     closeIcon={<CloseCircleOutlined />}
                     onClose={() => {
                       if (
-                        coupon === "COMPLETOSUMMERSPVC" ||
-                        coupon === "MEDIOSUMMERSPVC"
+                        // coupon === "COMPLETOSUMMERSPVC" ||
+                        // coupon === "MEDIOSUMMERSPVC" || 
+                        coupon === "PROFESORES2025"
                       ) {
                         setDiscountApplied(false);
                       }
