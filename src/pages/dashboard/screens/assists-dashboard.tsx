@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 
 function AssistsDashboard() {
-    const [loading, setLoading] = useState<boolean>(false);
+    const [, setLoading] = useState(false);
     const { userRole } = useAuth();
-
     const navigate = useNavigate();
+    const specificRole = "ADMIN";
 
-    const specificRole: string = "ADMIN";
     useEffect(() => {
         if (userRole && userRole.some((role) => role === specificRole)) {
             handleReload();
@@ -20,7 +19,7 @@ function AssistsDashboard() {
     const handleReload = async () => {
         setLoading(true);
         try {
-
+            // Aquí puedes cargar datos desde una API
         } catch (error) {
             console.error("Error al cargar los cursos", error);
         } finally {
@@ -34,7 +33,7 @@ function AssistsDashboard() {
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
         return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
-    }
+    };
 
     const courses = [
         {
@@ -61,73 +60,34 @@ function AssistsDashboard() {
             endDate: "2025-12-31",
             total_assists: 30,
         },
-    ]
+    ];
 
     return (
-        <div className="h-full">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <p className="m-4 font-semibold text-xl">
+        <div className="h-full p-4 max-sm:p-0 ">
+            <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
+                <p className="m-4 text-xl font-medium max-sm:text-lg">
                     Asistencias <span className="text-sm text-gray-500">({getCurrentDate()})</span>
                 </p>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    {/* Lista de Cursos */}
-                    <ul
-                        role="list"
-                        className="grid grid-cols-2 gap-4 m-4"
-                    >
-                        {courses.map((course) => (
-
-                            <li
-                                key={course.id}
-                                className="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+                    {courses.map((course) => (
+                        <li key={course.id} className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+                            <h3 className="text-gray-900 text-base font-medium max-sm:text-base">
+                                {course.name} <span className="text-sm text-gray-500 max-sm:text-xs">({course.total_assists} personas)</span>
+                            </h3>
+                            <p className="text-gray-500 text-sm max-sm:hidden">{course.description}</p>
+                            <div className="flex flex-wrap justify-between text-sm text-gray-900">
+                                <p><strong>Inicio:</strong> {course.startDate}</p>
+                                <p><strong>Final:</strong> {course.endDate}</p>
+                            </div>
+                            <button
+                                className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition"
+                                onClick={() => navigate(`/dashboard/assists/${course.id}`)}
                             >
-                                <div className="w-full flex items-center justify-between p-6 space-x-6">
-                                    <div className="flex-1 truncate">
-                                        <div className="flex items-center space-x-3">
-                                            <h3 className="text-gray-900 text-sm font-semibold truncate">
-                                                {course.name} {" "}
-                                                <span
-                                                    className="text-gray-500 text-sm font-normal"
-                                                >({course.total_assists} personas)</span>
-                                            </h3>
-                                        </div>
-                                        <p className="mt-1 text-gray-500 text-sm truncate">
-                                            {course.description}
-                                        </p>
-                                    </div>
-                                    <div className="flex-shrink-0">
-                                        <div className="flex gap-x-2">
-                                            <p className="text-sm font-medium text-gray-900">
-                                                Inicio:
-                                            </p>
-                                            <p className="text-sm font-medium text-gray-900">
-                                                {course.startDate}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-x-2">
-                                            <p className="text-sm font-medium text-gray-900">
-                                                Final:
-                                            </p>
-                                            <p className="text-sm font-medium text-gray-900">
-                                                {course.endDate}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button
-                                            type="button"
-                                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                            onClick={() => navigate(`/dashboard/assists/${course.id}`)}
-                                        >
-                                            Ver
-                                        </button>
-                                    </div>
-                                </div>
-                            </li>
-                        ))
-                        }
-                    </ul>
-                </div>
+                                Ver
+                            </button>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );

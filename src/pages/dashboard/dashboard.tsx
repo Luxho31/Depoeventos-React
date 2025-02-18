@@ -310,6 +310,7 @@ export default function Dashboard() {
                 setCollapsed(true); // Oculta el sidebar cuando el breakpoint se activa
               }
             }}
+
           >
             <div
               style={{
@@ -393,7 +394,7 @@ export default function Dashboard() {
                 width: "100%",
               }}
             >
-              <div className="flex justify-between items-center">
+              <div className={`flex justify-between items-center max-sm:fixed ${collapsed ? 'max-sm:bg-white' : 'max-sm:bg-transparent'} max-sm:z-40 max-sm:w-full`}>
                 <Button
                   type="text"
                   icon={

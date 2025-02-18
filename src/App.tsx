@@ -9,34 +9,35 @@ import ForgotPassword from "./pages/auth/forgot-password/forgot-password";
 import Login from "./pages/auth/login/login";
 import Register from "./pages/auth/register/register";
 import Dashboard from "./pages/dashboard/dashboard";
+import AssistsDashboard from "./pages/dashboard/screens/assists-dashboard";
+import AssistsDashboardId from "./pages/dashboard/screens/assists-dashboard/[id]";
 import CampusesDashboard from "./pages/dashboard/screens/campuses-dashboard";
 import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard";
 import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
+import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
 import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
 import DisciplinesDashboard from "./pages/dashboard/screens/disciplines-dashboard";
 import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
+import IncidentsDashboard from "./pages/dashboard/screens/incidents-dashboard";
+import IncidentsTeachersDashboard from "./pages/dashboard/screens/incidents-teachers-dashboard";
+import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
 import ProductsDashboard from "./pages/dashboard/screens/products-dashboard";
 import Profile from "./pages/dashboard/screens/profile";
 import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
+import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
 import UsersDashboard from "./pages/dashboard/screens/users-dashboard";
-import Cart from "./pages/landing/cart/cart";
-import Contact from "./pages/landing/contact/contact";
-import Home from "./pages/landing/home/home";
-import Products from "./pages/landing/products/products";
-import NotFound from "./pages/not-found/not-found";
-import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
-import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
-import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
-import { FaqSection } from "./pages/landing/faq/faq";
-import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
-import Opinions from "./pages/landing/opinions/opinions";
-import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
 import VideosDashboard from "./pages/dashboard/screens/videos-dashboard";
-import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
-import AssistsDashboard from "./pages/dashboard/screens/assists-dashboard";
-import IncidentsDashboard from "./pages/dashboard/screens/incidents-dashboard";
-import IncidentsTeachersDashboard from "./pages/dashboard/screens/incidents-teachers-dashboard";
+import Cart from "./pages/landing/cart/cart";
+import PurchaseCompleted from "./pages/landing/cart/components/purchase-completed";
+import { ComplaintsBook } from "./pages/landing/complaints-book/complaints-book";
+import Contact from "./pages/landing/contact/contact";
+import { FaqSection } from "./pages/landing/faq/faq";
+import Home from "./pages/landing/home/home";
+import Opinions from "./pages/landing/opinions/opinions";
+import Products from "./pages/landing/products/products";
+import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
+import NotFound from "./pages/not-found/not-found";
 
 function App() {
   return (
@@ -128,6 +129,7 @@ function App() {
                 path="/dashboard/assists"
                 element={<AssistsDashboard />}
               />
+              <Route path="/dashboard/assists/:id" element={<AssistsDashboardId />} />
               <Route
                 path="/dashboard/incidents"
                 element={<IncidentsDashboard />}
