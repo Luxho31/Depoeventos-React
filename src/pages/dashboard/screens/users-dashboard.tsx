@@ -42,7 +42,7 @@ function UsersDashboard() {
     }, [userRole]);
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => handleReload(currentPage), 400); 
+        const timeoutId = setTimeout(() => handleReload(currentPage), 400);
         return () => clearTimeout(timeoutId);
     }, [searchTerm, currentPage]);
 
@@ -102,6 +102,9 @@ function UsersDashboard() {
                             <th scope="col" className="px-6 py-3">
                                 Documento
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                                Profesor
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,8 +118,8 @@ function UsersDashboard() {
                                     className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
                                 >
                                     <img
-                                        className="w-10 h-10 rounded-full"
-                                        src={user.photo}
+                                        className="w-10 h-10 rounded-full border border-black"
+                                        src={user.photo || "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1739848801~exp=1739852401~hmac=cef7bd18f7f23f55413da182fda60596f9e126319afb75a8b11edf38f46385ee&w=740"}
                                         alt={`${user.firstName} image`}
                                     />
                                     <div className="ps-3">
@@ -140,6 +143,15 @@ function UsersDashboard() {
                                     <div className="font-normal text-gray-500">
                                         {user.documentType}
                                     </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {/* Checkbox to update */}
+                                    <input
+                                        type="checkbox"
+                                        className="form-checkbox h-5 w-5 text-blue-600"
+                                        disabled
+                                    />
+
                                 </td>
                             </tr>
                         ))}

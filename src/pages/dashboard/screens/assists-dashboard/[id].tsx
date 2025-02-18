@@ -104,6 +104,12 @@ export default function AssistsDashboardId() {
                       <Form.Item
                         name={`attendance-${participant.id}`}
                         className="w-full my-auto"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Por favor selecciona una opción",
+                          },
+                        ]}
                       >
                         <Radio.Group
                           className="flex justify-around w-full"

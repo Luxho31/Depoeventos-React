@@ -26,6 +26,7 @@ import Profile from "./pages/dashboard/screens/profile";
 import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
 import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
+import TrustedCompaniesDashboard from "./pages/dashboard/screens/trusted-companies-dashboard";
 import UsersDashboard from "./pages/dashboard/screens/users-dashboard";
 import VideosDashboard from "./pages/dashboard/screens/videos-dashboard";
 import Cart from "./pages/landing/cart/cart";
@@ -125,11 +126,11 @@ function App() {
                 path="/dashboard/complaints-book"
                 element={<ComplaintsBookDashboard />}
               />
+              <Route path="/dashboard/assists" element={<AssistsDashboard />} />
               <Route
-                path="/dashboard/assists"
-                element={<AssistsDashboard />}
+                path="/dashboard/assists/:id"
+                element={<AssistsDashboardId />}
               />
-              <Route path="/dashboard/assists/:id" element={<AssistsDashboardId />} />
               <Route
                 path="/dashboard/incidents"
                 element={<IncidentsDashboard />}
@@ -137,6 +138,10 @@ function App() {
               <Route
                 path="/dashboard/incidents-teachers"
                 element={<IncidentsTeachersDashboard />}
+              />
+              <Route
+                path="/dashboard/trusted-companies"
+                element={<TrustedCompaniesDashboard />}
               />
             </Route>
 

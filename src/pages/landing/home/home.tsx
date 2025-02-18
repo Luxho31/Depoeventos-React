@@ -9,6 +9,7 @@ import Intro from "./components/intro/intro";
 import Team from "./components/team/team";
 import Testimonials from "./components/testimonials/testimonials";
 import DepoVideos from "./components/videos/depovideos";
+import TrustedCompanies from "./trusted-companies/trusted-companies";
 
 export default function Home() {
   const data = [
@@ -64,6 +65,7 @@ export default function Home() {
         <Testimonials />
         <Team />
         <DepoVideos />
+        <TrustedCompanies />
         <FloatButton.Group shape="circle" className="space-y-2">
           <a
             href="https://wa.me/+51929952527"

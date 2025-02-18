@@ -60,14 +60,19 @@ function AssistsDashboard() {
             endDate: "2025-12-31",
             total_assists: 30,
         },
+        {
+            id: 4,
+            name: "Música",
+            description: "Descripción del curso 4",
+            startDate: "2026-01-01",
+            endDate: "2026-01-31",
+            total_assists: 40,
+        },
     ];
 
     return (
         <div className="h-full p-4 max-sm:p-0 ">
             <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
-                <p className="m-4 text-xl font-medium max-sm:text-lg">
-                    Asistencias <span className="text-sm text-gray-500">({getCurrentDate()})</span>
-                </p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
                     {courses.map((course) => (
                         <li key={course.id} className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
@@ -80,7 +85,7 @@ function AssistsDashboard() {
                                 <p><strong>Final:</strong> {course.endDate}</p>
                             </div>
                             <button
-                                className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition"
+                                className="mt-2 mx-auto w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition"
                                 onClick={() => navigate(`/dashboard/assists/${course.id}`)}
                             >
                                 Ver

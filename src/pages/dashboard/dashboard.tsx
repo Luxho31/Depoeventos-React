@@ -28,6 +28,7 @@ import type { MenuProps } from "antd";
 import { CiBadgeDollar, CiStar, CiWarning } from "react-icons/ci";
 import {
   FaBookOpen,
+  FaBuilding,
   FaChevronLeft,
   FaPhotoVideo,
   FaSchool,
@@ -46,7 +47,6 @@ import LogoIcon from "../../assets/image/logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import { GrSchedule } from "react-icons/gr";
 import { RiAlarmWarningLine } from "react-icons/ri";
-
 
 const { Header, Sider, Content } = Layout;
 
@@ -230,7 +230,15 @@ export default function Dashboard() {
       label: "Incidentes profesores",
       onClick: () => handleItemClick("/dashboard/incidents-teachers"),
       role: ["ADMIN"],
-    }
+    },
+    {
+      key: "18",
+      path: "/dashboard/trusted-companies",
+      icon: <FaBuilding />,
+      label: "Empresas de confianza",
+      onClick: () => handleItemClick("/dashboard/trusted-companies"),
+      role: ["ADMIN"],
+    },
   ];
 
   const selectedItem = menuItems.find(
@@ -286,10 +294,11 @@ export default function Dashboard() {
         <Layout className="h-screen relative">
           {!collapsed && (
             <div
-              className={`${windowWidth <= 768
-                ? "fixed inset-0 bg-black opacity-50 z-40"
-                : "hidden"
-                }`}
+              className={`${
+                windowWidth <= 768
+                  ? "fixed inset-0 bg-black opacity-50 z-40"
+                  : "hidden"
+              }`}
               onClick={() => setCollapsed(true)}
             ></div>
           )}
@@ -302,15 +311,15 @@ export default function Dashboard() {
             className={
               windowWidth >= 768
                 ? "fixed z-50"
-                : `!fixed ${collapsed && "z-50"
-                } top-0 left-0 h-screen relative z-50`
+                : `!fixed ${
+                    collapsed && "z-50"
+                  } top-0 left-0 h-screen relative z-50`
             }
             onBreakpoint={(broken) => {
               if (broken) {
                 setCollapsed(true); // Oculta el sidebar cuando el breakpoint se activa
               }
             }}
-
           >
             <div
               style={{
@@ -344,10 +353,11 @@ export default function Dashboard() {
                       onClick={() => {
                         setCollapsed(true);
                       }}
-                      className={`${windowWidth >= 768
-                        ? "hidden"
-                        : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
-                        }`}
+                      className={`${
+                        windowWidth >= 768
+                          ? "hidden"
+                          : "bg-[#001529] absolute rounded-tr-full rounded-br-full px-2 text-white h-10 -right-7 top-3"
+                      }`}
                     >
                       <FaChevronLeft className="text-lg" />
                     </button>
@@ -365,8 +375,9 @@ export default function Dashboard() {
                 }))}
               />
               <div
-                className={`${windowWidth >= 640 ? "hidden" : "block"
-                  } flex justify-center gap-2 mt-auto mb-4`}
+                className={`${
+                  windowWidth >= 640 ? "hidden" : "block"
+                } flex justify-center gap-2 mt-auto mb-4`}
               >
                 <Button
                   className="border-none h-12 p-2 bg-white rounded-lg"
@@ -394,7 +405,11 @@ export default function Dashboard() {
                 width: "100%",
               }}
             >
-              <div className={`flex justify-between items-center max-sm:fixed ${collapsed ? 'max-sm:bg-white' : 'max-sm:bg-transparent'} max-sm:z-40 max-sm:w-full`}>
+              <div
+                className={`flex justify-between items-center max-sm:fixed ${
+                  collapsed ? "max-sm:bg-white" : "max-sm:bg-transparent"
+                } max-sm:z-40 max-sm:w-full`}
+              >
                 <Button
                   type="text"
                   icon={
