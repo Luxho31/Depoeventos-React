@@ -239,6 +239,14 @@ export default function Dashboard() {
       onClick: () => handleItemClick("/dashboard/trusted-companies"),
       role: ["ADMIN"],
     },
+    {
+      key: "19",
+      path: "/dashboard/courses-with-children",
+      icon: <FaChildren />,
+      label: "Cursos con hijos",
+      onClick: () => handleItemClick("/dashboard/courses-with-children"),
+      role: ["ADMIN"],
+    },
   ];
 
   const selectedItem = menuItems.find(

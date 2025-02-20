@@ -16,6 +16,7 @@ import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard"
 import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
 import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
 import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
+import CoursesWithChildrenDashboard from "./pages/dashboard/screens/courses-with-children-dashboard";
 import DisciplinesDashboard from "./pages/dashboard/screens/disciplines-dashboard";
 import HomeDashboard from "./pages/dashboard/screens/home-dashboard";
 import IncidentsDashboard from "./pages/dashboard/screens/incidents-dashboard";
@@ -60,7 +61,6 @@ function App() {
                 element={<ChangePassword />}
               /> */}
             </Route>
-
             {/* Rutas Generales */}
             <Route path="/" element={<RutaGeneral />}>
               <Route index element={<Home />} />
@@ -78,7 +78,6 @@ function App() {
               <Route path="/complaints-book" element={<ComplaintsBook />} />
               <Route path="/faq" element={<FaqSection />} />
             </Route>
-
             {/* Rutas Protegidas */}
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<HomeDashboard />} />
@@ -126,11 +125,15 @@ function App() {
                 path="/dashboard/complaints-book"
                 element={<ComplaintsBookDashboard />}
               />
+
+              {/* Assists */}
               <Route path="/dashboard/assists" element={<AssistsDashboard />} />
               <Route
                 path="/dashboard/assists/:id"
                 element={<AssistsDashboardId />}
               />
+
+              {/* Incidents */}
               <Route
                 path="/dashboard/incidents"
                 element={<IncidentsDashboard />}
@@ -139,9 +142,17 @@ function App() {
                 path="/dashboard/incidents-teachers"
                 element={<IncidentsTeachersDashboard />}
               />
+
+              {/* Trusted companies */}
               <Route
                 path="/dashboard/trusted-companies"
                 element={<TrustedCompaniesDashboard />}
+              />
+
+              {/* Courses with children */}
+              <Route
+                path="/dashboard/courses-with-children"
+                element={<CoursesWithChildrenDashboard />}
               />
             </Route>
 

@@ -1,5 +1,7 @@
 import {
   Button,
+  DatePicker,
+  Divider,
   Drawer,
   Form,
   Input,
@@ -259,6 +261,8 @@ export default function RegistrationsDashboard() {
     }
   };
 
+  const { RangePicker } = DatePicker;
+
   return (
     <div className="h-screen">
       <button
@@ -431,7 +435,7 @@ export default function RegistrationsDashboard() {
                     { value: "8", label: "8vo grado / 2do secundaria" },
                     { value: "9", label: "9no grado / 3ero secundaria" },
                     { value: "10", label: "10mo grado / 4to secundaria" },
-                    { value: "11", label: "11vo grado / 5to secundaria" }
+                    { value: "11", label: "11vo grado / 5to secundaria" },
                   ]}
                 />
               </Form.Item>
@@ -447,6 +451,16 @@ export default function RegistrationsDashboard() {
                     { value: "Femenino", label: "Femenino" },
                     { value: "Mixto", label: "Mixto" },
                   ]}
+                />
+              </Form.Item>
+
+              <Divider />
+
+              {/* Tiempo rango */}
+              <Form.Item name="rangeTime" className="text-black">
+                <RangePicker
+                  placeholder={["Fecha de inicio", "Fecha de fin"]}
+                  className="w-full"
                 />
               </Form.Item>
 
