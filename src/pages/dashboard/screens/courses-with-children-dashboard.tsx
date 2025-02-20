@@ -110,6 +110,11 @@ function CoursesWithChildrenDashboard() {
     }
   };
 
+  const handleSaveChanges = () => {
+    console.log("Cambios realizados:", { leftList, rightList });
+    toast.success("Cambios confirmados");
+  };
+
   const OTP_PASSWORD = "260601";
 
   return (
@@ -137,7 +142,7 @@ function CoursesWithChildrenDashboard() {
               inputStyle={{
                 width: "1.8rem",
                 height: "1.8rem",
-                fontSize: "1.5rem",
+                fontSize: "1.2rem",
                 margin: "0 0.4rem",
                 borderRadius: "0.5rem",
                 border: "1px solid #ccc",
@@ -287,6 +292,17 @@ function CoursesWithChildrenDashboard() {
                 ))}
               </ul>
             </div>
+          </div>
+          <div
+            className="flex justify-center items-center gap-x-4"
+            style={{ marginTop: "1rem" }}
+          >
+            <button
+              onClick={handleSaveChanges}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600"
+            >
+              Confirmar cambios
+            </button>
           </div>
         </div>
       )}
