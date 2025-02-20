@@ -1,12 +1,12 @@
-import { Button, Divider, Select } from "antd";
+import { Button, Divider, Select, Tooltip } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { TbLock } from "react-icons/tb";
 import OtpInput from "react-otp-input";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../../context/AuthProvider";
-import { TbLock } from "react-icons/tb";
 
 const courses = [
   {
@@ -144,7 +144,7 @@ function CoursesWithChildrenDashboard() {
               }}
             />
 
-            <button
+            <motion.button
               onClick={() => {
                 if (!otp) {
                   toast.error("Ingresa la contraseña OTP");
@@ -158,10 +158,13 @@ function CoursesWithChildrenDashboard() {
                   setOtp("");
                 }
               }}
-              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
+              aria-label="Ingresar con OTP"
             >
               Ingresar
-            </button>
+            </motion.button>
           </motion.div>
         </div>
       )}
@@ -206,8 +209,11 @@ function CoursesWithChildrenDashboard() {
                 setOtp("");
                 setValidOtp(false);
               }}
+              className="hover:text-red-500 transition-colors"
             >
-              <TbLock />
+              <Tooltip title="Bloquear" placement="right">
+                <TbLock />
+              </Tooltip>
             </button>
           </div>
 
