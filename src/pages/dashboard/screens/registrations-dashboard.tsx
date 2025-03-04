@@ -209,14 +209,38 @@ export default function RegistrationsDashboard() {
   const getInscriptionsWithFiltersForm = async (values: any) => {
     try {
       setLoadingFilters(true);
-      const selectedProductIds = [];
-      for (const name of values.productIds) {
-        const ids = fullData
-          .filter((data) => data.product.name === name)
-          .map((data) => data.product.id);
-        selectedProductIds.push(...ids);
+
+      if (values.rangeTime) {
+        values.startTime = values.rangeTime[0];
+        values.endTime = values.rangeTime[1];
+        if (values.startTime && values.endTime) {
+          values.startTime = new Date(values.startTime.$d)
+            .toISOString()
+            .split("T")[0];
+          values.endTime = new Date(values.endTime.$d)
+            .toISOString()
+            .split("T")[0];
+        }
       }
-      const updatedValues = { ...values, productIds: selectedProductIds };
+      delete values.rangeTime;
+      console.log(values.startTime, values.endTime);
+
+      const selectedProductIds = [];
+      if (!values.productIds) {
+        values.productIds = [];
+      } else {
+        for (const name of values.productIds) {
+          const ids = fullData
+            .filter((data) => data.product.name === name)
+            .map((data) => data.product.id);
+          selectedProductIds.push(...ids);
+        }
+      }
+
+      const updatedValues = {
+        ...values,
+        productIds: selectedProductIds,
+      };
       const response = await getInscriptionsWithFilters(updatedValues);
       setRegistrationData(response);
       setFilterValues(updatedValues);

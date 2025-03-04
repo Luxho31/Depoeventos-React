@@ -51,9 +51,7 @@ export const getInscriptionById = async (id: number) => {
 //   [key: string]: number[];
 // };
 
-export const getInscriptionsWithFilters = async (
-  values: any
-) => {
+export const getInscriptionsWithFilters = async (values: any) => {
   try {
     const queryParams = new URLSearchParams();
 
@@ -63,7 +61,10 @@ export const getInscriptionsWithFilters = async (
         values[key] !== null &&
         (Array.isArray(values[key]) ? values[key].length > 0 : true)
       ) {
-        queryParams.append(key, values[key].join(","));
+        const value = Array.isArray(values[key])
+          ? values[key].join(",")
+          : values[key];
+        queryParams.append(key, value.toString());
       }
     }
 
