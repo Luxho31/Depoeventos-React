@@ -40,6 +40,8 @@ import Opinions from "./pages/landing/opinions/opinions";
 import Products from "./pages/landing/products/products";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 import NotFound from "./pages/not-found/not-found";
+import ReturnsDashboard from "./pages/dashboard/screens/returns-dashboard";
+
 
 function App() {
   return (
@@ -149,11 +151,19 @@ function App() {
                 element={<TrustedCompaniesDashboard />}
               />
 
+              {/* Returns */}
+              <Route
+                path="/dashboard/returns"
+                element={<ReturnsDashboard />}
+              />
+              
               {/* Courses with children */}
               <Route
                 path="/dashboard/courses-with-children"
                 element={<CoursesWithChildrenDashboard />}
               />
+
+              
             </Route>
 
             <Route path="*" element={<NotFound />} />

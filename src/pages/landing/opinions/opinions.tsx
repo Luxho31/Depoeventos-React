@@ -5,7 +5,7 @@ import { Checkbox, Form, Input, Spin } from "antd";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import contactUsIMG from "../../../assets/auth/contactUsIMG.jpg";
-import Politicas from "../../../assets/pdf/politica_de_privacidad.pdf";
+import Politicas from "../../../assets/pdf/PoliticaPrivacidad.pdf";
 
 import { createTestimonial } from "../../../services/opinions-service";
 

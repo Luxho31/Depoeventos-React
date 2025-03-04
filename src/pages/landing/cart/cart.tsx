@@ -8,7 +8,8 @@ import { Checkbox, Form, Progress, Spin, Tag } from "antd";
 import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
-import Terminos from "../../../assets/pdf/tyc.pdf";
+import Terminos from "../../../assets/pdf/TerminosCondiciones.pdf";
+import PoliticasPrivacidad from "../../../assets/pdf/PoliticaPrivacidad.pdf";
 import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
 import CartTable from "./components/cart-table";
@@ -153,8 +154,9 @@ export default function Cart() {
 
       {/* Table Cart */}
       <div
-        className={`${progressPercent === 0 ? "block" : "hidden"
-          } flex max-xl:flex-col items-start gap-x-12 `}
+        className={`${
+          progressPercent === 0 ? "block" : "hidden"
+        } flex max-xl:flex-col items-start gap-x-12 `}
       >
         {/* <div className="w-[60rem] mb-24"> */}
         <div className="w-full mb-12">
@@ -171,7 +173,7 @@ export default function Cart() {
                   createOrderForm(values);
                 }
               }}
-              onFinishFailed={() => { }}
+              onFinishFailed={() => {}}
               className="bg-[#f3f3f9] h-fit w-full flex flex-col justify-between rounded-3xl shadow-md p-8"
             >
               <div className="mb-8">
@@ -209,7 +211,7 @@ export default function Cart() {
                     onClose={() => {
                       if (
                         // coupon === "COMPLETOSUMMERSPVC" ||
-                        // coupon === "MEDIOSUMMERSPVC" || 
+                        // coupon === "MEDIOSUMMERSPVC" ||
                         coupon === "PROFESORES2025"
                       ) {
                         setDiscountApplied(false);
@@ -277,7 +279,14 @@ export default function Cart() {
                     onChange={() => handleCheckboxChange("dataUsage")}
                     disabled={loading}
                   >
-                    Acepto el uso de mis datos para fines comerciales
+                    Acepto el uso de mis datos para fines comerciales -{" "}
+                    <a
+                      className="text-blue-500 font-semibold hover:text-blue-700"
+                      href={PoliticasPrivacidad}
+                      target="_blank"
+                    >
+                      Política de privacidad
+                    </a>
                   </Checkbox>
                 </div>
 

@@ -10,6 +10,7 @@ import {
   Spin,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import PoliticasPrivacidad from "../../../assets/pdf/PoliticaPrivacidad.pdf";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { createComplaintsBook } from "../../../services/complaints-book-service";
@@ -319,7 +320,10 @@ export const ComplaintsBook = () => {
             >
               <Checkbox>
                 He leído y acepto las{" "}
-                <a href="#" className="text-blue-600">
+                <a href={PoliticasPrivacidad} className="text-blue-600"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   políticas de privacidad
                 </a>
                 .

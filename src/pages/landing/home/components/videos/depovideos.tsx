@@ -67,9 +67,9 @@ export default function DepoVideos() {
         </div>
         <div className="grid grid-cols-3 gap-4 place-items-center ">
           {data.length === 0 && (
-            <div className="flex w-full justify-center items-center ">
+            
               <Empty description="No hay videos disponibles" />
-            </div>
+            
           )}
           {data.map((data: any) => (
             <YouTubeVideo url={data.url} />

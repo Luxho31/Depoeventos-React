@@ -213,7 +213,7 @@ export default function Dashboard() {
       icon: <MdChecklistRtl />,
       label: "Asistencias",
       onClick: () => handleItemClick("/dashboard/assists"),
-      role: ["ADMIN"],
+      role: ["TEACHER", "ADMIN"],
     },
     {
       key: "16",
@@ -229,7 +229,7 @@ export default function Dashboard() {
       icon: <RiAlarmWarningLine />,
       label: "Incidentes profesores",
       onClick: () => handleItemClick("/dashboard/incidents-teachers"),
-      role: ["ADMIN"],
+      role: ["TEACHER", "ADMIN"],
     },
     {
       key: "18",
@@ -243,8 +243,16 @@ export default function Dashboard() {
       key: "19",
       path: "/dashboard/courses-with-children",
       icon: <FaChildren />,
-      label: "Cursos con hijos",
+      label: "Transferencias",
       onClick: () => handleItemClick("/dashboard/courses-with-children"),
+      role: ["ADMIN"],
+    },
+    {
+      key: "20",
+      path: "/dashboard/returns",
+      icon: <FaCartShopping />,
+      label: "Devoluciones",
+      onClick: () => handleItemClick("/dashboard/returns"),
       role: ["ADMIN"],
     },
   ];

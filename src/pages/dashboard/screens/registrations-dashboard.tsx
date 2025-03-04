@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { FaEye, FaUser } from "react-icons/fa";
+import { FaEye, FaShoppingBag, FaUser } from "react-icons/fa";
 import { IoDownload, IoSend } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -599,6 +599,14 @@ export default function RegistrationsDashboard() {
                       onClick={() => openSeeRegistrationChildrenModal(user.id)}
                     >
                       <FaUser className="text-xl text-gray-700" />
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Devolver">
+                    <button
+                      className="bg-slate-300 rounded-md p-1"
+                      onClick={() => openSeeRegistrationChildrenModal(user.id)}
+                    >
+                      <FaShoppingBag className="text-xl text-gray-700" />
                     </button>
                   </Tooltip>
                 </td>
