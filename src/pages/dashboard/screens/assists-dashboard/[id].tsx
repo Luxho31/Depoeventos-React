@@ -1,10 +1,10 @@
 import { Form, Radio } from "antd";
 import { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 export default function AssistsDashboardId() {
-  const { id } = useParams();
+  // const { id } = useParams();
   const [form] = Form.useForm();
   const [data, setData] = useState({} as any);
 

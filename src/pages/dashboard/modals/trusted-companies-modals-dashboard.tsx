@@ -1,6 +1,7 @@
 import { Button, Form, Input, Modal } from "antd";
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
+import { createTrustedCompany } from "../../../services/trusted-companies-service";
 
 export default function TrustedCompaniesModal({
   open,
@@ -14,7 +15,7 @@ export default function TrustedCompaniesModal({
   const createTrustedCompaniesForm = async (values: any) => {
     try {
       setLoading(true);
-      // await createTrustedCompanies(values);
+      await createTrustedCompany(values);
       console.log(values);
       form.resetFields();
       handleReload();

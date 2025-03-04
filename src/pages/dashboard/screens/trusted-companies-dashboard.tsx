@@ -3,17 +3,16 @@ import { useEffect, useState } from "react";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
+import { getAllTrustedCompanies } from "../../../services/trusted-companies-service";
 import {
-  getAllVideos,
-  toggleVideoStatus,
+  toggleVideoStatus
 } from "../../../services/video-service";
 import TrustedCompaniesModal from "../modals/trusted-companies-modals-dashboard";
 
 function TrustedCompaniesDashboard() {
-  const [videosData, setVideosData] = useState<any[]>([]);
-  const [, setLoading] = useState<boolean>(false);
+  const [trustedCompaniesData, setTrustedCompanies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openCreateVideoModal, setOpenCreateVideoModal] =
+  const [openCreateTrustedCompaniesModal, setOpenCreateTrustedCompaniesModal] =
     useState<boolean>(false);
 
   const { userRole } = useAuth();
@@ -35,14 +34,12 @@ function TrustedCompaniesDashboard() {
   }, [currentPage]);
 
   const handleReload = async () => {
-    setLoading(true);
     try {
-      const response = await getAllVideos();
-      setVideosData(response);
+      const response = await getAllTrustedCompanies();
+      setTrustedCompanies(response);
     } catch (error) {
       console.error("Error al cargar los videos:", error);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -64,11 +61,11 @@ function TrustedCompaniesDashboard() {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Button
-            onClick={() => setOpenCreateVideoModal(true)}
+            onClick={() => setOpenCreateTrustedCompaniesModal(true)}
             className="max-sm:hidden flex items-center gap-x-2 mb-5"
           >
             <HiMiniPlus className="text-lg" />
-            Crear empresa de confianza
+            Subir video
           </Button>
           <table className="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -88,7 +85,7 @@ function TrustedCompaniesDashboard() {
               </tr>
             </thead>
             <tbody>
-              {videosData.map((video, index) => (
+              {trustedCompaniesData.map((video, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
                   <td className="px-6 py-4">{video.id}</td>
                   <td className="px-6 py-4">{video.url}</td>
@@ -109,14 +106,14 @@ function TrustedCompaniesDashboard() {
         </div>
       </div>
       <TrustedCompaniesModal
-        open={openCreateVideoModal}
-        setOpen={setOpenCreateVideoModal}
+        open={openCreateTrustedCompaniesModal}
+        setOpen={setOpenCreateTrustedCompaniesModal}
         handleReload={handleReload}
       />
       <Pagination
         className="mt-4"
         current={currentPage + 1}
-        total={videosData.length}
+        total={trustedCompaniesData.length}
         pageSize={10}
         onChange={onPageChange}
         showSizeChanger={false}
