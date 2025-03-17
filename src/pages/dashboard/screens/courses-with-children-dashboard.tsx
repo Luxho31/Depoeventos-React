@@ -7,41 +7,10 @@ import OtpInput from "react-otp-input";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../../context/AuthProvider";
-
-const courses = [
-  {
-    id: 1,
-    name: "Curso 1",
-    children: [
-      { id: 1, name: "Curso1A" },
-      { id: 2, name: "Curso1B" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Curso 2",
-    children: [
-      { id: 3, name: "Curso2A" },
-      { id: 4, name: "Curso2B" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Curso 3",
-    children: [
-      { id: 5, name: "Curso3A" },
-      { id: 6, name: "Curso3B" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Curso 4",
-    children: [
-      { id: 7, name: "Curso4A" },
-      { id: 8, name: "Curso4B" },
-    ],
-  },
-];
+import {
+  getAllActiveProducts,
+  getChildrenByProduct,
+} from "../../../services/products-service";
 
 function CoursesWithChildrenDashboard() {
   const { userRole } = useAuth();
@@ -57,22 +26,29 @@ function CoursesWithChildrenDashboard() {
   );
   const [selectedLeft, setSelectedLeft] = useState<number[]>([]);
   const [selectedRight, setSelectedRight] = useState<number[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (userRole && userRole.includes(specificRole)) return;
     navigate("/dashboard");
   }, [userRole]);
 
-  const handleCourseChange = (courseId: number | null, isLeft: boolean) => {
+  useEffect(() => {
+    getActiveProducts();
+  }, []);
+
+  const handleCourseChange = async (courseId: any | null, isLeft: boolean) => {
     if (isLeft) {
       setSelectedCourse1(courseId);
-      const course = courses.find((c) => c.id === courseId);
-      setLeftList(course ? course.children : []);
+      await getChildrenByProduct(courseId).then((res) => {
+        setLeftList(res);
+      });
       setSelectedLeft([]);
     } else {
       setSelectedCourse2(courseId);
-      const course = courses.find((c) => c.id === courseId);
-      setRightList(course ? course.children : []);
+      await getChildrenByProduct(courseId).then((res) => {
+        setRightList(res);
+      });
       setSelectedRight([]);
     }
   };
@@ -110,12 +86,22 @@ function CoursesWithChildrenDashboard() {
     }
   };
 
+  const getActiveProducts = async () => {
+    const products = await getAllActiveProducts();
+    console.log("Productos activos:", products);
+    setProducts(products);
+  };
+
   const handleSaveChanges = () => {
     console.log("Cambios realizados:", { leftList, rightList });
     toast.success("Cambios confirmados");
   };
 
   const OTP_PASSWORD = "260601";
+
+  const getKeyRandom = () => {
+    return Math.floor(Math.random() * 1000000);
+  }
 
   return (
     <>
@@ -181,15 +167,22 @@ function CoursesWithChildrenDashboard() {
               placeholder="Selecciona Curso 1"
               value={selectedCourse1}
               onChange={(value) => handleCourseChange(value, true)}
-              className="w-52"
+              className="w-full"
             >
-              {courses.map((course) => (
+              {products.map((product) => (
                 <Select.Option
-                  key={course.id}
-                  value={course.id}
-                  disabled={course.id === selectedCourse2}
+                  key={product.id + getKeyRandom()}
+                  value={product.id}
+                  disabled={product.id === selectedCourse2}
                 >
-                  {course.name}
+                  {product.name} - {product.gender} -{" "}
+                  {product.grades.map((grade: number) => (
+                    <span key={grade}>{grade} </span>
+                  ))}
+                  -{" "}
+                  {product.campus.map((campus: any) => (
+                    <span key={campus.id}>{campus.name} </span>
+                  ))}
                 </Select.Option>
               ))}
             </Select>
@@ -197,15 +190,22 @@ function CoursesWithChildrenDashboard() {
               placeholder="Selecciona Curso 2"
               value={selectedCourse2}
               onChange={(value) => handleCourseChange(value, false)}
-              className="w-52"
+              className="w-full"
             >
-              {courses.map((course) => (
+              {products.map((product) => (
                 <Select.Option
-                  key={course.id}
-                  value={course.id}
-                  disabled={course.id === selectedCourse1}
+                  key={product.id + getKeyRandom()}
+                  value={product.id}
+                  disabled={product.id === selectedCourse2}
                 >
-                  {course.name}
+                  {product.name} - {product.gender} -{" "}
+                  {product.grades.map((grade: number) => (
+                    <span key={grade}>{grade} </span>
+                  ))}
+                  -{" "}
+                  {product.campus.map((campus: any) => (
+                    <span key={campus.id}>{campus.name} </span>
+                  ))}
                 </Select.Option>
               ))}
             </Select>
@@ -230,7 +230,7 @@ function CoursesWithChildrenDashboard() {
                 Curso {selectedCourse1 || "1"}
               </h3>
               <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] shadow-md">
-                {leftList.map((child) => (
+                {leftList.map((child: any) => (
                   <li
                     key={child.id}
                     className={`cursor-pointer my-1 p-2 rounded-lg text-center text-gray-700 ${
@@ -240,7 +240,7 @@ function CoursesWithChildrenDashboard() {
                     }`}
                     onClick={() => toggleSelection(child.id, true)}
                   >
-                    {child.name}
+                    {child.name} {child.lastName}
                   </li>
                 ))}
               </ul>
@@ -277,7 +277,7 @@ function CoursesWithChildrenDashboard() {
                 Curso {selectedCourse2 || "2"}
               </h3>
               <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] overflow-auto shadow-md">
-                {rightList.map((child) => (
+                {rightList.map((child: any) => (
                   <li
                     key={child.id}
                     className={`cursor-pointer p-2 rounded-lg text-center text-gray-700 ${
@@ -287,7 +287,7 @@ function CoursesWithChildrenDashboard() {
                     }`}
                     onClick={() => toggleSelection(child.id, false)}
                   >
-                    {child.name}
+                    {child.name} {child.lastName}
                   </li>
                 ))}
               </ul>

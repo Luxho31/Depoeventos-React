@@ -14,6 +14,7 @@ import {
   getAllProducts,
 } from "../../../services/products-service";
 import ProductModal from "../modals/products-modals-dashboard";
+import { getAllTeacher } from "../../../services/user-service";
 
 type ProductData = {
   campus: Campus[];
@@ -57,6 +58,7 @@ export default function DiciplinesDashboard() {
   const [campuses, setCampuses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
+  const [teachers, setTeachers] = useState([]);
 
   const { userRole } = useAuth();
   const usersPerPage: number = 10;
@@ -101,11 +103,15 @@ export default function DiciplinesDashboard() {
         getAllDisciplines(),
         getAllCampuses(),
         getAllCategories(),
-      ]).then(([disciplinesData, campusesData, categoriesData]) => {
-        setDisciplines(disciplinesData);
-        setCampuses(campusesData);
-        setCategories(categoriesData);
-      });
+        getAllTeacher(),
+      ]).then(
+        ([disciplinesData, campusesData, categoriesData, teachersData]) => {
+          setDisciplines(disciplinesData);
+          setCampuses(campusesData);
+          setCategories(categoriesData);
+          setTeachers(teachersData);
+        }
+      );
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     } finally {
@@ -288,6 +294,7 @@ export default function DiciplinesDashboard() {
             campuses={campuses}
             categories={categories}
             disciplines={disciplines}
+            teachers = {teachers}
           />
           <ProductModal
             type="edit"

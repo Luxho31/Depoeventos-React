@@ -24,6 +24,7 @@ import {
 import RegistrationsModal from "../modals/registrations-modals-dashboard";
 import { LoadingOutlined } from "@ant-design/icons";
 import { BiSliderAlt } from "react-icons/bi";
+import ReturnModal from "../modals/returns-modals-dashboard";
 
 type ProductType = {
   id?: number;
@@ -87,6 +88,7 @@ export default function RegistrationsDashboard() {
   const [seeId, setSeeId] = useState<number | undefined>(undefined);
   const [openSeeModal, setOpenSeeModal] = useState(false);
   const [openChildrenModal, setOpenChildrenModal] = useState(false);
+  const [openReturnModal, setOpenReturnModal] = useState(false);
   const [, setWindowWidth] = useState(window.innerWidth);
   const [open, setOpen] = useState(false);
   const [fullData, setFullData] = useState<RegistrationData[]>([]);
@@ -139,6 +141,11 @@ export default function RegistrationsDashboard() {
   const openSeeRegistrationChildrenModal = (id: number) => {
     setSeeId(id);
     setOpenChildrenModal(true);
+  };
+
+  const openCreateReturnModal = (id: number) => {
+    setSeeId(id);
+    setOpenReturnModal(true);
   };
 
   const handleSearch = () => {
@@ -557,6 +564,11 @@ export default function RegistrationsDashboard() {
             setOpen={setOpenChildrenModal}
             type="children"
           />
+          <ReturnModal
+            id={seeId}
+            open={openReturnModal}
+            setOpen={setOpenReturnModal}
+          />
         </div>
 
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -628,7 +640,7 @@ export default function RegistrationsDashboard() {
                   <Tooltip title="Devolver">
                     <button
                       className="bg-slate-300 rounded-md p-1"
-                      onClick={() => openSeeRegistrationChildrenModal(user.id)}
+                      onClick={() => openCreateReturnModal(user.id)}
                     >
                       <FaShoppingBag className="text-xl text-gray-700" />
                     </button>

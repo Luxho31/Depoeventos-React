@@ -69,6 +69,7 @@ type ProductModalProps = {
   campuses: Campus[]; // Arreglo de objetos de tipo Campus
   categories: Category[]; // Arreglo de objetos de tipo Category
   disciplines: Course[]; // Arreglo de objetos de tipo Discipline
+  teachers?: any;
 };
 
 export default function ProductModal({
@@ -80,6 +81,7 @@ export default function ProductModal({
   campuses,
   categories,
   disciplines,
+  teachers,
 }: ProductModalProps) {
   const [loading, setLoading] = useState(false);
   const [productImage, setProductImage] = useState<File | null>(null);
@@ -210,6 +212,7 @@ export default function ProductModal({
         maxStudents: values.maxStudents,
         price: values.price,
         active: values.active,
+        teacher: values.teacherId,
         coursesWithSchedules,
       };
 
@@ -266,6 +269,7 @@ export default function ProductModal({
         maxStudents: values.maxStudents,
         active: values.active,
         price: values.price,
+        teacher: values.teacherId,
         coursesWithSchedules,
       };
 
@@ -498,6 +502,7 @@ export default function ProductModal({
                   />
                   {/* </div> */}
                 </Form.Item>
+
                 <Form.Item
                   name="active"
                   label="Estado"
@@ -519,7 +524,34 @@ export default function ProductModal({
                   </Radio.Group>
                 </Form.Item>
               </div>
-
+              <Form.Item
+                name="teacherId"
+                label="Profesor"
+                labelCol={{ span: 24 }}
+                rules={[
+                  {
+                    required: true,
+                    message: "El profesor es requerido",
+                  },
+                ]}
+                className="w-full cursor-text"
+              >
+                <Select
+                  allowClear
+                  style={{ width: "100%" }}
+                  placeholder="Por favor, selecciona los profesores"
+                  className="w-full h-14"
+                  disabled={type === "see"}
+                >
+                  {(Array.isArray(teachers) ? teachers : []).map(
+                    (teacher: any) => (
+                      <Select.Option key={teacher.id} value={teacher.id}>
+                        {teacher.name}
+                      </Select.Option>
+                    )
+                  )}
+                </Select>
+              </Form.Item>
               {/* Input Descripcion del Producto */}
               <Form.Item
                 name="description"

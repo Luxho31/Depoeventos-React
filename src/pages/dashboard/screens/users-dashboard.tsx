@@ -1,9 +1,11 @@
-import { Checkbox, Form, Input, Pagination } from "antd";
+import { Input, Pagination, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { FaUser, FaUserEdit, FaUserGraduate } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { getAllUsers } from "../../../services/user-service";
+import { getAllUsers, updateRole } from "../../../services/user-service";
+import { toast, Toaster } from "sonner";
 
 type UserData = {
   id: number;
@@ -31,11 +33,6 @@ function UsersDashboard() {
   const { userRole } = useAuth();
   const navigate = useNavigate();
   const specificRole: string = "ADMIN";
-
-  // Estado para los checkboxes
-  const [checkedUsers, setCheckedUsers] = useState<{ [key: number]: boolean }>(
-    {}
-  );
 
   useEffect(() => {
     if (userRole && userRole.some((role) => role === specificRole)) {
@@ -69,13 +66,31 @@ function UsersDashboard() {
     setCurrentPage(page - 1);
   };
 
-  const onCheckboxChange = (userId: number, checked: boolean) => {
-    setCheckedUsers((prev) => ({ ...prev, [userId]: checked }));
-    console.log(`Usuario ID: ${userId}, Checked: ${checked}`);
+  const handleRoleClick = async (userId: any, role: any) => {
+    const superAdmins = [1, 2, 3];
+    if (superAdmins.includes(userId)) {
+      toast.error("No puedes cambiar el rol de un super administrador");
+      return;
+    }
+    try {
+      await updateRole(userId, role);
+      toast.message("Rol cambiado correctamente", {
+        description: `El rol de ${role} ha sido cambiado correctamente`,
+      });
+    } catch (error) {
+      console.error("Error al cambiar el rol del usuario:", error);
+      toast.error("Error al cambiar el rol del usuario");
+    }
   };
 
+  const rolesWithIcons: any = {
+    ADMIN: <FaUserEdit size={14} />,
+    USER: <FaUser size={14} />,
+    TEACHER: <FaUserGraduate size={14} />,
+  };
   return (
     <div className="h-screen">
+      <Toaster richColors />
       <div className="flex justify-between">
         <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
           <div className="relative">
@@ -111,7 +126,7 @@ function UsersDashboard() {
                 Documento
               </th>
               <th scope="col" className="px-6 py-3">
-                Profesor
+                Roles
               </th>
             </tr>
           </thead>
@@ -125,7 +140,7 @@ function UsersDashboard() {
                   <img
                     className="w-10 h-10 rounded-full border border-black"
                     src={
-                      user.photo ||
+                      // user.photo ||
                       "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg"
                     }
                     alt={`${user.firstName} image`}
@@ -151,14 +166,23 @@ function UsersDashboard() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <Form name="checkbox">
-                    <Checkbox
-                      checked={checkedUsers[user.id] || false}
-                      onChange={(e) =>
-                        onCheckboxChange(user.id, e.target.checked)
-                      }
-                    />
-                  </Form>
+                  <div className="flex gap-2">
+                    {Object.keys(rolesWithIcons).map((role) => (
+                      <Tooltip title={role} key={role} color={"cyan"}>
+                        <span
+                          key={role}
+                          className={
+                            user.roles.includes(role as never)
+                              ? "text-orange-600 cursor-not-allowed"
+                              : "text-gray-400 cursor-pointer"
+                          }
+                          onClick={() => handleRoleClick(user.id, role)}
+                        >
+                          {rolesWithIcons[role]}
+                        </span>
+                      </Tooltip>
+                    ))}
+                  </div>
                 </td>
               </tr>
             ))}

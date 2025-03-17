@@ -158,3 +158,16 @@ export const updateProductsDateRange = async (form: any) => {
     throw error;
   }
 };
+
+export const getChildrenByProduct = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/api/children/active-product/${id}/children`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de productos hijos:", error);
+    throw error;
+  }
+};
