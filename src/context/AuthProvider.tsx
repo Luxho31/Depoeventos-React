@@ -25,6 +25,7 @@ interface AuthContextType {
 }
 
 interface User {
+  id?: number;
   firstName?: string;
   lastName?: string;
   motherLastName?: string;
