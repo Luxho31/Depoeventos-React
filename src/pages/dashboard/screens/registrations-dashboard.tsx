@@ -148,6 +148,17 @@ export default function RegistrationsDashboard() {
     setOpenReturnModal(true);
   };
 
+  const handleReload = () => {
+    getAllRegistration()
+      .then((data: RegistrationData[]) => {
+        setRegistrationData(data);
+        setFullData(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener matriculas:", error);
+      });
+  };
+
   const handleSearch = () => {
     setCurrentPage(1);
   };
@@ -568,6 +579,7 @@ export default function RegistrationsDashboard() {
             id={seeId}
             open={openReturnModal}
             setOpen={setOpenReturnModal}
+            handleReload={handleReload}
           />
         </div>
 
