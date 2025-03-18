@@ -284,6 +284,7 @@ export default function DiciplinesDashboard() {
             campuses={campuses}
             categories={categories}
             disciplines={disciplines}
+            teachers={teachers}
           />
           <ProductModal
             type="create"
@@ -294,7 +295,7 @@ export default function DiciplinesDashboard() {
             campuses={campuses}
             categories={categories}
             disciplines={disciplines}
-            teachers = {teachers}
+            teachers={teachers}
           />
           <ProductModal
             type="edit"
@@ -305,6 +306,7 @@ export default function DiciplinesDashboard() {
             campuses={campuses}
             categories={categories}
             disciplines={disciplines}
+            teachers={teachers}
           />
           <ProductModal
             type="see"
@@ -315,6 +317,7 @@ export default function DiciplinesDashboard() {
             campuses={campuses}
             categories={categories}
             disciplines={disciplines}
+            teachers={teachers}
           />
         </div>
       </div>

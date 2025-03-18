@@ -24,10 +24,8 @@ export const getAllUsers = async (page: number, searchTerm?: string) => {
 
 export const getAllTeacher = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/api/users`, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
+    const response = await fetch(`${BASE_URL}/api/users/teachers`, {
+      headers: {},
     });
     const data = await response.json();
     return data;
@@ -52,4 +50,3 @@ export const updateRole = async (id: number, role: string) => {
     throw error;
   }
 };
-

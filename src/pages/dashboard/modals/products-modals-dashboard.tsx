@@ -151,6 +151,7 @@ export default function ProductModal({
         active: product.active,
         gender: product.gender,
         photo: product.photo,
+        teacherId: product.teacherId ? product.teacherId : "No asignado",
       });
       setValue(product.gender);
     } catch (error) {
@@ -269,7 +270,7 @@ export default function ProductModal({
         maxStudents: values.maxStudents,
         active: values.active,
         price: values.price,
-        teacher: values.teacherId,
+        teacherId: values.teacherId,
         coursesWithSchedules,
       };
 
@@ -295,7 +296,10 @@ export default function ProductModal({
   const seeProductForm = async (id: number) => {
     try {
       setLoading(true);
-      await getProductById(id);
+      const data = await getProductById(id);
+
+      console.log(data.teacherId)
+
     } catch (error) {
       console.error("Error al ver un producto:", error);
     } finally {
@@ -546,7 +550,7 @@ export default function ProductModal({
                   {(Array.isArray(teachers) ? teachers : []).map(
                     (teacher: any) => (
                       <Select.Option key={teacher.id} value={teacher.id}>
-                        {teacher.name}
+                        {teacher.firstName} {teacher.lastName}
                       </Select.Option>
                     )
                   )}
