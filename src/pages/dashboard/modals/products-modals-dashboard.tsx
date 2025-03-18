@@ -132,7 +132,7 @@ export default function ProductModal({
           [`endHour_${discipline.courseId}`]: discipline.schedules[0].endHour,
         });
       }
-
+      console.log("Product teachers id", product.teachers);
       form.setFieldsValue({
         name: product.name,
         description: product.description,
@@ -151,7 +151,7 @@ export default function ProductModal({
         active: product.active,
         gender: product.gender,
         photo: product.photo,
-        teacherId: product.teacherId ? product.teacherId : "No asignado",
+        teachersId: product.teachers ? product.teachers.map((teacher: any) => teacher.id) : [],
       });
       setValue(product.gender);
     } catch (error) {
@@ -213,7 +213,7 @@ export default function ProductModal({
         maxStudents: values.maxStudents,
         price: values.price,
         active: values.active,
-        teacher: values.teacherId,
+        teachersId: values.teachersId,
         coursesWithSchedules,
       };
 
@@ -270,7 +270,7 @@ export default function ProductModal({
         maxStudents: values.maxStudents,
         active: values.active,
         price: values.price,
-        teacherId: values.teacherId,
+        teachersId: values.teachersId,
         coursesWithSchedules,
       };
 
@@ -298,8 +298,7 @@ export default function ProductModal({
       setLoading(true);
       const data = await getProductById(id);
 
-      console.log(data.teacherId)
-
+      console.log(data.teacherId);
     } catch (error) {
       console.error("Error al ver un producto:", error);
     } finally {
@@ -529,7 +528,7 @@ export default function ProductModal({
                 </Form.Item>
               </div>
               <Form.Item
-                name="teacherId"
+                name="teachersId"
                 label="Profesor"
                 labelCol={{ span: 24 }}
                 rules={[
@@ -546,6 +545,7 @@ export default function ProductModal({
                   placeholder="Por favor, selecciona los profesores"
                   className="w-full h-14"
                   disabled={type === "see"}
+                  mode="multiple"
                 >
                   {(Array.isArray(teachers) ? teachers : []).map(
                     (teacher: any) => (
@@ -954,7 +954,7 @@ export default function ProductModal({
                   >
                     <Input
                       className="w-full rounded-xl p-4"
-                      placeholder="Nombre del producto"
+                      placeholder="Inicio de inscripción"
                       size="large"
                       disabled={type === "see"}
                     />
