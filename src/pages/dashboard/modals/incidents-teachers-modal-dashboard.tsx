@@ -172,15 +172,33 @@ export default function IncidentsTeachersModal({
           </div>
 
           {/* Fecha y Hora del Reporte */}
-          <Form.Item
-            name="fechaHoraReporte"
-            label="Fecha y Hora del Reporte"
-            rules={[{ required: true, message: "Seleccione la fecha y hora" }]}
-            labelCol={{ span: 24 }}
-            className="w-full"
-          >
-            <DatePicker showTime className="w-full" />
-          </Form.Item>
+          <div className="flex items-center gap-x-5">
+            <Form.Item
+              name="fechaHoraReporte"
+              label="Fecha y Hora del Reporte"
+              rules={[
+                { required: true, message: "Seleccione la fecha y hora" },
+              ]}
+              labelCol={{ span: 24 }}
+              className="w-full"
+            >
+              <DatePicker showTime className="w-full" />
+            </Form.Item>
+            <Form.Item
+              name="tipo"
+              label="Tipo"
+              rules={[{ required: true, message: "Seleccione un tipo" }]}
+              labelCol={{ span: 24 }}
+              className="w-full"
+            >
+              <Select placeholder="Seleccione un tipo">
+                <Select.Option value="Agresion">Agresión</Select.Option>
+                <Select.Option value="Bullying">Bullying</Select.Option>
+                <Select.Option value="Robo">Robo</Select.Option>
+                <Select.Option value="Pelea">Pelea</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
 
           {/* Alumnos implicados */}
           <Form.Item
