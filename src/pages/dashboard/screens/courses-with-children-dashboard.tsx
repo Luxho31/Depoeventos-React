@@ -11,6 +11,7 @@ import {
   getAllActiveProducts,
   getChildrenByProduct,
 } from "../../../services/products-service";
+import { changeChildrenCourse } from "../../../services/Inscriptions-service";
 
 function CoursesWithChildrenDashboard() {
   const { userRole } = useAuth();
@@ -92,8 +93,18 @@ function CoursesWithChildrenDashboard() {
     setProducts(products);
   };
 
-  const handleSaveChanges = () => {
-    console.log("Cambios realizados:", { leftList, rightList });
+  const handleSaveChanges = async () => {
+    const leftListIds = leftList.map((item) => item.id);
+    const rightListIds = rightList.map((item) => item.id);
+
+    const body = {
+      product1: selectedCourse1,
+      product2: selectedCourse2,
+      children1: leftListIds,
+      children2: rightListIds,
+    };
+
+    await changeChildrenCourse(body);
     toast.success("Cambios confirmados");
   };
 
@@ -101,7 +112,7 @@ function CoursesWithChildrenDashboard() {
 
   const getKeyRandom = () => {
     return Math.floor(Math.random() * 1000000);
-  }
+  };
 
   return (
     <>
@@ -196,7 +207,7 @@ function CoursesWithChildrenDashboard() {
                 <Select.Option
                   key={product.id + getKeyRandom()}
                   value={product.id}
-                  disabled={product.id === selectedCourse2}
+                  disabled={product.id === selectedCourse1}
                 >
                   {product.name} - {product.gender} -{" "}
                   {product.grades.map((grade: number) => (

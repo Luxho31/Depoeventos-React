@@ -134,6 +134,7 @@ export default function ReturnsDashboard() {
   return (
     <div className="h-full">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <h1 className="text-lg text-gray-600 ml-8 font-mono">Devoluciones</h1>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -225,7 +226,7 @@ export default function ReturnsDashboard() {
         className="mt-4"
         current={currentPage + 1}
         total={returnsData.length}
-        pageSize={10}
+        pageSize={20}
         onChange={onPageChange}
         showSizeChanger={false}
       />

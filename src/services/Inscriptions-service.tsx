@@ -136,3 +136,28 @@ export const generateExcel = async (
     return undefined;
   }
 };
+
+export const changeChildrenCourse = async (body: any) => {
+  try {
+    console.log(body);
+    const sendBody = {
+      childrens1: body.children1,
+      childrens2: body.children2,
+    };
+    console.log(sendBody);
+    const response = await fetch(
+      `${BASE_URL}/api/inscription/change-inscription?product1=${body.product1}&product2=${body.product2}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sendBody),
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
