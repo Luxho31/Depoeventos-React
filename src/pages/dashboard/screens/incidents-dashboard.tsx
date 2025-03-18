@@ -1,39 +1,22 @@
 import { Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
+import { MdOutlineDescription } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { MdOutlineDescription } from "react-icons/md";
+import { getAllIncidents } from "../../../services/incidents-service";
 
-const DATA = [
-  {
-    id: 1,
-    course: "Curso 1",
-    schedule: "Lunes 10:00 a 12:00",
-    location: "Sede 1",
-    teacher: "Profesor 1",
-    students: ["Alumno 1", "Alumno 2"],
-  },
-  {
-    id: 2,
-    course: "Curso 2",
-    schedule: "Martes 10:00 a 12:00",
-    location: "Sede 2",
-    teacher: "Profesor 2",
-    students: ["Alumno 3", "Alumno 4"],
-  },
-];
-function IncidentsDashboard() {
-  // const [videosData, setIncidentsData] = useState<any[]>([]);
+function IncidentsTeachersDashboard() {
   const [, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userRole } = useAuth();
+  const [data, setData] = useState<any[]>([]);
+  const [selectedIncident, setSelectedIncident] = useState<any>(null);
 
   const navigate = useNavigate();
 
-  const specificRole: string = "ADMIN";
   useEffect(() => {
-    if (userRole && userRole.some((role) => role === specificRole)) {
+    if (userRole && userRole.some((role) => role === "ADMIN")) {
       handleReload();
     } else {
       navigate("/dashboard");
@@ -45,25 +28,28 @@ function IncidentsDashboard() {
     return () => clearTimeout(timeoutId);
   }, [currentPage]);
 
-  const showModal = () => {
+  const showModal = (incident: any) => {
+    setSelectedIncident(incident);
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
     setIsModalOpen(false);
+    setSelectedIncident(null);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setSelectedIncident(null);
   };
 
   const handleReload = async () => {
     setLoading(true);
     try {
-      // const response = await getAllIncidents();
-      // setIncidentsData(response);
+      const response = await getAllIncidents();
+      setData(response);
     } catch (error) {
-      console.error("Error al cargar los videos:", error);
+      console.error("Error al cargar los incidentes:", error);
     } finally {
       setLoading(false);
     }
@@ -76,24 +62,35 @@ function IncidentsDashboard() {
   return (
     <div className="h-full">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="flex items-center justify-between shadow-md sm:rounded-lg">
+          <h1 className="text-base text-gray-500 ml-10">
+            Incidentes generales
+          </h1>
+        </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-700">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr className="w-fit">
                 <th scope="col" className="px-6 py-3">
                   Curso
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Horario
+                  Profesor
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Tipo
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Fecha
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Sede
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Alumno/s
+                  Alumno/s implicados
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Profesor
+                  Alumno/s testigos
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Detalle
@@ -101,46 +98,55 @@ function IncidentsDashboard() {
               </tr>
             </thead>
             <tbody>
-              {DATA.map((data) => (
-                <tr key={data.id} className="border-b border-gray-200">
+              {data.map((incident) => (
+                <tr key={incident.id} className="border-b border-gray-200">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{data.course}</div>
+                    {incident.products.length > 0
+                      ? incident.products[0].name
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{data.schedule}</div>
+                    {incident.teachers.length > 0
+                      ? incident.teachers
+                          .map((t: any) => `${t.firstName} ${t.lastName}`)
+                          .join(", ")
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{data.location}</div>
+                    {incident.products.length > 0
+                      ? incident.typeIncident
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {data.students.map((student) => (
-                        <div key={student}>{student}</div>
-                      ))}
-                    </div>
+                    {incident.products.length > 0
+                      ? incident.date.substring(0, 19).replace("T", " ")
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{data.teacher}</div>
+                    {incident.products.length > 0 &&
+                    incident.products[0].campuses.length > 0
+                      ? incident.products[0].campuses
+                          .map((c: any) => c.name)
+                          .join(", ")
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <>
-                      <button
-                        onClick={showModal}
-                        className=" font-bold py-2 px-4 rounded border hover:bg-gray-200"
-                      >
-                        <MdOutlineDescription />
-                      </button>
-                      <Modal
-                        title="Basic Modal"
-                        open={isModalOpen}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                      >
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                      </Modal>
-                    </>
+                    {incident.students
+                      .map((s: any) => s.name + " " + s.lastName)
+                      .join(", ") || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {incident.witnesses
+                      .map((w: any) => w.name + " " + w.lastName)
+                      .join(", ") || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => showModal(incident)}
+                      className="font-bold py-2 px-4 rounded border hover:bg-gray-200"
+                    >
+                      <MdOutlineDescription />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -149,11 +155,114 @@ function IncidentsDashboard() {
         </div>
       </div>
 
+      <Modal
+        title={`Detalles del Incidente `}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        style={{ top: 20 }}
+        destroyOnClose
+        width={800}
+        footer={null}
+        className="overflow-y-auto"
+      >
+        {selectedIncident ? (
+          <div className="space-y-4">
+            {/* Sección de Información General */}
+            <h2 className="text-lg font-semibold">Información General</h2>
+            <p>
+              <strong>Descripción:</strong>{" "}
+              {selectedIncident.description || "N/A"}
+            </p>
+            <p>
+              <strong>Tipo:</strong> {selectedIncident.typeIncident || "N/A"}
+            </p>
+            <p>
+              <strong>Fecha:</strong>{" "}
+              {selectedIncident.date?.substring(0, 19).replace("T", " ") ||
+                "N/A"}
+            </p>
+
+            <hr />
+
+            <h2 className="text-lg font-semibold">Profesores Involucrados</h2>
+            <ul className="list-disc pl-4">
+              {selectedIncident.teachers.length > 0 ? (
+                selectedIncident.teachers.map((t: any) => (
+                  <li key={t.id}>
+                    {t.firstName} {t.lastName} ({t.documentType}:{" "}
+                    {t.documentNumber})
+                  </li>
+                ))
+              ) : (
+                <p>N/A</p>
+              )}
+            </ul>
+
+            <hr />
+
+            <h2 className="text-lg font-semibold">Alumnos Implicados</h2>
+            <ul className="list-disc pl-4">
+              {selectedIncident.students.length > 0 ? (
+                selectedIncident.students.map((s: any) => (
+                  <li key={s.id}>
+                    {s.name} {s.lastName} ({s.documentType}: {s.documentNumber})
+                  </li>
+                ))
+              ) : (
+                <p>N/A</p>
+              )}
+            </ul>
+
+            <hr />
+
+            <h2 className="text-lg font-semibold">Testigos</h2>
+            <ul className="list-disc pl-4">
+              {selectedIncident.witnesses.length > 0 ? (
+                selectedIncident.witnesses.map((w: any) => (
+                  <li key={w.id}>
+                    {w.name} {w.lastName} ({w.documentType}: {w.documentNumber})
+                  </li>
+                ))
+              ) : (
+                <p>N/A</p>
+              )}
+            </ul>
+
+            <hr />
+
+            <h2 className="text-lg font-semibold">Productos Relacionados</h2>
+            {selectedIncident.products.length > 0 ? (
+              selectedIncident.products.map((p: any) => (
+                <div key={p.id} className="border p-2 rounded-md bg-gray-100">
+                  <p>
+                    <strong>Nombre:</strong> {p.name}
+                  </p>
+                  <p>
+                    <strong>Descripción:</strong> {p.description}
+                  </p>
+                  <p>
+                    <strong>Ubicación:</strong> {p.location}
+                  </p>
+                  <p>
+                    <strong>Activo:</strong> {p.active ? "Sí" : "No"}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>N/A</p>
+            )}
+          </div>
+        ) : (
+          "Cargando detalles..."
+        )}
+      </Modal>
+
       <Pagination
         className="mt-4"
         current={currentPage + 1}
-        // total={videosData.length}
         pageSize={10}
+        total={data.length}
         onChange={onPageChange}
         showSizeChanger={false}
       />
@@ -161,4 +270,4 @@ function IncidentsDashboard() {
   );
 }
 
-export default IncidentsDashboard;
+export default IncidentsTeachersDashboard;

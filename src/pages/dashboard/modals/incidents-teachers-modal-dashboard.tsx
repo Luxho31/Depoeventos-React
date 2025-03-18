@@ -2,7 +2,10 @@ import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../../context/AuthProvider";
-import { getCoursesByTeacher } from "../../../services/incidents-service";
+import {
+  createIncident,
+  getCoursesByTeacher,
+} from "../../../services/incidents-service";
 import { getChildrenByProduct } from "../../../services/products-service";
 
 export default function IncidentsTeachersModal({
@@ -68,7 +71,7 @@ export default function IncidentsTeachersModal({
     }
   };
 
-  const createIncident = async (values: any) => {
+  const createIncidentHandler = async (values: any) => {
     try {
       setLoading(true);
 
@@ -92,11 +95,22 @@ export default function IncidentsTeachersModal({
 
       values.fechaHoraReporte = formattedDate;
 
-      console.log("Incidencia creada:", values);
+      const body = {
+        students: values.alumnos,
+        product: [selectedCourse],
+        description: values.descripcion,
+        date: values.fechaHoraReporte,
+        teacher: [userId],
+        witnesses: values.testigos,
+        typeIncident: values.tipo,
+      };
+
+      await createIncident(body);
       form.resetFields();
       setSelectedImplicados([]);
       setSelectedTestigos([]);
       handleReload();
+      setOpen(false);
       toast.success("Incidencia creada correctamente");
     } catch (error) {
       toast.error("Error al crear la incidencia");
@@ -123,7 +137,7 @@ export default function IncidentsTeachersModal({
       ) : (
         <Form
           name="incidentForm"
-          onFinish={createIncident}
+          onFinish={createIncidentHandler}
           className="my-10 max-sm:mx-0 md:mx-10 lg:mx-32"
           form={form}
         >
@@ -269,10 +283,14 @@ export default function IncidentsTeachersModal({
                 required: true,
                 message: "Ingrese la descripción de la incidencia",
               },
+              {
+                max: 150,
+                message: "La descripción no puede tener más de 150 caracteres",
+              },
             ]}
             labelCol={{ span: 24 }}
           >
-            <Input.TextArea rows={4} />
+            <Input.TextArea rows={4} maxLength={150} />
           </Form.Item>
 
           <Form.Item>
