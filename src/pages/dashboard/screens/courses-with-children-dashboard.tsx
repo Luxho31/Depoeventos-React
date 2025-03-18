@@ -108,7 +108,20 @@ function CoursesWithChildrenDashboard() {
     };
 
     await changeChildrenCourse(body);
-    toast.success("Cambios confirmados");
+    toast.info(
+      "Cambios realizados con éxito. Los alumnos han sido transferidos",
+      {
+        duration: 5000,
+        description: `Los alumnos han sido transferidos del curso ${selectedCourse1} al curso ${selectedCourse2}`,
+      }
+    );
+    setSelectedCourse1(null);
+    setSelectedCourse2(null);
+    setLeftList([]);
+    setRightList([]);
+
+    setSelectedLeft([]);
+    setSelectedRight([]);
   };
 
   const OTP_PASSWORD = "260601";
