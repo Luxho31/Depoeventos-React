@@ -43,12 +43,14 @@ function CoursesWithChildrenDashboard() {
       setSelectedCourse1(courseId);
       await getChildrenByProduct(courseId).then((res) => {
         setLeftList(res);
+        console.log("Lista izquierda original: ", res);
       });
       setSelectedLeft([]);
     } else {
       setSelectedCourse2(courseId);
       await getChildrenByProduct(courseId).then((res) => {
         setRightList(res);
+        console.log("Lista derecha original: ", res);
       });
       setSelectedRight([]);
     }
@@ -96,7 +98,8 @@ function CoursesWithChildrenDashboard() {
   const handleSaveChanges = async () => {
     const leftListIds = leftList.map((item) => item.id);
     const rightListIds = rightList.map((item) => item.id);
-
+    console.log("Lista izquierda final: ", leftListIds);
+    console.log("Lista derecha final: ", rightListIds);
     const body = {
       product1: selectedCourse1,
       product2: selectedCourse2,
@@ -240,7 +243,7 @@ function CoursesWithChildrenDashboard() {
               <h3 className="text-center font-bold text-lg">
                 Curso {selectedCourse1 || "1"}
               </h3>
-              <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] shadow-md">
+              <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] max-h-[300px] overflow-auto shadow-md">
                 {leftList.map((child: any) => (
                   <li
                     key={child.id}
@@ -287,7 +290,7 @@ function CoursesWithChildrenDashboard() {
               <h3 className="text-center font-bold text-lg">
                 Curso {selectedCourse2 || "2"}
               </h3>
-              <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] overflow-auto shadow-md">
+              <ul className="border border-gray-300 bg-white p-4 rounded-lg min-h-[150px] max-h-[300px] overflow-auto shadow-md">
                 {rightList.map((child: any) => (
                   <li
                     key={child.id}
