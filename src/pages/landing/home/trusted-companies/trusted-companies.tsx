@@ -3,9 +3,10 @@ import { getAllApprovedTrustedCompanies } from "../../../../services/trusted-com
 import { Empty } from "antd";
 
 export const Item = (data: any) => {
+  console.log(data);
   return (
     <div className="flex flex-col items-center justify-center">
-      <img src={data.photo} alt={data.name} className="w-28 h-24 opacity-75" />
+      <img src={data.url} alt={data.name} className="w-28 h-24 opacity-75" />
       <p className="text-center mt-5 font-mono text-gray-500 tracking-wide">
         {data.name}
       </p>

@@ -218,19 +218,19 @@ export default function RegistrationsDashboard() {
       setLoadingFilters(true);
 
       if (values.rangeTime) {
-        values.startTime = values.rangeTime[0];
-        values.endTime = values.rangeTime[1];
-        if (values.startTime && values.endTime) {
-          values.startTime = new Date(values.startTime.$d)
+        values.startDate = values.rangeTime[0];
+        values.endDate = values.rangeTime[1];
+        if (values.startDate && values.endDate) {
+          values.startDate = new Date(values.startDate.$d)
             .toISOString()
             .split("T")[0];
-          values.endTime = new Date(values.endTime.$d)
+          values.endDate = new Date(values.endDate.$d)
             .toISOString()
             .split("T")[0];
         }
       }
       delete values.rangeTime;
-      console.log(values.startTime, values.endTime);
+      console.log(values.startDate, values.endDate);
 
       const selectedProductIds = [];
       if (!values.productIds) {
@@ -262,7 +262,7 @@ export default function RegistrationsDashboard() {
   const downloadData = async () => {
     try {
       setLoadingExcel(true);
-      console.log(filterValues);
+      console.log("filterValues", filterValues);
       await generateExcel(filterValues);
     } catch (error) {
       console.error("Error al descargar matriculas:", error);

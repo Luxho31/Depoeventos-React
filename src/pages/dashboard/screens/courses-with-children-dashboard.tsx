@@ -280,7 +280,7 @@ function CoursesWithChildrenDashboard() {
                 {rightList.map((child: any) => (
                   <li
                     key={child.id}
-                    className={`cursor-pointer p-2 rounded-lg text-center text-gray-700 ${
+                    className={`cursor-pointer my-1 p-2 rounded-lg text-center text-gray-700 ${
                       selectedRight.includes(child.id)
                         ? "bg-green-500 text-white"
                         : "hover:bg-gray-200"

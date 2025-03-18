@@ -8,10 +8,12 @@ function AssistsDashboard() {
   const [, setLoading] = useState(false);
   const { userRole } = useAuth();
   const navigate = useNavigate();
-  const specificRole = "ADMIN";
 
   useEffect(() => {
-    if (userRole && userRole.some((role) => role === specificRole)) {
+    if (
+      userRole &&
+      userRole.some((role) => role === "TEACHER" || role === "ADMIN")
+    ) {
       handleReload();
     } else {
       navigate("/dashboard");

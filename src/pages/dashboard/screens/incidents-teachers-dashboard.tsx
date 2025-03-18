@@ -34,9 +34,8 @@ function IncidentsTeachersDashboard() {
 
     const navigate = useNavigate();
 
-    const specificRole: string = "ADMIN";
     useEffect(() => {
-        if (userRole && userRole.some((role) => role === specificRole)) {
+        if (userRole && userRole.some((role) => role === "TEACHER" || role === "ADMIN")) {
             handleReload();
         } else {
             navigate("/dashboard");

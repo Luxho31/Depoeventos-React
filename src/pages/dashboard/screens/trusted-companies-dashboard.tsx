@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { HiMiniPlus } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-import { getAllTrustedCompanies } from "../../../services/trusted-companies-service";
 import {
-  toggleVideoStatus
-} from "../../../services/video-service";
+  getAllTrustedCompanies,
+  toggleCompanyStatus,
+} from "../../../services/trusted-companies-service";
 import TrustedCompaniesModal from "../modals/trusted-companies-modals-dashboard";
 
 function TrustedCompaniesDashboard() {
@@ -45,7 +45,7 @@ function TrustedCompaniesDashboard() {
 
   const handleChangeStatus = async (id: number) => {
     try {
-      await toggleVideoStatus(id);
+      await toggleCompanyStatus(id);
       handleReload();
     } catch (error) {
       console.error("Error al aprobar el video:", error);
@@ -65,7 +65,7 @@ function TrustedCompaniesDashboard() {
             className="max-sm:hidden flex items-center gap-x-2 mb-5"
           >
             <HiMiniPlus className="text-lg" />
-            Subir video
+            Subir empresa de confianza
           </Button>
           <table className="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -73,7 +73,7 @@ function TrustedCompaniesDashboard() {
                 <th scope="col" className="px-6 py-3">
                   ID
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 w-96">
                   URL
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -88,7 +88,7 @@ function TrustedCompaniesDashboard() {
               {trustedCompaniesData.map((video, index) => (
                 <tr key={index} className="bg-white border-b hover:bg-gray-50">
                   <td className="px-6 py-4">{video.id}</td>
-                  <td className="px-6 py-4">{video.url}</td>
+                  <td className="px-6 py-4 w-96">{video.url}</td>
                   <td className="px-2 py-4">{video.name}</td>
                   <td className="px-2 py-4">
                     <Switch

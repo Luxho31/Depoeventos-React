@@ -88,7 +88,7 @@ type GenerateExcelValues = {
   productIds: number[];
   campusesIds: number[];
   categoriesIds: number[];
-  [key: string]: number[];
+  [key: string]: number[] | string | undefined;
 };
 
 type GenerateExcelResponse = Blob;
@@ -100,20 +100,21 @@ export const generateExcel = async (
     const queryParams = new URLSearchParams();
 
     for (const key in values) {
-      if (
-        values[key] !== undefined &&
-        values[key] !== null &&
-        Array.isArray(values[key]) &&
-        values[key].length > 0
-      ) {
-        queryParams.append(key, values[key].join(","));
+      const value = values[key];
+      if (value !== undefined && value !== null) {
+        if (Array.isArray(value) && value.length > 0) {
+          queryParams.append(key, value.join(","));
+        } else if (typeof value === "string" && value.trim() !== "") {
+          queryParams.append(key, value);
+        }
       }
     }
 
     const queryString = queryParams.toString();
+
     const url = queryString
-      ? `${BASE_URL}/api/inscription/generate-excel?${queryString}`
-      : `${BASE_URL}/api/inscription/generate-excel`;
+      ? `${BASE_URL}/api/inscription/generate-excel-range-dates?${queryString}`
+      : `${BASE_URL}/api/inscription/generate-excel-range-dates`;
     const response = await fetch(url);
     const blob = await response.blob();
 

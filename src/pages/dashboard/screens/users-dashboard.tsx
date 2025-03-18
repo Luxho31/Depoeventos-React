@@ -77,6 +77,7 @@ function UsersDashboard() {
       toast.message("Rol cambiado correctamente", {
         description: `El rol de ${role} ha sido cambiado correctamente`,
       });
+      handleReload(currentPage);
     } catch (error) {
       console.error("Error al cambiar el rol del usuario:", error);
       toast.error("Error al cambiar el rol del usuario");

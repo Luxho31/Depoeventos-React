@@ -20,6 +20,7 @@ export default function TrustedCompaniesModal({
       form.resetFields();
       handleReload();
       toast.success("Trusted Companies creado correctamente");
+      setOpen(false);
     } catch (error) {
       console.error("Error al crear una empresa:", error);
       toast.error("Error al crear una empresa");

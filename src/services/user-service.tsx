@@ -36,21 +36,20 @@ export const getAllTeacher = async () => {
     throw error;
   }
 };
-
 export const updateRole = async (id: number, role: string) => {
   try {
     const response = await fetch(`${BASE_URL}/api/users/role/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify({ role }),
+      body: JSON.stringify([role]),
     });
-    const data = await response.json();
+    const data = await response.text();
     return data;
   } catch (error) {
     console.error("Error al actualizar el rol del usuario:", error);
     throw error;
   }
 };
+
