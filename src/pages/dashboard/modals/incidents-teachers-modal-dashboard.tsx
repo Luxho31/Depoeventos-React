@@ -15,6 +15,9 @@ export default function IncidentsTeachersModal({
   const { userInfo } = useAuth();
   const [coursesByTeacher, setCoursesByTeacher] = useState<any[]>([]);
   const [childrenByCourse, setChildrenByCourse] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [selectedImplicados, setSelectedImplicados] = useState<number[]>([]);
+  const [selectedTestigos, setSelectedTestigos] = useState<number[]>([]);
 
   useEffect(() => {
     if (open) {
@@ -22,13 +25,18 @@ export default function IncidentsTeachersModal({
     }
   }, [open]);
 
+  useEffect(() => {
+    if (selectedCourse) {
+      fetchChildrenByCourse(selectedCourse);
+    }
+  }, [selectedCourse]);
+
   const fetchCourses = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        console.error("No hay un token almacenado");
         toast.error("No hay un token almacenado");
         return;
       }
@@ -36,15 +44,10 @@ export default function IncidentsTeachersModal({
       const tokenPayload = JSON.parse(atob(token.split(".")[1]));
       const userId = tokenPayload.userId;
 
-      console.log("Obteniendo cursos del profesor con ID:", userId);
       const response = await getCoursesByTeacher(userId);
-
-      console.log("Cursos del profesor:", response);
-
       setCoursesByTeacher(Array.isArray(response) ? response : []);
       form.setFieldsValue({ curso: undefined });
     } catch (error) {
-      console.error("Error al obtener los cursos del profesor:", error);
       toast.error("Error al obtener los cursos del profesor");
       setCoursesByTeacher([]);
     } finally {
@@ -52,25 +55,50 @@ export default function IncidentsTeachersModal({
     }
   };
 
-  const getChildrenByCourse = async (courseId: number) => {
-    const response = await getChildrenByProduct(courseId);
-
-    console.log("Alumnos del curso:", response);
-
-    setChildrenByCourse(Array.isArray(response) ? response : []);
-
-    return response;
+  const fetchChildrenByCourse = async (courseId: number) => {
+    setLoading(true);
+    try {
+      const response = await getChildrenByProduct(courseId);
+      setChildrenByCourse(Array.isArray(response) ? response : []);
+    } catch (error) {
+      toast.error("Error al obtener los alumnos del curso");
+      setChildrenByCourse([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const createIncident = async (values: any) => {
     try {
       setLoading(true);
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("No hay un token almacenado");
+        return;
+      }
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      const userId = tokenPayload.userId;
+      if (values.profesor === "" || values.profesor === undefined) {
+        values.profesor = userId;
+      }
+      values.fechaHoraReporte = values.fechaHoraReporte.$d;
+
+      // formatear la fecha y hora
+      const date = new Date(values.fechaHoraReporte);
+      const formattedDate = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:00`;
+
+      values.fechaHoraReporte = formattedDate;
+
       console.log("Incidencia creada:", values);
       form.resetFields();
+      setSelectedImplicados([]);
+      setSelectedTestigos([]);
       handleReload();
       toast.success("Incidencia creada correctamente");
     } catch (error) {
-      console.error("Error al crear la incidencia:", error);
       toast.error("Error al crear la incidencia");
     } finally {
       setLoading(false);
@@ -100,13 +128,9 @@ export default function IncidentsTeachersModal({
           form={form}
         >
           <div className="flex items-center gap-x-5">
-            {/* Profesor */}
             <Form.Item
               name="profesor"
               label="Profesor"
-              rules={[
-                { required: true, message: "Ingrese el nombre del profesor" },
-              ]}
               labelCol={{ span: 24 }}
               className="w-full"
             >
@@ -116,13 +140,10 @@ export default function IncidentsTeachersModal({
               />
             </Form.Item>
 
-            {/* Curso */}
             <Form.Item
               name="curso"
               label="Curso"
-              rules={[
-                { required: true, message: "Ingrese el nombre del curso" },
-              ]}
+              rules={[{ required: true, message: "Seleccione un curso" }]}
               labelCol={{ span: 24 }}
               className="w-full"
             >
@@ -130,7 +151,13 @@ export default function IncidentsTeachersModal({
                 showSearch
                 placeholder="Seleccione un curso"
                 optionFilterProp="children"
-                loading={loading} // ✅ Muestra el estado de carga
+                onChange={(value) => {
+                  setSelectedCourse(value);
+                  setSelectedImplicados([]); // Reset al cambiar de curso
+                  setSelectedTestigos([]); // Reset al cambiar de curso
+                  form.setFieldsValue({ alumnos: [], testigos: [] });
+                }}
+                loading={loading}
                 notFoundContent={
                   loading ? "Cargando cursos..." : "No hay cursos disponibles"
                 }
@@ -143,61 +170,48 @@ export default function IncidentsTeachersModal({
               </Select>
             </Form.Item>
           </div>
-          <div className="flex items-center gap-x-5">
-            {/* Fecha y hora del reporte */}
-            <Form.Item
-              name="fechaHoraReporte"
-              label="Fecha y Hora del Reporte"
-              rules={[
-                {
-                  required: true,
-                  message: "Ingrese la fecha y hora del reporte",
-                },
-              ]}
-              labelCol={{ span: 24 }}
-              className="w-full"
-            >
-              <DatePicker showTime className="w-full" />
-            </Form.Item>
 
-            {/* Tipo de incidencia */}
-            <Form.Item
-              name="tipo"
-              label="Tipo de Incidencia"
-              rules={[
-                { required: true, message: "Ingrese el tipo de incidencia" },
-              ]}
-              labelCol={{ span: 24 }}
-              className="w-full"
-            >
-              <Select
-                showSearch
-                placeholder="Seleccione un tipo de incidencia"
-                optionFilterProp="children"
-              >
-                <Select.Option value="acoso">Acoso</Select.Option>
-                <Select.Option value="violencia">Violencia</Select.Option>
-                <Select.Option value="discriminacion">
-                  Discriminación
-                </Select.Option>
-                <Select.Option value="intimidacion">Intimidación</Select.Option>
-                <Select.Option value="pelea">Pelea</Select.Option>
-                <Select.Option value="robo">Robo</Select.Option>
-                <Select.Option value="daño">Daño</Select.Option>
-                <Select.Option value="falta">Falta</Select.Option>
-              </Select>
-            </Form.Item>
-          </div>
+          {/* Fecha y Hora del Reporte */}
+          <Form.Item
+            name="fechaHoraReporte"
+            label="Fecha y Hora del Reporte"
+            rules={[{ required: true, message: "Seleccione la fecha y hora" }]}
+            labelCol={{ span: 24 }}
+            className="w-full"
+          >
+            <DatePicker showTime className="w-full" />
+          </Form.Item>
+
           {/* Alumnos implicados */}
           <Form.Item
             name="alumnos"
             label="Alumnos Implicados"
             rules={[
-              { required: true, message: "Ingrese los alumnos implicados" },
+              { required: true, message: "Seleccione al menos un alumno" },
             ]}
             labelCol={{ span: 24 }}
           >
-            <Input />
+            <Select
+              mode="multiple"
+              placeholder="Seleccione los alumnos implicados"
+              optionFilterProp="children"
+              disabled={childrenByCourse.length === 0}
+              value={selectedImplicados}
+              onChange={(value) => {
+                setSelectedImplicados(value);
+                setSelectedTestigos((prev) =>
+                  prev.filter((id) => !value.includes(id))
+                );
+              }}
+            >
+              {childrenByCourse
+                .filter((child) => !selectedTestigos.includes(child.id)) // Excluir testigos
+                .map((child: any) => (
+                  <Select.Option key={child.id} value={child.id}>
+                    {child.name} {child.lastName}
+                  </Select.Option>
+                ))}
+            </Select>
           </Form.Item>
 
           {/* Alumnos testigos */}
@@ -206,10 +220,29 @@ export default function IncidentsTeachersModal({
             label="Alumnos Testigos"
             labelCol={{ span: 24 }}
           >
-            <Input />
+            <Select
+              mode="multiple"
+              placeholder="Seleccione los alumnos testigos"
+              optionFilterProp="children"
+              disabled={childrenByCourse.length === 0}
+              value={selectedTestigos}
+              onChange={(value) => {
+                setSelectedTestigos(value);
+                setSelectedImplicados((prev) =>
+                  prev.filter((id) => !value.includes(id))
+                );
+              }}
+            >
+              {childrenByCourse
+                .filter((child) => !selectedImplicados.includes(child.id)) // Excluir implicados
+                .map((child: any) => (
+                  <Select.Option key={child.id} value={child.id}>
+                    {child.name} {child.lastName}
+                  </Select.Option>
+                ))}
+            </Select>
           </Form.Item>
 
-          {/* Descripción */}
           <Form.Item
             name="descripcion"
             label="Descripción"
@@ -224,7 +257,6 @@ export default function IncidentsTeachersModal({
             <Input.TextArea rows={4} />
           </Form.Item>
 
-          {/* Crear */}
           <Form.Item>
             <Button htmlType="submit" color="primary">
               Crear
