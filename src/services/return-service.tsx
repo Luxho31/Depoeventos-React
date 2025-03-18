@@ -19,7 +19,7 @@ export const createReturn = async (body: any, id: any) => {
 
 export const getAllReturns = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/api/trusted-companies`, {
+    const response = await fetch(`${BASE_URL}/api/return`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export const getAllReturns = async () => {
     });
     return response.json();
   } catch (error) {
-    console.error("Error al obtener empresa de confianza:", error);
+    console.log("")
     throw error;
   }
 };
