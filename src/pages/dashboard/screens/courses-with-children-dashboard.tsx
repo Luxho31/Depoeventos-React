@@ -28,7 +28,7 @@ function CoursesWithChildrenDashboard() {
   const [selectedLeft, setSelectedLeft] = useState<number[]>([]);
   const [selectedRight, setSelectedRight] = useState<number[]>([]);
   const [products, setProducts] = useState<any[]>([]);
-
+  const [mobileSize, setMobileSize] = useState(false);
   useEffect(() => {
     if (userRole && userRole.includes(specificRole)) return;
     navigate("/dashboard");
@@ -36,6 +36,24 @@ function CoursesWithChildrenDashboard() {
 
   useEffect(() => {
     getActiveProducts();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 950) {
+        setMobileSize(true);
+        console.log("Mobile size");
+      } else {
+        setMobileSize(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleCourseChange = async (courseId: any | null, isLeft: boolean) => {
@@ -133,7 +151,7 @@ function CoursesWithChildrenDashboard() {
   return (
     <>
       <Toaster richColors />
-      {!validOtp && (
+      {!validOtp && !mobileSize && (
         <div className="w-full h-full flex justify-center items-center">
           <motion.div
             className="bg-white p-8 rounded-xl shadow-lg flex flex-col items-center gap-6 w-full max-w-md"
@@ -186,7 +204,19 @@ function CoursesWithChildrenDashboard() {
           </motion.div>
         </div>
       )}
-
+      {mobileSize && (
+        <div className="w-full h-full flex flex-col justify-center items-center text-center">
+          <h1
+            className="text-2xl font-semibold text-gray-800"
+            style={{ maxWidth: "300px" }}
+          >
+            Esta funcionalidad no está disponible en dispositivos móviles
+          </h1>
+          <p className="text-gray-500">
+            Por favor, ingresa desde un dispositivo con una pantalla más grande
+          </p>
+        </div>
+      )}
       {validOtp && (
         <div className="h-full p-6 rounded-lg shadow-lg">
           <div className="flex justify-center items-center gap-x-6 mb-4">
