@@ -131,7 +131,7 @@ function App() {
               {/* Assists */}
               <Route path="/dashboard/assists" element={<AssistsDashboard />} />
               <Route
-                path="/dashboard/assists/:id"
+                path="/dashboard/assists/:id/date/:date"
                 element={<AssistsDashboardId />}
               />
 

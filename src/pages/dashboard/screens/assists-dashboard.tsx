@@ -3,11 +3,16 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
+import { getCoursesByTeacher } from "../../../services/incidents-service";
 
 function AssistsDashboard() {
   const [, setLoading] = useState(false);
   const { userRole } = useAuth();
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs().format("YYYY-MM-DD")
+  ); // Estado para la fecha seleccionada
 
   useEffect(() => {
     if (
@@ -23,6 +28,13 @@ function AssistsDashboard() {
   const handleReload = async () => {
     setLoading(true);
     try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      const userId = tokenPayload.userId;
+      const response = await getCoursesByTeacher(userId);
+      setData(response);
     } catch (error) {
       console.error("Error al cargar los cursos", error);
     } finally {
@@ -30,48 +42,26 @@ function AssistsDashboard() {
     }
   };
 
+  // Si un producto tiene más de 1 curso, se muestra el curso.
+ 
+
+  const getMinDate = () => {
+    if (data.length === 0) {
+      return dayjs().subtract(1, "week").format("YYYY-MM-DD");
+    }
+
+    const minDate = data
+      .map((course: any) => dayjs(course.startDate))
+      .reduce(
+        (min, current) => (current.isBefore(min) ? current : min),
+        dayjs()
+      );
+
+    return minDate.format("YYYY-MM-DD");
+  };
   const getCurrentDate = () => {
     return dayjs().format("YYYY-MM-DD");
   };
-
-  const getMinDate = () => {
-    return dayjs().subtract(1, "week").format("YYYY-MM-DD");
-  };
-
-  const courses = [
-    {
-      id: 1,
-      name: "Actividades artísticas",
-      description: "Descripción del curso 1",
-      startDate: "2025-10-01",
-      endDate: "2025-10-31",
-      total_assists: 10,
-    },
-    {
-      id: 2,
-      name: "Fotografía",
-      description: "Descripción del curso 2",
-      startDate: "2025-11-01",
-      endDate: "2025-11-30",
-      total_assists: 20,
-    },
-    {
-      id: 3,
-      name: "Diseño gráfico",
-      description: "Descripción del curso 3",
-      startDate: "2025-12-01",
-      endDate: "2025-12-31",
-      total_assists: 30,
-    },
-    {
-      id: 4,
-      name: "Música",
-      description: "Descripción del curso 4",
-      startDate: "2026-01-01",
-      endDate: "2026-01-31",
-      total_assists: 40,
-    },
-  ];
 
   const dateFormat = "YYYY-MM-DD";
 
@@ -79,13 +69,18 @@ function AssistsDashboard() {
     <div className="h-full p-4 max-sm:p-0 ">
       <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
         <DatePicker
-          defaultValue={dayjs(getCurrentDate(), dateFormat)}
+          value={dayjs(selectedDate, dateFormat)}
+          onChange={(date) =>
+            setSelectedDate(
+              date ? date.format(dateFormat) : dayjs().format(dateFormat)
+            )
+          }
           minDate={dayjs(getMinDate(), dateFormat)}
           maxDate={dayjs(getCurrentDate(), dateFormat)}
           allowClear={false}
         />
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
-          {courses.map((course) => (
+          {data.map((course: any) => (
             <li
               key={course.id}
               className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2"
@@ -93,7 +88,7 @@ function AssistsDashboard() {
               <h3 className="text-gray-900 text-base font-medium max-sm:text-base">
                 {course.name}{" "}
                 <span className="text-sm text-gray-500 max-sm:text-xs">
-                  ({course.total_assists} personas)
+                  ({course.currentStudents} personas)
                 </span>
               </h3>
               <p className="text-gray-500 text-sm max-sm:hidden">
@@ -109,7 +104,11 @@ function AssistsDashboard() {
               </div>
               <button
                 className="mt-2 mx-auto w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition"
-                onClick={() => navigate(`/dashboard/assists/${course.id}`)}
+                onClick={() =>
+                  navigate(
+                    `/dashboard/assists/${course.id}/date/${selectedDate}`
+                  )
+                }
               >
                 Ver
               </button>

@@ -1,32 +1,95 @@
 import { Form, Radio } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import {
+  createAssist,
+  getAssistsByDateAndCourseHandler,
+} from "../../../../services/assists-service";
+import { getChildrenByProduct } from "../../../../services/products-service";
 
 export default function AssistsDashboardId() {
-  // const { id } = useParams();
+  const { id, date }: any = useParams();
   const [form] = Form.useForm();
-  const [data, setData] = useState({} as any);
+  const [data, setData] = useState([] as any[]);
+  const [lock, setLock] = useState(false);
 
   const states = ["presente", "ausente", "tardanza", "justificado"];
 
-  const participants = [
-    { id: 1, name: "Juan Pérez" },
-    { id: 2, name: "María Gómez" },
-    { id: 3, name: "Carlos Sánchez" },
-  ];
+  useEffect(() => {
+    getChildrenByCourseHandler();
+    handleGetAssists();
+  }, []);
 
-  const getCurrentDate = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const getChildrenByCourseHandler = async () => {
+    const response = await getChildrenByProduct(id);
+    if (response && response.length > 0) {
+      setData(response);
+    } else {
+      setData([]);
+    }
   };
 
   const handleAttendanceChange = (participantId: any, value: any) => {
-    setData((prevData: any) => ({
-      ...prevData,
-      [participantId]: value,
-    }));
+    setData((prevData) =>
+      prevData.map((participant) =>
+        participant.id === participantId
+          ? { ...participant, attendance: value }
+          : participant
+      )
+    );
   };
+
+  const handleSendAssists = async (val: any) => {
+    const body = {
+      date,
+      productId: id,
+      assists: data.map((participant) => ({
+        childrenId: participant.id,
+        state: val[`attendance-${participant.id}`],
+      })),
+    };
+    try {
+      await createAssist(body);
+      toast.success("Asistencia creada correctamente");
+      handleGetAssists();
+    } catch (error) {
+      console.error("Error al crear asistencia", error);
+      toast.error("Error al crear asistencia");
+    }
+  };
+
+  const handleGetAssists = async () => {
+    try {
+      const response = await getAssistsByDateAndCourseHandler(id, date);
+      if (response) {
+        setData(response);
+        setLock(true);
+      }
+    } catch (error) {
+      console.error("Error al cargar las asistencias", error);
+    } finally {
+      setLock(false);
+    }
+  };
+
+  if (data.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <button
+          className="m-4 font-semibold text-lg hover:cursor-pointer"
+          onClick={() => window.history.back()}
+          type="button"
+        >
+          <FaAngleLeft />
+        </button>
+        <p className="text-gray-500 text-lg">
+          No hay participantes disponibles.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full">
@@ -36,6 +99,7 @@ export default function AssistsDashboardId() {
           layout="vertical"
           name="attendanceForm"
           initialValues={{}}
+          onFinish={handleSendAssists}
         >
           <div className="flex w-full justify-between">
             <button
@@ -50,28 +114,25 @@ export default function AssistsDashboardId() {
               <article className="flex gap-x-2">
                 <span>Falta:</span>{" "}
                 <p className="text-red-500">
-                  {Object.values(data).filter((v) => v === "ausente").length}
+                  {data.filter((p) => p.attendance === "ausente").length}
                 </p>
               </article>
               <article className="flex gap-x-2">
                 <span>Tardanza:</span>{" "}
                 <p className="text-gray-400">
-                  {Object.values(data).filter((v) => v === "tardanza").length}
+                  {data.filter((p) => p.attendance === "tardanza").length}
                 </p>
               </article>
               <article className="flex gap-x-2">
-                <span> Justificado:</span>{" "}
+                <span>Justificado:</span>{" "}
                 <p className="text-gray-400">
-                  {
-                    Object.values(data).filter((v) => v === "justificado")
-                      .length
-                  }
+                  {data.filter((p) => p.attendance === "justificado").length}
                 </p>
               </article>
               <article className="flex gap-x-2">
                 <span>Presente:</span>{" "}
                 <p className="text-green-500">
-                  {Object.values(data).filter((v) => v === "presente").length}
+                  {data.filter((p) => p.attendance === "presente").length}
                 </p>
               </article>
             </div>
@@ -95,12 +156,12 @@ export default function AssistsDashboardId() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {participants.map((participant) => (
+                {data.map((participant) => (
                   <tr key={participant.id}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      {participant.name}
+                      {participant.name} {participant.lastName}
                     </td>
-                    <td colSpan={states.length} className="flex-grow ">
+                    <td colSpan={states.length} className="flex-grow">
                       <Form.Item
                         name={`attendance-${participant.id}`}
                         className="w-full my-auto"
@@ -119,7 +180,8 @@ export default function AssistsDashboardId() {
                               e.target.value
                             )
                           }
-                          value={data[participant.id]}
+                          value={participant.attendance}
+                          disabled={lock}
                         >
                           {states.map((state) => (
                             <Radio key={state} value={state} />
@@ -134,18 +196,15 @@ export default function AssistsDashboardId() {
           </div>
           <div className="flex justify-center p-4">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() =>
-                alert(
-                  JSON.stringify(
-                    { date: getCurrentDate(), attendance: data },
-                    null,
-                    2
-                  )
-                )
-              }
+              className={`${
+                lock
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              } font-medium py-2 px-4 rounded-lg transition`}
+              type="submit"
+              disabled={lock}
             >
-              Guardar asistencias
+              {lock ? "Asistencia creada" : "Enviar asistencia"}
             </button>
           </div>
         </Form>
