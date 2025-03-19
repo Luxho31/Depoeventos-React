@@ -42,7 +42,6 @@ import ProductsByLocation from "./pages/landing/products/products-by-location/[i
 import NotFound from "./pages/not-found/not-found";
 import ReturnsDashboard from "./pages/dashboard/screens/returns-dashboard";
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -131,7 +130,7 @@ function App() {
               {/* Assists */}
               <Route path="/dashboard/assists" element={<AssistsDashboard />} />
               <Route
-                path="/dashboard/assists/:id/date/:date"
+                path="/dashboard/assists/:id/course/:course_id/date/:date"
                 element={<AssistsDashboardId />}
               />
 
@@ -152,18 +151,13 @@ function App() {
               />
 
               {/* Returns */}
-              <Route
-                path="/dashboard/returns"
-                element={<ReturnsDashboard />}
-              />
-              
+              <Route path="/dashboard/returns" element={<ReturnsDashboard />} />
+
               {/* Courses with children */}
               <Route
                 path="/dashboard/courses-with-children"
                 element={<CoursesWithChildrenDashboard />}
               />
-
-              
             </Route>
 
             <Route path="*" element={<NotFound />} />

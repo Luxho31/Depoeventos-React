@@ -18,13 +18,17 @@ export const createAssist = async (assist: any) => {
 };
 
 export const getAssistsByDateAndCourseHandler = async (
-  id: string,
-  date: string
+  id: number,
+  date: string,
+  courseId: number
 ) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/assists/${id}/${date}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/assists/${id}/course/${courseId}/date/${date}`,
+      {
+        method: "GET",
+      }
+    );
     const data = await response.json();
     return data;
   } catch (error) {

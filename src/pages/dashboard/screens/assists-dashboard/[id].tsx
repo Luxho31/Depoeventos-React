@@ -10,7 +10,7 @@ import {
 import { getChildrenByProduct } from "../../../../services/products-service";
 
 export default function AssistsDashboardId() {
-  const { id, date }: any = useParams();
+  const { id, date, courseId }: any = useParams();
   const [form] = Form.useForm();
   const [data, setData] = useState([] as any[]);
   const [lock, setLock] = useState(false);
@@ -45,12 +45,14 @@ export default function AssistsDashboardId() {
     const body = {
       date,
       productId: id,
+      courseId: courseId,
       assists: data.map((participant) => ({
         childrenId: participant.id,
         state: val[`attendance-${participant.id}`],
       })),
     };
     try {
+      console.log(body);
       await createAssist(body);
       toast.success("Asistencia creada correctamente");
       handleGetAssists();
@@ -62,7 +64,11 @@ export default function AssistsDashboardId() {
 
   const handleGetAssists = async () => {
     try {
-      const response = await getAssistsByDateAndCourseHandler(id, date);
+      const response = await getAssistsByDateAndCourseHandler(
+        id,
+        date,
+        courseId
+      );
       if (response) {
         setData(response);
         setLock(true);

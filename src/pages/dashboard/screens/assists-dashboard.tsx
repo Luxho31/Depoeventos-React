@@ -42,9 +42,6 @@ function AssistsDashboard() {
     }
   };
 
-  // Si un producto tiene más de 1 curso, se muestra el curso.
- 
-
   const getMinDate = () => {
     if (data.length === 0) {
       return dayjs().subtract(1, "week").format("YYYY-MM-DD");
@@ -59,6 +56,7 @@ function AssistsDashboard() {
 
     return minDate.format("YYYY-MM-DD");
   };
+
   const getCurrentDate = () => {
     return dayjs().format("YYYY-MM-DD");
   };
@@ -80,40 +78,42 @@ function AssistsDashboard() {
           allowClear={false}
         />
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
-          {data.map((course: any) => (
-            <li
-              key={course.id}
-              className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2"
-            >
-              <h3 className="text-gray-900 text-base font-medium max-sm:text-base">
-                {course.name}{" "}
-                <span className="text-sm text-gray-500 max-sm:text-xs">
-                  ({course.currentStudents} personas)
-                </span>
-              </h3>
-              <p className="text-gray-500 text-sm max-sm:hidden">
-                {course.description}
-              </p>
-              <div className="flex flex-wrap justify-between text-sm text-gray-900">
-                <p>
-                  <strong>Inicio:</strong> {course.startDate}
-                </p>
-                <p>
-                  <strong>Final:</strong> {course.endDate}
-                </p>
-              </div>
-              <button
-                className="mt-2 mx-auto w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition"
-                onClick={() =>
-                  navigate(
-                    `/dashboard/assists/${course.id}/date/${selectedDate}`
-                  )
-                }
+          {data.flatMap((product: any) =>
+            product.courses.map((course: any) => (
+              <li
+                key={`${product.id}-${course.id}`}
+                className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2"
               >
-                Ver
-              </button>
-            </li>
-          ))}
+                <h3 className="text-gray-900 text-base font-medium max-sm:text-base">
+                  {course.name}{" "}
+                  <span className="text-sm text-gray-500 max-sm:text-xs">
+                    ({product.currentStudents} personas)
+                  </span>
+                </h3>
+                <p className="text-gray-500 text-sm max-sm:hidden">
+                  {product.description}
+                </p>
+                <div className="flex flex-wrap justify-between text-sm text-gray-900">
+                  <p>
+                    <strong>Inicio:</strong> {product.startDate}
+                  </p>
+                  <p>
+                    <strong>Final:</strong> {product.endDate}
+                  </p>
+                </div>
+                <button
+                  className="mt-2 mx-auto w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition"
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/assists/${product.id}/course/${course.id}/date/${selectedDate}`
+                    )
+                  }
+                >
+                  Ver
+                </button>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </div>
