@@ -29,8 +29,15 @@ export const getAssistsByDateAndCourseHandler = async (
         method: "GET",
       }
     );
-    const data = await response.json();
-    return data;
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        return null;
+      }
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Error al obtener asistencias por fecha y curso:", error);
     throw error;

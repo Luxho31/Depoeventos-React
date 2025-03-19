@@ -102,14 +102,21 @@ function AssistsDashboard() {
                   </p>
                 </div>
                 <button
-                  className="mt-2 mx-auto w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition"
+                  className={`mt-2 mx-auto px-4 font-medium py-2 rounded-lg transition ${
+                  product.currentStudents === 0
+                    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                  }`}
                   onClick={() =>
-                    navigate(
-                      `/dashboard/assists/${product.id}/course/${course.id}/date/${selectedDate}`
-                    )
+                  navigate(
+                    `/dashboard/assists/${product.id}/course/${course.id}/date/${selectedDate}`
+                  )
                   }
+                  disabled={product.currentStudents === 0}
                 >
-                  Ver
+                  {product.currentStudents === 0
+                  ? "Sin estudiantes"
+                  : "Ver asistencias"}
                 </button>
               </li>
             ))

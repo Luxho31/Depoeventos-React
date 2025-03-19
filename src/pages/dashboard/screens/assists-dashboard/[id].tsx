@@ -10,28 +10,69 @@ import {
 import { getChildrenByProduct } from "../../../../services/products-service";
 
 export default function AssistsDashboardId() {
-  const { id, date, courseId }: any = useParams();
+  const { id, date, course_id }: any = useParams();
   const [form] = Form.useForm();
   const [data, setData] = useState([] as any[]);
+  const [participants, setParticipants] = useState([] as any[]);
   const [lock, setLock] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const states = ["presente", "ausente", "tardanza", "justificado"];
 
   useEffect(() => {
-    getChildrenByCourseHandler();
-    handleGetAssists();
-  }, []);
+    loadInitialData();
+  }, [date, course_id]);
 
-  const getChildrenByCourseHandler = async () => {
-    const response = await getChildrenByProduct(id);
-    if (response && response.length > 0) {
-      setData(response);
-    } else {
-      setData([]);
+  const loadInitialData = async () => {
+    try {
+      setLoading(true);
+
+      const fetchedParticipants = await getChildrenByProduct(id);
+      setParticipants(fetchedParticipants);
+
+      const assists = await getAssistsByDateAndCourseHandler(
+        id,
+        date,
+        course_id
+      );
+
+      if (assists && assists.assists.length > 0) {
+        const updatedParticipants = fetchedParticipants.map(
+          (participant: any) => {
+            const existingAssist = assists.assists.find(
+              (a: any) => a.childrenId === participant.id
+            );
+            return {
+              ...participant,
+              attendance: existingAssist ? existingAssist.state : undefined,
+            };
+          }
+        );
+
+        setData(updatedParticipants);
+        setLock(true);
+      } else {
+        if (fetchedParticipants.length > 0) {
+          setData(
+            fetchedParticipants.map((p: any) => ({
+              ...p,
+              attendance: undefined,
+            }))
+          );
+          setLock(false);
+        } else {
+          setData([]);
+        }
+      }
+    } catch (error) {
+      console.error("Error al cargar datos iniciales", error);
+      toast.error("Error al cargar los datos");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleAttendanceChange = (participantId: any, value: any) => {
+  const handleAttendanceChange = (participantId: number, value: string) => {
     setData((prevData) =>
       prevData.map((participant) =>
         participant.id === participantId
@@ -41,46 +82,37 @@ export default function AssistsDashboardId() {
     );
   };
 
-  const handleSendAssists = async (val: any) => {
+  const handleSendAssists = async (values: any) => {
     const body = {
       date,
       productId: id,
-      courseId: courseId,
+      courseId: course_id,
       assists: data.map((participant) => ({
         childrenId: participant.id,
-        state: val[`attendance-${participant.id}`],
+        state: values[`attendance-${participant.id}`],
       })),
     };
+
     try {
-      console.log(body);
       await createAssist(body);
       toast.success("Asistencia creada correctamente");
-      handleGetAssists();
+      setLock(true);
+      loadInitialData();
     } catch (error) {
       console.error("Error al crear asistencia", error);
       toast.error("Error al crear asistencia");
     }
   };
 
-  const handleGetAssists = async () => {
-    try {
-      const response = await getAssistsByDateAndCourseHandler(
-        id,
-        date,
-        courseId
-      );
-      if (response) {
-        setData(response);
-        setLock(true);
-      }
-    } catch (error) {
-      console.error("Error al cargar las asistencias", error);
-    } finally {
-      setLock(false);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <p className="text-gray-500 text-lg">Cargando datos...</p>
+      </div>
+    );
+  }
 
-  if (data.length === 0) {
+  if (participants.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
         <button
@@ -91,7 +123,7 @@ export default function AssistsDashboardId() {
           <FaAngleLeft />
         </button>
         <p className="text-gray-500 text-lg">
-          No hay participantes disponibles.
+          No hay participantes disponibles en este curso.
         </p>
       </div>
     );
@@ -115,33 +147,6 @@ export default function AssistsDashboardId() {
             >
               <FaAngleLeft />
             </button>
-
-            <div className="mx-4 flex gap-x-5">
-              <article className="flex gap-x-2">
-                <span>Falta:</span>{" "}
-                <p className="text-red-500">
-                  {data.filter((p) => p.attendance === "ausente").length}
-                </p>
-              </article>
-              <article className="flex gap-x-2">
-                <span>Tardanza:</span>{" "}
-                <p className="text-gray-400">
-                  {data.filter((p) => p.attendance === "tardanza").length}
-                </p>
-              </article>
-              <article className="flex gap-x-2">
-                <span>Justificado:</span>{" "}
-                <p className="text-gray-400">
-                  {data.filter((p) => p.attendance === "justificado").length}
-                </p>
-              </article>
-              <article className="flex gap-x-2">
-                <span>Presente:</span>{" "}
-                <p className="text-green-500">
-                  {data.filter((p) => p.attendance === "presente").length}
-                </p>
-              </article>
-            </div>
           </div>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -161,7 +166,7 @@ export default function AssistsDashboardId() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200 overflow-y-auto">
                 {data.map((participant) => (
                   <tr key={participant.id}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
@@ -171,12 +176,7 @@ export default function AssistsDashboardId() {
                       <Form.Item
                         name={`attendance-${participant.id}`}
                         className="w-full my-auto"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor selecciona una opción",
-                          },
-                        ]}
+                        initialValue={participant.attendance}
                       >
                         <Radio.Group
                           className="flex justify-around w-full"
@@ -186,7 +186,6 @@ export default function AssistsDashboardId() {
                               e.target.value
                             )
                           }
-                          value={participant.attendance}
                           disabled={lock}
                         >
                           {states.map((state) => (
@@ -200,15 +199,15 @@ export default function AssistsDashboardId() {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center p-4">
+          <div className="w-full flex items-center mb-4">
             <button
-              className={`${
-                lock
-                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              } font-medium py-2 px-4 rounded-lg transition`}
               type="submit"
               disabled={lock}
+              className={`mt-4 ${
+                lock
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600"
+              } text-white font-medium py-2 px-4 rounded-lg transition mx-auto`}
             >
               {lock ? "Asistencia creada" : "Enviar asistencia"}
             </button>
