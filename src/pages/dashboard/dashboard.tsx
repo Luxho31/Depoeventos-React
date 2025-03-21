@@ -25,7 +25,7 @@ import {
 } from "react-router-dom";
 
 import type { MenuProps } from "antd";
-import { CiBadgeDollar, CiStar, CiWarning } from "react-icons/ci";
+import { CiBadgeDollar, CiSettings, CiStar, CiWarning } from "react-icons/ci";
 import {
   FaBookOpen,
   FaBuilding,
@@ -253,6 +253,14 @@ export default function Dashboard() {
       icon: <FaCartShopping />,
       label: "Devoluciones",
       onClick: () => handleItemClick("/dashboard/returns"),
+      role: ["ADMIN"],
+    },
+    {
+      key: "21",
+      path: "/dashboard/configuration",
+      icon: <CiSettings />,
+      label: "Configuración",
+      onClick: () => handleItemClick("/dashboard/configuration"),
       role: ["ADMIN"],
     },
   ];

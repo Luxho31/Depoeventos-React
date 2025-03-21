@@ -15,6 +15,7 @@ import CampusesDashboard from "./pages/dashboard/screens/campuses-dashboard";
 import CategoriesDashboard from "./pages/dashboard/screens/categories-dashboard";
 import ChildrensDashboard from "./pages/dashboard/screens/childrens-dashboard";
 import ComplaintsBookDashboard from "./pages/dashboard/screens/complaints-book-dashboard";
+import ConfigurationDashboard from "./pages/dashboard/screens/configuration-dashboard";
 import CoursesDashboard from "./pages/dashboard/screens/courses-dashboard";
 import CoursesWithChildrenDashboard from "./pages/dashboard/screens/courses-with-children-dashboard";
 import DisciplinesDashboard from "./pages/dashboard/screens/disciplines-dashboard";
@@ -25,6 +26,7 @@ import TestimonialDashboard from "./pages/dashboard/screens/opinions-dashboard";
 import ProductsDashboard from "./pages/dashboard/screens/products-dashboard";
 import Profile from "./pages/dashboard/screens/profile";
 import RegistrationsDashboard from "./pages/dashboard/screens/registrations-dashboard";
+import ReturnsDashboard from "./pages/dashboard/screens/returns-dashboard";
 import ScheduleDashboard from "./pages/dashboard/screens/schedule-dashboard";
 import TransactionsDashboard from "./pages/dashboard/screens/transactions-dashboard";
 import TrustedCompaniesDashboard from "./pages/dashboard/screens/trusted-companies-dashboard";
@@ -40,7 +42,6 @@ import Opinions from "./pages/landing/opinions/opinions";
 import Products from "./pages/landing/products/products";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 import NotFound from "./pages/not-found/not-found";
-import ReturnsDashboard from "./pages/dashboard/screens/returns-dashboard";
 
 function App() {
   return (
@@ -157,6 +158,11 @@ function App() {
               <Route
                 path="/dashboard/courses-with-children"
                 element={<CoursesWithChildrenDashboard />}
+              />
+
+              <Route
+                path="/dashboard/configuration"
+                element={<ConfigurationDashboard />}
               />
             </Route>
 
