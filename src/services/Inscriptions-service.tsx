@@ -113,8 +113,8 @@ export const generateExcel = async (
     const queryString = queryParams.toString();
 
     const url = queryString
-      ? `${BASE_URL}/api/inscription/generate-excel-range-dates?${queryString}`
-      : `${BASE_URL}/api/inscription/generate-excel-range-dates`;
+      ? `${BASE_URL}/api/inscription/generate-excel?${queryString}`
+      : `${BASE_URL}/api/inscription/generate-excel`;
     const response = await fetch(url);
     const blob = await response.blob();
 

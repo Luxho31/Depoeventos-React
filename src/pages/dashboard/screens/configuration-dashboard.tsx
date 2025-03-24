@@ -96,18 +96,18 @@ export default function ConfigurationDashboard() {
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th className="px-3 py-3"></th>
+                <th className="px-3 py-3 max-sm:hidden"></th>
                 <th className="px-6 py-3">Configuración</th>
-                <th className="px-6 py-3">Descripción</th>
+                <th className="px-6 py-3 max-sm:hidden">Descripción</th>
                 <th className="px-6 py-3">Acción</th>
               </tr>
             </thead>
             <tbody>
               {ConfigurationItems.map((item, index) => (
                 <tr key={index} className="bg-white">
-                  <td className="px-6 py-4">{item.icon}</td>
+                  <td className="px-6 py-4 max-sm:hidden" >{item.icon}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 text-sm">{item.description}</td>
+                  <td className="px-6 py-4 text-sm max-sm:hidden">{item.description}</td>
                   <td className="px-6 py-4">{item.action}</td>
                 </tr>
               ))}

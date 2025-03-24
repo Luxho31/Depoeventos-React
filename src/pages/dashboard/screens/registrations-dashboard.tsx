@@ -25,6 +25,7 @@ import RegistrationsModal from "../modals/registrations-modals-dashboard";
 import { LoadingOutlined } from "@ant-design/icons";
 import { BiSliderAlt } from "react-icons/bi";
 import ReturnModal from "../modals/returns-modals-dashboard";
+import dayjs from "dayjs";
 
 type ProductType = {
   id?: number;
@@ -503,6 +504,7 @@ export default function RegistrationsDashboard() {
                 <RangePicker
                   placeholder={["Fecha de inicio", "Fecha de fin"]}
                   className="w-full"
+                  maxDate={dayjs()}
                 />
               </Form.Item>
 

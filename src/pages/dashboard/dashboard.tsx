@@ -401,7 +401,7 @@ export default function Dashboard() {
               <div
                 className={`${
                   windowWidth >= 640 ? "hidden" : "block"
-                } flex justify-center gap-2 mt-auto mb-4`}
+                } flex justify-center gap-2 mt-auto mb-24`}
               >
                 <Button
                   className="border-none h-12 p-2 bg-white rounded-lg"
