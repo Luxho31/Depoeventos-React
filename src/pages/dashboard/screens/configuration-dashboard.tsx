@@ -44,27 +44,6 @@ const IncreaseStudentsGrade = () => {
   );
 };
 
-const ConfigurationItems = [
-  {
-    name: "Aumentar grado de alumnos",
-    description: "Aumenta el grado de los alumnos en 1 grado.",
-    action: <IncreaseStudentsGrade />,
-    icon: <MdOutlineSchool size={20} />,
-  },
-  {
-    name: "Cupones",
-    description: "Administra los cupones de descuento.",
-    action: <span className="text-gray-400">Próximamente...</span>,
-    icon: <CiShoppingTag size={20} />,
-  },
-  {
-    name: "Inicio y fin de matriculas",
-    description: "Establece el inicio y fin de matriculas.",
-    action: <span className="text-gray-400">Próximamente...</span>,
-    icon: <CiCalendarDate size={20} />,
-  },
-];
-
 export default function ConfigurationDashboard() {
   const { userRole } = useAuth();
   const navigate = useNavigate();
@@ -87,6 +66,34 @@ export default function ConfigurationDashboard() {
     }
   };
 
+  const ConfigurationItems = [
+    {
+      name: "Aumentar grado de alumnos",
+      description: "Aumenta el grado de los alumnos en 1 grado.",
+      action: <IncreaseStudentsGrade />,
+      icon: <MdOutlineSchool size={20} />,
+    },
+    {
+      name: "Cupones",
+      description: "Administra los cupones de descuento.",
+      action: (
+        <button
+          onClick={() => navigate("/dashboard/configuration/coupons")}
+          className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded`}
+        >
+          Administrar cupones
+        </button>
+      ),
+      icon: <CiShoppingTag size={20} />,
+    },
+    {
+      name: "Inicio y fin de matriculas",
+      description: "Establece el inicio y fin de matriculas.",
+      action: <span className="text-gray-400">Próximamente...</span>,
+      icon: <CiCalendarDate size={20} />,
+    },
+  ];
+
   return (
     <div className="h-full">
       <Toaster richColors />
@@ -105,9 +112,11 @@ export default function ConfigurationDashboard() {
             <tbody>
               {ConfigurationItems.map((item, index) => (
                 <tr key={index} className="bg-white">
-                  <td className="px-6 py-4 max-sm:hidden" >{item.icon}</td>
+                  <td className="px-6 py-4 max-sm:hidden">{item.icon}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 text-sm max-sm:hidden">{item.description}</td>
+                  <td className="px-6 py-4 text-sm max-sm:hidden">
+                    {item.description}
+                  </td>
                   <td className="px-6 py-4">{item.action}</td>
                 </tr>
               ))}

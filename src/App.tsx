@@ -42,6 +42,7 @@ import Opinions from "./pages/landing/opinions/opinions";
 import Products from "./pages/landing/products/products";
 import ProductsByLocation from "./pages/landing/products/products-by-location/[id]";
 import NotFound from "./pages/not-found/not-found";
+import CouponsDashboard from "./pages/dashboard/screens/coupons-dashboard";
 
 function App() {
   return (
@@ -163,6 +164,10 @@ function App() {
               <Route
                 path="/dashboard/configuration"
                 element={<ConfigurationDashboard />}
+              />
+              <Route
+                path="/dashboard/configuration/coupons"
+                element={<CouponsDashboard />}
               />
             </Route>
 
