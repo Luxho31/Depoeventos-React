@@ -1,5 +1,5 @@
 import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { FaCheck } from "react-icons/fa";
 import { useAuth } from "../../../../context/AuthProvider";
 import { useCart } from "../../../../context/CartProvider";
@@ -11,41 +11,46 @@ export default function PaymentStep({
   preferenceId,
   discount,
   couponCode,
-}: any) {
+}: {
+  preferenceId: string;
+  discount: number;
+  couponCode: string[];
+}) {
   useEffect(() => {
-    console.log("Descuento: ", discount);
-    console.log("Código de cupón: ", couponCode);
-  }, [discount]);
+    initMercadoPago(PUBLIC_KEY, { locale: "es-PE" });
+  }, []);
 
-  initMercadoPago(PUBLIC_KEY, {
-    locale: "es-PE",
-  });
+  useEffect(() => {
+    console.log("Descuento (total final): ", discount);
+    console.log("Código(s) de cupón: ", couponCode);
+  }, [discount, couponCode]);
 
   const { getTotalPrice, products } = useCart();
   const { userInfo } = useAuth();
 
   const payerData = {
-    name: userInfo?.firstName + " " + userInfo?.lastName,
+    name: `${userInfo?.firstName ?? ""} ${userInfo?.lastName ?? ""}`.trim(),
     email: userInfo?.username,
     country: userInfo?.country === "Peru" ? "Perú" : userInfo?.country,
   };
 
-  type Children = {
-    id: number;
-    name: string;
-  };
+  type Children = { id: number; name: string };
+  const total = useMemo(() => Number(getTotalPrice()) || 0, [getTotalPrice]);
+  const hasDiscount = discount > 0 && discount < total;
+  const discountAmount = hasDiscount
+    ? Number((total - discount).toFixed(2))
+    : 0;
+  const percent =
+    hasDiscount && total > 0 ? Math.round((discountAmount / total) * 100) : 0;
 
-  const asignarNombre = () => {
-    if (couponCode.includes("PROFESORES2025")) {
-      return "Descuento: PROFESORES2025 (-50%)";
-    }
-    // if (couponCode.includes("COMPLETOSUMMERSPVC")) {
-    //   return "Descuento: COMPLETOSUMMERSPVC (-9.09%)";
-    // } else if (couponCode.includes("MEDIOSUMMERSPVC")) {
-    //   return "Descuento: MEDIOSUMMERSPVC (-7.69%)";
-    // }
-    return "Sin descuento";
-  };
+  const code =
+    Array.isArray(couponCode) && couponCode.length > 0
+      ? couponCode[0]
+      : undefined;
+
+  const cupLabel = code
+    ? `Descuento: ${code}${percent ? ` (-${percent}%)` : ""}`
+    : "Sin descuento";
 
   return (
     <div className="flex flex-col justify-between gap-4 xl:flex-row">
@@ -54,13 +59,18 @@ export default function PaymentStep({
         <div className="border rounded-md shadow-md p-8 w-full">
           <h2 className="text-xl mb-4">Resumen del carrito</h2>
 
-          {/* Mostrar el precio total con o sin descuento */}
-          <h2 className="text-lg">Total S/. {getTotalPrice()}</h2>
-          {discount > 0 ? (
-            <h2 className="text-lg">Descuento: S/. {(getTotalPrice() - discount).toFixed(2)}</h2>
-          ) : (
-            <h2 className="text-lg">Descuento: S/. 0.00</h2>
-          )}
+          {/* Total original */}
+          <h2 className="text-lg">Total S/. {total.toFixed(2)}</h2>
+
+          {/* Monto descontado */}
+          <h2 className="text-lg">
+            Descuento: S/. {discountAmount.toFixed(2)}
+          </h2>
+
+          {/* Total a pagar */}
+          <h2 className="text-lg font-semibold mt-2">
+            Total a pagar: S/. {(hasDiscount ? discount : total).toFixed(2)}
+          </h2>
         </div>
 
         {/* Información del pagador */}
@@ -70,15 +80,15 @@ export default function PaymentStep({
           </h2>
           <div className="mb-2">
             <p className="text-sm font-semibold text-gray-600">Nombre:</p>
-            <p className="text-sm">{payerData.name}</p>
+            <p className="text-sm">{payerData.name || "-"}</p>
           </div>
           <div className="mb-2">
             <p className="text-sm font-semibold text-gray-600">Email:</p>
-            <p className="text-sm">{payerData.email}</p>
+            <p className="text-sm">{payerData.email || "-"}</p>
           </div>
           <div className="mb-2">
             <p className="text-sm font-semibold text-gray-600">País:</p>
-            <p className="text-sm">{payerData.country}</p>
+            <p className="text-sm">{payerData.country || "-"}</p>
           </div>
         </div>
       </div>
@@ -113,7 +123,7 @@ export default function PaymentStep({
                 <p className="text-sm font-semibold text-gray-600">
                   Cupón aplicado:
                 </p>
-                <p className="text-sm"> {asignarNombre()}</p>
+                <p className="text-sm">{cupLabel}</p>
               </div>
               <div className="mb-2">
                 <p className="text-sm font-semibold text-gray-600">
@@ -124,13 +134,10 @@ export default function PaymentStep({
             </div>
           </div>
 
-          {/* Renderizar el Wallet de MercadoPago */}
           <div className="flex items-center justify-center">
             <Wallet
-              initialization={{ preferenceId: preferenceId }}
-              customization={{
-                texts: { valueProp: "smart_option" },
-              }}
+              initialization={{ preferenceId }}
+              customization={{ texts: { valueProp: "smart_option" } }}
             />
           </div>
         </div>

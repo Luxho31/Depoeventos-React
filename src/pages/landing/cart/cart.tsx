@@ -5,40 +5,78 @@ import {
 } from "@ant-design/icons";
 import "animate.css";
 import { Checkbox, Form, Progress, Spin, Tag } from "antd";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Toaster, toast } from "sonner";
 import Terminos from "../../../assets/pdf/TerminosCondiciones.pdf";
 import PoliticasPrivacidad from "../../../assets/pdf/PoliticaPrivacidad.pdf";
 import { useCart } from "../../../context/CartProvider";
 import { createOrder } from "../../../services/cart-service/cart-service";
+import { getAllCoupons } from "../../../services/coupons-service";
 import CartTable from "./components/cart-table";
 import PaymentStep from "./components/payment-step";
+
+type Coupon = {
+  id: number;
+  name: string;
+  description?: string;
+  code: string;
+  expirationDate?: string;
+  active: boolean;
+  value: number;
+};
 
 export default function Cart() {
   const [progressPercent, setProgressPercent] = useState(0);
   const { products, getTotalPrice } = useCart();
+
   const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabledTerms, setDisabledTerms] = useState(true);
+
   const [discount, setDiscount] = useState(0);
+
   const [form] = Form.useForm();
 
   const [couponCode, setCouponCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
-  const [appliedCoupons, setAppliedCoupons] = useState<any[]>([]);
+  const [appliedCoupons, setAppliedCoupons] = useState<string[]>([]);
 
   const [completedOrder, setCompletedOrder] = useState(false);
 
   const [termsChecked, setTermsChecked] = useState(false);
   const [dataUsageChecked, setDataUsageChecked] = useState(false);
 
-  const handleCheckboxChange = (checkboxType: any) => {
+  // === NUEVO: cupones activos desde backend ===
+  const [activeCoupons, setActiveCoupons] = useState<Coupon[]>([]);
+  const todayISO = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const isExpired = (iso?: string) => !!iso && iso < todayISO;
+  const normalize = (s: string) => s.trim().toUpperCase();
+  const clamp = (n: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, n));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getAllCoupons();
+        const onlyActive = (Array.isArray(data) ? data : []).filter(
+          (c: Coupon) => c.active && !isExpired(c.expirationDate)
+        );
+        setActiveCoupons(onlyActive);
+      } catch (e) {
+        console.error("Error cargando cupones activos:", e);
+        setActiveCoupons([]);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCheckboxChange = (checkboxType: "terms" | "dataUsage") => {
     if (checkboxType === "terms") {
       const newTermsChecked = !termsChecked;
       setTermsChecked(newTermsChecked);
       setDisabledTerms(!(newTermsChecked && dataUsageChecked));
-    } else if (checkboxType === "dataUsage") {
+    } else {
       const newDataUsageChecked = !dataUsageChecked;
       setDataUsageChecked(newDataUsageChecked);
       setDisabledTerms(!(termsChecked && newDataUsageChecked));
@@ -47,18 +85,14 @@ export default function Cart() {
 
   const createOrderForm = async (values: any) => {
     try {
-      console.log("Valores Create Order Form: ", values);
       setLoading(true);
-      if (values.discount === undefined) {
-        values.discount = "-";
+      if (values.discount === undefined || values.discount === "") {
+        values.discount = appliedCoupons[0] ?? "-";
       }
-
-      console.log(values.discount);
       const response = await createOrder(values.discount);
       const preferenceId = response.preferenceId;
       setPreferenceId(preferenceId);
       setProgressPercent(50);
-
       setCompletedOrder(true);
       window.scrollTo(0, 0);
     } catch (error) {
@@ -68,47 +102,45 @@ export default function Cart() {
     }
   };
 
+  // === NUEVO: aplicar cupón activo ===
   const calculateDiscount = () => {
-    let discount = 0;
     if (couponCode.trim() === "") {
       toast.error("No se ha ingresado un cupón.");
-      return discount;
+      return;
     }
 
     if (appliedCoupons.length > 0) {
       toast.error(
         "Ya hay un cupón aplicado. No se pueden agregar más cupones."
       );
-
-      return discount;
+      return;
     }
 
-    if (couponCode === "PROFESORES2025") {
-      setDiscountApplied(true);
-      discount = getTotalPrice() * (1 - 0.5);
-      setDiscount(discount);
-      setAppliedCoupons([couponCode]);
-      toast.success("Cupón aplicado con éxito.");
-      // } else
-      // if (couponCode === "COMPLETOSUMMERSPVC") {
-      //   setDiscountApplied(true);
-      //   discount = getTotalPrice() * (1 - 0.0909);
-      //   setDiscount(discount);
-      //   setAppliedCoupons([couponCode]);
-      //   toast.success("Cupón aplicado con éxito.");
-      // } else if (couponCode === "MEDIOSUMMERSPVC") {
-      //   setDiscountApplied(true);
-      //   discount = getTotalPrice() * (1 - 0.0769);
-      //   setDiscount(discount);
-      //   setAppliedCoupons([couponCode]);
-      //   toast.success("Cupón aplicado con éxito.");
-    } else {
+    const entered = normalize(couponCode);
+    const found = activeCoupons.find((c) => normalize(c.code) === entered);
+
+    if (!found) {
       setCouponCode("");
-      toast.error("Cupón inválido.");
+      toast.error("Cupón inválido o no activo.");
+      return;
     }
 
+    if (isExpired(found.expirationDate)) {
+      setCouponCode("");
+      toast.error("El cupón está vencido.");
+      return;
+    }
+
+    const pct = clamp(Number(found.value) || 0, 0, 100);
+    const total = Number(getTotalPrice());
+    const finalTotal = Number((total * (1 - pct / 100)).toFixed(2));
+
+    setDiscountApplied(true);
+    setDiscount(finalTotal);
+    setAppliedCoupons([found.code]);
     setCouponCode("");
-    return discount;
+
+    toast.success(`Cupón aplicado: ${found.code} (-${pct}%)`);
   };
 
   const handleBackButton = () => {
@@ -117,10 +149,14 @@ export default function Cart() {
     window.scrollTo(0, 0);
   };
 
+  const total = Number(getTotalPrice());
+  const discountAmount = discountApplied
+    ? Number((total - discount).toFixed(2))
+    : 0;
+
   return (
     <div className="flex flex-col w-[80%] m-auto mt-24 min-h-screen">
       <Toaster richColors />
-      {/* Progress Bar */}
       <div className="w-full text-center">
         <div className={`${progressPercent === 0 ? "block" : "hidden"}`}>
           <h1 className="animate__animated animate__backInDown">
@@ -158,12 +194,11 @@ export default function Cart() {
           progressPercent === 0 ? "block" : "hidden"
         } flex max-xl:flex-col items-start gap-x-12 `}
       >
-        {/* <div className="w-[60rem] mb-24"> */}
         <div className="w-full mb-12">
           <CartTable />
         </div>
 
-        {products.length != 0 ? (
+        {products.length !== 0 ? (
           <div className="flex flex-col justify-around gap-y-8 max-sm:w-full w-[36rem] mb-24">
             <Form
               name="summary"
@@ -191,6 +226,7 @@ export default function Cart() {
                       />
                     </Form.Item>
                     <button
+                      type="button"
                       className="bg-neutral-900 text-white rounded-full px-8 py-3 max-sm:py-4 hover:bg-neutral-700"
                       onClick={() => {
                         if (couponCode.trim() !== "") {
@@ -204,60 +240,49 @@ export default function Cart() {
                     </button>
                   </div>
                 </div>
+
                 {appliedCoupons.map((coupon, index) => (
                   <Tag
                     key={index}
                     closeIcon={<CloseCircleOutlined />}
                     onClose={() => {
-                      if (
-                        // coupon === "COMPLETOSUMMERSPVC" ||
-                        // coupon === "MEDIOSUMMERSPVC" ||
-                        coupon === "PROFESORES2025"
-                      ) {
-                        setDiscountApplied(false);
-                      }
-                      const updatedCoupons = appliedCoupons.filter(
-                        (c) => c !== coupon
-                      );
-                      setAppliedCoupons(updatedCoupons);
+                      setDiscountApplied(false);
+                      setDiscount(0);
+                      setAppliedCoupons([]);
                     }}
                   >
                     {coupon}
                   </Tag>
                 ))}
               </div>
+
               <hr className="h-px bg-neutral-300" />
 
               <div className="my-8 flex flex-col gap-2">
                 <div className="flex justify-between">
                   <h2 className="text-lg text-slate-400">Subtotal</h2>
                   <h2 className="text-lg text-slate-400 line-through">
-                    S/. {getTotalPrice()}.00
+                    S/. {total.toFixed(2)}
                   </h2>
                 </div>
                 <div className="flex justify-between">
                   <h2 className="text-lg text-slate-400">Descuento</h2>
-                  {discountApplied ? (
-                    <h2 className="text-lg text-slate-400">
-                      S/. {(getTotalPrice() - discount).toFixed(2)}
-                    </h2>
-                  ) : (
-                    <h2 className="text-lg text-slate-400">- S/. 0.00</h2>
-                  )}
+                  <h2 className="text-lg text-slate-400">
+                    {discountApplied
+                      ? `S/. ${discountAmount.toFixed(2)}`
+                      : "- S/. 0.00"}
+                  </h2>
                 </div>
                 <div className="flex justify-between">
                   <h2 className="text-lg font-semibold">Total</h2>
-                  {discountApplied ? (
-                    <h2 className="text-xl font-semibold">
-                      S/. {discount.toFixed(2)}
-                    </h2>
-                  ) : (
-                    <h2 className="text-xl font-semibold">
-                      S/. {getTotalPrice().toFixed(2)}
-                    </h2>
-                  )}
+                  <h2 className="text-xl font-semibold">
+                    {discountApplied
+                      ? `S/. ${discount.toFixed(2)}`
+                      : `S/. ${total.toFixed(2)}`}
+                  </h2>
                 </div>
               </div>
+
               <div className="w-full flex flex-col justify-center items-center gap-y-3">
                 <div className="flex flex-col items-center justify-center">
                   <Checkbox
@@ -311,9 +336,7 @@ export default function Cart() {
               </div>
             </Form>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
 
       {/* Pasarela de Pago */}
